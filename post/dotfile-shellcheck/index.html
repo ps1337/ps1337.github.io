@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Using Shellcheck and Docker to Automatically Lint Dotfiles</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Using Shellcheck and Docker to Automatically Lint Dotfiles</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/dotfile-shellcheck/">Using Shellcheck and Docker to Automatically Lint Dotfiles</a></h4>
+    <h5>March 8, 2018</h5>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="tags/dotfiles"><kbd class="item-tag">dotfiles</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/travis"><kbd class="item-tag">travis</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>In order to prevent errors and side effects, it&rsquo;s useful to use <a href="https://www.shellcheck.net/">Shellcheck</a> to lint all shell scripts. While checking out the <a href="https://github.com/jessfraz/dotfiles">Dotfiles of jessfraz</a>, I came across an easy way to integrate this kind of check with <a href="https://www.travis-ci.org">Travis CI</a>. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository. All credits go to the <a href="https://github.com/jessfraz">original author</a> of the docker images and scripts, of course.</p>
+
+<h1 id="activating-travis-ci">Activating Travis CI</h1>
+
+<p>First of all, it&rsquo;s necessary to link your Github account to an account on <a href="https://www.travis-ci.org">Travis CI</a>. To do this, just sign in at the Travis page using your GitHub account. After that, you need to activate Travis for your specific Dotfile repository. You can do this after logging in at Travis. This will add a hook to your repository on GitHub which will trigger the Travis build/linting process after pushing new content.</p>
+
+<h1 id="adding-a-travis-job-file">Adding a Travis job file</h1>
+
+<p>To let Travis know which commands should be executed, a <code>.travis.yml</code> file is needed. This can be as simple as:</p>
+
+<pre><code>sudo: required
+dist: trusty
+
+services:
+  - docker
+
+before_script:
+  - // install required packages for the linting or notification process (optional).
+
+script:
+  - |
+      docker run --rm -i \
+          --name df-shellcheck \
+          -v $PWD:/usr/src:ro \
+          --workdir /usr/src \
+          r.j3ss.co/shellcheck ./.test.sh
+
+after_success:
+  - // e.g. send notification via Telegram.
+
+after_failure:
+  - // dito.
+</code></pre>
+
+<p>This will use a containerized version of <code>shellcheck</code> to lint all existing scripts using <code>.test.sh</code>, which will be prepared in the next step.</p>
+
+<h1 id="preparing-the-test-script">Preparing the test script</h1>
+
+<p>The test script has two jobs:</p>
+
+<ol>
+<li>Get all files which will be linted</li>
+<li>Execute <code>shellcheck</code> for each file</li>
+</ol>
+
+<pre><code>#!/bin/bash
+# Stolen from: https://github.com/jessfraz/dotfiles/blob/master/test.sh
+# (modified)
+
+set -e
+set -o pipefail
+
+ERRORS=()
+
+# find all executables and run `shellcheck`
+for f in $(find . -type f \
+        -not -iwholename '*.git*' | sort -u); do
+
+
+	if file &quot;$f&quot; | grep --quiet shell; then
+		{
+			shellcheck &quot;$f&quot; &amp;&amp; echo &quot;[OK]: sucessfully linted $f&quot;
+		} || {
+		# add to errors
+		ERRORS+=(&quot;$f&quot;)
+	}
+	fi
+done
+
+if [ ${#ERRORS[@]} -eq 0 ]; then
+	echo &quot;No errors, hooray&quot;
+else
+	echo &quot;These files failed shellcheck: ${ERRORS[*]}&quot;
+	exit 1
+fi
+</code></pre>
+
+<h1 id="executing-tests">Executing tests</h1>
+
+<p>If everything has been set up correctly, the output can show the following information:</p>
+
+<pre><code>docker run --rm -i -t \
+		--name df-shellcheck \
+		-v /home/travis/build/ps1337/Dotfiles:/usr/src:ro \
+		--workdir /usr/src \
+		r.j3ss.co/shellcheck ./.test.sh
+Unable to find image 'r.j3ss.co/shellcheck:latest' locally
+latest: Pulling from shellcheck
+bec7afd8e02c: Pulling fs layer
+245090c4c10c: Pulling fs layer
+cb3796b8dbab: Pulling fs layer
+245090c4c10c: Verifying Checksum
+245090c4c10c: Download complete
+cb3796b8dbab: Verifying Checksum
+cb3796b8dbab: Download complete
+bec7afd8e02c: Verifying Checksum
+bec7afd8e02c: Download complete
+bec7afd8e02c: Pull complete
+245090c4c10c: Pull complete
+cb3796b8dbab: Pull complete
+Digest: sha256:8c217eaf09cc2a6b960be4931ea2853ef339c052a890ef427e8de4da0cfa42ca
+Status: Downloaded newer image for r.j3ss.co/shellcheck:latest
+[OK]: sucessfully linted ./.test.sh
+[OK]: sucessfully linted ./bash_profile
+[OK]: sucessfully linted ./bindings
+[OK]: sucessfully linted ./dockerfunc
+[OK]: sucessfully linted ./exports
+[OK]: sucessfully linted ./i3/polybar/launchPolybar.sh
+[OK]: sucessfully linted ./i3/scripts/checkupdates.sh
+[OK]: sucessfully linted ./i3/scripts/launch-alt-tab-daemon.sh
+[OK]: sucessfully linted ./i3/scripts/launchBrowser.sh
+[OK]: sucessfully linted ./i3/scripts/launchFilemanager.sh
+[OK]: sucessfully linted ./i3/scripts/launchTerminal.sh
+[OK]: sucessfully linted ./i3/scripts/mediacontrol.sh
+[OK]: sucessfully linted ./i3/scripts/monitors.sh
+[OK]: sucessfully linted ./i3/scripts/randomwallpaper.sh
+[OK]: sucessfully linted ./i3/scripts/setbrightness.sh
+[OK]: sucessfully linted ./inputrc
+[OK]: sucessfully linted ./profile
+No errors, hooray
+</code></pre>
+
+<h1 id="bonus-telegram-notifications">Bonus: Telegram notifications</h1>
+
+<p>If you want to get notified after the linting process, you can refer to my <a href="https://github.com/ps1337/Dotfiles/blob/master/.travis.yml">Travis configuration</a> and <a href="/post/telegram-notifications/">one of my previous blog posts on this subject</a>.</p>
+
+<h1 id="credits">Credits</h1>
+
+<ul>
+<li><a href="https://github.com/jessfraz">Jess Frazelle</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
+    <h5>January 4, 2019</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
+    <h5>May 18, 2018</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="tags/hacking"><kbd class="item-tag">hacking</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/shell-upgrade/">Methods to Upgrade nc Reverse Shells</a></h4>
+    <h5>May 16, 2018</h5>
+    
+    <a href="tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

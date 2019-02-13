@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Creating A Multiplayer Game Hack</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Creating A Multiplayer Game Hack</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/multihack/">Creating A Multiplayer Game Hack</a></h4>
+    <h5>August 28, 2018</h5>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<h1 id="what">What?</h1>
+
+<p>This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called <a href="https://en.wikipedia.org/wiki/Star_Wars_Jedi_Knight:_Jedi_Academy">Jedi Academy</a>. I&rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.</p>
+
+<p>I&rsquo;ve released my <a href="https://github.com/ps1337/jka-multihack">multihack</a> source code. These are the implemented features:</p>
+
+<ul>
+<li>Wallhack (seeing enemies through walls)</li>
+<li>Player Glow (Enemies are glowing)</li>
+<li>Cheat Unlocker (Use otherwise blocked client side settings)</li>
+<li>Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)</li>
+</ul>
+
+<p>This is what the wallhack and player glow looks like:</p>
+
+<p><img src="/img/jka-multihack/wallhax.jpg" alt="Wallhax" /></p>
+
+<h1 id="game-hacking-approaches">Game Hacking Approaches</h1>
+
+<p>First of all, what are the necessary steps to influence another process in a way that it acts according to our intentions? Basically, you have to</p>
+
+<ol>
+<li><p>Inspect the target: What technologies are being used? Which game engine is in place? How do people write mods for the game in order to modify its logic? Is there some SDK available or is there any open source code?</p></li>
+
+<li><p>What parts of the game should be altered? Identify values and/or methods which should be modified/patched.</p></li>
+
+<li><p>Find a way to inject custom code into the process. In case of anti cheat mechanisms, search for techniques to hide the code injection process. This is necessary for most modern games but won&rsquo;t be covered in this post.</p></li>
+
+<li><p>Write the code that will be injected into the game in a way that doesn&rsquo;t break the game.</p></li>
+
+<li><p>Profit?</p></li>
+</ol>
+
+<h2 id="hookless-hacks">Hookless Hacks</h2>
+
+<p>Before talking about API hooks and what they are, let&rsquo;s quickly check out a way to alter a remote process by directly patching functions in memory. This has already been covered in <a href="/post/cvar-hax/">one of my previous posts</a>. The basic approach is the identify function  and memory addresses of interesting data and code and to modify it by spawning a thread in the target process or by overwriting them directly. A good example of this approach can be found <a href="http://aimbots.net/threads/17415-Completely-hookless-wallhack-for-Quake-3-engine-based-games">here</a>.</p>
+
+<p>This approach might look easy and elegant. However, finding the correct offsets and memory addresses can be hard. Also, after game updates these values don&rsquo;t match anymore. Because of this, it may be easier to use hooking to alter a remote process.</p>
+
+<h2 id="api-hooking">API Hooking</h2>
+
+<p>Hooking basically means intercepting function calls in order to execute code before or after the original function. In this blog post, I hooked a Windows API function in the context of the remote process to intercept calls to the game engine DLLs. This effectively forces the game to execute custom code. Please note that it may not work to be possible to just hook an arbitrary game method with pure API hooking. The best way to get started is to trace target methods to system calls and hooking the system calls instead.</p>
+
+<p>There are easy-to-use API hooking libraries available, like <a href="https://github.com/martona/mhook">mhook</a>. The usage of this particular library will also be discussed in this post.</p>
+
+<h1 id="dll-injection">DLL Injection</h1>
+
+<p>To hook game engines methods, it&rsquo;s necessary to install the hook from the context of the target application. This can be accomplished with a technique called DLL injection. Using this, the target process gets forced to load and execute a custom DLL in which contains our code. There are many approaches to do this &ndash; this post covers the <code>LoadLibraryA</code> method of injection DLLs.</p>
+
+<p><em>Note: To simplify things, disable unicode and the usage of pre-compiled headers in VisualStudio or things will get ugly.</em></p>
+
+<h2 id="building-the-dll-loader">Building The DLL Loader</h2>
+
+<p>The DLL loader has to take care of these things:</p>
+
+<ol>
+<li>Execute the game binary</li>
+<li>Get a handle of the game process</li>
+<li>Locate the DLL to be injected</li>
+<li>Load the DLL in the context of the game</li>
+</ol>
+
+<p>Of course the trickiest part of this is the last point, loading the DLL. This code segment does just this:</p>
+
+<pre><code>// Get the address of LoadLibraryA in kernel32.dll, used to
+// pass it to the remote process in order to load our dll later on
+LPVOID loadFunctionAddress = (LPVOID)GetProcAddress(GetModuleHandle(&quot;kernel32.dll&quot;), &quot;LoadLibraryA&quot;);
+
+// Allocate space in the target process for our DLL **PATH**
+LPVOID allocatedMem = LPVOID(VirtualAllocEx(procHandle, nullptr, MAX_PATH, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE));
+
+// Write the **PATH** of our DLL in the allocated memory of the remote process
+WriteProcessMemory(procHandle, allocatedMem, dllPath, MAX_PATH, nullptr);
+
+// Load the DLL by causing the remote process to spawn a thread which calls LoadLibraryA
+// which loads the DLL using the path we allocated previously.
+HANDLE threadHandle = CreateRemoteThread(procHandle, nullptr, NULL, LPTHREAD_START_ROUTINE(loadFunctionAddress), allocatedMem, NULL, nullptr);
+</code></pre>
+
+<p>Please note that error handling has been removed for a better overview.</p>
+
+<p>At this point the DLL has been injected into the target process and its <code>DllMain</code> method should have been called. Now, let&rsquo;s build a simple DLL to test the injection process</p>
+
+<h2 id="dll-structure">DLL Structure</h2>
+
+<p>The starting point for this is a new DLL project created by VisualStudio. Don&rsquo;t create a static library because this won&rsquo;t work!</p>
+
+<p>After creating the project, the file <code>dllmain.cpp</code> should have already been created. Let&rsquo;s create a simple PoC that spawns a message box upon loading the DLL:</p>
+
+<pre><code>extern &quot;C&quot; __declspec(dllexport) void Initialize()
+{
+	MessageBox(0, &quot;Locked and Loaded.&quot;, &quot;DLL Injection Successful!&quot;, 0);
+}
+
+BOOL APIENTRY DllMain
+(
+	HMODULE hModule,
+	DWORD  ul_reason_for_call,
+	LPVOID lpReserved
+)
+{
+    switch (ul_reason_for_call)
+    {
+		case DLL_PROCESS_ATTACH:
+			// Do not need the thread based attach/detach messages in this DLL
+			DisableThreadLibraryCalls(hModule);
+			Initialize();
+        break;
+    }
+    return TRUE;
+}
+</code></pre>
+
+<p>Compile this DLL, pass it to the loader and check out the created message box. Let&rsquo;s proceed with identifying the required hooks and game modifications.</p>
+
+<h1 id="know-your-target">Know Your Target</h1>
+
+<p>The target game is based on the Quake3 engine. Therefore, information on internal structures and processes are required in order to, for example, implement a wallhack. A Quake3 game is being executed in a &ldquo;VM&rdquo; that implements its own &ldquo;system calls&rdquo;.</p>
+
+<p>The Q3 engine methods are present in a separate DLL called <code>cgamex86.dll</code> which will be loaded by the game process. To load DLLs, the Windows API call <code>GetProcAddress</code> is being used to get the address of a specific function in a DLL. This means that by hooking <code>GetProcAddress</code> it&rsquo;s possible to intercept calls to the game engine:</p>
+
+<pre><code>// create the hook which serves as entry point for this
+if (!Mhook_SetHook((PVOID *)&amp;originalGetProcAddress, hookGetProcAddress))
+{
+    MessageBox(0, &quot;Couldn't create hook&quot;, &quot;:(&quot;, 0);
+}
+</code></pre>
+
+<p>The original and unmodified call to <code>GetProcAddress</code> will be stored in <code>originalGetProcAddress</code> and our own function <code>hookGetProcAddress</code> will be executed instead of the real function.</p>
+
+<p>While tracing the executed functions of <code>cgamex86.dll</code>, two calls have been identified as interesting in the game:</p>
+
+<ol>
+<li><code>vmMain</code>: Main function of the Q3 VM, accepting system calls</li>
+<li><code>dllEntry</code>: Used to execute additional Q3 system calls</li>
+</ol>
+
+<p>According to the Q3 engine <a href="https://github.com/id-Software/Quake-III-Arena/blob/master/code/cgame/cg_main.c#L46">source code</a>, <code>vmMain</code> contains code to <code>CG_DrawActiveFrame</code> &ndash; a function to draw a game frame. This may be handy later on.</p>
+
+<p><em>Note for OpenJK Users: Because the maintainers of OpenJK decided to update the syscall process of the game, it&rsquo;s required to modify <code>CL_BindCGame</code> to use legacy q3 VM system calls.</em></p>
+
+<p>Similar to this, <code>dllEntry</code> accepts the <code>CG_R_ADDREFENTITYTOSCENE</code> system call that adds an entity (a player, a weapon, &hellip;) to the scene to be rendered. The parameter for this is a pointer to an entity. All entities are stored in a container called <code>backEndData</code>, which gets used by <code>RE_RenderScene</code> to display all entities. By modifying entities before <code>RE_RenderScene</code> gets called, entities can always be displayed - no matter if there&rsquo;s a wall between the player and the entity.</p>
+
+<p>Luckily, the Q3 engine implements a flag called <code>RF_DEPTHHACK</code> which does just this: It makes the engine ignore an entity&rsquo;s depth, making it align with all entities in the same depth. By adding this flag, entities will be effectively displayed on top of walls!</p>
+
+<h1 id="using-game-engine-data">Using Game Engine Data</h1>
+
+<p>At this point, it&rsquo;s possible to execute code in the context of the target process and all required information on how to implement a wallhack are available. However, we still need access to the games internal entity values. These values are nested C-structs containing all kinds of information on players and objects in the game. By hooking the right system calls, the values of these structs can be obtained in the context of the thread in the injected DLL. Two steps are required for this:</p>
+
+<ul>
+<li>Add the official SDK to the DLL in order to get information on the structs.</li>
+<li><a href="https://github.com/ps1337/jka-multihack/blob/master/dll/dllmain.cpp#L245">Hook a Q3 system call</a> to get access all entity structs.</li>
+</ul>
+
+<p>While observing the required data and available syscalls, it became clear that not all game structs will be accessible by just hooking calls and saving their parameter values. Image a <a href="https://github.com/id-Software/Quake-III-Arena/blob/master/code/cgame/cg_local.h#L454">nested engine struct</a> containing this data:</p>
+
+<pre><code>typedef struct {
+    [...]
+    snapshot_t* snap;
+    [...]
+} cg_t;
+</code></pre>
+
+<p>By <a href="https://github.com/ps1337/jka-multihack/blob/master/dll/dllmain.cpp#L272">hooking</a> <code>CG_GETSNAPSHOT</code> it&rsquo;s possible get the current game snapshot &ndash; a <code>snapshot_t</code> pointer value. We are <strong>not</strong> able to directly get a <code>cg_t</code> engine struct by hooking system calls but we know that the <code>snapshot_t</code> pointer is nested in a <code>cg_t</code> struct. By using some pointer arithmetic it&rsquo;s still possible to get the parent struct, a <code>cg_t</code> value:</p>
+
+<pre><code>snapshot_t *snap = (snapshot_t *)arg[1];
+// temp value
+cg_t *tmp = 0;
+// we have an `snapshot_t` pointer, so let's substract that values length and get the parent element
+client_game = (cg_t *)((int)arg[1] - (int)&amp;tmp-&gt;activeSnapshots);
+</code></pre>
+
+<p>This works for some cases but we will come across a point where this memory hackery indeed causes some problems.</p>
+
+<h1 id="creating-the-wallhack">Creating The Wallhack</h1>
+
+<p>By using <code>dllMain</code> to hook all executed system calls, we modify calls with the <code>CG_R_ADDREFENTITYTOSCENE</code> command in a way that the <code>RF_DEPTHHACK</code> flag gets added:</p>
+
+<pre><code>// get the passed parameter (an entity)
+refEntity_t *ref = (refEntity_t *)arg[0];
+
+// add the y flag to display the entity
+// over walls, effectively disabling depth for players
+// --&gt; wallhack
+ref-&gt;renderfx |= RF_DEPTHHACK | RDF_NOFOG;
+
+if (playerGlowRequired())
+{
+    // add a glowing shader for a better view
+    ref-&gt;customShader = client_gameState-&gt;media.disruptorShader;
+}
+</code></pre>
+
+<p>As you can see, the player glow also gets added in this segment. <code>playerGlowRequired</code> checks whether an entity is a player by using internal engine structs, namely <code>centity_t</code> pointers which have been saved by hooking Q3 system calls.</p>
+
+<p>As a neat side effect, adding the <code>RF_DEPTHHACK</code> flag to all entities and not just players also shows entities like doors, weapon and pickups through walls:
+<img src="/img/jka-multihack/entities.jpg" alt="Entities" /></p>
+
+<h2 id="recognizing-teams">Recognizing Teams</h2>
+
+<p>Normally, an entity&rsquo;s team information is stored in the <code>client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName</code> value. After the pointer arithmetic hackery, the fields of <code>clientinfo</code> structs have somehow been corrupted and point to invalid data. For example, <code>teamName</code> contains parts of the model name for some entities. But let&rsquo;s just search in the memory region of the <code>clientinfo</code> struct!</p>
+
+<pre><code>// search for the team in the memory region of the `clientinfo` struct
+// using `.teamName` isn't exact because of memory hackery while determining `client_gameState`
+char red[] = &quot;red&quot;;
+char *base = client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName - 100;
+char *end = client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName + 1000;
+
+// check if he's red
+BOOL found = FALSE;
+while (base &lt; end)
+{
+    if (_memicmp(red, base, sizeof(red)) == 0)
+    {
+        teamMap.insert(std::pair&lt;int, int&gt;(currentEntityClientNumber, TEAM_RED));
+        return FALSE;
+    }
+    base += sizeof(red);
+}
+// then he must be blue &lt;:
+</code></pre>
+
+<p>This works because <code>CG_TeamName</code> puts a string containg either <code>RED</code> or <code>BLUE</code> in an entities <code>clientinfo</code>. By searching for these values in memory, we can get around the corrupted pointers and can obtain team information quickly. This has also been optimized to cache search results to prevent searching for these value every time.</p>
+
+<h1 id="pulling-the-trigger">Pulling The Trigger</h1>
+
+<p>Implementing a trigger bot is pretty straight forward once the we are able to modify each frame. By hooking the <code>CG_DRAW_ACTIVE_FRAME</code> command, we can check if we&rsquo;re aiming at an enemy by checking the value of <code>crosshairClientNum</code>:</p>
+
+<pre><code>// only trigger with a shootable weapon
+if (ps-&gt;weapon &gt; WP_SABER &amp;&amp; ps-&gt;weapon != WP_THERMAL &amp;&amp; ps-&gt;weapon != WP_TRIP_MINE &amp;&amp; ps-&gt;weapon != WP_DET_PACK)
+{
+    // only shoot at enemies
+    if (isEnemy(client_game-&gt;crosshairClientNum))
+    {
+        // send a left click
+        // not using left click for fire? srsly why
+        LeftClick();
+        client_game-&gt;crosshairClientNum = 0;
+    }
+}
+</code></pre>
+
+<h1 id="bonus-cvar-unlocker">Bonus: CVar Unlocker</h1>
+
+<p>The blocking of cheats is based on a server setting called <code>sv_cheats</code> which is read only on clients. However, by setting this value in the injected code with <code>syscall_hook(CG_CVAR_SET, &quot;sv_cheats&quot;, &quot;1&quot;);</code> circumvents this check :)</p>
+
+<h1 id="references">References</h1>
+
+<ul>
+<li><a href="https://github.com/martona/mhook">mhook - A Windows API hooking library</a></li>
+<li><a href="https://jkhub.org/files/file/1137-jedi-academy-sdk/">JKA SDK</a></li>
+<li><a href="https://github.com/id-Software/Quake-III-Arena">Q3 Source Code</a></li>
+<li><a href="http://aimbots.net/threads/13871-star-wars-Academy-Clienthook?s=8b499d2ecb5ca24cf45b3de98fad3376">JD Hook</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
+    <h5>October 26, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/gdb"><kbd class="item-tag">gdb</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/autohax/">Car Hacking: A Short Overview</a></h4>
+    <h5>October 23, 2018</h5>
+    
+    <a href="tags/automotive"><kbd class="item-tag">automotive</kbd></a>
+    
+    <a href="tags/car-hacking"><kbd class="item-tag">car-hacking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/cvar-hax/">Runtime Function Patching</a></h4>
+    <h5>August 16, 2018</h5>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="tags/cracking"><kbd class="item-tag">cracking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

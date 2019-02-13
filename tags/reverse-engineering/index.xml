@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reverse Engineering on A Blog.</title>
+    <link>/tags/reverse-engineering/</link>
+    <description>Recent content in Reverse Engineering on A Blog.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 26 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/reverse-engineering/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Automotive Security Research</title>
+      <link>/project/autosec/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/autosec/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CANalyzat0r</title>
+      <link>/project/canalyzat0r/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/canalyzat0r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Official Cutter Docker Configuration</title>
+      <link>/project/cutter-docker/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/cutter-docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Q3 Engine Multihack</title>
+      <link>/project/jka-multihack/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/jka-multihack/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Random Note #092345: Passing binary input via GDB</title>
+      <link>/post/rnd-092345-gdb/</link>
+      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/rnd-092345-gdb/</guid>
+      <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
+run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;)  from the gdb session to send arbitrary bytes.</description>
+    </item>
+    
+    <item>
+      <title>Car Hacking: A Short Overview</title>
+      <link>/post/autohax/</link>
+      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/autohax/</guid>
+      <description>Ever wondered about the various techniques that can be applied to hack modern cars? This post documents various ways to do so - you can use it as a cheatsheet
+Software There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It&amp;rsquo;s important to use special adapters that are whitelisted on the car&amp;rsquo;s head unit.</description>
+    </item>
+    
+    <item>
+      <title>Creating A Multiplayer Game Hack</title>
+      <link>/post/multihack/</link>
+      <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/multihack/</guid>
+      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
+I&amp;rsquo;ve released my multihack source code. These are the implemented features:
+ Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
+    </item>
+    
+    <item>
+      <title>Runtime Function Patching</title>
+      <link>/post/cvar-hax/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/cvar-hax/</guid>
+      <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
+The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
+    </item>
+    
+    <item>
+      <title>Cracking Music Server Software</title>
+      <link>/post/mserver-crack/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/mserver-crack/</guid>
+      <description>tl;dr Generating licenses using MD5(email) is bad.
+Validating licenses using HTTP in plain text is bad.
+The Software This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&amp;rsquo;t be disclosed.</description>
+    </item>
+    
+  </channel>
+</rss>

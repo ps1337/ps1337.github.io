@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Car Hacking: A Short Overview</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Car Hacking: A Short Overview</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/autohax/">Car Hacking: A Short Overview</a></h4>
+    <h5>October 23, 2018</h5>
+    
+    <a href="tags/automotive"><kbd class="item-tag">automotive</kbd></a>
+    
+    <a href="tags/car-hacking"><kbd class="item-tag">car-hacking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>Ever wondered about the various techniques that can be applied to hack modern cars? This post documents various ways to do so - you can use it as a cheatsheet</p>
+
+<h1 id="software">Software</h1>
+
+<p>There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It&rsquo;s important to use special adapters that are whitelisted on the car&rsquo;s head unit. Also, not every adapter may be supported after all. For this, it&rsquo;s best to do some research to get a hold of the right devices to use. Once attached to the network, assign a static IP to the interface. Once again it&rsquo;s up to the researcher to get the correct IP range. For a specific car manufacturer, it seems to be <code>192.168.0.0</code> according to KeenLab [1]. It&rsquo;s best to test all IP ranges not being publicly routed. Now, use some <code>nmap</code> to scan for services.</p>
+
+<p>There can be multiple possible results:</p>
+
+<ul>
+<li>Shells (easy win but rare)</li>
+<li>Forgotten developer or debugging services which may allow command execution</li>
+<li>Challenge/response services that open other ports upon authentication</li>
+<li>(Accidentally) exposed services</li>
+</ul>
+
+<p>All services may run as their own user to prevent compromising the entire system in case a vulnerability is present in one of the applications. Examine the service and fuzz it. For quick tests <a href="https://gitlab.com/akihe/radamsa">radamsa</a> can be of use.</p>
+
+<p>It may also be possible to create a WiFi hotspot using the car&rsquo;s head unit. There may be other services available when entering the created wireless network that are worth examining. If you have a developer unit, using a debugger and examining coredumps can be of use.</p>
+
+<p>From the internal point of view, using <code>netstat</code>, <code>sockstat</code> and other similar tools may reveal other vulnerable services. Potential attack scenarios can be horizontal and vertical privilege escalation, so it&rsquo;s worth checking out all open ports and tracing running applications. In case more information on a target is required, perform static analysis with IDA or a similar disassembler. Be sure to have the whole package ready, including support for foreign architectures. Yes, there&rsquo;s also Java on cars, so reverse engineering of these applications should be way more easier. As always when performing static analysis, keep an eye open for static keys, weak crypto and infrastructure related info. This also includes any MQTT brokers the car may be attached to. As with &ldquo;traditional&rdquo; pentesting, search for SUID binaries and <code>sudo</code>-like mechanisms that may enable privilege escalation.</p>
+
+<h1 id="os">OS</h1>
+
+<p>Various ECUs and devices may run different operating systems you haven&rsquo;t encountered before, like QNX [1]. Search for all info you can get. Evaluate the permissions of all users, kernel versions and known vulnerabilities. For example, if the system service <code>qconn</code> on port 8000 is running, it&rsquo;s a <a href="https://www.blackmoreops.com/2016/06/02/hacking-qnx-systems-over-qconn/">quick win</a>.</p>
+
+<h1 id="apps">Apps</h1>
+
+<p>Cars come with their own mobile app and application servers which may be a valuable source of information. In-app purchases for cars, NFC and Bluetooth come to mind. Look out for developer menus and ways the app affects the car and the application server. How does the car unlock process work?</p>
+
+<p>&ldquo;Apps&rdquo; also refers to services running in the car:</p>
+
+<ul>
+<li>Do they run in a browser? Maybe an old browser exploit works</li>
+<li>Are these apps signed and can they be uploaded to the car in any way?</li>
+</ul>
+
+<h1 id="external-media">External Media</h1>
+
+<p>Some things to check:</p>
+
+<ul>
+<li>Can you fuzz the USB stack and crash system services? Maybe code execution can be achieved.</li>
+<li>Are all parts of external update packages signed?</li>
+<li>Are files being written to external media devices once they are inserted? Fuzz these files.</li>
+<li>Fuzz media files and their embedded information, such as cover art.</li>
+<li>Fuzz CSV files and try to import them from the car.</li>
+</ul>
+
+<h1 id="car-network">Car Network</h1>
+
+<p>It may be valuable to apply the old-fashioned CAN fuzzing to uncover potential problems. Also use the internal wires and not just the OBD-II port as it may be &ldquo;firewalled&rdquo;. Modern cars use VLANs and IPv6, so using the traditional IPv6 attack tools can be of use. Also, issues in the network segmentation can be severe: You shouldn&rsquo;t be able to open the car from a isolated network segment that controls media stuff. Hopping from one ECU to another using interfaces listed in <code>ifconfig</code> or devices under <code>/dev</code> is also possible. The worst case would be sending CAN packets from a hijacked unit.</p>
+
+<p>Check for bus wires that are exposed via car mirrors and antennas!</p>
+
+<h1 id="other-things">Other Things</h1>
+
+<ul>
+<li>Fuzzing the Bluetooth/GPS stack</li>
+<li>Faking GSM and GPS data</li>
+<li>SMS based attacks [1]</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+<li><a href="https://keenlab.tencent.com/en/Experimental_Security_Assessment_of_BMW_Cars_by_KeenLab.pdf">1 - Keen Security Lab BMW Analysis</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
+    <h5>October 26, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/gdb"><kbd class="item-tag">gdb</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/multihack/">Creating A Multiplayer Game Hack</a></h4>
+    <h5>August 28, 2018</h5>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/cvar-hax/">Runtime Function Patching</a></h4>
+    <h5>August 16, 2018</h5>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="tags/cracking"><kbd class="item-tag">cracking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

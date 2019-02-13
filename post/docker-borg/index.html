@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Easy and Secure Backups Using Borg and Docker</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Easy and Secure Backups Using Borg and Docker</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-borg/">Easy and Secure Backups Using Borg and Docker</a></h4>
+    <h5>March 14, 2018</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/borg"><kbd class="item-tag">borg</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p><a href="https://www.borgbackup.org/">BorgBackup</a> is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.</p>
+
+<h1 id="getting-started">Getting started</h1>
+
+<p>I&rsquo;ve created a <a href="https://github.com/ps1337/borg-docker/blob/master/Dockerfile">Dockerfile</a> based on Alpine Linux which is also available on <a href="https://hub.docker.com/r/ps1337/borg-docker/">DockerHub</a>. It gets built weekly to always stay up to date.</p>
+
+<p>This <code>Makefile</code> can be used to quickly get started using a containerized version of Borg:</p>
+
+<pre><code>SHELL := /bin/bash
+VERSION ?= latest
+
+# The directory of this file
+DIR := $(shell echo $(shell cd &quot;$(shell  dirname &quot;${BASH_SOURCE[0]}&quot; )&quot; &amp;&amp; pwd ))
+
+IMAGE_NAME ?= ps1337/borg-docker
+CONTAINER_NAME ?= borg
+
+# This will output the help for each task
+# thanks to https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+.PHONY: help
+
+help: ## This help
+	@awk 'BEGIN {FS = &quot;:.*?## &quot;} /^[a-zA-Z_-]+:.*?## / {printf &quot;\033[36m%-30s\033[0m %s\n&quot;, $$1, $$2}' $(MAKEFILE_LIST)
+
+.DEFAULT_GOAL := help
+
+# Build the container
+build: ## Build the container
+	docker build --rm -t $(IMAGE_NAME) .
+
+build-nc: ## Build the container without caching
+	docker build --rm --no-cache -t $(IMAGE_NAME) .
+
+run: ## Run container
+	sudo docker run \
+	-d \
+	--name $(CONTAINER_NAME) \
+	-v $(DIR)/data:/var/backups/borg \
+	-v $(DIR)/authorized_keys:/home/borg/.ssh/authorized_keys \
+	-p 22:22 \
+	$(IMAGE_NAME):$(VERSION)
+
+stop: ## Stop a running container
+	docker stop $(CONTAINER_NAME)
+
+remove: ## Remove a (running) container
+	docker rm -f $(CONTAINER_NAME)
+
+remove-image-force: ## Remove the latest image (forced)
+	docker rmi -f $(IMAGE_NAME):$(VERSION)
+
+</code></pre>
+
+<p>This <code>docker run</code> call mounts two things:</p>
+
+<ol>
+<li><code>./dir</code> to persistently store the backup data on the container host</li>
+<li><code>./authorized_keys</code> to perform authentication with the OpenSSH server of borg. You have to provide this file to get started.</li>
+</ol>
+
+<h1 id="creating-repositories-and-backups">Creating repositories and backups</h1>
+
+<p>To create a borg backup repository using a specified SSH private key, use</p>
+
+<pre><code>BORG_RSH='ssh -i &lt;/path/to/private/key&gt;' borg init -e repokey &lt;ssh://borg@yourDomain:exposedPort/var/backups/borg/repoName&gt;
+</code></pre>
+
+<p>For each backup repository, you can create a borg backup script like this:</p>
+
+<pre><code>#!/bin/sh
+
+export BORG_RSH='&lt;ssh -i /path/to/private/key&gt;'
+
+# Setting this, so the repo does not need to be given on the commandline:
+export BORG_REPO=&lt;ssh://borg@yourDomain:exposedPort/var/backups/borg/repoName&gt;
+
+# Setting this, so you won't be asked for your repository passphrase:
+export BORG_PASSPHRASE=$(&lt;Password manager call to get the secret key&gt;)
+
+HOSTNAME=`hostname`
+DATE=`date +%Y-%m-%d-%s `
+
+# some helpers and error handling:
+info() { printf &quot;\n%s %s\n\n&quot; &quot;$( date )&quot; &quot;$*&quot; &gt;&amp;2; }
+trap 'echo $( date ) Backup interrupted &gt;&amp;2; exit 2' INT TERM
+
+info &quot;Starting backup&quot;
+
+# Backup the most important directories into an archive named after
+# the machine this script is currently running on:
+
+borg create                         \
+    --verbose                       \
+    --filter AME                    \
+    --list                          \
+    --progress                      \
+    --stats                         \
+    --show-rc                       \
+    --compression zlib              \
+    --exclude-caches                \
+    --exclude '/home/*/.cache/*'    \
+    ::$HOSTNAME-$DATE               \
+    /home
+
+backup_exit=$?
+
+if [ ${backup_exit} -eq 0 ];
+    then
+        info &quot;Pruning repository&quot;
+
+        # Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
+        # archives of THIS machine. The '{hostname}-' prefix is very important to
+        # limit prune's operation to this machine's archives and not apply to
+        # other machines' archives also:
+
+        borg prune                          \
+            --list                          \
+            --prefix $HOSTNAME-             \
+            --show-rc                       \
+            --keep-daily    7               \
+            --keep-weekly   4               \
+            --keep-monthly  6               \
+
+        prune_exit=$?
+
+        # use highest exit code as global exit code
+        global_exit=$(( backup_exit &gt; prune_exit ? backup_exit : prune_exit ))
+
+        if [ ${global_exit} -eq 1 ];
+        then
+            info &quot;Backup and/or Prune finished with a warning&quot;
+        fi
+
+        if [ ${global_exit} -gt 1 ];
+        then
+            info &quot;Backup and/or Prune finished with an error&quot;
+        fi
+
+        exit ${global_exit}
+fi
+
+exit ${backup_exit}
+
+</code></pre>
+
+<p>This script can be called daily or using a cronjob.</p>
+
+<p>After creating a few backups, the results can look like this:</p>
+
+<pre><code>                       Original size      Compressed size    Deduplicated size
+This archive:               75.24 GB             61.03 GB             53.69 GB
+All archives:              100.14 GB             84.17 GB             53.69 GB
+
+</code></pre>
+
+<p>Note the deduplicated size vs. original size, showing the amount of space that&rsquo;s possible to save using borg.</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
+    <h5>January 4, 2019</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
+    <h5>May 18, 2018</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="tags/hacking"><kbd class="item-tag">hacking</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
+    <h5>April 10, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vim"><kbd class="item-tag">vim</kbd></a>
+    
+    <a href="tags/tmux"><kbd class="item-tag">tmux</kbd></a>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

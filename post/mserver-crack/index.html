@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Cracking Music Server Software</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Cracking Music Server Software</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/mserver-crack/">Cracking Music Server Software</a></h4>
+    <h5>May 13, 2018</h5>
+    
+    <a href="tags/cracking"><kbd class="item-tag">cracking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<h1 id="tl-dr">tl;dr</h1>
+
+<p>Generating licenses using <code>MD5(email)</code> is bad.</p>
+
+<p>Validating licenses using HTTP in plain text is bad.</p>
+
+<h1 id="the-software">The Software</h1>
+
+<p>This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&rsquo;t be disclosed.</p>
+
+<h1 id="source-code">Source Code</h1>
+
+<p>The server application consists of a software package written in java. This means that decompilation can easily be performed using <code>jd-gui</code> or similar tools. Afterwards simple <code>grep</code>ing for <code>license</code> yields these interesting methods:</p>
+
+<ul>
+<li><code>void validateLicense()</code></li>
+<li><code>boolean isLicenseValid(String email, String license)</code></li>
+</ul>
+
+<p>Further analysis shows that licensed are validated in two steps:</p>
+
+<ol>
+<li>Local checks using <code>isLicenseValid(String email, String license)</code></li>
+<li>Server side checks using <code>validateLicense()</code>`</li>
+</ol>
+
+<h1 id="local-checks">Local Checks</h1>
+
+<p>After digging into the source code, this code snippet has been identified to be responsible for local license checks:</p>
+
+<pre><code>public boolean isLicenseValid(String email, String license) {
+   if ((email == null) || (license == null)) {
+      return false;
+   }
+   return license.equalsIgnoreCase(StringUtil.md5Hex(email.toLowerCase()));
+}
+</code></pre>
+
+<p>That&rsquo;s right: All licensed issued are basically <code>MD5(email)</code>. Bypassing this check is done by generating a MD5 hash of a random email address. This also means that you can hijack another persons license only by knowing his/her email address.</p>
+
+<h1 id="remote-checks">Remote Checks</h1>
+
+<p>Bypassing local checks is easily possible - not let&rsquo;s have a look at the API call which triggers server side checks:</p>
+
+<pre><code>private void validateLicense() {
+   String email = getLicenseEmail();
+   Date date = getLicenseDate();
+
+   if ((email == null) || (date == null)) {
+      licenseValidated = false;
+      return;
+   }
+   try
+   {
+      String content = HttpUtil.httpGet(&quot;http://&lt;domain&gt;/&lt;endpoint&gt;?email=&quot; + StringUtil.urlEncode(email) + &quot;&amp;date=&quot; + date
+            .getTime() + &quot;&amp;version=&quot; + versionService.getLocalVersion(), 120, 120);
+
+      licenseValidated = ((content != null) &amp;&amp; (!content.contains(&quot;false&quot;)));
+      if (!licenseValidated) {
+         LOG.warn(&quot;License key is not valid.&quot;);
+      }
+      String[] lines = StringUtils.split(content);
+      if (lines.length &gt; 1) {
+         licenseExpires = new Date(Long.parseLong(lines[1]));
+      }
+   }
+   catch (Throwable x) {
+      LOG.warn(&quot;Failed to validate license.&quot;, x);
+   }
+}
+</code></pre>
+
+<p>To bypass the second validation stage, one could perform an easy attack: Redirecting <code>domain</code> locally to an attacker provided server which always returns the string <code>true</code>. However, another approach seemed to require even less work.</p>
+
+<p>By spawning a docker container with the name <code>domain</code> and linking it to the application server, this check seemed to be bypassed. This step basically redirects <code>domain</code> to a non existing server which tricks the validation process into being successfull all the time. Most likely this is intended behaviour because people don&rsquo;t need an internet connection to validate licenses.</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
+    <h5>October 26, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/gdb"><kbd class="item-tag">gdb</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/autohax/">Car Hacking: A Short Overview</a></h4>
+    <h5>October 23, 2018</h5>
+    
+    <a href="tags/automotive"><kbd class="item-tag">automotive</kbd></a>
+    
+    <a href="tags/car-hacking"><kbd class="item-tag">car-hacking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/multihack/">Creating A Multiplayer Game Hack</a></h4>
+    <h5>August 28, 2018</h5>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

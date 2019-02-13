@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gogs on A Blog.</title>
+    <link>/tags/gogs/</link>
+    <description>Recent content in Gogs on A Blog.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 15 Jan 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/gogs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Building a CI Docker Pipeline Using Docker in Your Docker</title>
+      <link>/post/docker-jenkins/</link>
+      <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/docker-jenkins/</guid>
+      <description>First of all – why should you want to build all the docker images on your own build server?
+ Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry. If that isn&amp;rsquo;t the case yet, you can just use the pre-built registry image using the following Makefile.</description>
+    </item>
+    
+  </channel>
+</rss>

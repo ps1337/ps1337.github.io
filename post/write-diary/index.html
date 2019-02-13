@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Auditing WriteDiary.com (2 CVEs) </title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Auditing WriteDiary.com (2 CVEs) </a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/write-diary/">Auditing WriteDiary.com (2 CVEs) </a></h4>
+    <h5>October 27, 2017</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p><em>General note: The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&rsquo;t described here. However, no response has been received.</em></p>
+
+<p>WriteDiary consists of a <a href="http://www.WriteDiary.com">webapp</a> and an <a href="https://play.google.com/store/apps/details?id=com.adpog.diary">Android app</a> (version 4.72). For the audit, the android app was the primary target.</p>
+
+<h1 id="cve-2017-15581-lack-of-https-usage-lack-of-user-data-encryption-when-transmitting">CVE-2017-15581: Lack of HTTPS-usage, lack of user data encryption when transmitting</h1>
+
+<p>In the &ldquo;Diary with lock&rdquo; (aka WriteDiary) application 4.72 for Android, neither HTTPS nor other encryption is used for transmitting data, despite the <a href="http://writediary.com/">website</a> states that the product is intended for &ldquo;a personal journal of secrets and feelings,&rdquo; which allows remote attackers to obtain sensitive information by sniffing the network during <code>LoginActivity</code> or <code>NoteActivity</code> execution. You can simply check the file <code>strings.xml</code> for <code>api_url_prod</code> with the value of <code>http://diary.adpog.com/api2</code>.</p>
+
+<p><img src="/img/write-diary/cleartext_pw.png" alt="Password transmission in plain text" /></p>
+
+<p><img src="/img/write-diary/cleartext_body.png" alt="Plaintet body" /></p>
+
+<h2 id="summary">Summary</h2>
+
+<p>The CVE details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15581">here</a></p>
+
+<table width=100% border=1>
+    <tr>
+        <td align="center" valign="middle"><b>Vulnerability Type</b></td>
+        <td align="center" valign="middle">Plaintext data transport</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+        <td align="center" valign="middle">WriteDiary - 4.72</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Component</b></td>
+        <td align="center" valign="middle">LoginActivity, NoteActivity</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Impact</b></td>
+        <td align="center" valign="middle">Information disclosure of sensitive user data</td>
+    </tr>
+</table>
+
+<h1 id="cve-2017-15582-usage-of-static-aes-parameters">CVE-2017-15582: Usage of static AES parameters</h1>
+
+<p>In <code>net.MCrypt</code> in the &ldquo;Diary with lock&rdquo; (aka WriteDiary) application 4.72 for Android, hardcoded <code>SecretKey</code> and <code>iv</code> variables are used for the AES parameters, which makes it easier for attackers to obtain the cleartext of stored diary entries:</p>
+
+<p><img src="/img/write-diary/staticAES.png" alt="Static AES parameters" /></p>
+
+<p>As you can see, the specific values are:</p>
+
+<pre><code>secret key = &quot;f8djD2kfdU31wuRu&quot;
+iv = &quot;aBcNvn71dkdjf8hf&quot;
+</code></pre>
+
+<h2 id="summary-1">Summary</h2>
+
+<p>The CVE details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15582">here</a></p>
+
+<table width=100% border=1>
+    <tr>
+        <td align="center" valign="middle"><b>Vulnerability Type</b></td>
+        <td align="center" valign="middle">Hard coded AES parameters</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+        <td align="center" valign="middle">WriteDiary - 4.72</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Component</b></td>
+        <td align="center" valign="middle">net.MCrypt</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Impact</b></td>
+        <td align="center" valign="middle">Information disclosure of sensitive user data</td>
+    </tr>
+</table>
+
+<h1 id="additional-note">Additional note</h1>
+
+<p>Further analysis showed that the data stored on the webapplication server is not encrypted. This means, that the whole concept isn&rsquo;t as private as it claims it is. On top of that, there&rsquo;s a built-in backdoor which lets the administrator access the confidential diary entries of every user.</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/realtek-driverutil/">Exploiting Unqoted Service Paths For Fun and No Profit</a></h4>
+    <h5>March 15, 2018</h5>
+    
+    <a href="tags/exploit"><kbd class="item-tag">exploit</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+    <a href="tags/windows"><kbd class="item-tag">windows</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/oral-b/">Auditing the Oral-B App (v5.0.0) (1 CVE)</a></h4>
+    <h5>January 8, 2018</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/nq-contactsbackup/">Auditing NQ Contacts Backup &amp; Restore 1.1 (3 CVEs)</a></h4>
+    <h5>October 29, 2017</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

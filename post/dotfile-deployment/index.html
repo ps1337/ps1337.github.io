@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Automated and Tested Dotfile Deployment Using Ansible and Docker</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Automated and Tested Dotfile Deployment Using Ansible and Docker</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/dotfile-deployment/">Automated and Tested Dotfile Deployment Using Ansible and Docker</a></h4>
+    <h5>March 8, 2018</h5>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="tags/dotfiles"><kbd class="item-tag">dotfiles</kbd></a>
+    
+    <a href="tags/ansible"><kbd class="item-tag">ansible</kbd></a>
+    
+    <a href="tags/travis"><kbd class="item-tag">travis</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>This is the second part of my posts about Dotfile management. Part one can be found <a href="/post/dotfile-shellcheck/">here</a>.</p>
+
+<p>After spending a lot of time and effort on your Dotfiles, it may be useful to setup an automated deployment process. There are existing solutions like <a href="https://www.gnu.org/software/stow/">GNU Stow</a>, but for maximum flexibility the use of <a href="https://www.ansible.com/">Ansible</a> may be a better option. Using this, files and advanced configuration hierarchies can be distributed easily. This post covers my personal setup, which also includes an automated deployment test approach for multiple linux distributions.</p>
+
+<h1 id="getting-started">Getting started</h1>
+
+<h2 id="structure">Structure</h2>
+
+<p>This step will guide you through the process of setting up the required folder hierarchy for the Ansible project. First of all, a folder called <code>roles</code> will be created at the project root to store all created Ansible roles. A role equips a host with the ability to perform required actions and to fulfill a specific &lsquo;role&rsquo;. Basic roles <em>can</em> be</p>
+
+<ul>
+<li><code>dotfiles</code>: Provide all Dotfiles, fonts, etc.</li>
+<li><code>general</code>: Installs the most basic tools you will need on all hosts and Dotfile dependencies (This can be moved into the <code>dotfile</code> role if desired)</li>
+<li><code>vim</code>: Installs <code>vim</code>/<code>neovim</code> and all plugin dependencies.</li>
+</ul>
+
+<p>Each role gets its on subfolder in the <code>roles</code> directory. In a specific role folder, all executed actions will be defined in the file <code>tasks/main.yml</code>, while additional task files can be included at runtime. For more info on this and additional actions, you can refer to the Ansible documentation.</p>
+
+<p>After setting up roles, additional helper scripts and files are created to execute the deployment process, e.g.:</p>
+
+<ul>
+<li><code>Makefile</code> to start specific deployment strategies</li>
+<li><code>deploy.yml</code> to call the created roles in a modular manner</li>
+<li><code>updateDotfiles.yml</code> only executes <code>dotfiles</code> role to update the provided files and symlinks on a host</li>
+</ul>
+
+<p><em>Note: My Roles and helper files can be checked <a href="https://github.com/ps1337/Dotfile-tools">here</a>.</em></p>
+
+<p>After creating this structure, it can look like this:</p>
+
+<pre><code>
+├── roles
+│   ├── dotfiles
+│   │   └── tasks
+│   │       ├── main.yml
+│   │       └── symlinks.yml
+│   ├── general
+│   │   ├── files
+│   │   └── tasks
+│   │       ├── arch.yml
+│   │       ├── debian.yml
+│   │       ├── main.yml
+│   │       └── ubuntu.yml
+│   └── vim
+│       └── tasks
+│           ├── arch.yml
+│           ├── debian.yml
+│           ├── main.yml
+│           └── ubuntu.yml
+├── .deployTest.yml
+├── deploy.yml
+├── Makefile
+├── README.md
+├── .travis.yml
+└── updateDotfiles.yml
+
+</code></pre>
+
+<h2 id="role-example">Role example</h2>
+
+<p>When using Ansible, it&rsquo;s important to use the predefined modules in order to have idempotency for all actions. Unwanted side effects can occur if this isn&rsquo;t taken care of. For example, cloning a Dotfiles repository can be as simple as:</p>
+
+<pre><code>- name: Clone Dotfiles repo
+  git:
+    repo: 'https://github.com/ps1337/Dotfiles.git'
+    dest: ~/.dotfiles
+    update: yes
+    recursive: yes
+
+</code></pre>
+
+<p>To create symlinks for specific files, the following structure can be of use:</p>
+
+<pre><code>- name: Create Symlinks for public files
+  file:
+    src: &quot;{{ srcBase }}/.dotfiles/{{ item.src }}&quot;
+    dest: &quot;{{ dstBase }}/{{ item.dst }}&quot;
+    state: link
+    force: yes
+  with_items:
+    - { src: &quot;aliases&quot;, dst: &quot;.aliases&quot; }
+    - { src: &quot;bash_profile&quot;, dst: &quot;.bash_profile&quot; }
+    - { src: &quot;bashrc&quot;, dst: &quot;.bashrc&quot; }
+    - { src: &quot;bindings&quot;, dst: &quot;.bindings&quot; }
+    - { src: &quot;dockerfunc&quot;, dst: &quot;.dockerfunc&quot; }
+    - { src: &quot;dunst&quot;, dst: &quot;.config/dunst&quot; }
+    - { src: &quot;exports&quot;, dst: &quot;.exports&quot; }
+
+</code></pre>
+
+<p>Note that <code>srcBase</code> and <code>dstBase</code> are Ansible variables. These values can be overridden for each user. Using this, multiple users can share a locally cloned repository of Dotfiles.</p>
+
+<h2 id="additional-tricks">Additional Tricks</h2>
+
+<ol>
+<li><p>Support for secret sub repositories can be implemented pretty easy using the <code>vars_prompt</code> and <code>when</code> directives as you can see <a href="https://github.com/ps1337/Dotfile-tools/blob/master/deploy.yml">here</a> and <a href="https://github.com/ps1337/Dotfile-tools/blob/master/roles/dotfiles/tasks/symlinks.yml">here</a>.</p></li>
+
+<li><p>The generic package manager <code>package</code> can be used to install packages easily without having to specify <code>apt</code> or <code>pacman</code>.</p></li>
+
+<li><p>Actions which are specific for a distribution can be included at runtime using:</p></li>
+</ol>
+
+<pre><code>- include_tasks: ubuntu.yml
+  when: ansible_distribution == &quot;Ubuntu&quot;`
+</code></pre>
+
+<h1 id="docker-travis-automated-testing">Docker + Travis = Automated Testing</h1>
+
+<p>After <a href="/post/dotfile-shellcheck/">setting up Travis CI</a> for your Dotfile deployment repository, this <code>.travis.yml</code> file can be used to trigger the deployment tests:</p>
+
+<pre><code>services:
+  - docker
+
+env:
+  - BUILD_CFG=arch
+  - BUILD_CFG=ubuntu
+  - BUILD_CFG=debian
+
+script:
+  - |
+      if [ &quot;$BUILD_CFG&quot; == &quot;ubuntu&quot; ]; then
+          docker run \
+              --rm \
+              -v $PWD:/tmp/Dotfile-tools \
+              ubuntu:latest \
+              bash -c &quot;apt update &amp;&amp; \
+                       apt -y install \
+                           sudo \
+                           make &amp;&amp; \
+                       cd /tmp/Dotfile-tools &amp;&amp; \
+                       make ansible &amp;&amp; \
+                       make test&quot;
+
+      elif [ &quot;$BUILD_CFG&quot; == &quot;debian&quot; ]; then
+          docker run \
+              --rm \
+              -v $PWD:/tmp/Dotfile-tools \
+              debian:latest \
+              bash -c &quot;apt update &amp;&amp; \
+                       apt -y install \
+                           sudo \
+                           make \
+                           gnupg &amp;&amp; \
+                       cd /tmp/Dotfile-tools &amp;&amp; \
+                       make ansible &amp;&amp; \
+                       make test&quot;
+
+      elif [ &quot;$BUILD_CFG&quot; == &quot;arch&quot; ]; then
+          docker run \
+              --rm \
+              -v $PWD:/tmp/Dotfile-tools \
+              alekzonder/archlinux-yaourt:latest \
+              bash -c &quot;pacman --noconfirm -Syu \
+                           sudo \
+                           which \
+                           gawk \
+                           python \
+                           make &amp;&amp; \
+                       cd /tmp/Dotfile-tools &amp;&amp; \
+                       sudo -u yaourt bash -c 'cd /tmp/Dotfile-tools &amp;&amp; \
+                                               make ansible &amp;&amp; make test'&quot;
+      fi
+
+after_success:
+  - // e.g. send notification using Telegram
+
+after_failure:
+  - // e.g. send notification using Telegram
+</code></pre>
+
+<p>As you can see, it&rsquo;s pretty easy to test the Dotfile provisioning on Arch, Ubuntu and Debian at the same time using Docker and Travis. For each value for <code>BUILD_CFG</code>, a separate deploying process will be started. In each spawned container, Ansible gets installed and all Ansible roles will be executed locally in the container to simulate deploying the Dotfiles and dependencies on a real host.</p>
+
+<p>This can also be performed in intervals using cron jobs to ensure a working deployment suite.</p>
+
+<p>As a bonus, the dependencies of all plugins, helper scripts and other fancy stuff you use will be documented within Ansible roles if done correctly.</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
+    <h5>January 4, 2019</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
+    <h5>May 18, 2018</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="tags/hacking"><kbd class="item-tag">hacking</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/shell-upgrade/">Methods to Upgrade nc Reverse Shells</a></h4>
+    <h5>May 16, 2018</h5>
+    
+    <a href="tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

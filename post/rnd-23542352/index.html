@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Random Note #23542351: Using the GitHub API to improve Dockerfiles</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Random Note #23542351: Using the GitHub API to improve Dockerfiles</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-23542352/">Random Note #23542351: Using the GitHub API to improve Dockerfiles</a></h4>
+    <h5>March 20, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify"><p>When writing Dockerfiles, people often use something like this to download and install software from GitHub:</p>
+
+<pre><code>ENV SOFTWARE_VERSION 1.33.7
+RUN curl -sSL \
+    https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb
+</code></pre>
+
+<p>This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:</p>
+
+<pre><code>curl -sSL \
+   $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \
+   grep &quot;browser_download_url&quot; | \
+   grep &quot;amd64.deb&quot; | \
+   cut -d &quot;:&quot; -f 2,3 | \
+   tr --delete \&quot; | \
+   tr --delete &quot; &quot;) \
+-o /tmp/software-amd64.deb \
+</code></pre>
+
+<p>As you can see, the endpoint at <code>https://api.github.com/repos/user/repo/releases/latest</code> returns a JSON object which contains the download links for the newest release for each maintained architecture (along with some additional stuff maybe). For example, let&rsquo;s have a look at <a href="https://github.com/atom/atom/">Atom</a>:</p>
+
+<pre><code>&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-1.25.0-full.nupkg&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-amd64.deb&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-amd64.tar.gz&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-api.json&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-mac-symbols.zip&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-mac.zip&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-windows.zip&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-x64-windows.zip&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom.x86_64.rpm&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/AtomSetup-x64.exe&quot;
+&quot;browser_download_url&quot;:
+    &quot;https://github.com/atom/atom/releases/download/v1.25.0/AtomSetup.exe&quot;
+</code></pre>
+
+<p>This can be parsed with <code>grep</code> and <code>tr</code> like above or <a href="https://starkandwayne.com/blog/how-to-download-the-latest-release-from-github/">by using jq</a>.</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
+    <h5>January 4, 2019</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
+    <h5>October 26, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/gdb"><kbd class="item-tag">gdb</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-632424-2fa-backup/">Random Note #632424: Backup Google Authenticator Data</a></h4>
+    <h5>June 20, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/backups"><kbd class="item-tag">backups</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

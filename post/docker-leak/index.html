@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Information Leak in Docker</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Information Leak in Docker</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
+    <h5>January 4, 2019</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>During an assessment of the Docker platform in November 2018, two information leaks regarding the <code>/proc/asound</code> path were discovered in the OCI (Open Container Initiative) specification. These issues have been <a href="https://github.com/moby/moby/issues/38285">fixed</a> quickly by the Docker security team using the provided suggestions.</p>
+
+<h1 id="leak-of-audio-device-status-of-the-host">Leak of audio device status of the host</h1>
+
+<p>When media is being played on the host, the <code>/proc/asound/card*/pcm*p/sub*/status</code> files may contain information regarding the status of media playback. Consider this command for a demonstration:</p>
+
+<pre><code>docker run --rm \
+    ubuntu:latest bash -c \
+        &quot;sleep 5; \
+        cat /proc/asound/card*/pcm*p/sub*/status | \
+        grep state | \
+        cut -d ' ' -f2 | \
+        grep RUNNING || echo 'not running'&quot;
+</code></pre>
+
+<p>When playing a media file, watching a video or executing similar actions involving sound output on the host, the above command demonstrates that a containerized process is able to gather information on this status. Therefore a process in a container is able to check whether and what kind of user activity is present on the host system. Also, this may indicate whether a container runs on a desktop system or a server as media playback rarely happens on server systems.</p>
+
+<p>The scenario described above is in regard to media playback. Moreover, when examining the <code>/proc/asound/card*/pcm*c/sub*/status</code> files (<code>pcm*c</code> instead of <code>pcm*p</code>) this can also leak information regarding capturing sound, as in recording audio or making calls on the host system.</p>
+
+<h1 id="leak-of-monitor-type">Leak of Monitor Type</h1>
+
+<p>Monitors can also act as sound output devices when connected using a compatible interface like DisplayPort. The listing below illustrates how the model type of the connected monitors can be read from within a container:</p>
+
+<pre><code>docker run --rm \
+    ubuntu:latest bash -c \
+        &quot;cat /proc/asound/card*/eld* | \
+        grep monitor_name&quot;
+
+monitor_name SMS24A650 # (A Samsung monitor)
+monitor_name SMS24A650
+</code></pre>
+
+<p>This information should not be accessible from within a container as it contains specific information on the host and its environment.</p>
+
+<p>These issues have been reported to the Docker maintainers were fixed by <a href="https://github.com/moby/moby/pull/38299/files">moving</a> <code>/proc/asound</code> to the list of paths that are being masked to make each container manage its own versions of the affected paths. This path list is part of the OCI specification. Therefore, the fix for these issues also propagates to <code>containerd</code> which also uses this specification.</p>
+
+<h1 id="lessons-learned">Lessons Learned</h1>
+
+<p>Containers are a construct of namespaces and cgroups in combination with some C and Go code that tie everything together. This <em>tries</em> to isolate the underlying system by any means necessary (which works pretty well as of today). There&rsquo;s always the possibility of information leaks in case something is missed or newly introduced (either by Linux or the container managers). Theoretically, there can exist more issues of this type in the current state of container managers. Maybe some of them can be found in an automated manner? Hopefully AppArmor or similar mechanisms are in place to at least prevent writing leaked paths to prevent potential breakouts :)</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
+    <h5>May 18, 2018</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="tags/hacking"><kbd class="item-tag">hacking</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
+    <h5>April 10, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vim"><kbd class="item-tag">vim</kbd></a>
+    
+    <a href="tags/tmux"><kbd class="item-tag">tmux</kbd></a>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-23542352/">Random Note #23542351: Using the GitHub API to improve Dockerfiles</a></h4>
+    <h5>March 20, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

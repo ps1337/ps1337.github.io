@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Building a CI Docker Pipeline Using Docker in Your Docker</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Building a CI Docker Pipeline Using Docker in Your Docker</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-jenkins/">Building a CI Docker Pipeline Using Docker in Your Docker</a></h4>
+    <h5>January 15, 2018</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/jenkins"><kbd class="item-tag">jenkins</kbd></a>
+    
+    <a href="tags/gogs"><kbd class="item-tag">gogs</kbd></a>
+    
+    <a href="tags/ci"><kbd class="item-tag">ci</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify"><p>First of all – why should you want to build all the docker images on your own build server?</p>
+
+<ul>
+<li>Complete control over the build process</li>
+<li>You know when the images are built and how up-to-date they are</li>
+<li>Use of private repositories and images</li>
+<li>Because you can</li>
+</ul>
+
+<p>This assumes that you already have control over a private docker registry. If that isn&rsquo;t the case yet, you can just use the pre-built registry image using the following <code>Makefile</code>. Just be sure to edit the placeholders marked by <code>~~</code>.</p>
+
+<p><em>Note: Use tabs instead of spaces in</em> <code>Makefile</code><em>s!</em></p>
+
+<pre><code>SHELL := /bin/bash
+
+# The directory of this file
+DIR := $(shell echo $(shell cd &quot;$(shell  dirname &quot;${BASH_SOURCE[0]}&quot; )&quot; &amp;&amp; pwd ))
+
+# If you use an nginx-proxy for TLS, you have to set this accordingly.
+VIRTUALHOST := &quot;~~YourRegistryDomain&quot;
+CONTAINER_NAME ?= &quot;~~YourContainerName&quot;
+
+# Use the registry image
+IMAGE_NAME ?= registry
+VERSION ?= 2
+
+
+# This will output the help for each task
+# thanks to https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+.PHONY: help
+
+help: ## This help
+@awk 'BEGIN {FS = &quot;:.*?## &quot;} /^[a-zA-Z_-]+:.*?## / {printf &quot;\033[36m%-30s\033[0m %s\n&quot;, $$1, $$2}' $(MAKEFILE_LIST)
+
+.DEFAULT_GOAL := help
+
+
+# Docker commands
+# Build the container
+build: ## Build the container
+	docker build --rm -t $(IMAGE_NAME) .
+
+build-nc: ## Build the container without caching
+	docker build --rm --no-cache -t $(IMAGE_NAME) .
+
+run: ## Run container
+	docker pull $(IMAGE_NAME):$(VERSION) &amp;&amp; \
+	docker run \
+		-d \
+		--name=$(CONTAINER_NAME) \
+		--restart=always \
+		-v $(DIR)/data:/var/lib/registry \
+		-v $(DIR)/htpasswd:/htpasswd \
+		-v $(DIR)/config.yml:/etc/docker/registry/config.yml \
+		--expose 5000 \
+		$(IMAGE_NAME):$(VERSION)
+
+stop: ## Stop a running container
+	docker stop $(CONTAINER_NAME)
+
+remove: ## Remove a (running) container
+	docker rm -f $(CONTAINER_NAME)
+
+remove-image-force: ## Remove the latest image (forced)
+	docker rmi -f $(IMAGE_NAME):$(VERSION)
+</code></pre>
+
+<p>The help message of the <code>Makefile</code> can be displayed with <code>make</code>.</p>
+
+<p>As you can see in the <code>run</code> rule, the file <code>config.yml</code> gets mounted into the container. You <strong>should</strong> create this file along with the specified <code>.htpasswd</code> file as specified in the <code>run</code> command of the <code>Makefile</code> to disallow anonymous access. That being said, the files should be placed in the same folder the <code>Makefile</code> was saved in.</p>
+
+<p>My <code>config.yml</code> looks like this (minus the placeholder for the <code>secret</code> directive):</p>
+
+<pre><code>version: 0.1
+log:
+  level: info
+  fields:
+    service: registry
+storage:
+  cache:
+    layerinfo: inmemory
+  filesystem:
+    rootdirectory: /var/lib/registry
+auth:
+  htpasswd:
+    realm: basic-realm
+    path: /htpasswd
+http:
+  addr: :5000
+  secret: ~~YourHTTPSecret
+</code></pre>
+
+<p>You can then use <code>make run</code> to start your private registry. The folder <code>$(DIR)/data</code> will be used for persistent storage.</p>
+
+<p>Now that the registry is up and running, it&rsquo;s time to create a Jenkins instance in another container using this <code>Dockerfile</code>:</p>
+
+<pre><code>FROM jenkins/jenkins:lts
+
+USER root
+
+# Install the dependencies to use docker in the container
+RUN apt-get update &amp;&amp; \
+    apt-get install -y \
+        sudo \
+        libltdl7 \
+        libltdl-dev \
+        make &amp;&amp; \
+    rm -rf /var/lib/apt/lists/*
+
+# Allow sudo access for the jenkins user in order
+# to build images
+RUN echo &quot;jenkins ALL=NOPASSWD: ALL&quot; &gt;&gt; /etc/sudoers
+
+USER jenkins
+</code></pre>
+
+<p>It&rsquo;s worth mentioning that this Jenkins instance <strong>should&rsquo;nt be publically exposed</strong> because of different reasons:</p>
+
+<ul>
+<li><p>Jenkins user = root in the container. However, this is required to build docker containers automatically using docker-in-docker.</p></li>
+
+<li><p>Jenkins is Jenkins and we don&rsquo;t trust Jenkins security.</p></li>
+</ul>
+
+<p>Personally, I use another <code>Makefile</code> to run Jenkins (as before - mind the placeholders marked by <code>~~</code>):</p>
+
+<pre><code>SHELL := /bin/bash
+VERSION ?= latest
+
+# The directory of this file
+DIR := $(shell echo $(shell cd &quot;$(shell  dirname &quot;${BASH_SOURCE[0]}&quot; )&quot; &amp;&amp; pwd ))
+REGISTRY_VIRTUALHOST := &quot;~~YourRegistryDomain&quot;
+DOCKER_PATH := $(shell which docker)
+
+IMAGE_NAME ?= ~~YourRegistryImage
+CONTAINER_NAME ?= ~~YourContainerName
+
+# This will output the help for each task
+# thanks to https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
+.PHONY: help
+
+help: ## This help
+@awk 'BEGIN {FS = &quot;:.*?## &quot;} /^[a-zA-Z_-]+:.*?## / {printf &quot;\033[36m%-30s\033[0m %s\n&quot;, $$1, $$2}' $(MAKEFILE_LIST)
+
+.DEFAULT_GOAL := help
+
+# Docker commands
+# Build the container
+build: ## Build the container
+	docker build --rm -t $(IMAGE_NAME) .
+
+build-nc: ## Build the container without caching
+	docker build --rm --no-cache -t $(IMAGE_NAME) .
+
+run: ## Run container
+	docker pull $(IMAGE_NAME):$(VERSION) &amp;&amp; \
+	chown -R 1000 $DIR/data &amp;&amp; \
+	docker run \
+		-d \
+		--name=$(CONTAINER_NAME) \
+		--restart=always \
+		-v $(DIR)/data:/var/jenkins_home \
+		-v /var/run/docker.sock:/var/run/docker.sock:ro \
+		-v $(DOCKER_PATH):/usr/bin/docker:ro \
+		--expose 8080 \
+		-p 127.0.0.1:8080:8080 \
+		--link $(REGISTRY_VIRTUALHOST) \
+		$(IMAGE_NAME):$(VERSION)
+
+stop: ## Stop a running container
+	docker stop $(CONTAINER_NAME)
+
+remove: ## Remove a (running) container
+	docker rm -f $(CONTAINER_NAME)
+
+remove-image-force: ## Remove the latest image (forced)
+	docker rmi -f $(IMAGE_NAME):$(VERSION)
+
+</code></pre>
+
+<p>A few things are important here:</p>
+
+<ul>
+<li><p>Docker has to be installed on the host of the Jenkins container. The docker socket and binary will be mounted into the jenkins container.</p></li>
+
+<li><p>The jenkins container will be linked to the registry container for efficient data transfers - keep the container names consistent!</p></li>
+
+<li><p>Jenkins will only be accessible by <code>localhost</code> on the machine. I use SSH port forwarding to access the Jenkins instance from remote:
+<code>ssh -L &lt;localPort&gt;:localhost:&lt;exposedJenkinsContainerPort&gt; user@yourServer</code>.</p></li>
+</ul>
+
+<p>Using this, jenkins is accessible via <code>localhost:&lt;localPort&gt;</code> on my machine but <strong>not</strong> from the interwebz.</p>
+
+<p><em>Side note: Don&rsquo;t just use</em> <code>make remove</code> <em>on the jenkins container if you are currently logged in - data can be corrupted easily. Logout first.</em></p>
+
+<p>That&rsquo;s it! Now connect jenkins with your private gogs instance or whatever. Here&rsquo;s a hacky example of a <code>Jenkinsfile</code> one could use to build images:</p>
+
+<pre><code>node {
+
+    try {
+
+       def app
+
+          stage('Clone repository') {
+             /* Let's make sure we have the repository cloned to our workspace */
+
+             checkout scm
+          }
+
+       stage('Build image') {
+          /* This builds the actual image; synonymous to
+           * docker build on the command line */
+          sh 'sudo make build-nc'
+
+       }
+
+       stage('Push image') {
+          withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                // set the dockerhub credentials
+                credentialsId: 'YourCredentialID',
+                passwordVariable: 'REGISTRY_PASSWORD',
+                usernameVariable: 'REGISTRY_USERNAME']]) {
+             sh '''sudo docker login yourRegistryDomain -u ${REGISTRY_USERNAME} -p ${REGISTRY_PASSWORD}
+             sudo docker push yourRegistryDomain/yourImageName:latest'''
+          }
+       }
+
+       stage('Cleanup') {
+          sh 'sudo make remove-image-force'
+
+       }
+
+    }
+    catch(error) {
+       // Send a telegram messsage
+       sh 'curl -i -X GET &quot;https://api.telegram.org/botYourBotToken/sendMessage?chat_id=YourChatID&amp;text=failed&quot;'
+          error &quot;Exception --&gt; Aborting&quot;
+    }
+
+
+    sh 'curl -i -X GET &quot;https://api.telegram.org/botYourBotToken/sendMessage?chat_id=YourChatID&amp;text=OK&quot;'
+
+ }
+
+</code></pre>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
+    <h5>January 4, 2019</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
+    <h5>May 18, 2018</h5>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="tags/hacking"><kbd class="item-tag">hacking</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
+    <h5>April 10, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vim"><kbd class="item-tag">vim</kbd></a>
+    
+    <a href="tags/tmux"><kbd class="item-tag">tmux</kbd></a>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

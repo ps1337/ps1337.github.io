@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Universal Notifications Using Telegram and cURL</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Universal Notifications Using Telegram and cURL</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/telegram-notifications/">Universal Notifications Using Telegram and cURL</a></h4>
+    <h5>March 7, 2018</h5>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="tags/notification"><kbd class="item-tag">notification</kbd></a>
+    
+    <a href="tags/jenkins"><kbd class="item-tag">jenkins</kbd></a>
+    
+    <a href="tags/travis"><kbd class="item-tag">travis</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>If you ever wanted to get notified when certain things happen but didn&rsquo;t find a lightweight solution &ndash; here comes captain Telegram.</p>
+
+<p>Using a simple Telegram bot, it&rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is <code>curl</code> installed.</p>
+
+<h1 id="registering-a-bot">Registering a bot</h1>
+
+<p>First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</p>
+
+<ul>
+<li>Using your Telegram client, send a message to <code>@BotFather</code> with the command <code>/newbot</code> and follow the instructions.</li>
+<li>Note the bot token you receive after successfully registering the bot.</li>
+<li>Message your bot with a simple message like <code>/start</code> or <code>/test</code>.</li>
+<li>Use <code>curl -i -X GET https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/getUpdates</code> to get the chat ID of the chat you created in the previous chat.</li>
+</ul>
+
+<h1 id="sending-messages">Sending messages</h1>
+
+<p>Now, you should have to following things:
+- Bot API token
+- Chat ID of the chat between you and your newly created bot.</p>
+
+<p>To send a message, it&rsquo;s as simple as using the following command structure</p>
+
+<pre><code>curl -i -X GET &quot;https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/sendMessage?chat_id=&lt;CHAT_ID&gt;&amp;text=hello&quot;
+</code></pre>
+
+<h1 id="example-1-jenkins-build-notifications">Example 1: Jenkins build notifications</h1>
+
+<p>In order to get notified in case a Jenkins build succeeds or fails, you can edit the <code>Jenkinsfile</code> as follows</p>
+
+<pre><code>try {
+   // Build steps
+}
+catch(error) {
+   // Send Telegram message: Fail
+   error &quot;Exception occurred, aborting&quot;
+}
+// Send Telegram message: Success
+</code></pre>
+
+<h1 id="example-2-travis-notifications">Example 2: Travis notifications</h1>
+
+<p>If you use <a href="https://www.travis-ci.org">Travis CI</a> to build your projects after pushing to GitHub, notifications can be implemented by editing the <code>.travis.yml</code> file:</p>
+
+<pre><code>after_success:
+  - curl -iX GET &quot;https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$CHATID&amp;text=Build OK&quot; 2&gt;&amp;1 &gt;/dev/null
+
+after_failure:
+  - curl -iX GET &quot;https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$CHATID&amp;text=Build failed&quot; 2&gt;&amp;1 &gt;/dev/null
+</code></pre>
+
+<p>Two things are important here:</p>
+
+<ol>
+<li>Redirect the output to <code>/dev/null</code> in order to prevent the chat ID from being logged into the public build log.</li>
+<li>Add your secrets (<code>$TOKEN</code> and <code>$CHATID</code>) to the repository specific settings in Travis to populate the used environment variables in a secure manner.</li>
+</ol>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/shell-upgrade/">Methods to Upgrade nc Reverse Shells</a></h4>
+    <h5>May 16, 2018</h5>
+    
+    <a href="tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
+    <h5>April 10, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/vim"><kbd class="item-tag">vim</kbd></a>
+    
+    <a href="tags/tmux"><kbd class="item-tag">tmux</kbd></a>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/dotfile-shellcheck/">Using Shellcheck and Docker to Automatically Lint Dotfiles</a></h4>
+    <h5>March 8, 2018</h5>
+    
+    <a href="tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="tags/dotfiles"><kbd class="item-tag">dotfiles</kbd></a>
+    
+    <a href="tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="tags/travis"><kbd class="item-tag">travis</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

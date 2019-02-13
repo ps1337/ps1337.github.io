@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Monitoring on A Blog.</title>
+    <link>/tags/monitoring/</link>
+    <description>Recent content in Monitoring on A Blog.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 16 Mar 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/monitoring/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Monitor All the Things using Docker and Monit</title>
+      <link>/post/monit/</link>
+      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/monit/</guid>
+      <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&amp;rsquo;ve created a Dockerfile and image for Monit for this.
+Monit is extremely configurable and allows a maximum of flexibility when it comes to monitoring.
+Initially, a configuration file is required to get started. To get one, call</description>
+    </item>
+    
+  </channel>
+</rss>

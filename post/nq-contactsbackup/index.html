@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Auditing NQ Contacts Backup &amp; Restore 1.1 (3 CVEs)</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.52" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Auditing NQ Contacts Backup &amp; Restore 1.1 (3 CVEs)</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/nq-contactsbackup/">Auditing NQ Contacts Backup &amp; Restore 1.1 (3 CVEs)</a></h4>
+    <h5>October 29, 2017</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p><a href="https://play.google.com/store/apps/details?id=com.netqin.contactbackup">NQ Contacts Backup &amp; Restore</a> is an android app that allows users to backup and restore contact data (as vcard) to/from the remote NQ server. For the audit, the android app was the primary target.</p>
+
+<p><em>Note: The app shares its code base with <a href="https://play.google.com/store/apps/details?id=com.nqmobile.antivirus20">NQ Mobile Security &amp; Anti Virus</a> - hence the odd class names for a simple contact backup app.</em></p>
+
+<h1 id="cve-2017-15999-lack-of-https-usage">CVE-2017-15999: Lack of HTTPS usage</h1>
+
+<p>When logging in or transmitting data, the app communicates with the remote server via HTTP. This can be exploited in various ways. One of these is sniffing the request when a user logs in:</p>
+
+<p><img src="/img/nq-contactsbackup/xml.png" alt="XML file with a password hash" /></p>
+
+<p>As you can see, the username is being transmitted in cleartext.  The password is hashed with SHA-1.
+An attacker can now crack the SHA-1 hash (because that&rsquo;s pretty easy nowadays):</p>
+
+<p><img src="/img/nq-contactsbackup/cracked.png" alt="Cracked password hash" /></p>
+
+<p>Additionally, an attacker could use the sniffed hash to download the stored contacts from the server directly. As described later, the attacker can also access transmitted contact data.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>The CVE details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15599">here</a></p>
+
+<table width=100% border=1>
+    <tr>
+        <td align="center" valign="middle"><b>Vulnerability Type</b></td>
+        <td align="center" valign="middle">Plaintext data transport</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+        <td align="center" valign="middle">NQ Contacts Backup & Restore - 1.1</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Component</b></td>
+        <td align="center" valign="middle">Basically every component executing network action. For the login process: ContactAccountLogin and ContactAccountSwitch</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Impact</b></td>
+        <td align="center" valign="middle">Information Disclosure of sensitive data (login data)</td>
+    </tr>
+</table>
+
+<h1 id="cve-2017-15997-rc4-encryption-with-a-static-key">CVE-2017-15997: RC4 encryption with a static key</h1>
+
+<p>The app uses the RC4 stream cipher to encrypt/decrypt password stored in the android shared preferences. The file looks like this:</p>
+
+<p><img src="/img/nq-contactsbackup/sharedPref.png" alt="Shared Preferences" /></p>
+
+<p>The decryption routine, which can be found in <code>DataUtils</code>, look as follows:</p>
+
+<p><img src="/img/nq-contactsbackup/decryption.png" alt="Decryption Routine" /></p>
+
+<p>The stored value is base64-decoded and passed to the RC4 algorithm. The first parameter of decryptForXml is a static key, as you can see here:</p>
+
+<p><img src="/img/nq-contactsbackup/keyusage.png" alt="Key Usage" /></p>
+
+<p>Using this knowledge, it&rsquo;s easy to decrypt the stored password value from the shared preferences XML file:</p>
+
+<p><img src="/img/nq-contactsbackup/sharedprefs-decrypt.png" alt="Decryption of Shared Preferences" /></p>
+
+<p>This makes it easier for an attacker to decrypt login data of users.</p>
+
+<h2 id="summary-1">Summary</h2>
+
+<p>The CVE details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15597">here</a></p>
+
+<table width=100% border=1>
+    <tr>
+        <td align="center" valign="middle"><b>Vulnerability Type</b></td>
+        <td align="center" valign="middle">Usage of a static encryption key</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+        <td align="center" valign="middle">NQ Contacts Backup & Restore - 1.1</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Component</b></td>
+        <td align="center" valign="middle">NetQinSharedPreferences</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Impact</b></td>
+        <td align="center" valign="middle">Information Disclosure of login data</td>
+    </tr>
+</table>
+
+<h1 id="cve-2017-15998-des-encryption-with-a-static-key">CVE-2017-15998: DES encryption with a static key</h1>
+
+<p>When syncing user data (e.g. contacts as vcards), the app uses DES encrypted zip files, as you can see in the class <code>ServerBackupDoing$7</code> :</p>
+
+<p><img src="/img/nq-contactsbackup/encryptAndSync.png" alt="Encrypt And Sync" /></p>
+
+<p><img src="/img/nq-contactsbackup/DESusage-only-paths-as-parameter.png" alt="Parameters" /></p>
+
+<p>In the class DesCript, there exist two static keys:</p>
+
+<p><img src="/img/nq-contactsbackup/DESkeyspec-creation.png" alt="Static DES keys" /></p>
+
+<p>The key named keyByte is used to create a KeySpec, which represents the key being used to encrypt/decrypt data.</p>
+
+<p><img src="/img/nq-contactsbackup/DESkeyspec.png" alt="DES Key Specification" /></p>
+
+<p>Because there is no HTTPS in place, it&rsquo;s therefore possible for an attacker to gain access to sensitive contact data.</p>
+
+<h2 id="summary-2">Summary</h2>
+
+<p>The CVE details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15598">here</a></p>
+
+<table width=100% border=1>
+    <tr>
+        <td align="center" valign="middle"><b>Vulnerability Type</b></td>
+        <td align="center" valign="middle">Usage of a static encryption key</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+        <td align="center" valign="middle">NQ Contacts Backup & Restore - 1.1</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Affected Component</b></td>
+        <td align="center" valign="middle">ServerBackupDoing, DesCript</td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle"><b>Impact</b></td>
+        <td align="center" valign="middle">Information Disclosure of contact data</td>
+    </tr>
+</table>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/realtek-driverutil/">Exploiting Unqoted Service Paths For Fun and No Profit</a></h4>
+    <h5>March 15, 2018</h5>
+    
+    <a href="tags/exploit"><kbd class="item-tag">exploit</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+    <a href="tags/windows"><kbd class="item-tag">windows</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/oral-b/">Auditing the Oral-B App (v5.0.0) (1 CVE)</a></h4>
+    <h5>January 8, 2018</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/write-diary/">Auditing WriteDiary.com (2 CVEs) </a></h4>
+    <h5>October 27, 2017</h5>
+    
+    <a href="tags/android"><kbd class="item-tag">android</kbd></a>
+    
+    <a href="tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+
