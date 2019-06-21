@@ -36,7 +36,8 @@
       
       <guid>/post/bananabot/</guid>
       <description>This post covers creating a multihack for the game Counter Strike: Global Offensive. The created hack works with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools. Below you can find a demonstration of the finished cheat:
-The features therefore include: - Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains - No Flash: Be immune to flash grenades that would block the players vision - Aimbot: Automatically aim at the head of the nearest enemy</description>
+The features therefore include:
+ Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy  Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
     </item>
     
     <item>
