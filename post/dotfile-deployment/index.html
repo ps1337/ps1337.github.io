@@ -74,7 +74,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.54.0" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
 
         
@@ -263,12 +263,12 @@
 
 <li><p>The generic package manager <code>package</code> can be used to install packages easily without having to specify <code>apt</code> or <code>pacman</code>.</p></li>
 
-<li><p>Actions which are specific for a distribution can be included at runtime using:</p></li>
-</ol>
+<li><p>Actions which are specific for a distribution can be included at runtime using:</p>
 
 <pre><code>- include_tasks: ubuntu.yml
-  when: ansible_distribution == &quot;Ubuntu&quot;`
-</code></pre>
+when: ansible_distribution == &quot;Ubuntu&quot;`
+</code></pre></li>
+</ol>
 
 <h1 id="docker-travis-automated-testing">Docker + Travis = Automated Testing</h1>
 

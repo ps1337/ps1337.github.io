@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Cracking on A Blog.</title>
+    <title>cracking on A Blog.</title>
     <link>/tags/cracking/</link>
-    <description>Recent content in Cracking on A Blog.</description>
+    <description>Recent content in cracking on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 16 Aug 2018 00:00:00 +0000</lastBuildDate>

@@ -7,6 +7,10 @@
   </url>
   
   <url>
+    <loc>/project/bananabot/</loc>
+  </url>
+  
+  <url>
     <loc>/project/canalyzat0r/</loc>
   </url>
   
@@ -47,8 +51,44 @@
   </url>
   
   <url>
-    <loc>/post/binary-aslr-dep-32/</loc>
-    <lastmod>2019-05-01T00:00:00+00:00</lastmod>
+    <loc>/</loc>
+    <lastmod>2019-06-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/bananabot/</loc>
+    <lastmod>2019-06-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2019-06-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-06-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/binary/</loc>
+    <lastmod>2019-06-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/c&#43;&#43;/</loc>
+    <lastmod>2019-06-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/reverse-engineering/</loc>
+    <lastmod>2019-06-19T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -57,8 +97,38 @@
   </url>
   
   <url>
+    <loc>/tags/docker/</loc>
+    <lastmod>2019-01-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/vulnerability/</loc>
+    <lastmod>2019-01-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/rnd-092345-gdb/</loc>
     <lastmod>2018-10-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/exploiting/</loc>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/gdb/</loc>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/randomnote/</loc>
+    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -67,8 +137,26 @@
   </url>
   
   <url>
+    <loc>/tags/automotive/</loc>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/car-hacking/</loc>
+    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/multihack/</loc>
     <lastmod>2018-08-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/hooking/</loc>
+    <lastmod>2018-08-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -77,8 +165,20 @@
   </url>
   
   <url>
+    <loc>/tags/cracking/</loc>
+    <lastmod>2018-08-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/rnd-632424-2fa-backup/</loc>
     <lastmod>2018-06-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/backups/</loc>
+    <lastmod>2018-06-20T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -87,8 +187,26 @@
   </url>
   
   <url>
+    <loc>/tags/hacking/</loc>
+    <lastmod>2018-05-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/pentesting/</loc>
+    <lastmod>2018-05-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/shell-upgrade/</loc>
     <lastmod>2018-05-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/shell/</loc>
+    <lastmod>2018-05-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -102,8 +220,32 @@
   </url>
   
   <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2018-05-13T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/pairprog/</loc>
     <lastmod>2018-04-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/programming/</loc>
+    <lastmod>2018-04-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/tmux/</loc>
+    <lastmod>2018-04-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/vim/</loc>
+    <lastmod>2018-04-10T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -122,13 +264,49 @@
   </url>
   
   <url>
+    <loc>/tags/malware/</loc>
+    <lastmod>2018-03-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/monitoring/</loc>
+    <lastmod>2018-03-16T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/realtek-driverutil/</loc>
     <lastmod>2018-03-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
+    <loc>/tags/cve/</loc>
+    <lastmod>2018-03-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/exploit/</loc>
+    <lastmod>2018-03-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/windows/</loc>
+    <lastmod>2018-03-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/docker-borg/</loc>
     <lastmod>2018-03-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/borg/</loc>
+    <lastmod>2018-03-14T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -142,8 +320,38 @@
   </url>
   
   <url>
+    <loc>/tags/ansible/</loc>
+    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/dotfiles/</loc>
+    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/travis/</loc>
+    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/telegram-notifications/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/jenkins/</loc>
+    <lastmod>2018-03-07T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/notification/</loc>
+    <lastmod>2018-03-07T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -152,8 +360,26 @@
   </url>
   
   <url>
+    <loc>/tags/ci/</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/gogs/</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/post/oral-b/</loc>
     <lastmod>2018-01-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/android/</loc>
+    <lastmod>2018-01-08T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -167,189 +393,7 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2019-05-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/android/</loc>
-    <lastmod>2018-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ansible/</loc>
-    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/automotive/</loc>
-    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/backups/</loc>
-    <lastmod>2018-06-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/binary/</loc>
-    <lastmod>2018-08-28T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/borg/</loc>
-    <lastmod>2018-03-14T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/c&#43;&#43;/</loc>
-    <lastmod>2018-08-28T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/car-hacking/</loc>
-    <lastmod>2018-10-23T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ci/</loc>
-    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/container/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/cracking/</loc>
-    <lastmod>2018-08-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/cve/</loc>
-    <lastmod>2018-03-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/docker/</loc>
-    <lastmod>2019-01-04T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/dockerfiles/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/dotfiles/</loc>
-    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/exploit/</loc>
-    <lastmod>2018-03-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/exploiting/</loc>
-    <lastmod>2019-05-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/gdb/</loc>
-    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/gogs/</loc>
-    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/hacking/</loc>
-    <lastmod>2018-05-18T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/hooking/</loc>
-    <lastmod>2018-08-28T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/i3/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/jenkins/</loc>
-    <lastmod>2018-03-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/jka/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/malware/</loc>
-    <lastmod>2018-03-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/monitoring/</loc>
-    <lastmod>2018-03-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/notification/</loc>
-    <lastmod>2018-03-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/pentesting/</loc>
-    <lastmod>2018-05-18T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2019-05-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/programming/</loc>
-    <lastmod>2018-04-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -359,79 +403,27 @@
   </url>
   
   <url>
-    <loc>/tags/python/</loc>
-    <lastmod>2018-05-13T00:00:00+00:00</lastmod>
+    <loc>/tags/container/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/r2/</loc>
-    <lastmod>2019-05-01T00:00:00+00:00</lastmod>
+    <loc>/tags/dockerfiles/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/i3/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/jka/</loc>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/randomizer/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/randomnote/</loc>
-    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/ret2libc/</loc>
-    <lastmod>2019-05-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/reverse-engineering/</loc>
-    <lastmod>2019-05-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/shell/</loc>
-    <lastmod>2018-05-16T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2018-01-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/tmux/</loc>
-    <lastmod>2018-04-10T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/travis/</loc>
-    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/vim/</loc>
-    <lastmod>2018-04-10T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/vulnerability/</loc>
-    <lastmod>2019-01-04T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/windows/</loc>
-    <lastmod>2018-03-15T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,121 +6,40 @@
     <description>Recent content in Tags on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 08 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 19 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Android</title>
-      <link>/tags/android/</link>
-      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/android/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Ansible</title>
-      <link>/tags/ansible/</link>
-      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/ansible/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Automotive</title>
-      <link>/tags/automotive/</link>
-      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/automotive/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Backups</title>
-      <link>/tags/backups/</link>
-      <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/backups/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Binary</title>
+      <title>binary</title>
       <link>/tags/binary/</link>
-      <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/binary/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Borg</title>
-      <link>/tags/borg/</link>
-      <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/borg/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>C&#43;&#43;</title>
+      <title>c&#43;&#43;</title>
       <link>/tags/c&#43;&#43;/</link>
-      <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/c&#43;&#43;/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Car Hacking</title>
-      <link>/tags/car-hacking/</link>
-      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      <title>reverse-engineering</title>
+      <link>/tags/reverse-engineering/</link>
+      <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/car-hacking/</guid>
+      <guid>/tags/reverse-engineering/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Ci</title>
-      <link>/tags/ci/</link>
-      <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/ci/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Container</title>
-      <link>/tags/container/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/container/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Cracking</title>
-      <link>/tags/cracking/</link>
-      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/cracking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Cve</title>
-      <link>/tags/cve/</link>
-      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/cve/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Docker</title>
+      <title>docker</title>
       <link>/tags/docker/</link>
       <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
       
@@ -129,241 +48,7 @@
     </item>
     
     <item>
-      <title>Dockerfiles</title>
-      <link>/tags/dockerfiles/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/dockerfiles/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Dotfiles</title>
-      <link>/tags/dotfiles/</link>
-      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/dotfiles/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Exploit</title>
-      <link>/tags/exploit/</link>
-      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/exploit/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Exploiting</title>
-      <link>/tags/exploiting/</link>
-      <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/exploiting/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gdb</title>
-      <link>/tags/gdb/</link>
-      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/gdb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Gogs</title>
-      <link>/tags/gogs/</link>
-      <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/gogs/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Hacking</title>
-      <link>/tags/hacking/</link>
-      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/hacking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Hooking</title>
-      <link>/tags/hooking/</link>
-      <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/hooking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>I3</title>
-      <link>/tags/i3/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/i3/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Jenkins</title>
-      <link>/tags/jenkins/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/jenkins/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Jka</title>
-      <link>/tags/jka/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/jka/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Malware</title>
-      <link>/tags/malware/</link>
-      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/malware/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Monitoring</title>
-      <link>/tags/monitoring/</link>
-      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/monitoring/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Notification</title>
-      <link>/tags/notification/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/notification/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Pentesting</title>
-      <link>/tags/pentesting/</link>
-      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/pentesting/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Programming</title>
-      <link>/tags/programming/</link>
-      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/programming/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Python</title>
-      <link>/tags/python/</link>
-      <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R2</title>
-      <link>/tags/r2/</link>
-      <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/r2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Randomizer</title>
-      <link>/tags/randomizer/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/randomizer/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Randomnote</title>
-      <link>/tags/randomnote/</link>
-      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/randomnote/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Ret2libc</title>
-      <link>/tags/ret2libc/</link>
-      <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/ret2libc/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reverse Engineering</title>
-      <link>/tags/reverse-engineering/</link>
-      <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/reverse-engineering/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Shell</title>
-      <link>/tags/shell/</link>
-      <pubDate>Wed, 16 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/shell/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tmux</title>
-      <link>/tags/tmux/</link>
-      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/tmux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Travis</title>
-      <link>/tags/travis/</link>
-      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/travis/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Vim</title>
-      <link>/tags/vim/</link>
-      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/vim/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Vulnerability</title>
+      <title>vulnerability</title>
       <link>/tags/vulnerability/</link>
       <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
       
@@ -372,11 +57,308 @@
     </item>
     
     <item>
-      <title>Windows</title>
+      <title>exploiting</title>
+      <link>/tags/exploiting/</link>
+      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/exploiting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gdb</title>
+      <link>/tags/gdb/</link>
+      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/gdb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>randomnote</title>
+      <link>/tags/randomnote/</link>
+      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/randomnote/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>automotive</title>
+      <link>/tags/automotive/</link>
+      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/automotive/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>car-hacking</title>
+      <link>/tags/car-hacking/</link>
+      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/car-hacking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hooking</title>
+      <link>/tags/hooking/</link>
+      <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/hooking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cracking</title>
+      <link>/tags/cracking/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/cracking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>backups</title>
+      <link>/tags/backups/</link>
+      <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/backups/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hacking</title>
+      <link>/tags/hacking/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/hacking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pentesting</title>
+      <link>/tags/pentesting/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/pentesting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>/tags/shell/</link>
+      <pubDate>Wed, 16 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>/tags/python/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>programming</title>
+      <link>/tags/programming/</link>
+      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tmux</title>
+      <link>/tags/tmux/</link>
+      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/tmux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vim</title>
+      <link>/tags/vim/</link>
+      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/vim/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>malware</title>
+      <link>/tags/malware/</link>
+      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/malware/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>monitoring</title>
+      <link>/tags/monitoring/</link>
+      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/monitoring/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cve</title>
+      <link>/tags/cve/</link>
+      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/cve/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>exploit</title>
+      <link>/tags/exploit/</link>
+      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/exploit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>windows</title>
       <link>/tags/windows/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/windows/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>borg</title>
+      <link>/tags/borg/</link>
+      <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/borg/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ansible</title>
+      <link>/tags/ansible/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ansible/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dotfiles</title>
+      <link>/tags/dotfiles/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/dotfiles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>travis</title>
+      <link>/tags/travis/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/travis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jenkins</title>
+      <link>/tags/jenkins/</link>
+      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/jenkins/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>notification</title>
+      <link>/tags/notification/</link>
+      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/notification/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ci</title>
+      <link>/tags/ci/</link>
+      <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ci/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gogs</title>
+      <link>/tags/gogs/</link>
+      <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/gogs/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>android</title>
+      <link>/tags/android/</link>
+      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/android/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>container</title>
+      <link>/tags/container/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/container/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dockerfiles</title>
+      <link>/tags/dockerfiles/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/dockerfiles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>i3</title>
+      <link>/tags/i3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/i3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jka</title>
+      <link>/tags/jka/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/jka/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>randomizer</title>
+      <link>/tags/randomizer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/randomizer/</guid>
       <description></description>
     </item>
     

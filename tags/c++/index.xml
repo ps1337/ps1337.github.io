@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>C&#43;&#43; on A Blog.</title>
+    <title>c&#43;&#43; on A Blog.</title>
     <link>/tags/c&#43;&#43;/</link>
-    <description>Recent content in C&#43;&#43; on A Blog.</description>
+    <description>Recent content in c&#43;&#43; on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 19 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/c++/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Bananabot: CS:GO Multihack</title>
+      <link>/project/bananabot/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project/bananabot/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Crypt0r</title>
@@ -36,6 +45,16 @@
       
       <guid>/project/randomjk/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Coding A CS:GO Hack</title>
+      <link>/post/bananabot/</link>
+      <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/bananabot/</guid>
+      <description>This post covers creating a multihack for the game Counter Strike: Global Offensive. The created hack works with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools. Below you can find a demonstration of the finished cheat:
+The features therefore include: - Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains - No Flash: Be immune to flash grenades that would block the players vision - Aimbot: Automatically aim at the head of the nearest enemy</description>
     </item>
     
     <item>

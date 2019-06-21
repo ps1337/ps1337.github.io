@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Programming on A Blog.</title>
+    <title>programming on A Blog.</title>
     <link>/tags/programming/</link>
-    <description>Recent content in Programming on A Blog.</description>
+    <description>Recent content in programming on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 10 Apr 2018 00:00:00 +0000</lastBuildDate>

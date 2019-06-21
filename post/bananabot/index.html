@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Coding A CS:GO Hack</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: red;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.55.6" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Coding A CS:GO Hack</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/bananabot/">Coding A CS:GO Hack</a></h4>
+    <h5>June 19, 2019</h5>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>This post covers creating a multihack for the game Counter Strike: Global Offensive. The created hack works with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools. Below you can find a demonstration of the finished cheat:</p>
+
+<p><img src="/img/csgo-multihack/demo_1.gif" alt="Bananabot Demo" />
+<img src="/img/csgo-multihack/demo_2.gif" alt="Bananabot Demo" />
+<img src="/img/csgo-multihack/demo_3.gif" alt="Bananabot Demo" />
+<img src="/img/csgo-multihack/demo_4.gif" alt="Bananabot Demo" /></p>
+
+<p>The features therefore include:
+- Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains
+- No Flash: Be immune to flash grenades that would block the players vision
+- Aimbot: Automatically aim at the head of the nearest enemy</p>
+
+<h1 id="tooling-setup">Tooling &amp; Setup</h1>
+
+<p>Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this. There are <code>pince</code> and <code>scanmem</code> available but they only provide a limited set of the required features. In the Windows world, there&rsquo;s handy tool called <a href="https://github.com/cheat-engine/cheat-engine">Cheat Engine</a> that is capable of all the required tasks, like:</p>
+
+<ul>
+<li>Searching for addresses in the memory of the target process by performing filter-based searches</li>
+<li>Pointer scan: Search for pointers to addresses</li>
+<li>Debugger: Determine functions that read and write specific values and addresses</li>
+</ul>
+
+<p>Fortunately, Cheat Engine is split into two parts: <a href="https://aur.archlinux.org/packages/ceserver/"><code>ceserver</code></a> and the GUI. It&rsquo;s therefore possible to launch the Linux version of <code>ceserver</code> natively and launch the GUI using <code>wine</code>. The GUI can then be connected to the server using a local socket. Of course, <code>ceserver</code> has to be run as <code>root</code> in order to read and write memory of arbitrary target processes. This setup is semi-stable but still the best for Linux at the moment.</p>
+
+<h1 id="basics">Basics</h1>
+
+<p>Once Cheat Engine is attached to the CS:GO process, it can access the whole memory region of that process. This also includes the shared objects that are present in the target memory. The memory layout can be inspected with <code>cat /proc/&lt;PID&gt;/maps</code>.</p>
+
+<p>Once a game client is connected to a network game, it doesn&rsquo;t only know the local player&rsquo;s health and location but also the respective values of all team mates and enemies. The game wouldn&rsquo;t show it of course, but the information is present in the process memory. Objects and structures in this memory are structured according to the game engine&rsquo;s <a href="https://github.com/ValveSoftware/source-sdk-2013/">source code</a>. The developers of CS:GO however applied some changes in regard to the released SDK, so some things may still be different in the actual game memory. For example, the class <code>CBaseEntity</code> is, among other things, responsible to manage the data of player objects. All values present in that memory structure can be found in the <a href="https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/game/server/baseentity.h">SDK source code</a>.</p>
+
+<p>A general therefore is to find the exact location of these structures in the game memory and analyze it accordingly. For example, enemy locations can be read and other values can be written in order to achieve a certain goal. Please note that it&rsquo;s not as simple as finding a memory location and using the address of the memory structure in the hack because this value changes upon restarting the game. To get around this, a <em>static</em> pointer to the address or a static pointer to a pointer to the address are required. The game executable and the loaded libraries may contain static pointers that lead to the start of a structure in game memory at runtime.</p>
+
+<p>For example, the library that manages the players in the game is called <code>client_panorama_client.so</code>. This library, at a specific offset, contains a static pointer to a structure in game memory that in turn contains the <code>CBaseEntity</code> object of the current player at a specific offset:</p>
+
+<p><img src="/img/csgo-multihack/mem_ptr.png" alt="Using Static Pointers" /></p>
+
+<p>Using this so called <em>multi level pointer</em>, all required memory structures can be found by using a single static pointer and by following it to the desired location.</p>
+
+<p>The <em>pointer scan</em> feature of Cheat Engine helps in this analysis step by searching for all pointers that point to a given address, like the beginning of the <code>CBaseEntity</code>. Upon restarting the game, some of these addresses should still point to valid data and can therefore be used in the cheat.</p>
+
+<p>After the game is being updated, some offsets and addresses may be changed. Because of this, dumpers such as <a href="https://github.com/Teklad/tuxdump">tuxdump</a> may be used. These tools are able to read the offsets to various in-game structures using pattern matching approches.</p>
+
+<h1 id="bunnyhop-bot">Bunnyhop Bot</h1>
+
+<p>With the <code>CBaseEntity</code>, or sometimes called <em>local player</em>, being found it&rsquo;s possible to detect whether the player is on the ground or not. When analyzing the memory region of the local player structure when playing, one specific bit can be determined that holds the information to the current players status in regard to touching the floor. This can be checked in the hack - the only thing required for bunnyhopping is invoking jumps. Of course, sending a key event may be a working solution. However, the cheat can&rsquo;t be sure which key the player actually uses for jumping. Because of this, an other approach has been implemented.</p>
+
+<p>The game uses certain memory addresses as interrupts. As soon as a special value is in this address, the game invokes a jump all by itself. The jump interrupt address can be found with the following approach:</p>
+
+<ul>
+<li>Scan for <em>unknown initial 4 byte value</em> in Cheat Engine</li>
+<li>In the in-game console type <code>+jump</code>. This tells the game that the jump button has been pressed and is being held</li>
+<li>Search for <em>changed value</em></li>
+<li>Type <code>-jump</code>, which tells the game that the jump button has been released</li>
+<li>Search for <em>changed value</em></li>
+<li>Repeat until only a few addresses are remaining</li>
+</ul>
+
+<p>By reverse engineering the game, it can be found that writing the value <code>0x06</code> to the correct interrupt address will cause the player to perform a jump. The remaining addresses can be filtered by writing this value to them. If no jump has been invoked, it&rsquo;s the wrong address.</p>
+
+<p>After finding a static pointer to this interrupt address, bunny hopping can be implemented easily.</p>
+
+<h1 id="no-flash">No Flash</h1>
+
+<p>It turns out that the game keeps an internal counter that&rsquo;s being set to a high value once the player is <em>flashed</em>. Each frame this counter is being decremented and the flash effect will keep being present as long as this counter isn&rsquo;t zero. To stop the flash effect it&rsquo;s therefore required to zero this specific address.</p>
+
+<p>The following animation illustrates this:</p>
+
+<p><img src="/img/csgo-multihack/noflash.gif" alt="NoFlash Demo" /></p>
+
+<p>Cheat engine once again helps in finding the correct address and static pointer to this value.</p>
+
+<h1 id="aimbot">Aimbot</h1>
+
+<p>There are quite some steps required in order to get this work. The local player&rsquo;s location, as in X, Y and Z coordinates can be found in the <code>CBaseEntity</code> structure that has been found before. Every additional required step is covered in its own section.</p>
+
+<h2 id="getting-enemy-locations">Getting Enemy Locations</h2>
+
+<p>The enemy locations can be found via various methods. In the cheat the <code>GlowObjectManager</code> has been used. This is a structure in memory that, for whatever reason, holds structures that include pointers to all entities on the map (<code>CBaseEntity</code> structures). Each sub-structure is <code>0x40</code> bytes large and starts with the entity pointer element. The manager structure also contains a counter value that can be used in order to loop through all available entities in a <code>for</code> loop.</p>
+
+<p>After filtering out dead enemies and team mates from all available entities by making use of other member values of <code>CBaseEntity</code>, their location can be read directly from memory. Determining the offset of the entity locations can be done by pushing players around and watching the memory change:</p>
+
+<p><img src="/img/csgo-multihack/entitypos.gif" alt="Getting Enemy Entity Location" /></p>
+
+<p>Of course, the determined memory regions have to be converted to <code>float</code>s before processing this data any further.</p>
+
+<h2 id="getting-the-nearest-enemy">Getting the Nearest Enemy</h2>
+
+<p>With the local player&rsquo;s and all enemy coordinates ready, it&rsquo;s quite easy to determine the nearest enemy using mad math skills:</p>
+
+<pre><code>return std::sqrt(std::pow(entity_x - own_x, 2) + std::pow(entity_y - own_y, 2) + std::pow(entity_z - own_z, 2));
+</code></pre>
+
+<h2 id="setting-the-camera-angle">Setting the Camera Angle</h2>
+
+<p>Using the in-game console command <code>cl_showpos 1</code>, the current camera angle can bee seen. By moving the mouse and searching for changed values in Cheat Engine, multiple addresses can be found that hold the current camera angle. However, only one can be used to actually set this angle programmatically.</p>
+
+<h2 id="calculating-the-camera-angle">Calculating the Camera Angle</h2>
+
+<p>The only thing that&rsquo;s still required is the calculating the camera angle in order to automatically aim at the enemy. The following function takes the local player&rsquo;s and the enemy coordinates and magically calculates this angle:</p>
+
+<pre><code>// Slightly modified standard `CalculateAngle` function.
+std::vector&lt;float&gt; MadMath::calcAngle(std::vector&lt;float&gt; src, std::vector&lt;float&gt; dst)
+{
+    std::vector&lt;float&gt; angles;
+    std::vector&lt;double&gt; delta = {src[0] - dst[0], src[1] - dst[1], src[2] - dst[2]};
+    double hyp = std::sqrt(delta[0] * delta[0] + delta[2] * delta[2]);
+
+    angles.push_back((float)(asinf(delta[1] / hyp) * RADIANT));
+    angles.push_back((float)(atanf(delta[2] / delta[0]) * RADIANT));
+    angles.push_back(0);
+
+    if (delta[0] &gt;= 0)
+    {
+        angles[1] += 180.0f;
+    }
+
+    return angles;
+}
+</code></pre>
+
+<p>This works because of reasons and it&rsquo;s great.</p>
+
+<h1 id="playing-online">Playing Online</h1>
+
+<p>It definitively works but you will get banned because the aimbot just aims through walls, no matter if the enemy can actually be seen or not :D</p>
+
+<h1 id="references">References</h1>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=RpnFoSIlw8s">How To Make An Aimbot in C++</a></li>
+<li><a href="https://github.com/frk1/hazedumper/">Hazedumper</a></li>
+<li><a href="https://github.com/schroeji/pengWin/">PengWin</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
+    <h5>October 26, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/gdb"><kbd class="item-tag">gdb</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/autohax/">Car Hacking: A Short Overview</a></h4>
+    <h5>October 23, 2018</h5>
+    
+    <a href="tags/automotive"><kbd class="item-tag">automotive</kbd></a>
+    
+    <a href="tags/car-hacking"><kbd class="item-tag">car-hacking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/multihack/">Creating A Multiplayer Game Hack</a></h4>
+    <h5>August 28, 2018</h5>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

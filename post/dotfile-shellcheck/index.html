@@ -74,7 +74,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.54.0" />
+ <meta name="generator" content="Hugo 0.55.6" />
         
 
         
@@ -204,8 +204,8 @@ after_failure:
 
 <ol>
 <li>Get all files which will be linted</li>
-<li>Execute <code>shellcheck</code> for each file</li>
-</ol>
+
+<li><p>Execute <code>shellcheck</code> for each file</p>
 
 <pre><code>#!/bin/bash
 # Stolen from: https://github.com/jessfraz/dotfiles/blob/master/test.sh
@@ -218,7 +218,7 @@ ERRORS=()
 
 # find all executables and run `shellcheck`
 for f in $(find . -type f \
-        -not -iwholename '*.git*' | sort -u); do
+    -not -iwholename '*.git*' | sort -u); do
 
 
 	if file &quot;$f&quot; | grep --quiet shell; then
@@ -237,7 +237,8 @@ else
 	echo &quot;These files failed shellcheck: ${ERRORS[*]}&quot;
 	exit 1
 fi
-</code></pre>
+</code></pre></li>
+</ol>
 
 <h1 id="executing-tests">Executing tests</h1>
 
