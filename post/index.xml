@@ -22,6 +22,16 @@ The features therefore include: - Bunnyhop Bot: Do jumps as soon as the player h
     </item>
     
     <item>
+      <title>Bypassing ASLR and DEP for 32-Bit Binaries With r2</title>
+      <link>/post/binary-aslr-dep-32/</link>
+      <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/binary-aslr-dep-32/</guid>
+      <description>This post covers basic basics of bypassing ASLR and DEP with r2. For this, a vulnerable application, yolo.c, is required:
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); }  64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow.</description>
+    </item>
+    
+    <item>
       <title>Information Leak in Docker</title>
       <link>/post/docker-leak/</link>
       <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>

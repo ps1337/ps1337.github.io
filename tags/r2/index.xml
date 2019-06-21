@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>exploiting on A Blog.</title>
-    <link>/tags/exploiting/</link>
-    <description>Recent content in exploiting on A Blog.</description>
+    <title>r2 on A Blog.</title>
+    <link>/tags/r2/</link>
+    <description>Recent content in r2 on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 01 May 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/exploiting/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/r2/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,16 +19,6 @@
       <guid>/post/binary-aslr-dep-32/</guid>
       <description>This post covers basic basics of bypassing ASLR and DEP with r2. For this, a vulnerable application, yolo.c, is required:
 #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); }  64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow.</description>
-    </item>
-    
-    <item>
-      <title>Random Note #092345: Passing binary input via GDB</title>
-      <link>/post/rnd-092345-gdb/</link>
-      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/rnd-092345-gdb/</guid>
-      <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
-run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;)  from the gdb session to send arbitrary bytes.</description>
     </item>
     
   </channel>
