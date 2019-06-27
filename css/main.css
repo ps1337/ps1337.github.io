@@ -51,10 +51,16 @@ main {
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
-/*apply accent colour to links*/
 
+code {
+    color: #000;
+    background-color: #ffe13566;
+}
+
+
+/*apply accent colour to links*/
 a:link, a:visited {
-    color: var(--accent);
+    color: #000;
 }
 
 a.icon:hover {
@@ -83,6 +89,7 @@ a:hover {
 
 .item-tag {
     background-color: var(--accent);
+    color: #000;
 }
 
 /*navigation bar icons*/
