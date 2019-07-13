@@ -180,22 +180,22 @@
 
 <p>The approach to exploit buffer overflows on x64 is a bit different that on x86. This post demonstrates this using the <code>split</code> challenge of <a href="https://ropemporium.com/">ROP Emporium</a> while making use of <code>radare2</code>.</p>
 
-<h1 id="canonical-addresses">Canonical Addresses</h1>
+<h1 id="rip-canonical-addresses">RIP &amp; Canonical Addresses</h1>
 
 <p>The first thing one notices when trying to gain control over the instruction pointer is that only values of a specific range are allowed to be loaded into the <code>RIP</code> register. On x86 arbitrary values can be loaded into the instruction pointer register (<code>EIP</code>) - on x64 only <em>canonical</em> values are allowed. These are values of the following ranges:</p>
 
 <ul>
-<li><code>0x0000000000000000</code> to <code>0x00007FFFFFFFFFFF</code></li>
+<li><code>0x0000000000000000</code> to <code>0x00007FFFFFFFFFFF</code>: User space</li>
 <li><code>0xFFFF800000000000</code> to <code>0xFFFFFFFFFFFFFFFF</code></li>
 </ul>
 
-<p>Other values are illegal and the program aborts when attempting to load such a value into the instruction pointer register, e.g. after a <code>ret</code> instruction.</p>
+<p>Other values are illegal and the program aborts when attempting to load such a value into the instruction pointer register, e.g. after a <code>ret</code> instruction. A safe value for user the space memory region would therefore be <code>0x0000414141414141</code> and <strong>not</strong> <code>0x4141414141414141</code>. This is important to keep in mind while fuzzing.</p>
 
 <h1 id="passing-parameters">Passing Parameters</h1>
 
 <p>A second aspect of x64 exploitation is that function parameters are being passed using the <code>RDI</code>, <code>RSI</code>, <code>RDX</code>, <code>RCX</code>, <code>R8D</code> and <code>R9D</code> <a href="https://www.felixcloutier.com/x86/ret">registers</a>. All remaining parameters are passed using the stack. This is different than the x86 semantics where parameters are being passed using the stack.</p>
 
-<p>This makes x64 exploitation a bit more difficult because function parameters have to be loaded into the respective registers prior to executing function in the target process. For this, a very small ROP payload can be used to populate the required registers first and <code>ret</code>urn or jump to the payload afterwards.</p>
+<p>This makes x64 exploitation a bit more difficult if you want to call a function that&rsquo;s already existing because function parameters have to be loaded into the respective registers prior to executing as function in the target process. For this, a very small ROP payload can be used to populate the required registers first and <code>ret</code>urn or jump to the payload afterwards.</p>
 
 <p>To accomplish this, the <code>/R</code> search of <code>r2</code> can be used, e.g. like this:</p>
 
@@ -217,7 +217,7 @@
 <li>Address of the PLT entry of the <code>system</code> function that executes an arbitrary shell command. Use <code>aaa</code> and <code>afl</code> for this.</li>
 </ol>
 
-<p>Please note that all values have to be 8 byte value in the payload because we are dealing with x64. You can use <code>p64()</code> of <code>pwnlib</code> for this.</p>
+<p>Please note that all values have to be 8 byte value in the payload because we are dealing with x64. You can use <code>p64()</code> of <code>pwntools</code> for this.</p>
 
 <p>Upon reaching the ROP gadget on runtime, the target process will:</p>
 
@@ -228,7 +228,7 @@
 
 <h1 id="exploitation">Exploitation</h1>
 
-<p>You can use <code>pwnlib</code> to exploit the binary or a simple <code>printf</code> with an <code>r2</code> profile:</p>
+<p>You can use <code>pwntools</code> to exploit the binary or a simple <code>printf</code> with an <code>r2</code> profile:</p>
 
 <pre><code>$ printf &quot;`python2.7 -c 'import sys; sys.stdout.write(&quot;A&quot; * 40)'`\x83\x08\x40\x00\x00\x00\x00\x00\x60\x10\x60\x00\x00\x00\x00\x00\xe0\x05\x40\x00\x00\x00\x00\x00&quot; &gt; /tmp/in
 

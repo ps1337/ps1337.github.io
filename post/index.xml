@@ -18,7 +18,7 @@
       
       <guid>/post/x64-bof/</guid>
       <description>The approach to exploit buffer overflows on x64 is a bit different that on x86. This post demonstrates this using the split challenge of ROP Emporium while making use of radare2.
-Canonical Addresses The first thing one notices when trying to gain control over the instruction pointer is that only values of a specific range are allowed to be loaded into the RIP register. On x86 arbitrary values can be loaded into the instruction pointer register (EIP) - on x64 only canonical values are allowed.</description>
+RIP &amp;amp; Canonical Addresses The first thing one notices when trying to gain control over the instruction pointer is that only values of a specific range are allowed to be loaded into the RIP register. On x86 arbitrary values can be loaded into the instruction pointer register (EIP) - on x64 only canonical values are allowed.</description>
     </item>
     
     <item>
