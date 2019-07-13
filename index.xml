@@ -6,7 +6,7 @@
     <description>Recent content on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
@@ -117,6 +117,16 @@
       
       <guid>/project/haxxor-tools/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Buffer Overflows on x64 with radare2</title>
+      <link>/post/x64-bof/</link>
+      <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/x64-bof/</guid>
+      <description>The approach to exploit buffer overflows on x64 is a bit different that on x86. This post demonstrates this using the split challenge of ROP Emporium while making use of radare2.
+Canonical Addresses The first thing one notices when trying to gain control over the instruction pointer is that only values of a specific range are allowed to be loaded into the RIP register. On x86 arbitrary values can be loaded into the instruction pointer register (EIP) - on x64 only canonical values are allowed.</description>
     </item>
     
     <item>
@@ -349,8 +359,9 @@ Registering a bot First of all, a Telegram bot has to be registered in order to 
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/docker-jenkins/</guid>
-      <description>First of all – why should you want to build all the docker images on your own build server?
- Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry. If that isn&amp;rsquo;t the case yet, you can just use the pre-built registry image using the following Makefile.</description>
+      <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
+First of all – why should you want to build all the docker images on your own build server?
+ Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
     </item>
     
     <item>

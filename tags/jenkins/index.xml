@@ -28,8 +28,9 @@ Registering a bot First of all, a Telegram bot has to be registered in order to 
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>/post/docker-jenkins/</guid>
-      <description>First of all – why should you want to build all the docker images on your own build server?
- Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry. If that isn&amp;rsquo;t the case yet, you can just use the pre-built registry image using the following Makefile.</description>
+      <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
+First of all – why should you want to build all the docker images on your own build server?
+ Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
     </item>
     
   </channel>
