@@ -185,11 +185,11 @@
 <p>The first thing one notices when trying to gain control over the instruction pointer is that only values of a specific range are allowed to be loaded into the <code>RIP</code> register. On x86 arbitrary values can be loaded into the instruction pointer register (<code>EIP</code>) - on x64 only <em>canonical</em> values are allowed. These are values of the following ranges:</p>
 
 <ul>
-<li><code>0x0000000000000000</code> to <code>0x00007FFFFFFFFFFF</code>: User space</li>
-<li><code>0xFFFF800000000000</code> to <code>0xFFFFFFFFFFFFFFFF</code></li>
+<li><code>0x0000000000000000</code> to <code>0x00007FFFFFFFFFFF</code> (user space)</li>
+<li><code>0xFFFF800000000000</code> to <code>0xFFFFFFFFFFFFFFFF</code> (the other thing)</li>
 </ul>
 
-<p>Other values are illegal and the program aborts when attempting to load such a value into the instruction pointer register, e.g. after a <code>ret</code> instruction. A safe value for user the space memory region would therefore be <code>0x0000414141414141</code> and <strong>not</strong> <code>0x4141414141414141</code>. This is important to keep in mind while fuzzing.</p>
+<p>Other values are illegal and the program aborts when attempting to load such a value into the instruction pointer register, e.g. after a <code>ret</code> instruction. A valid value for the user space memory region would therefore be <code>0x0000414141414141</code> and <strong>not</strong> <code>0x4141414141414141</code>. This is important to keep in mind while fuzzing.</p>
 
 <h1 id="passing-parameters">Passing Parameters</h1>
 
@@ -217,7 +217,7 @@
 <li>Address of the PLT entry of the <code>system</code> function that executes an arbitrary shell command. Use <code>aaa</code> and <code>afl</code> for this.</li>
 </ol>
 
-<p>Please note that all values have to be 8 byte value in the payload because we are dealing with x64. You can use <code>p64()</code> of <code>pwntools</code> for this.</p>
+<p>Please note that all values have to be padded to 8 byte values in the payload because we are dealing with x64. You can use <code>p64()</code> of <code>pwntools</code> for this.</p>
 
 <p>Upon reaching the ROP gadget on runtime, the target process will:</p>
 
