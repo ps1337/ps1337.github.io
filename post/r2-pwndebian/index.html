@@ -213,7 +213,7 @@ YOLO
 
 <h1 id="grep-it-like-it-s-hot">Grep It Like It&rsquo;s Hot</h1>
 
-<p>While searching through the git log with <code>git log --grep</code>, we&rsquo;ve found an <a href="https://github.com/radare/radare2/commit/5ecd4c352bae1114730321fec2bde72332f8f090">interesting commit</a> that seems to fix code injection issues in the <code>ir*</code> and <code>is*</code> commands. In particular, the fixes in <code>libr/core/cbin.c</code> seem to fix this by wrapping the output of these commands in quotes. This seems strange, since these changes happen in <code>r_cons_printf</code> calls that only print text to the terminal.</p>
+<p>While searching through the git log with <code>git log --grep</code>, we&rsquo;ve found an <a href="https://github.com/radare/radare2/commit/5ecd4c352bae1114730321fec2bde72332f8f090">interesting commit</a> that seems to fix code injection issues in the <code>ir*</code> and <code>is*</code> commands. In particular, the fixes in <code>libr/core/cbin.c</code> seem to fix this by wrapping the output of these commands in quotes. This seems strange, since these changes happen in <code>r_cons_printf()</code> calls that only print text to the terminal.</p>
 
 <p>This situation has been cleared up for us after we&rsquo;ve stumbled across usages of <code>.&lt;command&gt;*</code> in the <code>radare2</code> code after grepping with <code>ag &quot;\&quot;\.&quot; | ag cmd</code>.</p>
 
@@ -276,7 +276,7 @@ f sym.imp.sigismember 16 0x00000000
 --&gt; PWNED
 </code></pre>
 
-<p>Therefore you can get pwned by executing <code>ood</code> after opening the binary.</p>
+<p>Therefore you can get pwned by executing <code>ood</code> after opening the binary, which is quite a common thing to do.</p>
 
 <h1 id="demo-time">Demo Time</h1>
 
@@ -289,13 +289,15 @@ f sym.imp.sigismember 16 0x00000000
 
 <p>The proof of concept exploits shown above can be found <a href="https://github.com/ps1337/r2-pwndebian-exploits">here</a>.</p>
 
+<p>Please note that the calculator exploit calls <code>gnome-calculator</code>, so you need that installed. If you dont&rsquo; have it, try the <code>sleep</code> exploit.</p>
+
 <h1 id="the-fix">The Fix</h1>
 
 <p>We&rsquo;ve thought really hard about this.</p>
 
 <p><img src="/img/r2-pwndebian/thinking.gif" alt="Hmmmm" /></p>
 
-<p>We decided to quote the entire command.</p>
+<p>We decided to quote the entire command:</p>
 
 <pre><code>f sym.imp.__sprintf_chk 16 0x00000000
 </code></pre>
@@ -319,7 +321,9 @@ f sym.imp.sigismember 16 0x00000000
 
 <p>and therefore doesn&rsquo;t get executed, no matter of missing sanitation. Therefore, the old Debian <code>3.2.1</code> release is affected and the current master isn&rsquo;t :)</p>
 
-<p>And now update <code>r2</code> for Debian pls.</p>
+<p>The PR for this can be found <a href="https://github.com/radare/radare2/pull/14690">here</a></p>
+
+<p>And now update <code>r2</code> for Debian pls and don&rsquo;t forget to <code>git pull</code>.</p>
 
 <hr />
 
