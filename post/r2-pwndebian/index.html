@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>r2con 2019 PwnDebian Challenge: Exploiting radare2</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="/css/font.css">
+
+
+ <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+     <script src="https://bananamafia.dev/js/python.min.js"></script>  <script src="https://bananamafia.dev/js/cpp.min.js"></script>  <script src="https://bananamafia.dev/js/json.min.js"></script>  <script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.55.6" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">r2con 2019 PwnDebian Challenge: Exploiting radare2</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2-pwndebian/">r2con 2019 PwnDebian Challenge: Exploiting radare2</a></h4>
+    <h5>July 30, 2019</h5>
+    
+    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="tags/exploit"><kbd class="item-tag">exploit</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>Yo Yo Yo.</p>
+
+<p>Everyone knows: This years r2con, the conference about <code>radare2</code>, has a very special challenge &ndash; PwnDebian:</p>
+
+<p><img src="/img/r2-pwndebian/pwndebian.jpg" alt="PwnDebian" /></p>
+
+<p>The almighty <a href="https://github.com/blenk92">blenk92</a> and me decided to assist the <code>radare2</code> project in finding such an exploit an we think we were quite successful :)</p>
+
+<p>But first some basics for <code>r2</code>.</p>
+
+<h1 id="shelling-out-via-the-r2-shell">Shelling Out Via The r2 Shell</h1>
+
+<p>While running <code>r2</code>, it&rsquo;s possible to shell out and execute shell commands without leaving the <code>r2</code> console:</p>
+
+<pre><code>[0x00000000]&gt; ! echo YOLO
+YOLO
+[...]
+[0x5645965b5060]&gt; dr `cat /tmp/reg`
+0x5645965b5060
+</code></pre>
+
+<p>As can be seen, the <code>!</code> and backtick characters are treated in quite a special way in the <code>r2</code> shell. In fact, they cause the arguments to be executed by <code>sh -c</code> via <code>r_sys_cmd_str()</code> and similar functions from <code>libr/util/sys.c</code>.</p>
+
+<h1 id="the-command">The <code>.</code> command</h1>
+
+<p>Another important aspect is that the <code>.</code> command also has a special function in <code>r2</code>. Let&rsquo;s consult the help function in the <code>radare2</code> shell:</p>
+
+<pre><code>[0x00000000]&gt; .?
+.r2cmd: interpret the output of the command as r2 commands
+</code></pre>
+
+<p>This is similar to an <code>eval()</code> function that takes the raw input, in this case the output from an arbitrary <code>r2</code> command, and executes it as if it was typed directly into the <code>r2</code> shell.</p>
+
+<h1 id="grep-it-like-it-s-hot">Grep It Like It&rsquo;s Hot</h1>
+
+<p>While searching through the git log with <code>git log --grep</code>, we&rsquo;ve found an <a href="https://github.com/radare/radare2/commit/5ecd4c352bae1114730321fec2bde72332f8f090">interesting commit</a> that seems to fix code injection issues in the <code>ir*</code> and <code>is*</code> commands. In particular, the fixes in <code>libr/core/cbin.c</code> seem to fix this by wrapping the output of these commands in quotes. This seems strange, since these changes happen in <code>r_cons_printf</code> calls that only print text to the terminal.</p>
+
+<p>This situation has been cleared up for us after we&rsquo;ve stumbled across usages of <code>.&lt;command&gt;*</code> in the <code>radare2</code> code after grepping with <code>ag &quot;\&quot;\.&quot; | ag cmd</code>.</p>
+
+<p>An interesting example of this is present in the <code>r_core_file_reopen_debug()</code> function in <code>libr/core/cmd_open.c</code>:</p>
+
+<pre><code>[...]
+r_core_cmd0 (core, &quot;.is*&quot;);
+r_core_cmd0 (core, &quot;.ir*&quot;);
+r_core_cmd0 (core, &quot;.iz*&quot;);
+r_core_cmd0 (core, &quot;.iM*&quot;);
+[...]
+</code></pre>
+
+<p>The first line calls <code>is*</code> internally and evaluates the output by executing the commands printed by <code>is*</code> that look as follows:</p>
+
+<pre><code>[...]
+f sym.imp.getxattr 16 0x00000000
+f sym.imp.gethostname 16 0x00000000
+f sym.imp.sigismember 16 0x00000000
+[...]
+</code></pre>
+
+<p>This seems like a good attack vector, since the symbol names after <code>sym.imp</code> are user controlled and taken directly from the analyzed binary.</p>
+
+<h1 id="crafting-a-payload">Crafting A Payload</h1>
+
+<p>After some tests, it turned out that no sanitation of the symbol names is taking place. Therefore the first idea was to force a new line and append a command prefixed with <code>!</code>. As this didn&rsquo;t seem to work properly, another approach was used.</p>
+
+<p>It turns out that commands can be injected by wrapping them in:</p>
+
+<pre><code>`! &lt;cmd&gt;`
+</code></pre>
+
+<p>and inserting them into an existing command. A simple example of this approach is:</p>
+
+<pre><code>f sym.imp.`! sleep 999` 16 0x0
+</code></pre>
+
+<h2 id="manipulating-bin-ls">Manipulating /bin/ls</h2>
+
+<p>Our exploit uses our all-time favorite target: <code>/bin/ls</code>.</p>
+
+<p>By replacing a symbol name like <code>gethostname</code> with</p>
+
+<pre><code>`! &lt;cmd&gt;`
+</code></pre>
+
+<p>using <code>r2</code> or a hex editor, it becomes possible to provide an arbitrary shell command withing a binary. Since it&rsquo;s quite common to analyse and debug untrusted and malicious binaries, this seems like a great attack scenario since this is largely invisible for potential victims. Also, the shell command doesn&rsquo;t even get printed into the console after it has been executed:</p>
+
+<pre><code>|ERROR| Invalid command 'f sym.imp.p 99`AAAAAAAAAAA 16 0x557aa086c000' (0x66)
+</code></pre>
+
+<p>No sign of the <code>sleep</code> command: The victim doesn&rsquo;t even realize it has been pwned in case a more APT-like payload is being used &lt;:</p>
+
+<h1 id="executing-the-payload">Executing The Payload</h1>
+
+<p>As already mentioned, the function that&rsquo;s executing <code>r_core_cmd0 (core, &quot;.is*&quot;)</code> internally is called <code>r_core_file_reopen_debug()</code>. This smells like the <code>ood</code> command!</p>
+
+<pre><code>r2 -c &quot;ood&quot; -d /tmp/hax
+--&gt; PWNED
+</code></pre>
+
+<p>Therefore you can get pwned by executing <code>ood</code> after opening the binary.</p>
+
+<h1 id="demo-time">Demo Time</h1>
+
+<p>Let&rsquo;s see it in action:</p>
+
+<p><img src="/img/r2-pwndebian/calc.gif" alt="Calculator Exploit" />
+<img src="/img/r2-pwndebian/sleep.gif" alt="Sleep Exploit" /></p>
+
+<h1 id="pocs">PoCs</h1>
+
+<p>The proof of concept exploits shown above can be found <a href="https://github.com/ps1337/r2-pwndebian-exploits">here</a>.</p>
+
+<h1 id="the-fix">The Fix</h1>
+
+<p>We&rsquo;ve thought really hard about this.</p>
+
+<p><img src="/img/r2-pwndebian/thinking.gif" alt="Hmmmm" /></p>
+
+<p>We decided to quote the entire command.</p>
+
+<pre><code>f sym.imp.__sprintf_chk 16 0x00000000
+</code></pre>
+
+<p>becomes</p>
+
+<pre><code>&quot;f sym.imp.__sprintf_chk 16 0x5562473eb000&quot;
+</code></pre>
+
+<hr />
+
+<p>And</p>
+
+<pre><code>f sym.A`!sleep 99`AAAAAAAAAAA 8 0x000222c0
+</code></pre>
+
+<p>becomes</p>
+
+<pre><code>&quot;f sym.A`!sleep 99`AAAAAAAAAAA 8 0x000222c0&quot;
+</code></pre>
+
+<p>and therefore doesn&rsquo;t get executed, no matter of missing sanitation. Therefore, the old Debian <code>3.2.1</code> release is affected and the current master isn&rsquo;t :)</p>
+
+<p>And now update <code>r2</code> for Debian pls.</p>
+
+<hr />
+
+<p>Thanks for reading, I love you all, see you at r2con!</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/x64-bof/">Buffer Overflows on x64 with radare2</a></h4>
+    <h5>July 13, 2019</h5>
+    
+    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="tags/x64"><kbd class="item-tag">x64</kbd></a>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/bananabot/">Coding A CS:GO Hack</a></h4>
+    <h5>June 19, 2019</h5>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/binary-aslr-dep-32/">Bypassing ASLR and DEP for 32-Bit Binaries With r2</a></h4>
+    <h5>May 1, 2019</h5>
+    
+    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="tags/ret2libc"><kbd class="item-tag">ret2libc</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

@@ -6,7 +6,7 @@
     <description>Recent content in radare2 on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 13 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/radare2/index.xml" rel="self" type="application/rss+xml" />
     
@@ -18,6 +18,19 @@
       
       <guid>/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2</title>
+      <link>/post/r2-pwndebian/</link>
+      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/r2-pwndebian/</guid>
+      <description>Yo Yo Yo.
+Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
+The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
+But first some basics for r2.
+Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell out and execute shell commands without leaving the r2 console:</description>
     </item>
     
     <item>
