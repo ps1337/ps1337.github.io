@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tmux on A Blog.</title>
-    <link>/tags/tmux/</link>
-    <description>Recent content in tmux on A Blog.</description>
+    <title>Tmux on A Blog.</title>
+    <link>https://bananamafia.dev/tags/tmux/</link>
+    <description>Recent content in Tmux on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 10 Apr 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/tmux/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/tmux/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</title>
-      <link>/post/pairprog/</link>
+      <link>https://bananamafia.dev/post/pairprog/</link>
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/pairprog/</guid>
+      <guid>https://bananamafia.dev/post/pairprog/</guid>
       <description>Recently I&amp;rsquo;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&amp;rsquo;t even have to give them access to your host system - they will be contained just like you and the work that&amp;rsquo;s being done. Using my docker image, it&amp;rsquo;s possible to share a tmux session with a group of people.</description>
     </item>
     

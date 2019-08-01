@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>jka on A Blog.</title>
-    <link>/tags/jka/</link>
-    <description>Recent content in jka on A Blog.</description>
+    <title>Jka on A Blog.</title>
+    <link>https://bananamafia.dev/tags/jka/</link>
+    <description>Recent content in Jka on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="/tags/jka/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/jka/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>RandomJK</title>
-      <link>/project/randomjk/</link>
+      <link>https://bananamafia.dev/project/randomjk/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/randomjk/</guid>
+      <guid>https://bananamafia.dev/project/randomjk/</guid>
       <description></description>
     </item>
     

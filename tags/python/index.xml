@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>python on A Blog.</title>
-    <link>/tags/python/</link>
-    <description>Recent content in python on A Blog.</description>
+    <title>Python on A Blog.</title>
+    <link>https://bananamafia.dev/tags/python/</link>
+    <description>Recent content in Python on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 13 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>CANalyzat0r</title>
-      <link>/project/canalyzat0r/</link>
+      <link>https://bananamafia.dev/project/canalyzat0r/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/canalyzat0r/</guid>
+      <guid>https://bananamafia.dev/project/canalyzat0r/</guid>
       <description></description>
     </item>
     
     <item>
       <title>pwntools-r2</title>
-      <link>/project/pwntools-r2/</link>
+      <link>https://bananamafia.dev/project/pwntools-r2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/pwntools-r2/</guid>
+      <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
     </item>
     
     <item>
       <title>2 Common Python Security Issues</title>
-      <link>/post/python-hax/</link>
+      <link>https://bananamafia.dev/post/python-hax/</link>
       <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/python-hax/</guid>
+      <guid>https://bananamafia.dev/post/python-hax/</guid>
       <description>tl;dr Be aware that imports can be hijacked for Python2 and Python3 - take care of EUIDs.
 Don&amp;rsquo;t use input() for Python2.x.
 Module Hijacking When assigning SUID bits to Python scripts, privileges can be escalated easily. Consider the following Python source code:

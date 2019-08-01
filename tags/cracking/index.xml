@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>cracking on A Blog.</title>
-    <link>/tags/cracking/</link>
-    <description>Recent content in cracking on A Blog.</description>
+    <title>Cracking on A Blog.</title>
+    <link>https://bananamafia.dev/tags/cracking/</link>
+    <description>Recent content in Cracking on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 16 Aug 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/cracking/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/cracking/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Runtime Function Patching</title>
-      <link>/post/cvar-hax/</link>
+      <link>https://bananamafia.dev/post/cvar-hax/</link>
       <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/cvar-hax/</guid>
+      <guid>https://bananamafia.dev/post/cvar-hax/</guid>
       <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
 The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
     </item>
     
     <item>
       <title>Cracking Music Server Software</title>
-      <link>/post/mserver-crack/</link>
+      <link>https://bananamafia.dev/post/mserver-crack/</link>
       <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/mserver-crack/</guid>
+      <guid>https://bananamafia.dev/post/mserver-crack/</guid>
       <description>tl;dr Generating licenses using MD5(email) is bad.
 Validating licenses using HTTP in plain text is bad.
 The Software This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&amp;rsquo;t be disclosed.</description>

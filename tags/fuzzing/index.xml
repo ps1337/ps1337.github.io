@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>fuzzing on A Blog.</title>
-    <link>/tags/fuzzing/</link>
-    <description>Recent content in fuzzing on A Blog.</description>
+    <title>Fuzzing on A Blog.</title>
+    <link>https://bananamafia.dev/tags/fuzzing/</link>
+    <description>Recent content in Fuzzing on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="/tags/fuzzing/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/fuzzing/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>mitm-fuzz0r</title>
-      <link>/project/mitmfuzz0r/</link>
+      <link>https://bananamafia.dev/project/mitmfuzz0r/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/mitmfuzz0r/</guid>
+      <guid>https://bananamafia.dev/project/mitmfuzz0r/</guid>
       <description></description>
     </item>
     

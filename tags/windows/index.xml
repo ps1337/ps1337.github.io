@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>windows on A Blog.</title>
-    <link>/tags/windows/</link>
-    <description>Recent content in windows on A Blog.</description>
+    <title>Windows on A Blog.</title>
+    <link>https://bananamafia.dev/tags/windows/</link>
+    <description>Recent content in Windows on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 15 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/windows/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Exploiting Unqoted Service Paths For Fun and No Profit</title>
-      <link>/post/realtek-driverutil/</link>
+      <link>https://bananamafia.dev/post/realtek-driverutil/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/realtek-driverutil/</guid>
+      <guid>https://bananamafia.dev/post/realtek-driverutil/</guid>
       <description>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version 1030.6). Note that the download link points to alfa.com but the driver utility itself says it&amp;rsquo;s developed by REALTEK.
 The vulnerability Upon installing the driver utility, two vulnerable services get installed.</description>
     </item>

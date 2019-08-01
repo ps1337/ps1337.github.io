@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>dockerfiles on A Blog.</title>
-    <link>/tags/dockerfiles/</link>
-    <description>Recent content in dockerfiles on A Blog.</description>
+    <title>Dockerfiles on A Blog.</title>
+    <link>https://bananamafia.dev/tags/dockerfiles/</link>
+    <description>Recent content in Dockerfiles on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="/tags/dockerfiles/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/dockerfiles/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Dockerfiles</title>
-      <link>/project/dockerfiles/</link>
+      <link>https://bananamafia.dev/project/dockerfiles/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/dockerfiles/</guid>
+      <guid>https://bananamafia.dev/project/dockerfiles/</guid>
       <description></description>
     </item>
     

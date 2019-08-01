@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>randomnote on A Blog.</title>
-    <link>/tags/randomnote/</link>
-    <description>Recent content in randomnote on A Blog.</description>
+    <title>Randomnote on A Blog.</title>
+    <link>https://bananamafia.dev/tags/randomnote/</link>
+    <description>Recent content in Randomnote on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 26 Oct 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/randomnote/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/randomnote/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Random Note #092345: Passing binary input via GDB</title>
-      <link>/post/rnd-092345-gdb/</link>
+      <link>https://bananamafia.dev/post/rnd-092345-gdb/</link>
       <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-092345-gdb/</guid>
+      <guid>https://bananamafia.dev/post/rnd-092345-gdb/</guid>
       <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
 run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;)  from the gdb session to send arbitrary bytes.</description>
     </item>
     
     <item>
       <title>Random Note #632424: Backup Google Authenticator Data</title>
-      <link>/post/rnd-632424-2fa-backup/</link>
+      <link>https://bananamafia.dev/post/rnd-632424-2fa-backup/</link>
       <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-632424-2fa-backup/</guid>
+      <guid>https://bananamafia.dev/post/rnd-632424-2fa-backup/</guid>
       <description>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you&amp;rsquo;re using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn&amp;rsquo;t require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail.</description>
     </item>
     
     <item>
       <title>Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</title>
-      <link>/post/pairprog/</link>
+      <link>https://bananamafia.dev/post/pairprog/</link>
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/pairprog/</guid>
+      <guid>https://bananamafia.dev/post/pairprog/</guid>
       <description>Recently I&amp;rsquo;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&amp;rsquo;t even have to give them access to your host system - they will be contained just like you and the work that&amp;rsquo;s being done. Using my docker image, it&amp;rsquo;s possible to share a tmux session with a group of people.</description>
     </item>
     
     <item>
       <title>Random Note #23542351: Using the GitHub API to improve Dockerfiles</title>
-      <link>/post/rnd-23542352/</link>
+      <link>https://bananamafia.dev/post/rnd-23542352/</link>
       <pubDate>Tue, 20 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-23542352/</guid>
+      <guid>https://bananamafia.dev/post/rnd-23542352/</guid>
       <description>When writing Dockerfiles, people often use something like this to download and install software from GitHub:
 ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb  This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
 curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;quot;browser_download_url&amp;quot; | \ grep &amp;quot;amd64.deb&amp;quot; | \ cut -d &amp;quot;:&amp;quot; -f 2,3 | \ tr --delete \&amp;quot; | \ tr --delete &amp;quot; &amp;quot;) \ -o /tmp/software-amd64.</description>

@@ -23,19 +23,19 @@
 
 
 
-<link rel="stylesheet" href="/css/font.css">
+<link rel="stylesheet" href="https://bananamafia.dev/css/font.css">
 
 
- <link rel="stylesheet" href="/css/solarized-dark.min.css"> 
+ <link rel="stylesheet" href="https://bananamafia.dev/css/solarized-dark.min.css"> 
 
 
-<link rel="stylesheet" href="/css/bootstrap-min.css" integrity="">
+<link rel="stylesheet" href="https://bananamafia.dev/css/bootstrap-min.css" integrity="">
 
 
-<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="https://bananamafia.dev/css/main.css">
 
 
-<link rel="stylesheet" href="/css/font-awesome.min.css" integrity="">
+<link rel="stylesheet" href="https://bananamafia.dev/css/font-awesome.min.css" integrity="">
  
 
 
@@ -84,7 +84,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.55.6" />
+ <meta name="generator" content="Hugo 0.40.1" />
         
 
         
@@ -162,15 +162,15 @@
     <h4><a href="/post/binary-aslr-dep-32/">Bypassing ASLR and DEP for 32-Bit Binaries With r2</a></h4>
     <h5>May 1, 2019</h5>
     
-    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    <a href="https://bananamafia.devtags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
     
-    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    <a href="https://bananamafia.devtags/r2"><kbd class="item-tag">r2</kbd></a>
     
-    <a href="tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    <a href="https://bananamafia.devtags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
-    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    <a href="https://bananamafia.devtags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
-    <a href="tags/ret2libc"><kbd class="item-tag">ret2libc</kbd></a>
+    <a href="https://bananamafia.devtags/ret2libc"><kbd class="item-tag">ret2libc</kbd></a>
     
 
 </div>
@@ -202,27 +202,26 @@ int main(int argc, char **argv)
 
 <ul>
 <li>Providing shellcode via user input: DEP prevents executing this code and the application would just crash</li>
-
-<li><p>Using a library like <code>libc</code> and spawning a shell (e.g. using <code>ret2libc</code>) because the start address of the library is randomized after each start of a process:</p>
+<li>Using a library like <code>libc</code> and spawning a shell (e.g. using <code>ret2libc</code>) because the start address of the library is randomized after each start of a process:</li>
+</ul>
 
 <pre><code>$ gcc yolo.c -o yolo_x64
 
 $ ldd yolo_x64 | grep libc
-    libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fe0def68000)
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fe0def68000)
 
 $ ldd yolo_x64 | grep libc
-    libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fba1f038000) &lt;-- much random
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fba1f038000) &lt;-- much random
 
 $ ldd yolo_x64 | grep libc
-    libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007f3d65b03000) &lt;-- also here
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007f3d65b03000) &lt;-- also here
 
 $ ldd yolo_x64 | grep libc
-    libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007f584e180000) &lt;-- here too
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007f584e180000) &lt;-- here too
 
 $ ldd yolo_x64 | grep libc
-    libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fc4aee7c000) &lt;-- :/
-</code></pre></li>
-</ul>
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007fc4aee7c000) &lt;-- :/
+</code></pre>
 
 <p>As seen above, the start address of <code>libc</code> always has a random value. The <code>ret2libc</code> technique would theoretically work in case an attacker is able to guess the start address of <code>libc</code>. However, for 64-bit binaries the chance to guess this right is just too small. Because of this, this post covers 32-bit binaries where the chance to make a right guess is better:</p>
 
@@ -466,15 +465,15 @@ sh-5.0$
     <h4><a href="/post/r2-pwndebian/">r2con 2019 PwnDebian Challenge: Exploiting radare2</a></h4>
     <h5>July 30, 2019</h5>
     
-    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    <a href="https://bananamafia.devtags/r2"><kbd class="item-tag">r2</kbd></a>
     
-    <a href="tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    <a href="https://bananamafia.devtags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
-    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    <a href="https://bananamafia.devtags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
-    <a href="tags/exploit"><kbd class="item-tag">exploit</kbd></a>
+    <a href="https://bananamafia.devtags/exploit"><kbd class="item-tag">exploit</kbd></a>
     
-    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    <a href="https://bananamafia.devtags/binary"><kbd class="item-tag">binary</kbd></a>
     
 
 </div>
@@ -490,15 +489,15 @@ sh-5.0$
     <h4><a href="/post/x64-bof/">Buffer Overflows on x64 with radare2</a></h4>
     <h5>July 13, 2019</h5>
     
-    <a href="tags/r2"><kbd class="item-tag">r2</kbd></a>
+    <a href="https://bananamafia.devtags/r2"><kbd class="item-tag">r2</kbd></a>
     
-    <a href="tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    <a href="https://bananamafia.devtags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
-    <a href="tags/x64"><kbd class="item-tag">x64</kbd></a>
+    <a href="https://bananamafia.devtags/x64"><kbd class="item-tag">x64</kbd></a>
     
-    <a href="tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    <a href="https://bananamafia.devtags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
     
-    <a href="tags/rop"><kbd class="item-tag">rop</kbd></a>
+    <a href="https://bananamafia.devtags/rop"><kbd class="item-tag">rop</kbd></a>
     
 
 </div>
@@ -514,11 +513,11 @@ sh-5.0$
     <h4><a href="/post/bananabot/">Coding A CS:GO Hack</a></h4>
     <h5>June 19, 2019</h5>
     
-    <a href="tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    <a href="https://bananamafia.devtags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
-    <a href="tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    <a href="https://bananamafia.devtags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
     
-    <a href="tags/binary"><kbd class="item-tag">binary</kbd></a>
+    <a href="https://bananamafia.devtags/binary"><kbd class="item-tag">binary</kbd></a>
     
 
 </div>

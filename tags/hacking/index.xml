@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>hacking on A Blog.</title>
-    <link>/tags/hacking/</link>
-    <description>Recent content in hacking on A Blog.</description>
+    <title>Hacking on A Blog.</title>
+    <link>https://bananamafia.dev/tags/hacking/</link>
+    <description>Recent content in Hacking on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 18 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/hacking/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/hacking/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>haxxor-tools</title>
-      <link>/project/haxxor-tools/</link>
+      <link>https://bananamafia.dev/project/haxxor-tools/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/haxxor-tools/</guid>
+      <guid>https://bananamafia.dev/project/haxxor-tools/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Docker Breakout Using X11</title>
-      <link>/post/docker-breakout/</link>
+      <link>https://bananamafia.dev/post/docker-breakout/</link>
       <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-breakout/</guid>
+      <guid>https://bananamafia.dev/post/docker-breakout/</guid>
       <description>Use Docker to run GUI applications they said.
 Mount the X11 socket they said.
 Allow other users to access your X session they said.

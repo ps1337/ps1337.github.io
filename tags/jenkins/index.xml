@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>jenkins on A Blog.</title>
-    <link>/tags/jenkins/</link>
-    <description>Recent content in jenkins on A Blog.</description>
+    <title>Jenkins on A Blog.</title>
+    <link>https://bananamafia.dev/tags/jenkins/</link>
+    <description>Recent content in Jenkins on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 07 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/jenkins/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/jenkins/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Universal Notifications Using Telegram and cURL</title>
-      <link>/post/telegram-notifications/</link>
+      <link>https://bananamafia.dev/post/telegram-notifications/</link>
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/telegram-notifications/</guid>
+      <guid>https://bananamafia.dev/post/telegram-notifications/</guid>
       <description>If you ever wanted to get notified when certain things happen but didn&amp;rsquo;t find a lightweight solution &amp;ndash; here comes captain Telegram.
 Using a simple Telegram bot, it&amp;rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
 Registering a bot First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</description>
@@ -24,10 +24,10 @@ Registering a bot First of all, a Telegram bot has to be registered in order to 
     
     <item>
       <title>Building a CI Docker Pipeline Using Docker in Your Docker</title>
-      <link>/post/docker-jenkins/</link>
+      <link>https://bananamafia.dev/post/docker-jenkins/</link>
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-jenkins/</guid>
+      <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
       <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
  Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
