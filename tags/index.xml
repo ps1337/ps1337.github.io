@@ -2,435 +2,435 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on A Blog.</title>
-    <link>/tags/</link>
+    <link>https://bananamafia.dev/tags/</link>
     <description>Recent content in Tags on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 08 Aug 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>binary</title>
-      <link>/tags/binary/</link>
-      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/binary/</guid>
-      <description></description>
-    </item>
     
     <item>
-      <title>exploit</title>
-      <link>/tags/exploit/</link>
-      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
+      <title>ctf</title>
+      <link>https://bananamafia.dev/tags/ctf/</link>
+      <pubDate>Thu, 08 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/exploit/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>r2</title>
-      <link>/tags/r2/</link>
-      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/r2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>radare2</title>
-      <link>/tags/radare2/</link>
-      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/radare2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>reverse-engineering</title>
-      <link>/tags/reverse-engineering/</link>
-      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/reverse-engineering/</guid>
+      <guid>https://bananamafia.dev/tags/ctf/</guid>
       <description></description>
     </item>
     
     <item>
       <title>exploiting</title>
-      <link>/tags/exploiting/</link>
-      <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+      <link>https://bananamafia.dev/tags/exploiting/</link>
+      <pubDate>Thu, 08 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/exploiting/</guid>
+      <guid>https://bananamafia.dev/tags/exploiting/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>rop</title>
-      <link>/tags/rop/</link>
-      <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+      <title>r2</title>
+      <link>https://bananamafia.dev/tags/r2/</link>
+      <pubDate>Thu, 08 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/rop/</guid>
+      <guid>https://bananamafia.dev/tags/r2/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>x64</title>
-      <link>/tags/x64/</link>
-      <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+      <title>radare2</title>
+      <link>https://bananamafia.dev/tags/radare2/</link>
+      <pubDate>Thu, 08 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/x64/</guid>
+      <guid>https://bananamafia.dev/tags/radare2/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>c&#43;&#43;</title>
-      <link>/tags/c&#43;&#43;/</link>
-      <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
+      <title>binary</title>
+      <link>https://bananamafia.dev/tags/binary/</link>
+      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/c&#43;&#43;/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ret2libc</title>
-      <link>/tags/ret2libc/</link>
-      <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/ret2libc/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>docker</title>
-      <link>/tags/docker/</link>
-      <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/docker/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>vulnerability</title>
-      <link>/tags/vulnerability/</link>
-      <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/vulnerability/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>gdb</title>
-      <link>/tags/gdb/</link>
-      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/gdb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>randomnote</title>
-      <link>/tags/randomnote/</link>
-      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/randomnote/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>automotive</title>
-      <link>/tags/automotive/</link>
-      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/automotive/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>car-hacking</title>
-      <link>/tags/car-hacking/</link>
-      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/car-hacking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>hooking</title>
-      <link>/tags/hooking/</link>
-      <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/hooking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>cracking</title>
-      <link>/tags/cracking/</link>
-      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/cracking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>backups</title>
-      <link>/tags/backups/</link>
-      <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/backups/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>hacking</title>
-      <link>/tags/hacking/</link>
-      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/hacking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>pentesting</title>
-      <link>/tags/pentesting/</link>
-      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/pentesting/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>shell</title>
-      <link>/tags/shell/</link>
-      <pubDate>Wed, 16 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/shell/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>/tags/python/</link>
-      <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>programming</title>
-      <link>/tags/programming/</link>
-      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/programming/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tmux</title>
-      <link>/tags/tmux/</link>
-      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/tmux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>vim</title>
-      <link>/tags/vim/</link>
-      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/vim/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>malware</title>
-      <link>/tags/malware/</link>
-      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/malware/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>monitoring</title>
-      <link>/tags/monitoring/</link>
-      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/monitoring/</guid>
+      <guid>https://bananamafia.dev/tags/binary/</guid>
       <description></description>
     </item>
     
     <item>
       <title>cve</title>
-      <link>/tags/cve/</link>
-      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
+      <link>https://bananamafia.dev/tags/cve/</link>
+      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/cve/</guid>
+      <guid>https://bananamafia.dev/tags/cve/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>exploit</title>
+      <link>https://bananamafia.dev/tags/exploit/</link>
+      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/exploit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>reverse-engineering</title>
+      <link>https://bananamafia.dev/tags/reverse-engineering/</link>
+      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/reverse-engineering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rop</title>
+      <link>https://bananamafia.dev/tags/rop/</link>
+      <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/rop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>x64</title>
+      <link>https://bananamafia.dev/tags/x64/</link>
+      <pubDate>Sat, 13 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/x64/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>c&#43;&#43;</title>
+      <link>https://bananamafia.dev/tags/c&#43;&#43;/</link>
+      <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ret2libc</title>
+      <link>https://bananamafia.dev/tags/ret2libc/</link>
+      <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/ret2libc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>docker</title>
+      <link>https://bananamafia.dev/tags/docker/</link>
+      <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vulnerability</title>
+      <link>https://bananamafia.dev/tags/vulnerability/</link>
+      <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/vulnerability/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gdb</title>
+      <link>https://bananamafia.dev/tags/gdb/</link>
+      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/gdb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>randomnote</title>
+      <link>https://bananamafia.dev/tags/randomnote/</link>
+      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/randomnote/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>automotive</title>
+      <link>https://bananamafia.dev/tags/automotive/</link>
+      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/automotive/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>car-hacking</title>
+      <link>https://bananamafia.dev/tags/car-hacking/</link>
+      <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/car-hacking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hooking</title>
+      <link>https://bananamafia.dev/tags/hooking/</link>
+      <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/hooking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cracking</title>
+      <link>https://bananamafia.dev/tags/cracking/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/cracking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>backups</title>
+      <link>https://bananamafia.dev/tags/backups/</link>
+      <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/backups/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>hacking</title>
+      <link>https://bananamafia.dev/tags/hacking/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/hacking/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pentesting</title>
+      <link>https://bananamafia.dev/tags/pentesting/</link>
+      <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/pentesting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>https://bananamafia.dev/tags/shell/</link>
+      <pubDate>Wed, 16 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://bananamafia.dev/tags/python/</link>
+      <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>programming</title>
+      <link>https://bananamafia.dev/tags/programming/</link>
+      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tmux</title>
+      <link>https://bananamafia.dev/tags/tmux/</link>
+      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/tmux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>vim</title>
+      <link>https://bananamafia.dev/tags/vim/</link>
+      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/vim/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>malware</title>
+      <link>https://bananamafia.dev/tags/malware/</link>
+      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/malware/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>monitoring</title>
+      <link>https://bananamafia.dev/tags/monitoring/</link>
+      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/monitoring/</guid>
       <description></description>
     </item>
     
     <item>
       <title>windows</title>
-      <link>/tags/windows/</link>
+      <link>https://bananamafia.dev/tags/windows/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/windows/</guid>
+      <guid>https://bananamafia.dev/tags/windows/</guid>
       <description></description>
     </item>
     
     <item>
       <title>borg</title>
-      <link>/tags/borg/</link>
+      <link>https://bananamafia.dev/tags/borg/</link>
       <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/borg/</guid>
+      <guid>https://bananamafia.dev/tags/borg/</guid>
       <description></description>
     </item>
     
     <item>
       <title>ansible</title>
-      <link>/tags/ansible/</link>
+      <link>https://bananamafia.dev/tags/ansible/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/ansible/</guid>
+      <guid>https://bananamafia.dev/tags/ansible/</guid>
       <description></description>
     </item>
     
     <item>
       <title>dotfiles</title>
-      <link>/tags/dotfiles/</link>
+      <link>https://bananamafia.dev/tags/dotfiles/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/dotfiles/</guid>
+      <guid>https://bananamafia.dev/tags/dotfiles/</guid>
       <description></description>
     </item>
     
     <item>
       <title>travis</title>
-      <link>/tags/travis/</link>
+      <link>https://bananamafia.dev/tags/travis/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/travis/</guid>
+      <guid>https://bananamafia.dev/tags/travis/</guid>
       <description></description>
     </item>
     
     <item>
       <title>jenkins</title>
-      <link>/tags/jenkins/</link>
+      <link>https://bananamafia.dev/tags/jenkins/</link>
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/jenkins/</guid>
+      <guid>https://bananamafia.dev/tags/jenkins/</guid>
       <description></description>
     </item>
     
     <item>
       <title>notification</title>
-      <link>/tags/notification/</link>
+      <link>https://bananamafia.dev/tags/notification/</link>
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/notification/</guid>
+      <guid>https://bananamafia.dev/tags/notification/</guid>
       <description></description>
     </item>
     
     <item>
       <title>ci</title>
-      <link>/tags/ci/</link>
+      <link>https://bananamafia.dev/tags/ci/</link>
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/ci/</guid>
+      <guid>https://bananamafia.dev/tags/ci/</guid>
       <description></description>
     </item>
     
     <item>
       <title>gogs</title>
-      <link>/tags/gogs/</link>
+      <link>https://bananamafia.dev/tags/gogs/</link>
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/gogs/</guid>
+      <guid>https://bananamafia.dev/tags/gogs/</guid>
       <description></description>
     </item>
     
     <item>
       <title>android</title>
-      <link>/tags/android/</link>
+      <link>https://bananamafia.dev/tags/android/</link>
       <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/tags/android/</guid>
+      <guid>https://bananamafia.dev/tags/android/</guid>
       <description></description>
     </item>
     
     <item>
       <title>container</title>
-      <link>/tags/container/</link>
+      <link>https://bananamafia.dev/tags/container/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/container/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ctf</title>
-      <link>/tags/ctf/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/ctf/</guid>
+      <guid>https://bananamafia.dev/tags/container/</guid>
       <description></description>
     </item>
     
     <item>
       <title>dockerfiles</title>
-      <link>/tags/dockerfiles/</link>
+      <link>https://bananamafia.dev/tags/dockerfiles/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/dockerfiles/</guid>
+      <guid>https://bananamafia.dev/tags/dockerfiles/</guid>
       <description></description>
     </item>
     
     <item>
       <title>fuzzing</title>
-      <link>/tags/fuzzing/</link>
+      <link>https://bananamafia.dev/tags/fuzzing/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/fuzzing/</guid>
+      <guid>https://bananamafia.dev/tags/fuzzing/</guid>
       <description></description>
     </item>
     
     <item>
       <title>i3</title>
-      <link>/tags/i3/</link>
+      <link>https://bananamafia.dev/tags/i3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/i3/</guid>
+      <guid>https://bananamafia.dev/tags/i3/</guid>
       <description></description>
     </item>
     
     <item>
       <title>jka</title>
-      <link>/tags/jka/</link>
+      <link>https://bananamafia.dev/tags/jka/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/jka/</guid>
+      <guid>https://bananamafia.dev/tags/jka/</guid>
       <description></description>
     </item>
     
     <item>
       <title>pwntools</title>
-      <link>/tags/pwntools/</link>
+      <link>https://bananamafia.dev/tags/pwntools/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/pwntools/</guid>
+      <guid>https://bananamafia.dev/tags/pwntools/</guid>
       <description></description>
     </item>
     
     <item>
       <title>randomizer</title>
-      <link>/tags/randomizer/</link>
+      <link>https://bananamafia.dev/tags/randomizer/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/tags/randomizer/</guid>
+      <guid>https://bananamafia.dev/tags/randomizer/</guid>
       <description></description>
     </item>
     

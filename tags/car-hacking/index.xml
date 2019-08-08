@@ -2,39 +2,39 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>car-hacking on A Blog.</title>
-    <link>/tags/car-hacking/</link>
+    <link>https://bananamafia.dev/tags/car-hacking/</link>
     <description>Recent content in car-hacking on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 23 Oct 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/car-hacking/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/car-hacking/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Automotive Security Research</title>
-      <link>/project/autosec/</link>
+      <link>https://bananamafia.dev/project/autosec/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/autosec/</guid>
+      <guid>https://bananamafia.dev/project/autosec/</guid>
       <description></description>
     </item>
     
     <item>
       <title>CANalyzat0r</title>
-      <link>/project/canalyzat0r/</link>
+      <link>https://bananamafia.dev/project/canalyzat0r/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/canalyzat0r/</guid>
+      <guid>https://bananamafia.dev/project/canalyzat0r/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Car Hacking: A Short Overview</title>
-      <link>/post/autohax/</link>
+      <link>https://bananamafia.dev/post/autohax/</link>
       <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/autohax/</guid>
+      <guid>https://bananamafia.dev/post/autohax/</guid>
       <description>Ever wondered about the various techniques that can be applied to hack modern cars? This post documents various ways to do so - you can use it as a cheatsheet
 Software There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It&amp;rsquo;s important to use special adapters that are whitelisted on the car&amp;rsquo;s head unit.</description>
     </item>

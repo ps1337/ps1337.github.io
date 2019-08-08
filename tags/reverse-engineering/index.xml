@@ -2,66 +2,66 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>reverse-engineering on A Blog.</title>
-    <link>/tags/reverse-engineering/</link>
+    <link>https://bananamafia.dev/tags/reverse-engineering/</link>
     <description>Recent content in reverse-engineering on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/reverse-engineering/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/reverse-engineering/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Automotive Security Research</title>
-      <link>/project/autosec/</link>
+      <link>https://bananamafia.dev/project/autosec/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/autosec/</guid>
+      <guid>https://bananamafia.dev/project/autosec/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Bananabot: CS:GO Multihack</title>
-      <link>/project/bananabot/</link>
+      <link>https://bananamafia.dev/project/bananabot/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/bananabot/</guid>
+      <guid>https://bananamafia.dev/project/bananabot/</guid>
       <description></description>
     </item>
     
     <item>
       <title>CANalyzat0r</title>
-      <link>/project/canalyzat0r/</link>
+      <link>https://bananamafia.dev/project/canalyzat0r/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/canalyzat0r/</guid>
+      <guid>https://bananamafia.dev/project/canalyzat0r/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Official Cutter Docker Configuration</title>
-      <link>/project/cutter-docker/</link>
+      <link>https://bananamafia.dev/project/cutter-docker/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/cutter-docker/</guid>
+      <guid>https://bananamafia.dev/project/cutter-docker/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Q3 Engine Multihack</title>
-      <link>/project/jka-multihack/</link>
+      <link>https://bananamafia.dev/project/jka-multihack/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/jka-multihack/</guid>
+      <guid>https://bananamafia.dev/project/jka-multihack/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2</title>
-      <link>/post/r2-pwndebian/</link>
+      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745)</title>
+      <link>https://bananamafia.dev/post/r2-pwndebian/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/r2-pwndebian/</guid>
+      <guid>https://bananamafia.dev/post/r2-pwndebian/</guid>
       <description>Yo Yo Yo.
 Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
 The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
@@ -71,10 +71,10 @@ Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell
     
     <item>
       <title>Coding A CS:GO Hack</title>
-      <link>/post/bananabot/</link>
+      <link>https://bananamafia.dev/post/bananabot/</link>
       <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/bananabot/</guid>
+      <guid>https://bananamafia.dev/post/bananabot/</guid>
       <description>This post covers creating a multihack for the game Counter Strike: Global Offensive. The created hack works with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools. Below you can find a demonstration of the finished cheat:
 The features therefore include:
  Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy  Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
@@ -82,40 +82,40 @@ The features therefore include:
     
     <item>
       <title>Bypassing ASLR and DEP for 32-Bit Binaries With r2</title>
-      <link>/post/binary-aslr-dep-32/</link>
+      <link>https://bananamafia.dev/post/binary-aslr-dep-32/</link>
       <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/binary-aslr-dep-32/</guid>
+      <guid>https://bananamafia.dev/post/binary-aslr-dep-32/</guid>
       <description>This post covers basic basics of bypassing ASLR and DEP with r2. For this, a vulnerable application, yolo.c, is required:
 #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); }  64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow.</description>
     </item>
     
     <item>
       <title>Random Note #092345: Passing binary input via GDB</title>
-      <link>/post/rnd-092345-gdb/</link>
+      <link>https://bananamafia.dev/post/rnd-092345-gdb/</link>
       <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-092345-gdb/</guid>
+      <guid>https://bananamafia.dev/post/rnd-092345-gdb/</guid>
       <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
 run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;)  from the gdb session to send arbitrary bytes.</description>
     </item>
     
     <item>
       <title>Car Hacking: A Short Overview</title>
-      <link>/post/autohax/</link>
+      <link>https://bananamafia.dev/post/autohax/</link>
       <pubDate>Tue, 23 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/autohax/</guid>
+      <guid>https://bananamafia.dev/post/autohax/</guid>
       <description>Ever wondered about the various techniques that can be applied to hack modern cars? This post documents various ways to do so - you can use it as a cheatsheet
 Software There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It&amp;rsquo;s important to use special adapters that are whitelisted on the car&amp;rsquo;s head unit.</description>
     </item>
     
     <item>
       <title>Creating A Multiplayer Game Hack</title>
-      <link>/post/multihack/</link>
+      <link>https://bananamafia.dev/post/multihack/</link>
       <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/multihack/</guid>
+      <guid>https://bananamafia.dev/post/multihack/</guid>
       <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
 I&amp;rsquo;ve released my multihack source code. These are the implemented features:
  Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
@@ -123,20 +123,20 @@ I&amp;rsquo;ve released my multihack source code. These are the implemented feat
     
     <item>
       <title>Runtime Function Patching</title>
-      <link>/post/cvar-hax/</link>
+      <link>https://bananamafia.dev/post/cvar-hax/</link>
       <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/cvar-hax/</guid>
+      <guid>https://bananamafia.dev/post/cvar-hax/</guid>
       <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
 The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
     </item>
     
     <item>
       <title>Cracking Music Server Software</title>
-      <link>/post/mserver-crack/</link>
+      <link>https://bananamafia.dev/post/mserver-crack/</link>
       <pubDate>Sun, 13 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/mserver-crack/</guid>
+      <guid>https://bananamafia.dev/post/mserver-crack/</guid>
       <description>tl;dr Generating licenses using MD5(email) is bad.
 Validating licenses using HTTP in plain text is bad.
 The Software This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&amp;rsquo;t be disclosed.</description>

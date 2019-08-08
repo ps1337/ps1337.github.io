@@ -2,67 +2,67 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>docker on A Blog.</title>
-    <link>/tags/docker/</link>
+    <link>https://bananamafia.dev/tags/docker/</link>
     <description>Recent content in docker on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 04 Jan 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/docker/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Dockerfiles</title>
-      <link>/project/dockerfiles/</link>
+      <link>https://bananamafia.dev/project/dockerfiles/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/dockerfiles/</guid>
+      <guid>https://bananamafia.dev/project/dockerfiles/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Dotfile-tools</title>
-      <link>/project/dotfile-tools/</link>
+      <link>https://bananamafia.dev/project/dotfile-tools/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/dotfile-tools/</guid>
+      <guid>https://bananamafia.dev/project/dotfile-tools/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Linux Containers Research</title>
-      <link>/project/containers/</link>
+      <link>https://bananamafia.dev/project/containers/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/containers/</guid>
+      <guid>https://bananamafia.dev/project/containers/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Official Cutter Docker Configuration</title>
-      <link>/project/cutter-docker/</link>
+      <link>https://bananamafia.dev/project/cutter-docker/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/cutter-docker/</guid>
+      <guid>https://bananamafia.dev/project/cutter-docker/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Information Leak in Docker</title>
-      <link>/post/docker-leak/</link>
+      <link>https://bananamafia.dev/post/docker-leak/</link>
       <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-leak/</guid>
+      <guid>https://bananamafia.dev/post/docker-leak/</guid>
       <description>During an assessment of the Docker platform in November 2018, two information leaks regarding the /proc/asound path were discovered in the OCI (Open Container Initiative) specification. These issues have been fixed quickly by the Docker security team using the provided suggestions.
 Leak of audio device status of the host When media is being played on the host, the /proc/asound/card*/pcm*p/sub*/status files may contain information regarding the status of media playback. Consider this command for a demonstration:</description>
     </item>
     
     <item>
       <title>Docker Breakout Using X11</title>
-      <link>/post/docker-breakout/</link>
+      <link>https://bananamafia.dev/post/docker-breakout/</link>
       <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-breakout/</guid>
+      <guid>https://bananamafia.dev/post/docker-breakout/</guid>
       <description>Use Docker to run GUI applications they said.
 Mount the X11 socket they said.
 Allow other users to access your X session they said.
@@ -73,19 +73,19 @@ The problem To display windows spawned through a Docker container, people often 
     
     <item>
       <title>Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</title>
-      <link>/post/pairprog/</link>
+      <link>https://bananamafia.dev/post/pairprog/</link>
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/pairprog/</guid>
+      <guid>https://bananamafia.dev/post/pairprog/</guid>
       <description>Recently I&amp;rsquo;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&amp;rsquo;t even have to give them access to your host system - they will be contained just like you and the work that&amp;rsquo;s being done. Using my docker image, it&amp;rsquo;s possible to share a tmux session with a group of people.</description>
     </item>
     
     <item>
       <title>Random Note #23542351: Using the GitHub API to improve Dockerfiles</title>
-      <link>/post/rnd-23542352/</link>
+      <link>https://bananamafia.dev/post/rnd-23542352/</link>
       <pubDate>Tue, 20 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-23542352/</guid>
+      <guid>https://bananamafia.dev/post/rnd-23542352/</guid>
       <description>When writing Dockerfiles, people often use something like this to download and install software from GitHub:
 ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb  This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
 curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;quot;browser_download_url&amp;quot; | \ grep &amp;quot;amd64.deb&amp;quot; | \ cut -d &amp;quot;:&amp;quot; -f 2,3 | \ tr --delete \&amp;quot; | \ tr --delete &amp;quot; &amp;quot;) \ -o /tmp/software-amd64.</description>
@@ -93,10 +93,10 @@ curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest |
     
     <item>
       <title>Monitor All the Things using Docker and Monit</title>
-      <link>/post/monit/</link>
+      <link>https://bananamafia.dev/post/monit/</link>
       <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/monit/</guid>
+      <guid>https://bananamafia.dev/post/monit/</guid>
       <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&amp;rsquo;ve created a Dockerfile and image for Monit for this.
 Monit is extremely configurable and allows a maximum of flexibility when it comes to monitoring.
 Initially, a configuration file is required to get started. To get one, call</description>
@@ -104,10 +104,10 @@ Initially, a configuration file is required to get started. To get one, call</de
     
     <item>
       <title>Easy and Secure Backups Using Borg and Docker</title>
-      <link>/post/docker-borg/</link>
+      <link>https://bananamafia.dev/post/docker-borg/</link>
       <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-borg/</guid>
+      <guid>https://bananamafia.dev/post/docker-borg/</guid>
       <description>BorgBackup is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.
 Getting started I&amp;rsquo;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
 This Makefile can be used to quickly get started using a containerized version of Borg:
@@ -116,29 +116,29 @@ SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell
     
     <item>
       <title>Automated and Tested Dotfile Deployment Using Ansible and Docker</title>
-      <link>/post/dotfile-deployment/</link>
+      <link>https://bananamafia.dev/post/dotfile-deployment/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/dotfile-deployment/</guid>
+      <guid>https://bananamafia.dev/post/dotfile-deployment/</guid>
       <description>This is the second part of my posts about Dotfile management. Part one can be found here.
 After spending a lot of time and effort on your Dotfiles, it may be useful to setup an automated deployment process. There are existing solutions like GNU Stow, but for maximum flexibility the use of Ansible may be a better option. Using this, files and advanced configuration hierarchies can be distributed easily. This post covers my personal setup, which also includes an automated deployment test approach for multiple linux distributions.</description>
     </item>
     
     <item>
       <title>Using Shellcheck and Docker to Automatically Lint Dotfiles</title>
-      <link>/post/dotfile-shellcheck/</link>
+      <link>https://bananamafia.dev/post/dotfile-shellcheck/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/dotfile-shellcheck/</guid>
+      <guid>https://bananamafia.dev/post/dotfile-shellcheck/</guid>
       <description>In order to prevent errors and side effects, it&amp;rsquo;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
     </item>
     
     <item>
       <title>Building a CI Docker Pipeline Using Docker in Your Docker</title>
-      <link>/post/docker-jenkins/</link>
+      <link>https://bananamafia.dev/post/docker-jenkins/</link>
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-jenkins/</guid>
+      <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
       <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
  Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>borg on A Blog.</title>
-    <link>/tags/borg/</link>
+    <link>https://bananamafia.dev/tags/borg/</link>
     <description>Recent content in borg on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 14 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/borg/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/borg/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Easy and Secure Backups Using Borg and Docker</title>
-      <link>/post/docker-borg/</link>
+      <link>https://bananamafia.dev/post/docker-borg/</link>
       <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/docker-borg/</guid>
+      <guid>https://bananamafia.dev/post/docker-borg/</guid>
       <description>BorgBackup is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.
 Getting started I&amp;rsquo;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
 This Makefile can be used to quickly get started using a containerized version of Borg:

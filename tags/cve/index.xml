@@ -2,31 +2,44 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>cve on A Blog.</title>
-    <link>/tags/cve/</link>
+    <link>https://bananamafia.dev/tags/cve/</link>
     <description>Recent content in cve on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/cve/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/cve/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745)</title>
+      <link>https://bananamafia.dev/post/r2-pwndebian/</link>
+      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/r2-pwndebian/</guid>
+      <description>Yo Yo Yo.
+Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
+The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
+But first some basics for r2.
+Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell out and execute shell commands without leaving the r2 console:</description>
+    </item>
+    
+    <item>
       <title>Exploiting Unqoted Service Paths For Fun and No Profit</title>
-      <link>/post/realtek-driverutil/</link>
+      <link>https://bananamafia.dev/post/realtek-driverutil/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/realtek-driverutil/</guid>
+      <guid>https://bananamafia.dev/post/realtek-driverutil/</guid>
       <description>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version 1030.6). Note that the download link points to alfa.com but the driver utility itself says it&amp;rsquo;s developed by REALTEK.
 The vulnerability Upon installing the driver utility, two vulnerable services get installed.</description>
     </item>
     
     <item>
       <title>Auditing the Oral-B App (v5.0.0) (1 CVE)</title>
-      <link>/post/oral-b/</link>
+      <link>https://bananamafia.dev/post/oral-b/</link>
       <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/oral-b/</guid>
+      <guid>https://bananamafia.dev/post/oral-b/</guid>
       <description>Upon assessing the Oral-B app (com.pg.oralb.oralbapp), the following findings have been made:
 CVE-2018-5298: Hardcoded AES Parameters Guess what, hardcoded AES parameters:
 These parameters are stored in the class OralBApplication and also get used there:
@@ -36,10 +49,10 @@ Because of the static key, an attacker can gain access to user data more easily 
     
     <item>
       <title>Auditing NQ Contacts Backup &amp; Restore 1.1 (3 CVEs)</title>
-      <link>/post/nq-contactsbackup/</link>
+      <link>https://bananamafia.dev/post/nq-contactsbackup/</link>
       <pubDate>Sun, 29 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/post/nq-contactsbackup/</guid>
+      <guid>https://bananamafia.dev/post/nq-contactsbackup/</guid>
       <description>NQ Contacts Backup &amp;amp; Restore is an android app that allows users to backup and restore contact data (as vcard) to/from the remote NQ server. For the audit, the android app was the primary target.
 Note: The app shares its code base with NQ Mobile Security &amp;amp; Anti Virus - hence the odd class names for a simple contact backup app.
 CVE-2017-15999: Lack of HTTPS usage When logging in or transmitting data, the app communicates with the remote server via HTTP.</description>
@@ -47,10 +60,10 @@ CVE-2017-15999: Lack of HTTPS usage When logging in or transmitting data, the ap
     
     <item>
       <title>Auditing WriteDiary.com (2 CVEs) </title>
-      <link>/post/write-diary/</link>
+      <link>https://bananamafia.dev/post/write-diary/</link>
       <pubDate>Fri, 27 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>/post/write-diary/</guid>
+      <guid>https://bananamafia.dev/post/write-diary/</guid>
       <description>General note: The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&amp;rsquo;t described here. However, no response has been received.
 WriteDiary consists of a webapp and an Android app (version 4.72). For the audit, the android app was the primary target.
 CVE-2017-15581: Lack of HTTPS-usage, lack of user data encryption when transmitting In the &amp;ldquo;Diary with lock&amp;rdquo; (aka WriteDiary) application 4.</description>

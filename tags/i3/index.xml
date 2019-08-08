@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>i3 on A Blog.</title>
-    <link>/tags/i3/</link>
+    <link>https://bananamafia.dev/tags/i3/</link>
     <description>Recent content in i3 on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="/tags/i3/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/i3/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Dotfiles</title>
-      <link>/project/dotfiles/</link>
+      <link>https://bananamafia.dev/project/dotfiles/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/dotfiles/</guid>
+      <guid>https://bananamafia.dev/project/dotfiles/</guid>
       <description></description>
     </item>
     

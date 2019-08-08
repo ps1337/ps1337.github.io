@@ -2,48 +2,48 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>binary on A Blog.</title>
-    <link>/tags/binary/</link>
+    <link>https://bananamafia.dev/tags/binary/</link>
     <description>Recent content in binary on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/binary/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/binary/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Bananabot: CS:GO Multihack</title>
-      <link>/project/bananabot/</link>
+      <link>https://bananamafia.dev/project/bananabot/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/bananabot/</guid>
+      <guid>https://bananamafia.dev/project/bananabot/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Q3 Engine Multihack</title>
-      <link>/project/jka-multihack/</link>
+      <link>https://bananamafia.dev/project/jka-multihack/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/jka-multihack/</guid>
+      <guid>https://bananamafia.dev/project/jka-multihack/</guid>
       <description></description>
     </item>
     
     <item>
       <title>mitm-fuzz0r</title>
-      <link>/project/mitmfuzz0r/</link>
+      <link>https://bananamafia.dev/project/mitmfuzz0r/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/mitmfuzz0r/</guid>
+      <guid>https://bananamafia.dev/project/mitmfuzz0r/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2</title>
-      <link>/post/r2-pwndebian/</link>
+      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745)</title>
+      <link>https://bananamafia.dev/post/r2-pwndebian/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/r2-pwndebian/</guid>
+      <guid>https://bananamafia.dev/post/r2-pwndebian/</guid>
       <description>Yo Yo Yo.
 Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
 The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
@@ -53,10 +53,10 @@ Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell
     
     <item>
       <title>Coding A CS:GO Hack</title>
-      <link>/post/bananabot/</link>
+      <link>https://bananamafia.dev/post/bananabot/</link>
       <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/bananabot/</guid>
+      <guid>https://bananamafia.dev/post/bananabot/</guid>
       <description>This post covers creating a multihack for the game Counter Strike: Global Offensive. The created hack works with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools. Below you can find a demonstration of the finished cheat:
 The features therefore include:
  Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy  Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
@@ -64,10 +64,10 @@ The features therefore include:
     
     <item>
       <title>Creating A Multiplayer Game Hack</title>
-      <link>/post/multihack/</link>
+      <link>https://bananamafia.dev/post/multihack/</link>
       <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/multihack/</guid>
+      <guid>https://bananamafia.dev/post/multihack/</guid>
       <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
 I&amp;rsquo;ve released my multihack source code. These are the implemented features:
  Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
@@ -75,10 +75,10 @@ I&amp;rsquo;ve released my multihack source code. These are the implemented feat
     
     <item>
       <title>Runtime Function Patching</title>
-      <link>/post/cvar-hax/</link>
+      <link>https://bananamafia.dev/post/cvar-hax/</link>
       <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/cvar-hax/</guid>
+      <guid>https://bananamafia.dev/post/cvar-hax/</guid>
       <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
 The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
     </item>

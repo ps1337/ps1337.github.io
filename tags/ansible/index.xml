@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>ansible on A Blog.</title>
-    <link>/tags/ansible/</link>
+    <link>https://bananamafia.dev/tags/ansible/</link>
     <description>Recent content in ansible on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/ansible/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/ansible/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Dotfile-tools</title>
-      <link>/project/dotfile-tools/</link>
+      <link>https://bananamafia.dev/project/dotfile-tools/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/project/dotfile-tools/</guid>
+      <guid>https://bananamafia.dev/project/dotfile-tools/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Automated and Tested Dotfile Deployment Using Ansible and Docker</title>
-      <link>/post/dotfile-deployment/</link>
+      <link>https://bananamafia.dev/post/dotfile-deployment/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/dotfile-deployment/</guid>
+      <guid>https://bananamafia.dev/post/dotfile-deployment/</guid>
       <description>This is the second part of my posts about Dotfile management. Part one can be found here.
 After spending a lot of time and effort on your Dotfiles, it may be useful to setup an automated deployment process. There are existing solutions like GNU Stow, but for maximum flexibility the use of Ansible may be a better option. Using this, files and advanced configuration hierarchies can be distributed easily. This post covers my personal setup, which also includes an automated deployment test approach for multiple linux distributions.</description>
     </item>

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>gdb on A Blog.</title>
-    <link>/tags/gdb/</link>
+    <link>https://bananamafia.dev/tags/gdb/</link>
     <description>Recent content in gdb on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 26 Oct 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/gdb/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://bananamafia.dev/tags/gdb/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Random Note #092345: Passing binary input via GDB</title>
-      <link>/post/rnd-092345-gdb/</link>
+      <link>https://bananamafia.dev/post/rnd-092345-gdb/</link>
       <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/rnd-092345-gdb/</guid>
+      <guid>https://bananamafia.dev/post/rnd-092345-gdb/</guid>
       <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
 run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;)  from the gdb session to send arbitrary bytes.</description>
     </item>
