@@ -6,10 +6,21 @@
     <description>Recent content in Posts on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 11 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CryptoCTF 2019 Writeup: Decode Me</title>
+      <link>https://bananamafia.dev/post/cryptoctf-1-decodeme/</link>
+      <pubDate>Sun, 11 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/cryptoctf-1-decodeme/</guid>
+      <description>This is short writeup on the Decode Me challenge of the first CryptoCTF.
+The following string has to be decoded into a flag somehow:
+D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey xam lb lbaH  The first thing that comes to mind is that some sort of substitution cipher was being used in the first place. A cipher of this kind is the Caesar cipher which is also known as ROT. Fiddling around with this cipher and a key of 7 yields:</description>
+    </item>
     
     <item>
       <title>Brute-Forcing x86 Stack Canaries</title>
