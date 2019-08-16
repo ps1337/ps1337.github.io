@@ -293,7 +293,7 @@ f sym.imp.sigismember 16 0x00000000
 
 <p>Please note that the calculator exploit calls <code>gnome-calculator</code>, so you need that installed. If you dont&rsquo; have it, try the <code>sleep</code> exploit.</p>
 
-<h1 id="the-fix">The Fix</h1>
+<h1 id="the-hotfix">The Hotfix</h1>
 
 <p>We&rsquo;ve thought really hard about this.</p>
 
@@ -321,11 +321,15 @@ f sym.imp.sigismember 16 0x00000000
 <pre><code>&quot;f sym.A`!sleep 99`AAAAAAAAAAA 8 0x000222c0&quot;
 </code></pre>
 
-<p>and therefore doesn&rsquo;t get executed, no matter of missing sanitation. Therefore, the old Debian <code>3.2.1</code> release is affected and the current master isn&rsquo;t :)</p>
+<p>and therefore doesn&rsquo;t get executed*. Therefore, the old Debian <code>3.2.1</code> release is affected and the current master isn&rsquo;t :)</p>
 
-<p>The PR for this can be found <a href="https://github.com/radare/radare2/pull/14690">here</a></p>
+<p><em>* Well at least not this time, however the fix is not complete yet :) Pull request coming soon™</em></p>
 
-<p>And now update <code>r2</code> for Debian pls and don&rsquo;t forget to <code>git pull</code>. CVE-2019-14745 has been assigned to this.</p>
+<p>The PR for the hotfix can be found <a href="https://github.com/radare/radare2/pull/14690">here</a>.</p>
+
+<p>And now update <code>r2</code> for Debian pls and don&rsquo;t forget to <code>git pull</code>.</p>
+
+<p>CVE-2019-14745 has been assigned to this.</p>
 
 <hr />
 
@@ -340,6 +344,32 @@ f sym.imp.sigismember 16 0x00000000
         <h4 class="page-header">Related</h4>
 
          <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/binary-rop-stackpivot/">ROP It Like It&#39;s Hot: ROP Basics - Stack Pivoting</a></h4>
+    <h5>August 13, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -382,26 +412,6 @@ f sym.imp.sigismember 16 0x00000000
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
     
     <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/post/bananabot/">Coding A CS:GO Hack</a></h4>
-    <h5>June 19, 2019</h5>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
     
 
 </div>
