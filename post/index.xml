@@ -49,7 +49,7 @@ How Stack Canaries Work If you&amp;rsquo;ve ever read the error message *** stac
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2-pwndebian/</guid>
-      <description>Yo Yo Yo.
+      <description>Hello hello!
 Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
 The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
 But first some basics for r2.
@@ -302,7 +302,7 @@ First of all – why should you want to build all the docker images on your own 
     </item>
     
     <item>
-      <title>Auditing the Oral-B App (v5.0.0) (1 CVE)</title>
+      <title>Auditing the Oral-B App (v5.0.0)</title>
       <link>https://bananamafia.dev/post/oral-b/</link>
       <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
       
@@ -315,7 +315,7 @@ Because of the static key, an attacker can gain access to user data more easily 
     </item>
     
     <item>
-      <title>Auditing NQ Contacts Backup &amp; Restore 1.1 (3 CVEs)</title>
+      <title>Auditing NQ Contacts Backup &amp; Restore 1.1</title>
       <link>https://bananamafia.dev/post/nq-contactsbackup/</link>
       <pubDate>Sun, 29 Oct 2017 00:00:00 +0000</pubDate>
       
@@ -326,14 +326,13 @@ CVE-2017-15999: Lack of HTTPS usage When logging in or transmitting data, the ap
     </item>
     
     <item>
-      <title>Auditing WriteDiary.com (2 CVEs) </title>
+      <title>Auditing WriteDiary.com</title>
       <link>https://bananamafia.dev/post/write-diary/</link>
       <pubDate>Fri, 27 Oct 2017 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/write-diary/</guid>
-      <description>General note: The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&amp;rsquo;t described here. However, no response has been received.
-WriteDiary consists of a webapp and an Android app (version 4.72). For the audit, the android app was the primary target.
-CVE-2017-15581: Lack of HTTPS-usage, lack of user data encryption when transmitting In the &amp;ldquo;Diary with lock&amp;rdquo; (aka WriteDiary) application 4.</description>
+      <description>WriteDiary consists of a webapp and an Android app (version 4.72). For the audit, the android app was the primary target.
+The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&amp;rsquo;t described here. However, no response has been received. This is bad, as you will see in the first finding:</description>
     </item>
     
   </channel>
