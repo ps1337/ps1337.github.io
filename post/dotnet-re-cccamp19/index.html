@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+     <script src="https://bananamafia.dev/js/python.min.js"></script>  <script src="https://bananamafia.dev/js/cpp.min.js"></script>  <script src="https://bananamafia.dev/js/json.min.js"></script>  <script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.55.6" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/dotnet-re-cccamp19/">Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</a></h4>
+    <h5>August 25, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/dotnet"><kbd class="item-tag">dotnet</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify"><p>Finally a nice .NET CTF challenge - time to pull out <a href="https://github.com/0xd4d/dnSpy">dnSpy</a> :)</p>
+
+<p>The provided ZIP includes a <code>CampRE.dll</code> file which, according to the challenge description, is a .NET Core application. Time to boot a Windows VM and install the .NET Core runtime environment.</p>
+
+<p>After decompiling the <code>dll</code>, this source code can be inspected:</p>
+
+<pre><code class="language-csharp">private static void Main(string[] args)
+{
+    byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location);
+    for (int i = 0; i &lt; 1333337; i++)
+    {
+        MD5 md = MD5.Create();
+        byte[] bytes = Encoding.ASCII.GetBytes(&quot;i=&quot; + i.ToString());
+        byte[] array = md.ComputeHash(bytes);
+        MD5 md2 = MD5.Create();
+        byte[] bytes2 = Encoding.ASCII.GetBytes(&quot;i1337=&quot; + i.ToString());
+        byte[] sourceArray2 = md2.ComputeHash(bytes2);
+        byte[] destinationArray = new byte[32];
+        Array.Copy(array, 0, destinationArray, 0, 16);
+        Array.Copy(sourceArray2, 0, destinationArray, 16, 16);
+        byte[] array2 = new byte[16];
+        MD5 md3 = MD5.Create();
+        byte[] array3 = new byte[10];
+        Array.Copy(sourceArray, 4432, array3, 0, 10);
+        byte[] sourceArray3 = md3.ComputeHash(array3);
+        Array.Copy(sourceArray3, 0, array2, 0, 16);
+        try
+        {
+            global::Aes aes = new global::Aes(array, array2);
+            byte[] rawAssembly = aes.DecryptFromBase64StringAsByte(Program.toDecrypt);
+            MethodInfo entryPoint = Assembly.Load(rawAssembly).EntryPoint;
+            entryPoint.Invoke(null, new object[]
+            {
+                new string[] { &quot;NOT_A_BADBOY&quot; }
+            });
+        }
+        catch (Exception ex) {}
+    }
+}
+</code></pre>
+
+<p>It seems that the application brute-forces the AES key for an embedded Base64 string in memory and tries to execute it as a binary afterwards. The first thing I did was modifying the <code>dll</code> with <code>dnSpy</code> in order to dump the decrypted binary to a local file:</p>
+
+<pre><code class="language-csharp">byte[] decrypted = new global::Aes(array, array2).DecryptFromBase64StringAsByte(Program.toDecrypt);
+// try to read some assembly info
+Console.WriteLine(Assembly.Load(decrypted).FullName);
+File.WriteAllBytes(&quot;Foo.dll&quot;, decrypted);
+</code></pre>
+
+<p>Obviously this didn&rsquo;t work out of the box. It seems that the application reads some bytes from its own binary file in the beginning:</p>
+
+<pre><code class="language-csharp">byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location);
+[...]
+Array.Copy(sourceArray, 4432, array3, 0, 10);
+</code></pre>
+
+<p>After applying the changes above, these bytes seem to be wrong since the offset changed. My second modification to the application fixes this my making the routine read the untouched file instead of its own binary:</p>
+
+<pre><code class="language-csharp">byte[] sourceArray = File.ReadAllBytes(&quot;original.dll&quot;);
+</code></pre>
+
+<p>After calling the modified binary with <code>dotnet CampRE.dll</code>, a file called <code>Foo.dll</code> has been written. Now it&rsquo;s time to decompile it:</p>
+
+<pre><code class="language-csharp">private static void Main(string[] args)
+{
+    bool flag = args[0] != &quot;BADBOY&quot;;
+    if (flag) { Environment.Exit(-2); }
+
+    StackTrace stackTrace = new StackTrace();
+    StackFrame[] frames = stackTrace.GetFrames();
+    bool flag2 = frames.Length == 1;
+    if (flag2) { Environment.Exit(-1); }
+    int metadataToken = frames[1].GetMethod().MetadataToken;
+    byte[] array = new byte[32];
+    byte[] array2 = new byte[16];
+    for (int i = 0; i &lt; 8; i++)
+    {
+        byte[] bytes = BitConverter.GetBytes(metadataToken);
+        Console.WriteLine(BitConverter.ToString(bytes));
+        Array.Copy(bytes, 0, array, i * 4, 4);
+    }
+    for (int j = 0; j &lt; 4; j++)
+    {
+        byte[] bytes2 = BitConverter.GetBytes(metadataToken);
+        Console.WriteLine(BitConverter.ToString(bytes2));
+        Array.Copy(bytes2, 0, array2, j * 4, 4);
+    }
+    Aes aes = new Aes(array, array2);
+    byte[] bytes3 = aes.DecryptFromBase64String(&quot;fQjMpHu5cK122YUeJHX8T5wzTKbVhVZcNcCvSGSedV8=&quot;);
+    Console.WriteLine(&quot;Good job. Flag: &quot; + Encoding.ASCII.GetString(bytes3));
+}
+</code></pre>
+
+<p>It decrypts another Base64 string using a computed AES key. This key results from calling <code>frames[1].GetMethod().MetadataToken</code> and doing some magic stuff with it afterwards. The important thing to notice is that it&rsquo;s using <code>frames[1]</code>, which doesn&rsquo;t exist when executing this second stage as a standalone binary. This stack frame must result from <code>CampRE.dll</code> calling this embedded second stage.</p>
+
+<p>I decided to patch out the <code>BADBOY</code> check above and construct a new loader for the second stage:</p>
+
+<pre><code class="language-csharp">private static void Main(string[] args)
+{
+    try
+    {
+        Assembly.Load(File.ReadAllBytes(&quot;Foo.dll&quot;)).EntryPoint.Invoke(null, new object[]
+        {
+            new string[]
+            {
+                &quot;NOT_A_BADBOY&quot;
+            }
+        });
+    }
+    catch (Exception) {}
+}
+</code></pre>
+
+<p>This mimics <code>CampRE.dll</code> decrypting and calling the embedded second stage, while the <code>MetadataToken</code> from which the AES key is computed remains intact since the call stack is the same.</p>
+
+<p>After re-compiling and running this, the flag is being printed:</p>
+
+<p><img src="/img/dotnet-re-cccamp19/flag.jpg" alt="yay" /></p>
+
+<p>Peace out, thanks to <a href="https://twitter.com/allesctf">ALLES CTF</a> and 0x4d5a for this challenge!</p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/php-deserialize-cccamp19/">Exploiting PHP Deserialization: CCCamp19 CTF PDFCreator Challenge</a></h4>
+    <h5>August 24, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/deserialization"><kbd class="item-tag">deserialization</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/binary-rop-stackpivot/">ROP It Like It&#39;s Hot: ROP Basics - Stack Pivoting</a></h4>
+    <h5>August 13, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/cryptoctf-1-decodeme/">CryptoCTF 2019 Writeup: Decode Me</a></h4>
+    <h5>August 11, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/crypto"><kbd class="item-tag">crypto</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

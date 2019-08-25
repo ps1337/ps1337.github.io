@@ -6,7 +6,7 @@
     <description>Recent content in ctf on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 24 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 25 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
     
@@ -18,6 +18,18 @@
       
       <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</title>
+      <link>https://bananamafia.dev/post/dotnet-re-cccamp19/</link>
+      <pubDate>Sun, 25 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/dotnet-re-cccamp19/</guid>
+      <description>Finally a nice .NET CTF challenge - time to pull out dnSpy :)
+The provided ZIP includes a CampRE.dll file which, according to the challenge description, is a .NET Core application. Time to boot a Windows VM and install the .NET Core runtime environment.
+After decompiling the dll, this source code can be inspected:
+private static void Main(string[] args) { byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location); for (int i = 0; i &amp;lt; 1333337; i++) { MD5 md = MD5.</description>
     </item>
     
     <item>
