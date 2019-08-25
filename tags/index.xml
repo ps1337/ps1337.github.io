@@ -6,10 +6,37 @@
     <description>Recent content in Tags on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 13 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 24 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ctf</title>
+      <link>https://bananamafia.dev/tags/ctf/</link>
+      <pubDate>Sat, 24 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/ctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>deserialization</title>
+      <link>https://bananamafia.dev/tags/deserialization/</link>
+      <pubDate>Sat, 24 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/deserialization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>exploiting</title>
+      <link>https://bananamafia.dev/tags/exploiting/</link>
+      <pubDate>Sat, 24 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/exploiting/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>binary</title>
@@ -17,15 +44,6 @@
       <pubDate>Tue, 13 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/binary/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>exploiting</title>
-      <link>https://bananamafia.dev/tags/exploiting/</link>
-      <pubDate>Tue, 13 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/exploiting/</guid>
       <description></description>
     </item>
     
@@ -71,15 +89,6 @@
       <pubDate>Sun, 11 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/crypto/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ctf</title>
-      <link>https://bananamafia.dev/tags/ctf/</link>
-      <pubDate>Sun, 11 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/ctf/</guid>
       <description></description>
     </item>
     

@@ -6,7 +6,7 @@
     <description>Recent content in ctf on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 24 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
     
@@ -18,6 +18,16 @@
       
       <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Exploiting PHP Deserialization: CCCamp19 CTF PDFCreator Challenge</title>
+      <link>https://bananamafia.dev/post/php-deserialize-cccamp19/</link>
+      <pubDate>Sat, 24 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/php-deserialize-cccamp19/</guid>
+      <description>Deserialization is a vulnerability class that&amp;rsquo;s often overlooked. It&amp;rsquo;s great that this year&amp;rsquo;s CCCamp CTF included an interesting web based challenge that is based on this vulnerability class.
+The Target The challenge includes a link to a web service that allows converting user-supplied images into PDF files. Users can upload image files, add some additional HTML content in a textbox and render the whole thing into a PDF file:</description>
     </item>
     
     <item>
