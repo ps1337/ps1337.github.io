@@ -57,6 +57,12 @@ code {
     background-color: #ffe13566;
 }
 
+pre code {
+  white-space: pre;
+  overflow-x: auto;
+  display: inline-block;
+  min-width: 100%;
+}
 
 /*apply accent colour to links*/
 a:link, a:visited {
