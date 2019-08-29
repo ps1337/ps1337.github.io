@@ -84,7 +84,7 @@
 
 
 <script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
- <meta name="generator" content="Hugo 0.55.6" />
+ <meta name="generator" content="Hugo 0.56.3" />
         
 
         
@@ -193,7 +193,7 @@
 <li>Uploaded files are stored in the <code>/upload</code> folder.</li>
 </ul>
 
-<p>I decided to check the TCPDF libary for public vulnerabilities. I came across a <a href="https://packetstormsecurity.com/files/152200/TCPDF-6.2.19-Deserialization-Remote-Code-Execution.html">RCE vulnerability</a> for versions &lt;= <code>6.2.19</code> that&rsquo;s based on insecure <code>phar</code> deserialization. The exploit also referenced the <a href="/misc/us-18-Thomas-It's-A-PHP-Unserialization-Vulnerability-Jim-But-Not-As-We-Know-It.pdf">slides of a talk at BlackHat 2018</a> that explains <code>phar</code> based exploits and also contains a case study of the TCPDF library.</p>
+<p>I decided to check the TCPDF libary for public vulnerabilities. I came across a <a href="https://packetstormsecurity.com/files/152200/TCPDF-6.2.19-Deserialization-Remote-Code-Execution.html">RCE vulnerability</a> for versions &lt;= <code>6.2.19</code> that&rsquo;s based on insecure <code>phar</code> deserialization. The exploit also referenced the <a href="/misc/php-deserialize-cccamp19/us-18-Thomas-It's-A-PHP-Unserialization-Vulnerability-Jim-But-Not-As-We-Know-It.pdf">slides of a talk at BlackHat 2018</a> that explains <code>phar</code> based exploits and also contains a case study of the TCPDF library.</p>
 
 <h1 id="exploiting-php-phar-deserialization">Exploiting PHP Phar Deserialization</h1>
 
@@ -336,6 +336,32 @@ namespace PDFStuff {
     
     
 
+    <h4><a href="/post/x64-rop-redpwn/">ROP On x64: What&#39;s ret2csu Again?</a></h4>
+    <h5>August 29, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ret2csu"><kbd class="item-tag">ret2csu</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
     <h4><a href="/post/dotnet-re-cccamp19/">Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</a></h4>
     <h5>August 25, 2019</h5>
     
@@ -370,24 +396,6 @@ namespace PDFStuff {
     <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
     <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/post/cryptoctf-1-decodeme/">CryptoCTF 2019 Writeup: Decode Me</a></h4>
-    <h5>August 11, 2019</h5>
-    
-    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/crypto"><kbd class="item-tag">crypto</kbd></a>
     
 
 </div>
