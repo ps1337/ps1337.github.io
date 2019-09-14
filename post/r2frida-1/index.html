@@ -343,7 +343,7 @@ Undocumented: Z, S
 <pre><code>[TRACE] dtf     0xcad8f330      (0: &quot;�kB�&quot; 1: &quot;\u0001G\u0013\n\u001c\b\u001dS\u0007-TF*\u001eUE,PS*GV\u0010 EV\u000f&quot;)   0xcad8f2a0      libnative-lib.so 0x72a0 0xcb19d177
 </code></pre>
 
-<p>The first parameter (<code>0</code>) contains trash (empty user input) and the second parameter (<code>1</code>) contains an interesting string that represents the expected flag value. This value has to be UTF-16 decoded (removing the <code>\u</code> notation) and XOR decrypted with the key <code>supersecure</code>. This key was determined using reverse engineering of the shared library. This is the flag, as determined with <em>CyberChef</em>:</p>
+<p>The first parameter (<code>0</code>) contains trash (empty user input) and the second parameter (<code>1</code>) contains an interesting string that represents the expected flag value. This value has to be decoded (removing the <code>\u</code> notation) and XOR decrypted with the key <code>supersecure</code>. This key was determined using reverse engineering of the shared library. This is the flag, as determined with <em>CyberChef</em>:</p>
 
 <p><img src="/img/r2frida-1/r2xor-flag.jpg" alt="The Flag" /></p>
 </div>
