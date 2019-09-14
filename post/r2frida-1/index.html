@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Dynamic Instrumentation: Frida And r2frida For Noobs</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+     <script src="https://bananamafia.dev/js/python.min.js"></script>  <script src="https://bananamafia.dev/js/cpp.min.js"></script>  <script src="https://bananamafia.dev/js/json.min.js"></script>  <script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.56.3" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Dynamic Instrumentation: Frida And r2frida For Noobs</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
+    <h5>September 13, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>One of my main takeaways from this year&rsquo;s r2con is that <a href="https://www.frida.re">Frida</a> is cool and that <a href="https://github.com/nowsecure/r2frida">r2frida</a>, the integration with <code>radare2</code>, is even cooler. Using this, it&rsquo;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of <code>radare2</code>. This is a small tutorial to get started with both Frida and <code>r2frida</code> that&rsquo;s based on the <a href="/misc/r2frida-1/re.rada.con.ctf.r2xor.apk">r2xor</a> challenge of the recent r2con CTF. Please note that this is <em>not</em> a complete writeup for <code>r2xor</code>.</p>
+
+<h1 id="the-challenge">The Challenge</h1>
+
+<p>An Android <code>apk</code> file is given that contains the flag somewhere embedded into it. Based on the challenge name, it can be assumed that the flag is stored as a XOR encrypted value somewhere in the app, along with a static decryption key for it. The plan is to instrument the app using Frida in order to dump the flag. This is possible because the app uses the function <code>sym.check_flag_char_const___char_const(int32_t arg_4h, int32_t arg_8h)</code> to check whether the user provided the correct flag. It takes two string pointer parameters: A pointer to the user input and a pointer to the correct flag, in whichever form. By hooking this function, the expected flag value can be read and the challenge is solved. Good plan for now.</p>
+
+<p>The app comes bundled with a native library called <code>libnative-lib.so</code> that contains the validation function above. Therefore hooking has to be performed in this native library. Also, the app checks whether the device its running on is rooted. If this is the case, the app won&rsquo;t run and will display a blank screen instead.</p>
+
+<h1 id="working-environment">Working Environment</h1>
+
+<p>I&rsquo;ve used the <a href="https://www.genymotion.com/">Genymotion</a> Android emulator. This runs x86 based pre-rooted Android devices on a local machine and exposes an <code>adb</code> port for easy shell access. I&rsquo;ve replaced the <code>adb</code> binary of Genymotion with my local version to prevent errors caused by incompatible <code>adb</code> versions.</p>
+
+<p>Frida comes with both a server and a client component. Therefore the next thing to prepare is a new <code>pipenv</code> with the Frida client installed. If you don&rsquo;t use the newest version, a <a href="https://github.com/frida/frida-java-bridge/issues/29">bug</a> can occur that prevents hooking functions that are executed early in the application life cycle, such as <code>onCreate()</code>. Calling <code>frida-ls-devices</code> should show a virtual Android USB device in case the Genymotion VM is running.</p>
+
+<p>The <a href="https://github.com/frida/frida/releases">latest Frida server release</a> can be downloaded with the correct architecture, x86 in this case, and uploaded to the running Android device:</p>
+
+<pre><code>adb push frida-server /data/local/tmp
+</code></pre>
+
+<p>Don&rsquo;t forget to set the executable bit and to run the Frida server as root from an <code>adb</code> shell.</p>
+
+<p>The last thing to do is to install <code>r2frida</code> using the <code>radare2</code> packet manager:</p>
+
+<pre><code>r2pm -ci r2frida
+</code></pre>
+
+<h1 id="bypassing-root-detection">Bypassing Root Detection</h1>
+
+<p>The first method that will be executed when launching the app is <code>onCreate()</code> of the class <code>MainActivity</code>. This is the decompiled code of it:</p>
+
+<pre><code>public void onCreate(Bundle paramBundle) {
+    super.onCreate(paramBundle);
+    setContentView(2131296284);
+    ((Button)findViewById(2131165219)).setOnClickListener(new a(this));
+    if (!n()) {
+        ((TextView)findViewById(2131165274)).setText(stringFromJNI());
+    } else {
+        System.exit(1);
+    }
+}
+</code></pre>
+
+<p>The app terminates in case <code>n()</code> returns <code>true</code>. The first thing <code>n()</code> does is creating an instance of the <code>RootDetection</code> class and proceeding with the root check. In order to run this app on the rooted device, it would therefore be convenient to force <code>n()</code> to always return <code>false</code> &ndash; Frida to the rescue.</p>
+
+<p>The plan is to launch the app using Frida while replacing <code>n()</code> with a function that just performs a <code>return false</code>. I&rsquo;ve used this script for this task:</p>
+
+<pre><code class="language-python">#!/usr/bin/python3
+
+import frida
+import time
+import sys
+
+js = &quot;&quot;&quot;
+Java.perform(function() {
+       var mainActivity = Java.use(&quot;re.rada.con.ctf.r2xor.MainActivity&quot;);
+       mainActivity.n.implementation = function() {
+           console.log(&quot;[*] Root check called&quot;);
+           return false;
+        }
+       console.log(&quot;[+] Hooking complete&quot;)
+})
+&quot;&quot;&quot;
+
+
+def on_message(message, data):
+    print(message)
+
+
+device = frida.get_usb_device()
+pid = device.spawn(['re.rada.con.ctf.r2xor'])
+print(&quot;[+] Got PID %d&quot; % (pid))
+session = device.attach(pid)
+script = session.create_script(js)
+
+# Callback function
+script.on('message', on_message)
+script.load()
+
+device.resume(pid)
+
+sys.stdin.read()
+print(&quot;[!] Exiting&quot;)
+</code></pre>
+
+<p>Frida itself spawns the app on the device, sets up the hooks, injects JavaScript code into the target process and resumes the process afterwards. This allows various modifications to an application, such as the ones defined in the <code>js</code> variable. Lets&rsquo; break it down:</p>
+
+<ol>
+<li>It&rsquo;s required to hook a function of the <code>MainActivity</code> class. In order to do this, we retrieve the class and assign it to a variable with <code>Java.use()</code> for later use.</li>
+<li>The <code>n()</code> function will be replaced with our own version that just returns <code>false</code> every time. The <code>implementation()</code> function performs just this. You could also call the original function with <code>this.n()</code> in case you would want to inject code before or after the original function.</li>
+<li>That&rsquo;s it! Root check bypassed.</li>
+</ol>
+
+<p>It&rsquo;s important to call <code>device.resume()</code> after <code>script.load()</code>. Otherwise early functions, such as <code>onCreate()</code>, can&rsquo;t be hooked correctly in case you are required to do so.</p>
+
+<p>Calling this script will spawn the application on the device, with the root check bypassed:</p>
+
+<p><center>
+<img src="/img/r2frida-1/r2xor-gui.jpg" alt="r2xor App" />
+</center></p>
+
+<p>Time to get the flag.</p>
+
+<h1 id="tracing-function-calls-with-r2frida">Tracing Function Calls With r2frida</h1>
+
+<p>It&rsquo;s now necessary to get the values of the parameters for the <code>check_flag()</code> function. You could solve this entirely with Frida, but I&rsquo;ve decided to utilize <code>r2frida</code> and its tracing capabilities. Tracing in this context means that function calls can be <a href="https://www.frida.re/docs/frida-trace/">observed dynamically</a> while printing the passed parameters.</p>
+
+<p>Let&rsquo;s open the application in r2frida:</p>
+
+<pre><code>r2 frida://usb//&lt;PID&gt;
+</code></pre>
+
+<p>Tracing can be set up with the <code>\dtf</code> command, as seen in <a href="https://github.com/enovella/r2frida-wiki/blob/master/README.md">this wiki page</a>. Remember, all <code>r2frida</code> commands have to be prefixed with a slash.</p>
+
+<p>Let&rsquo;s check the help text of this command:</p>
+
+<pre><code>[0x00000000]&gt; \dt?~dtf
+ dtf    trace format
+[0x00000000]&gt; \dtf?
+Usage: dtf [format] || dtf [addr] [fmt]
+  ^  = trace onEnter instead of onExit
+  +  = show backtrace on trace
+ p/x = show pointer in hexadecimal
+  c  = show value as a string (char)
+  i  = show decimal argument
+  z  = show pointer to string
+  s  = show string in place
+  O  = show pointer to ObjC object
+Undocumented: Z, S
+ dtf    trace format
+</code></pre>
+
+<p>The <code>onEnter</code> (<code>^</code>) and string pointer (<code>z</code>) parameters seem to be fitting for this case. Now only the address of the function to be traced is required.</p>
+
+<p>The offset of the validation function is <code>0x00007330</code>, as determined via:</p>
+
+<pre><code>r2 -q -A -c &quot;afl~check&quot; libnative-lib.so
+0x00007330   28 271          sym.check_flag_char_const___char_const
+</code></pre>
+
+<p>The start address of <code>libnative-lib.so</code> in the target process can be determined as follows in <code>r2frida</code>:</p>
+
+<pre><code>[0x00000000]&gt; \dm~libnative
+0xcad88000 - 0xcadb6000 r-x /data/app/re.rada.con.ctf.r2xor-sROpLQAWfATDWNdVkEW8XA==/lib/x86/libnative-lib.so
+[...]
+</code></pre>
+
+<p>Now the address of the function to be traced can be calculated using the library start address and the offset:</p>
+
+<pre><code>0xcad88000 + 0x00007330 = 0xcad8f330
+</code></pre>
+
+<p>Let&rsquo;s set up the tracing:</p>
+
+<pre><code>[0x00000000]&gt; \dtf 0xcad8f330 zz^
+</code></pre>
+
+<p>This traces the function when entering it and prints the values of two string pointer parameters.</p>
+
+<p>Clicking the <em>Validate</em> button in the app now prints this in <code>r2frida</code>:</p>
+
+<pre><code>[TRACE] dtf     0xcad8f330      (0: &quot;�kB�&quot; 1: &quot;\u0001G\u0013\n\u001c\b\u001dS\u0007-TF*\u001eUE,PS*GV\u0010 EV\u000f&quot;)   0xcad8f2a0      libnative-lib.so 0x72a0 0xcb19d177
+</code></pre>
+
+<p>The first parameter (<code>0</code>) contains trash (empty user input) and the second parameter (<code>1</code>) contains an interesting string that represents the expected flag value. This value has to be UTF-16 decoded (removing the <code>\u</code> notation) and XOR decrypted with the key <code>supersecure</code>. This key was determined using reverse engineering of the shared library. This is the flag, as determined with <em>CyberChef</em>:</p>
+
+<p><img src="/img/r2frida-1/r2xor-flag.jpg" alt="The Flag" /></p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
+    <h5>September 2, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/x64-rop-redpwn/">ROP On x64: What&#39;s ret2csu Again?</a></h4>
+    <h5>August 29, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ret2csu"><kbd class="item-tag">ret2csu</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/dotnet-re-cccamp19/">Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</a></h4>
+    <h5>August 25, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/dotnet"><kbd class="item-tag">dotnet</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+
