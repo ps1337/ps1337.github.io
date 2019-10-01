@@ -249,9 +249,9 @@ init:
   mov ecx, ebx ; dito
   mov edx, 0x400 ; end of arena
 
-  mov edi, &lt;stage 3 code&gt;
-  mov esi, &lt;stage 3 code&gt;
-  mov ebp, &lt;stage 3 code&gt;
+  mov edi, &lt;stage 4 code&gt;
+  mov esi, &lt;stage 4 code&gt;
+  mov ebp, &lt;stage 4 code&gt;
 
   call stage_1
 </code></pre>
@@ -271,7 +271,7 @@ init:
 <pre><code>mov esp, eax ; relocate to `eax`
 pushad
 [...]
-jmp esp ; execute third stage (embedded into registers and now written to memory)
+jmp esp ; execute 4th stage (embedded into registers and now written to memory)
 </code></pre>
 
 <h2 id="stage-4">Stage 4</h2>
