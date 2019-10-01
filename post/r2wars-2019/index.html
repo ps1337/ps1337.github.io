@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>How Not To Suck At r2wars</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+    <script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+     <script src="https://bananamafia.dev/js/python.min.js"></script>  <script src="https://bananamafia.dev/js/cpp.min.js"></script>  <script src="https://bananamafia.dev/js/json.min.js"></script>  <script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.56.3" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">How Not To Suck At r2wars</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2wars-2019/">How Not To Suck At r2wars</a></h4>
+    <h5>October 1, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2wars"><kbd class="item-tag">r2wars</kbd></a>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<p>As every year at <a href="https://rada.re/con/2019/">r2con</a>, the r2wars competition was hosted by <a href="https://twitter.com/sanguinawer">sanguinawer</a> and the <code>r2</code> overlord <a href="https://twitter.com/trufae">pancake</a>. I&rsquo;ve made it to the second place in this year&rsquo;s battles, so I&rsquo;ve promised to create a writeup for my participation &ndash; and here it is. Welcome to the nerdiest game in town.</p>
+
+<h1 id="lol-what-s-r2wars-again">Lol What&rsquo;s r2wars Again?</h1>
+
+<p>The r2wars competition is based on <code>radare2</code>&rsquo;s <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">ESIL</a> (Evaluable Strings Intermediate Language) engine. It&rsquo;s normally used to emulate instructions of various architectures during reverse engineering. It&rsquo;s definitely a useful feature if <code>radare2</code> and you can find more information <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">here</a> if you want to get started using it.</p>
+
+<p>In order to find and fix bugs in the ESIL engine, r2wars was created to have fun and find bugs at the same time. Let&rsquo;s just quote the description of the r2wars competition for more information:</p>
+
+<p><em>Participants must submit small programs written in assembly (assembled by rasm2) to be executed with ESIL in a shared memory space inside r2.</em></p>
+
+<p><em>The objective of those programs is to find out the other program location and overwrite its code to make it crash, the last program to survive wins.</em></p>
+
+<p>The idea is similar to <a href="http://www.pbm.com/~lindahl/pbem_articles/corewars">Core Wars</a> which is a game that&rsquo;s already around for many years. In r2wars, there&rsquo;s a shared memory space of 1KB that&rsquo;s mapped as <code>rwx</code> and initialized with null bytes. Both bots get instantiated in this memory space at random locations and the battle begins.</p>
+
+<p>The goal is to corrupt the instruction pointer of the opponent and therefore cause it to crash. Another option is to cause invalid read/writes that also result in crashes. There are many strategies to do this &ndash; many of these can be found in the Core Wars article above which is a good read by itself.</p>
+
+<p>Keep in mind that it&rsquo;s important to write efficient assembler code, since <em>expensive</em> instructions cause the r2wars scheduler to skip some execution cycles of your bot and I guess you simply don&rsquo;t want that to happen :)</p>
+
+<p>As soon as the bots are being executed in the <a href="https://github.com/radareorg/r2wars">r2wars</a> environment, the battle is displayed in a web UI for people to watch:</p>
+
+<p><img src="/img/r2wars-2019/r2wars-run.gif" alt="r2wars Web UI" /></p>
+
+<h1 id="getting-started">Getting Started</h1>
+
+<p>First, install Mono (yes, really) and compile r2wars with <code>xbuild r2wars.csproj</code>. After that, place your bots in the <code>warrriors</code> folder next to <code>r2wars.exe</code> and start r2wars with Mono.</p>
+
+<p>Some repositories already contain some simple bots you can play around with:</p>
+
+<ul>
+<li><a href="https://github.com/radareorg/r2wars/tree/master/examples">r2wars examples</a></li>
+<li><a href="https://github.com/radareorg/radare2-extras/tree/master/r2wars/t">r2wars extras</a></li>
+</ul>
+
+<p>This year the most popular architecture was x86, but there also were some ARM and MIPS bots. I&rsquo;m going to create an ARM based bot for next year and <a href="https://anisse.astier.eu/r2wars-2019.html">this year&rsquo;s winner</a> is based on ARM too, so don&rsquo;t hesitate to step back from using x86 only. However, for beginners x86 is the best option to begin with in my opinion.</p>
+
+<h2 id="debugging">Debugging</h2>
+
+<p>Use this cool one-liner to assemble and debug your bot during development:</p>
+
+<pre><code>radare2 malloc://1024 -c &quot;e asm.arch=x86; e asm.bits=32; aei; aeim; wx $(rasm2 -a x86 -b 32 -f yoloBot.x86-32.asm) @100; aer PC=100; aer SP=SP+100; Vpp&quot;
+</code></pre>
+
+<p>After the visual view has opened, just step through the execution and fix your bugs.</p>
+
+<p><img src="/img/r2wars-2019/r2wars-dbg.gif" alt="r2wars Debug" /></p>
+
+<h2 id="profiling">Profiling</h2>
+
+<p>A part of my strategy was to write as much data as possible in the most efficient way possible. I&rsquo;ve tried various instructions for this when developing my bot. To profile how well it performs, I&rsquo;ve used a fixed amount of instructions to execute and examined the memory space afterwards. This is the one-liner I&rsquo;ve used:</p>
+
+<pre><code>radare2 malloc://1024 -c &quot;e asm.arch=x86; e asm.bits=32; aei; aeim; wx $(rasm2 -a x86 -b 32 -f yoloBot.x86-32.asm) @100; aer PC=100; aer SP=SP+100; 150ds; s 0x0; V\!&quot;
+</code></pre>
+
+<p>This executes 150 instructions of bot code and opens the visual mode of <code>radare2</code>. You can now just scroll through the memory view and check for large blocks that consist of only null bytes. Finding such blocks of memory that haven&rsquo;t been overwritten is an indicator for an inefficient bot, since you might also just miss your opponent in battle:</p>
+
+<p><img src="/img/r2wars-2019/r2wars-profile.gif" alt="r2wars Profiling" /></p>
+
+<p>You can profile variants your bot using this method and choose the most efficient one afterwards.</p>
+
+<h1 id="my-captnbananaboii-bot">My <code>CAPTNBANANABOII</code> Bot</h1>
+
+<p>I won&rsquo;t paste the full code here, you&rsquo;ll have to reverse it yourself :D However, I&rsquo;m going to describe the general structure:</p>
+
+<h2 id="stage-1">Stage 1</h2>
+
+<p>In the first phase, the bot will populate the registers:</p>
+
+<pre><code>call init
+
+init:
+  [...]
+  mov ebx, 0xc3c3c3c3 ; ret instructions
+  mov ecx, ebx ; dito
+  mov edx, 0x400 ; end of arena
+
+  mov edi, &lt;stage 3 code&gt;
+  mov esi, &lt;stage 3 code&gt;
+  mov ebp, &lt;stage 3 code&gt;
+
+  call stage_1
+</code></pre>
+
+<p>The <code>0xc3</code> values are being used to (hopefully) cause the opponent to crash by causing it to perform a <code>ret</code> instruction. I&rsquo;m using two registers full of these bytes that will be used in a later stage. To keep track of the end of the arena, which is at <code>0x400</code>, the <code>EDX</code> register is used.</p>
+
+<p>My bot is a replicator. This means that it contains code for another execution stage in its registers, namely <code>EDI</code>, <code>ESI</code> and <code>EBP</code>. The bot will repeatedly push these registers and perform a jump into the resulting code and execute it all over again. You can find a detailed description of this technique in <a href="https://ackcent.com/blog/r2wars/">this</a> post. It&rsquo;s important to fit the whole last stage into the registers that are still available for use.</p>
+
+<h2 id="stage-2">Stage 2</h2>
+
+<p>In the second stage, the bot wipes the end and the start of the memory region since many bots try to be sneaky and hide in these places. I should&rsquo;ve also wiped the middle of the memory region since this year&rsquo;s winner decided to hide there as well. Hmm, maybe next year :)</p>
+
+<h2 id="stage-3">Stage 3</h2>
+
+<p>The third stage migrates into the first quarter of the memory region and initiates the replication process:</p>
+
+<pre><code>mov esp, eax ; relocate to `eax`
+pushad
+pushad
+[...]
+jmp esp ; execute third stage (embedded into registers and now written to memory)
+</code></pre>
+
+<h2 id="stage-4">Stage 4</h2>
+
+<p>The fourth and last stage performs an infinite loop. It adds a carefully crafted static offset to <code>ESP</code> (lol), pushes the embedded code and jumps to it again. I&rsquo;ve tried to fit as many <code>pushad</code> instructions into this stage as possible. One neat trick allowed me to save additional space for one more <code>pushad</code> &ndash; you can compare two registers and move a value in case one has a greater value than the other in a single instruction:</p>
+
+<pre><code>cmovg esp, eax ; enter arena from start - we are outside
+</code></pre>
+
+<p>This instruction avoids writing outside of the arena, which would count as an invalid instruction.</p>
+
+<p>And that&rsquo;s it :)</p>
+
+<h1 id="additional-notes">Additional Notes</h1>
+
+<ol>
+<li>You have to search for fast write instructions or otherwise another bot might chase yours and you will lose eventually</li>
+<li>Be aware that people at r2con will and are able to reverse your bot while it&rsquo;s running on the screen, since the whole code is displayed on there. Looking at you, <a href="https://twitter.com/Aissn">Anisse</a> :D</li>
+</ol>
+
+<p><br>
+<marquee>Thanks for reading, BYE. <3</marquee></p>
+</div>
+
+    
+    
+
+    
+
+        <h4 class="page-header">Related</h4>
+
+         <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
+    <h5>September 13, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
+    <h5>September 2, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/x64-rop-redpwn/">ROP On x64: What&#39;s ret2csu Again?</a></h4>
+    <h5>August 29, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ret2csu"><kbd class="item-tag">ret2csu</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+
+    </body>
+
+</html>
+

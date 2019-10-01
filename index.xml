@@ -6,7 +6,7 @@
     <description>Recent content on A Blog.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 13 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/index.xml" rel="self" type="application/rss+xml" />
     
@@ -135,6 +135,16 @@
       
       <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>How Not To Suck At r2wars</title>
+      <link>https://bananamafia.dev/post/r2wars-2019/</link>
+      <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/r2wars-2019/</guid>
+      <description>As every year at r2con, the r2wars competition was hosted by sanguinawer and the r2 overlord pancake. I&amp;rsquo;ve made it to the second place in this year&amp;rsquo;s battles, so I&amp;rsquo;ve promised to create a writeup for my participation &amp;ndash; and here it is. Welcome to the nerdiest game in town.
+Lol What&amp;rsquo;s r2wars Again? The r2wars competition is based on radare2&amp;rsquo;s ESIL (Evaluable Strings Intermediate Language) engine. It&amp;rsquo;s normally used to emulate instructions of various architectures during reverse engineering.</description>
     </item>
     
     <item>
