@@ -178,7 +178,7 @@
 
 <h1 id="lol-what-s-r2wars-again">Lol What&rsquo;s r2wars Again?</h1>
 
-<p>The r2wars competition is based on <code>radare2</code>&rsquo;s <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">ESIL</a> (Evaluable Strings Intermediate Language) engine. It&rsquo;s normally used to emulate instructions of various architectures during reverse engineering. It&rsquo;s definitely a useful feature if <code>radare2</code> and you can find more information <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">here</a> if you want to get started using it.</p>
+<p>The r2wars competition is based on <code>radare2</code>&rsquo;s <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">ESIL</a> (Evaluable Strings Intermediate Language) engine. It&rsquo;s normally used to emulate instructions of various architectures during reverse engineering. It&rsquo;s definitely a useful feature of <code>radare2</code> and you can find more information <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">here</a> if you want to get started using it.</p>
 
 <p>In order to find and fix bugs in the ESIL engine, r2wars was created to have fun and find bugs at the same time. Let&rsquo;s just quote the description of the r2wars competition for more information:</p>
 
@@ -188,7 +188,7 @@
 
 <p>The idea is similar to <a href="http://www.pbm.com/~lindahl/pbem_articles/corewars">Core Wars</a> which is a game that&rsquo;s already around for many years. In r2wars, there&rsquo;s a shared memory space of 1KB that&rsquo;s mapped as <code>rwx</code> and initialized with null bytes. Both bots get instantiated in this memory space at random locations and the battle begins.</p>
 
-<p>The goal is to corrupt the instruction pointer of the opponent and therefore cause it to crash. Another option is to cause invalid read/writes that also result in crashes. There are many strategies to do this &ndash; many of these can be found in the Core Wars article above which is a good read by itself.</p>
+<p>The goal is to corrupt the instruction pointer of the opponent and therefore cause it to crash. Another option is to cause invalid read/writes that also result in crashes. There are many strategies to do this &ndash; many of these can be found in the Core Wars article above which is already a good read by itself.</p>
 
 <p>Keep in mind that it&rsquo;s important to write efficient assembler code, since <em>expensive</em> instructions cause the r2wars scheduler to skip some execution cycles of your bot and I guess you simply don&rsquo;t want that to happen :)</p>
 
@@ -231,7 +231,7 @@
 
 <p><img src="/img/r2wars-2019/r2wars-profile.gif" alt="r2wars Profiling" /></p>
 
-<p>You can profile variants your bot using this method and choose the most efficient one afterwards.</p>
+<p>You can profile variants of your bot using this method and choose the most efficient one afterwards.</p>
 
 <h1 id="my-captnbananaboii-bot">My <code>CAPTNBANANABOII</code> Bot</h1>
 
@@ -269,7 +269,6 @@ init:
 <p>The third stage migrates into the first quarter of the memory region and initiates the replication process:</p>
 
 <pre><code>mov esp, eax ; relocate to `eax`
-pushad
 pushad
 [...]
 jmp esp ; execute third stage (embedded into registers and now written to memory)
