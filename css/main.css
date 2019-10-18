@@ -56,11 +56,11 @@ code {
     color: #000;
     background-color: #ffe13566;
 }
-
+/*
 pre code {
   white-space: pre;
 }
-
+ */
 /*apply accent colour to links*/
 a:link, a:visited {
     color: #000;
