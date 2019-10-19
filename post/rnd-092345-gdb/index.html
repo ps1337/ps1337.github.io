@@ -47,7 +47,9 @@
 <script src="https://bananamafia.dev/js/json.min.js"></script> 
 <script src="https://bananamafia.dev/js/go.min.js"></script> 
 
-<script>hljs.initHighlightingOnLoad();</script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
 
 
 
@@ -177,7 +179,8 @@
 </div>
 
 
-    <br> <div class="text-justify"><p>When trying to exploit an application it&rsquo;s useful to send the input via <code>gdb</code> to immediately check how the input is being processed. But once the <code>gdb</code> is open it&rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using <code>read</code>. An easy way is to start the debugging session with <code>gdb ./binary</code> and using</p>
+    <br>
+    <div class="content-width text-justify"><p>When trying to exploit an application it&rsquo;s useful to send the input via <code>gdb</code> to immediately check how the input is being processed. But once the <code>gdb</code> is open it&rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using <code>read</code>. An easy way is to start the debugging session with <code>gdb ./binary</code> and using</p>
 
 <pre><code>run &lt; &lt;(printf &quot;\xAA\xAA\xAA&quot;)
 </code></pre>
@@ -190,9 +193,9 @@
 
     
 
-        <h4 class="page-header">Related</h4>
+    <h4 class="page-header">Related</h4>
 
-         <div class="item">
+     <div class="item">
 
     
     
@@ -268,25 +271,17 @@
 </div>
  
 
-    
-
-    
-
-</main>
-
-<footer>
-
+    <footer>
+    <img style="width:30vh" src="/img/tag.png">
 
     <p class="copyright text-muted">
 
-        <center>
-            <img style="width:30vh; text-align:center;display:block;margin:auto;" src="/img/tag.png">
-        </center>
         &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
-
 </footer>
-
 </body>
 
 </html>
+    
+
+</main>

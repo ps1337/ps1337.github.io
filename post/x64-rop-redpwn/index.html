@@ -47,7 +47,9 @@
 <script src="https://bananamafia.dev/js/json.min.js"></script> 
 <script src="https://bananamafia.dev/js/go.min.js"></script> 
 
-<script>hljs.initHighlightingOnLoad();</script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
 
 
 
@@ -181,7 +183,8 @@
 </div>
 
 
-    <br> <div class="text-justify">
+    <br>
+    <div class="content-width text-justify">
 
 <p>Based on the <em>Stop, ROP, n&rsquo;, Roll</em> challenge from this year&rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&rsquo;s using <em>glibc</em>. Of course, everything will be done with <code>radare2</code> and <code>pwntools</code>.</p>
 
@@ -422,9 +425,9 @@ p.interactive()
 
     
 
-        <h4 class="page-header">Related</h4>
+    <h4 class="page-header">Related</h4>
 
-         <div class="item">
+     <div class="item">
 
     
     
@@ -494,25 +497,17 @@ p.interactive()
 </div>
  
 
-    
-
-    
-
-</main>
-
-<footer>
-
+    <footer>
+    <img style="width:30vh" src="/img/tag.png">
 
     <p class="copyright text-muted">
 
-        <center>
-            <img style="width:30vh; text-align:center;display:block;margin:auto;" src="/img/tag.png">
-        </center>
         &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
-
 </footer>
-
 </body>
 
 </html>
+    
+
+</main>

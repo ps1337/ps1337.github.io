@@ -47,7 +47,9 @@
 <script src="https://bananamafia.dev/js/json.min.js"></script> 
 <script src="https://bananamafia.dev/js/go.min.js"></script> 
 
-<script>hljs.initHighlightingOnLoad();</script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
 
 
 
@@ -181,7 +183,8 @@
 </div>
 
 
-    <br> <div class="text-justify">
+    <br>
+    <div class="content-width text-justify">
 
 <p>Let&rsquo;s check out Return Oriented Programming (ROP) with the <code>pivot32</code> challenge from <a href="https://ropemporium.com/challenge/pivot.html">ROP Emporium</a> by using <code>radare2</code>. The <code>pivot32</code> binary is compiled without stack canaries and PIE but has NX enabled.</p>
 
@@ -349,9 +352,9 @@ STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
 
     
 
-        <h4 class="page-header">Related</h4>
+    <h4 class="page-header">Related</h4>
 
-         <div class="item">
+     <div class="item">
 
     
     
@@ -421,25 +424,17 @@ STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
 </div>
  
 
-    
-
-    
-
-</main>
-
-<footer>
-
+    <footer>
+    <img style="width:30vh" src="/img/tag.png">
 
     <p class="copyright text-muted">
 
-        <center>
-            <img style="width:30vh; text-align:center;display:block;margin:auto;" src="/img/tag.png">
-        </center>
         &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
-
 </footer>
-
 </body>
 
 </html>
+    
+
+</main>

@@ -47,7 +47,9 @@
 <script src="https://bananamafia.dev/js/json.min.js"></script> 
 <script src="https://bananamafia.dev/js/go.min.js"></script> 
 
-<script>hljs.initHighlightingOnLoad();</script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
 
 
 
@@ -177,7 +179,8 @@
 </div>
 
 
-    <br> <div class="text-justify">
+    <br>
+    <div class="content-width text-justify">
 
 <p>In order to prevent errors and side effects, it&rsquo;s useful to use <a href="https://www.shellcheck.net/">Shellcheck</a> to lint all shell scripts. While checking out the <a href="https://github.com/jessfraz/dotfiles">Dotfiles of jessfraz</a>, I came across an easy way to integrate this kind of check with <a href="https://www.travis-ci.org">Travis CI</a>. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository. All credits go to the <a href="https://github.com/jessfraz">original author</a> of the docker images and scripts, of course.</p>
 
@@ -318,9 +321,9 @@ No errors, hooray
 
     
 
-        <h4 class="page-header">Related</h4>
+    <h4 class="page-header">Related</h4>
 
-         <div class="item">
+     <div class="item">
 
     
     
@@ -378,25 +381,17 @@ No errors, hooray
 </div>
  
 
-    
-
-    
-
-</main>
-
-<footer>
-
+    <footer>
+    <img style="width:30vh" src="/img/tag.png">
 
     <p class="copyright text-muted">
 
-        <center>
-            <img style="width:30vh; text-align:center;display:block;margin:auto;" src="/img/tag.png">
-        </center>
         &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
-
 </footer>
-
 </body>
 
 </html>
+    
+
+</main>
