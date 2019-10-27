@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>In-Process Fuzzing With Frida</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/python.min.js"></script> 
+<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
+<script src="https://bananamafia.dev/js/json.min.js"></script> 
+<script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.56.3" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">In-Process Fuzzing With Frida</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
+    <h5>October 24, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify">
+
+<p>In a <a href="https://bananamafia.dev/post/r2frida-1/">previous post</a> I&rsquo;ve already covered <a href="https://www.frida.re/">Frida</a> and its instrumentation abilities. But check this out: You can also use Frida to perform fuzzing. What&rsquo;s even greater is that Frida allows in-process fuzzing.</p>
+
+<p>Why would you want to do this? There may be various reasons, but the most outstanding one for me is building a fuzzing harness for closed source applications and libraries. Just take Counter Strike GO as an example:</p>
+
+<p>If you want to fuzz the map loading routines with maximum speed, you&rsquo;d (ideally) want to create a minimized environment that only performs the map loading. Now the CS:GO client is a graphical application that performs all kinds of stuff when being launched and it&rsquo;s not scriptable to an extent that allows efficient fuzzing. To avoid executing all this code that&rsquo;s not even related to map loading, a fuzzing harness is required. A great example of such a harness for CS:GO can be found <a href="https://phoenhex.re/2018-08-26/csgo-fuzzing-bsp">here</a> - the harness consists of a custom wrapper and some patches.</p>
+
+<p>This of course allows very specific fuzzing at a great speed, but also requires quite some effort to pull of. An approach that <em>might</em> be easier to pull involves using Frida and in-process fuzzing. This, of course, comes with a much higher fuzzing performance impact compared to the native approach.</p>
+
+<h1 id="ok-how">OK HOW?</h1>
+
+<p>Let&rsquo;s Consider this very sophisticated fuzzing target:</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+void lol(char *b)
+{
+    char buffer[1337];
+    strcpy(buffer, b);
+}
+
+int main(int argc, char **argv)
+{
+    lol(argv[1]);
+}
+</code></pre>
+
+<p>Yes, the vulnerability is obvious and yes, you can find it using simple reverse engineering but I don&rsquo;t want to build a better PoC just for people to stop complaining, okay? :)</p>
+
+<p>The idea is to inject some code into the target process and use it to perform the fuzzing directly in the process as soon as the target function would be called regularly. This causes the target to execute all setup routines for us, up to the point where the harness would also hand over the work to the fuzzer. The target function will then be called in an infinite loop, with some optional cleanup in between, while mutating the input. This mutation can also happen directly in memory, if applicable.</p>
+
+<p>I&rsquo;ve created this highly complex fuzzing setup using Frida&rsquo;s Python bindings:</p>
+
+<pre><code class="language-python">#!/usr/bin/python3
+
+import frida
+import time
+import sys
+
+def on_message(message, data):
+    print(message)
+
+js = &quot;&quot;&quot;
+
+// Maximum payload size
+var size = 2000;
+
+// Argument for the fuzzed function
+var arg = Memory.alloc(size);
+var fuzzData = [0x41];
+
+var lolAddr = null;
+var lolHandle = null;
+
+// Find the vulnerable function in the target process
+// and get a handle to it
+Module.enumerateSymbolsSync(&quot;yolo&quot;).forEach(function(symbol){
+        switch (symbol.name) {
+            case &quot;lol&quot;:
+                lolAddr = symbol.address;
+                // use the function prototype to create a handle
+                lolHandle = new NativeFunction(ptr(lolAddr), &quot;void&quot;, [&quot;pointer&quot;]);
+                console.log(&quot;[i] lol() is at &quot; + lolAddr);
+        }
+    });
+
+if (lolAddr == null) {
+    die(&quot;Error finding symbol&quot;);
+}
+
+// Fuzz the function in-process
+Interceptor.attach(ptr(lolAddr), {
+    // Begin fuzzing as soon as the application calls the function itself
+    onEnter: function(args) {
+        console.log(&quot;[i] Original argument: &quot; + args[0].readCString());
+
+        console.log(&quot;[*] Fuzzing now&quot;);
+        while(fuzzData.length &lt; size) {
+            fuzzData.push(0x41);
+            Memory.writeByteArray(arg, fuzzData);
+            try {
+                lolHandle(arg);
+            }
+            catch(e) {
+                console.log(&quot;[!] Crash found for size &quot; + fuzzData.length);
+                break;
+            }
+        }
+    },
+});
+&quot;&quot;&quot;
+
+# Spawn the target process
+pid = frida.spawn([&quot;./yolo&quot;, &quot;hello&quot;])
+session = frida.attach(pid)
+
+# Inject dem scriptz
+script = session.create_script(js)
+script.on('message', on_message)
+script.load()
+
+# Continue execution of the target
+frida.resume(pid)
+
+sys.stdin.read()
+</code></pre>
+
+<p>Ok cool, what does this all do? Here&rsquo;s the output:</p>
+
+<pre><code>[i] lol() is at 0x5560a8bc5149
+[i] Original argument: hello
+[*] Fuzzing now
+*** stack smashing detected ***: &lt;unknown&gt; terminated
+[!] Crash found for size 1353
+</code></pre>
+
+<p>The script causes Frida to spawn the process, inject the JavaScript code into it and resume the target afterwards. The target process will then proceed with its normal execution up to the point where <code>lol()</code> gets called. The JavaScript code defines a hook for this function that hijacks the program flow and causes the target to fuzz itself using mutated input. This mutation happens directly in memory using a buffer that Frida allocated for itself. This mutation can do all kinds of things, for the example it&rsquo;s enough to simply grow the string length over time until the target crashes.</p>
+
+<p>For a real-world fuzzing setup you would use <code>Process.enumerateModulesSync()</code> and <code>Module.enumerateSymbols(&quot;&lt;module&gt;&quot;)</code> to get the addresses of the target functions in order to hijack the program flow. The Frida hooks would then allow mutating the input data and calling the fuzzed function.</p>
+
+<h1 id="dis-sucks-i-want-better">Dis Sucks, I Want Better</h1>
+
+<p>Luckily <a href="https://twitter.com/dennismantz">@dennismantz</a> and <a href="https://twitter.com/lod108">@lod108</a> have released <a href="https://github.com/demantz/frizzer">Frizzer</a> recently! It&rsquo;s a <em>coverage-guided blackbox fuzzer based on the Frida instrumentation framework</em>. It&rsquo;s still a work in progress project but I think it&rsquo;s in a very useful state that can be adapted to own projects pretty quickly at this point.</p>
+
+<p>The best feature is that it uses coverage information provided by <a href="https://www.frida.re/news/2017/08/25/frida-10-5-released/">Frida/Stalker</a> in order to find new execution paths while fuzzing and mutating the input accordingly. This mutation is based on a pre-defined set of corpus files.</p>
+
+<h2 id="frizzer-example">Frizzer Example</h2>
+
+<p>You can find some fuzzing targets in the Frizzer repository, but I&rsquo;ve built one myself in order to see how Frizzer performs and what it expects. I&rsquo;m using a target modified from my <a href="https://bananamafia.dev/post/binary-canary-bruteforce/">previous stack canary post</a>:</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;netinet/in.h&gt;
+#include &lt;arpa/inet.h&gt;
+
+#define PORT 7777
+
+void thisIsBad()
+{
+    char yolo[12];
+    strcpy(yolo, &quot;13333333333333333333333333333333333333333333333333337&quot;);
+}
+
+// Frizzer has to get to the `thisIsBad` call using
+// the Stalker information
+void pwned(char *buf)
+{
+    printf(&quot;[*] Received: %s\n&quot;, buf);
+    if (strlen(buf) &gt;= 16)
+    {
+        printf(&quot;1\n&quot;);
+        if (strncmp(buf + 2, &quot;A&quot;, 1) == 0)
+        {
+            printf(&quot;2\n&quot;);
+            if (strncmp(buf + 4, &quot;X&quot;, 1) == 0)
+            {
+                printf(&quot;3\n&quot;);
+                printf(&quot;[!] PWNED\n&quot;);
+                thisIsBad();
+            }
+        }
+    }
+}
+
+int main()
+{
+    int sockfd, ret;
+    struct sockaddr_in serverAddr;
+
+    int newSocket;
+    struct sockaddr_in newAddr;
+
+    socklen_t addr_size;
+
+    char buffer[1024];
+    pid_t childpid;
+
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&amp;serverAddr, '\0', sizeof(serverAddr));
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(PORT);
+    serverAddr.sin_addr.s_addr = inet_addr(&quot;127.0.0.1&quot;);
+
+    ret = bind(sockfd, (struct sockaddr *)&amp;serverAddr, sizeof(serverAddr));
+    if (listen(sockfd, 10) == 0)
+    {
+        printf(&quot;[+] Listening....\n&quot;);
+    }
+    else
+    {
+        printf(&quot;[-] Error Binding to Port\n&quot;);
+    }
+
+    while (1)
+    {
+        newSocket = accept(sockfd, (struct sockaddr *)&amp;newAddr, &amp;addr_size);
+        printf(&quot;[*] Got Connection from %s:%d\n&quot;, inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
+
+        // get user input
+        char data[32];
+        bzero(data, sizeof(data));
+        recv(newSocket, data, 32, 0);
+
+        if (!strlen(data))
+        {
+            continue;
+        }
+
+        pwned(data);
+
+        // if this works then no buffer overflow has occurred
+        send(newSocket, &quot;OK\n&quot;, strlen(&quot;OK\n&quot;), 0);
+        close(newSocket);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<p>This is a simple server application that accepts user input via TCP. This was compiled using <code>gcc -no-pie test.c -o test</code>. Disabling PIE theoretically isn&rsquo;t necessary because Frizzer <em>could</em> get the address of the function to fuzz directly on run time, as seen in the first example at the beginning of this post.</p>
+
+<p>This is the script used to start the fuzzing process:</p>
+
+<pre><code class="language-bash">#!/bin/bash
+
+rm -rf tmpprojdir
+
+frizzer init tmpprojdir
+cat &gt; tmpprojdir/config &lt;&lt;EOF
+[fuzzer]
+log_level       = 3 # debug
+debug_mode      = false
+
+[target]
+process_name    = &quot;test&quot;
+function        = 0x00401294
+remote_frida    = false
+fuzz_in_process = true
+modules = [
+        &quot;/&lt;path to target&gt;/yolotest/test&quot;,
+    ]
+EOF
+
+frizzer add -p tmpprojdir indir
+frizzer fuzz -p tmpprojdir
+</code></pre>
+
+<p>As can be seen, Frizzer requires the address of the target function that&rsquo;s going to be fuzzed. I&rsquo;ve determined this address using <code>radare2</code> like this:</p>
+
+<pre><code class="language-bash">$ r2 -A -c &quot;afl~pwned&quot; -q test
+0x00401294    5 179          sym.pwned
+</code></pre>
+
+<p>Also, Frizzer seems to mutate the first parameter of the target function during fuzzing - in this case a <code>char*</code> value. If you find yourself trying to fuzz something different you might have to customize Frizzer to your needs :)</p>
+
+<p>The directory <code>indir</code> will be filled with files that contain corpus data. This data is the basis for all the fuzzing that&rsquo;s going on.</p>
+
+<p>Let&rsquo;s see Frizzer in action:</p>
+
+<p><img src="/img/frida-fuzz/frizzer.gif" alt="Frizzer" /></p>
+
+<p>And that&rsquo;s it :)</p>
+
+<p>As you can see, fuzzing using Frida seems to be a promising and quite interesting approach. I&rsquo;m quite interested to see how Frizzer evolves and what kind of vulnerabilities it&rsquo;s going to find.</p>
+
+<p><marquee>K THX BYE</marquee></p>
+</div>
+
+    
+    
+
+    
+
+    <h4 class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
+    <h5>September 13, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
+    <h5>September 2, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/x64-rop-redpwn/">ROP On x64: What&#39;s ret2csu Again?</a></h4>
+    <h5>August 29, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ret2csu"><kbd class="item-tag">ret2csu</kbd></a>
+    
+
+</div>
+ 
+
+    <footer>
+    <img style="width:30vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+</html>
+    
+
+</main>
