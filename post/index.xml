@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on A Blog.</title>
+    <title>Posts on BananaMafia</title>
     <link>https://bananamafia.dev/post/</link>
-    <description>Recent content in Posts on A Blog.</description>
+    <description>Recent content in Posts on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 24 Oct 2019 00:00:00 +0000</lastBuildDate>
@@ -381,30 +381,6 @@ Registering a bot First of all, a Telegram bot has to be registered in order to 
       <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
  Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
-    </item>
-    
-    <item>
-      <title>Auditing the Oral-B App (v5.0.0)</title>
-      <link>https://bananamafia.dev/post/oral-b/</link>
-      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/post/oral-b/</guid>
-      <description>Upon assessing the Oral-B app (com.pg.oralb.oralbapp), the following findings have been made:
-CVE-2018-5298: Hardcoded AES Parameters Guess what, hardcoded AES parameters:
-These parameters are stored in the class OralBApplication and also get used there:
-The stored AES parameters are used to encrypt and decrypt the locally stored shared preferences in the class called Preferences:
-Because of the static key, an attacker can gain access to user data more easily by leveraging access to the preferences XML file.</description>
-    </item>
-    
-    <item>
-      <title>Auditing NQ Contacts Backup &amp; Restore 1.1</title>
-      <link>https://bananamafia.dev/post/nq-contactsbackup/</link>
-      <pubDate>Sun, 29 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/post/nq-contactsbackup/</guid>
-      <description>NQ Contacts Backup &amp;amp; Restore is an android app that allows users to backup and restore contact data (as vcard) to/from the remote NQ server. For the audit, the android app was the primary target.
-Note: The app shares its code base with NQ Mobile Security &amp;amp; Anti Virus - hence the odd class names for a simple contact backup app.
-CVE-2017-15999: Lack of HTTPS usage When logging in or transmitting data, the app communicates with the remote server via HTTP.</description>
     </item>
     
     <item>

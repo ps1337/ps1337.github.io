@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>cve on A Blog.</title>
+    <title>cve on BananaMafia</title>
     <link>https://bananamafia.dev/tags/cve/</link>
-    <description>Recent content in cve on A Blog.</description>
+    <description>Recent content in cve on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
@@ -32,30 +32,6 @@ Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell
       <guid>https://bananamafia.dev/post/realtek-driverutil/</guid>
       <description>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version 1030.6). Note that the download link points to alfa.com but the driver utility itself says it&amp;rsquo;s developed by REALTEK.
 The vulnerability Upon installing the driver utility, two vulnerable services get installed.</description>
-    </item>
-    
-    <item>
-      <title>Auditing the Oral-B App (v5.0.0)</title>
-      <link>https://bananamafia.dev/post/oral-b/</link>
-      <pubDate>Mon, 08 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/post/oral-b/</guid>
-      <description>Upon assessing the Oral-B app (com.pg.oralb.oralbapp), the following findings have been made:
-CVE-2018-5298: Hardcoded AES Parameters Guess what, hardcoded AES parameters:
-These parameters are stored in the class OralBApplication and also get used there:
-The stored AES parameters are used to encrypt and decrypt the locally stored shared preferences in the class called Preferences:
-Because of the static key, an attacker can gain access to user data more easily by leveraging access to the preferences XML file.</description>
-    </item>
-    
-    <item>
-      <title>Auditing NQ Contacts Backup &amp; Restore 1.1</title>
-      <link>https://bananamafia.dev/post/nq-contactsbackup/</link>
-      <pubDate>Sun, 29 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/post/nq-contactsbackup/</guid>
-      <description>NQ Contacts Backup &amp;amp; Restore is an android app that allows users to backup and restore contact data (as vcard) to/from the remote NQ server. For the audit, the android app was the primary target.
-Note: The app shares its code base with NQ Mobile Security &amp;amp; Anti Virus - hence the odd class names for a simple contact backup app.
-CVE-2017-15999: Lack of HTTPS usage When logging in or transmitting data, the app communicates with the remote server via HTTP.</description>
     </item>
     
     <item>

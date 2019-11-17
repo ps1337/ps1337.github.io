@@ -1,0 +1,133 @@
+---
+title: "Auditing NQ Contacts Backup & Restore 1.1"
+date: 2017-10-29
+tags: ["android", "cve"]
+draft: false
+---
+
+[NQ Contacts Backup & Restore](https://play.google.com/store/apps/details?id=com.netqin.contactbackup) is an android app that allows users to backup and restore contact data (as vcard) to/from the remote NQ server. For the audit, the android app was the primary target.
+
+*Note: The app shares its code base with [NQ Mobile Security & Anti Virus](https://play.google.com/store/apps/details?id=com.nqmobile.antivirus20) - hence the odd class names for a simple contact backup app.*
+
+# CVE-2017-15999: Lack of HTTPS usage
+
+When logging in or transmitting data, the app communicates with the remote server via HTTP. This can be exploited in various ways. One of these is sniffing the request when a user logs in:
+
+![XML file with a password hash](/img/nq-contactsbackup/xml.png)
+
+As you can see, the username is being transmitted in cleartext.  The password is hashed with SHA-1.
+An attacker can now crack the SHA-1 hash (because that's pretty easy nowadays):
+
+
+![Cracked password hash](/img/nq-contactsbackup/cracked.png)
+
+Additionally, an attacker could use the sniffed hash to download the stored contacts from the server directly. As described later, the attacker can also access transmitted contact data.
+
+## Summary
+
+The CVE details can be found [here](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15599)
+
+<table width=100% border=1>
+	<tr>
+		<td align="center" valign="middle"><b>Vulnerability Type</b></td>
+		<td align="center" valign="middle">Plaintext data transport</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+		<td align="center" valign="middle">NQ Contacts Backup & Restore - 1.1</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Component</b></td>
+		<td align="center" valign="middle">Basically every component executing network action. For the login process: ContactAccountLogin and ContactAccountSwitch</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Impact</b></td>
+		<td align="center" valign="middle">Information Disclosure of sensitive data (login data)</td>
+	</tr>
+</table>
+
+# CVE-2017-15997: RC4 encryption with a static key
+
+The app uses the RC4 stream cipher to encrypt/decrypt password stored in the android shared preferences. The file looks like this:
+
+
+![Shared Preferences](/img/nq-contactsbackup/sharedPref.png)
+
+The decryption routine, which can be found in `DataUtils`, look as follows:
+
+![Decryption Routine](/img/nq-contactsbackup/decryption.png)
+
+The stored value is base64-decoded and passed to the RC4 algorithm. The first parameter of decryptForXml is a static key, as you can see here:
+
+![Key Usage](/img/nq-contactsbackup/keyusage.png)
+
+Using this knowledge, it's easy to decrypt the stored password value from the shared preferences XML file:
+
+![Decryption of Shared Preferences](/img/nq-contactsbackup/sharedprefs-decrypt.png)
+
+This makes it easier for an attacker to decrypt login data of users.
+
+## Summary
+
+The CVE details can be found [here](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15597)
+
+<table width=100% border=1>
+	<tr>
+		<td align="center" valign="middle"><b>Vulnerability Type</b></td>
+		<td align="center" valign="middle">Usage of a static encryption key</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+		<td align="center" valign="middle">NQ Contacts Backup & Restore - 1.1</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Component</b></td>
+		<td align="center" valign="middle">NetQinSharedPreferences</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Impact</b></td>
+		<td align="center" valign="middle">Information Disclosure of login data</td>
+	</tr>
+</table>
+
+# CVE-2017-15998: DES encryption with a static key
+
+When syncing user data (e.g. contacts as vcards), the app uses DES encrypted zip files, as you can see in the class `ServerBackupDoing$7` :
+
+![Encrypt And Sync](/img/nq-contactsbackup/encryptAndSync.png)
+
+![Parameters](/img/nq-contactsbackup/DESusage-only-paths-as-parameter.png)
+
+
+In the class DesCript, there exist two static keys:
+
+![Static DES keys](/img/nq-contactsbackup/DESkeyspec-creation.png)
+
+The key named keyByte is used to create a KeySpec, which represents the key being used to encrypt/decrypt data.
+
+![DES Key Specification](/img/nq-contactsbackup/DESkeyspec.png)
+
+Because there is no HTTPS in place, it's therefore possible for an attacker to gain access to sensitive contact data.
+
+## Summary
+
+The CVE details can be found [here](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15598)
+
+<table width=100% border=1>
+	<tr>
+		<td align="center" valign="middle"><b>Vulnerability Type</b></td>
+		<td align="center" valign="middle">Usage of a static encryption key</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+		<td align="center" valign="middle">NQ Contacts Backup & Restore - 1.1</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Component</b></td>
+		<td align="center" valign="middle">ServerBackupDoing, DesCript</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Impact</b></td>
+		<td align="center" valign="middle">Information Disclosure of contact data</td>
+	</tr>
+</table>

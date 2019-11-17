@@ -1,0 +1,82 @@
+---
+title: "Auditing the Oral-B App (v5.0.0)"
+date: 2018-01-08
+tags: ["android", "cve"]
+draft: false
+---
+
+Upon assessing the Oral-B app (`com.pg.oralb.oralbapp`), the following findings have been made:
+
+# CVE-2018-5298: Hardcoded AES Parameters
+
+Guess what, hardcoded AES parameters:
+
+![AES Parameters](/img/oral-b/keys.png)
+
+These parameters are stored in the class `OralBApplication` and also get used there:
+
+![AES Parameter Usage](/img/oral-b/keyUsage.png)
+
+The stored AES parameters are used to encrypt and decrypt the locally stored shared preferences in the class called `Preferences`:
+
+![AES Parameter Usage](/img/oral-b/sharedPrefsEnc.png)
+
+Because of the static key, an attacker can gain access to user data more easily by leveraging access to the preferences XML file.
+
+# Twitter Secrets
+
+Using hardcoded Twitter secrets, it's possible to create bearer tokens impersonating the Oral-B twitter application. The secrets stored in the app are applicationtokens only - in my tests it was not possible to authenticate in user context.
+
+This PoC generates such an application token using the secret values found by decompiling the application:
+```
+#!/usr/bin/python3
+
+import base64
+import requests
+
+client_key = '2UGKNRVIDdgC[...]'
+client_secret = 'ycXHbtEKNAK2vPGf[...]'
+
+key_secret = '{}:{}'.format(client_key, client_secret) \
+    .encode('ascii')
+b64_encoded_key = base64.b64encode(key_secret)
+b64_encoded_key = b64_encoded_key.decode('ascii')
+
+base_url = 'https://api.twitter.com/'
+auth_url = '{}oauth2/token'.format(base_url)
+
+auth_headers = {
+    'Authorization': 'Basic {}'.format(b64_encoded_key),
+    'Content-Type': 'application/x-www-form-urlencoded;\
+        charset=UTF-8'
+}
+
+auth_data = {
+    'grant_type': 'client_credentials'
+}
+
+auth_resp = requests.post(auth_url, headers=auth_headers,
+                          data=auth_data)
+access_token = auth_resp.json()['access_token']
+```
+
+# Tracking
+Upon running the app, the user automatically gets tracked. There is no opt-in required, it's enabled by default.
+
+As you can see, third party advertising providers are allowed to gain access to the user location automatically. Unique advertising IDs are automatically assigned.
+
+![Tracking](/img/oral-b/3dpartyTracking.png)
+
+It's possible to add your dentist to the Oral-B app. This process uses a server side API to search for a specific dentist in your location. This allows Oral-B to access your location and gain information about your dentist:
+
+![Time to get a dentist](/img/oral-b/dentistSearchLocationName.png)
+
+Of course, facebook tracking is also enabled by default:
+
+![Facebook Tracking](/img/oral-b/facebookTracking.png)
+
+Last but not least, the weather functionality of course also requires and transmits the current location:
+
+![Location transfer](/img/oral-b/weatherLocation.png)
+
+Please note no transmission of user specific brushing data has been identified. However, there is a cache that saves the last brushing sessions.
