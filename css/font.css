@@ -17,7 +17,7 @@
 
 @font-face {
   font-family: "BananasPersonalUse";
-  src: url(http://localhost:1313/font/Bananas.woff2) format("woff2");
+  src: url(/font/Bananas.woff2) format("woff2");
   font-weight: normal;
   font-style: normal;
 }
