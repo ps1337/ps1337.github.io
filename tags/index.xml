@@ -6,10 +6,55 @@
     <description>Recent content in Tags on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 24 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>arm</title>
+      <link>https://bananamafia.dev/tags/arm/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/arm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>exploitation</title>
+      <link>https://bananamafia.dev/tags/exploitation/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/exploitation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>r2</title>
+      <link>https://bananamafia.dev/tags/r2/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/r2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>radare2</title>
+      <link>https://bananamafia.dev/tags/radare2/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/radare2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rop</title>
+      <link>https://bananamafia.dev/tags/rop/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/rop/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>exploiting</title>
@@ -66,29 +111,11 @@
     </item>
     
     <item>
-      <title>r2</title>
-      <link>https://bananamafia.dev/tags/r2/</link>
-      <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/r2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>r2wars</title>
       <link>https://bananamafia.dev/tags/r2wars/</link>
       <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/r2wars/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>radare2</title>
-      <link>https://bananamafia.dev/tags/radare2/</link>
-      <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/radare2/</guid>
       <description></description>
     </item>
     
@@ -116,15 +143,6 @@
       <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/ret2csu/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>rop</title>
-      <link>https://bananamafia.dev/tags/rop/</link>
-      <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/rop/</guid>
       <description></description>
     </item>
     
