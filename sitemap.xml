@@ -59,22 +59,67 @@
   </url>
   
   <url>
+    <loc>https://bananamafia.dev/post/36c3ctf/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/ctf/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/exploiting/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/reversing/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/openredirect/</loc>
+    <lastmod>2019-12-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/research/</loc>
+    <lastmod>2019-12-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/vulnerability/</loc>
+    <lastmod>2019-12-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/web/</loc>
+    <lastmod>2019-12-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://bananamafia.dev/tags/arm/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bananamafia.dev/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://bananamafia.dev/tags/exploitation/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/post/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
   </url>
   
@@ -96,16 +141,6 @@
   <url>
     <loc>https://bananamafia.dev/post/rop-arm-1/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/exploiting/</loc>
-    <lastmod>2019-10-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -151,11 +186,6 @@
   <url>
     <loc>https://bananamafia.dev/tags/r2wars/</loc>
     <lastmod>2019-10-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/ctf/</loc>
-    <lastmod>2019-09-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -280,11 +310,6 @@
   
   <url>
     <loc>https://bananamafia.dev/post/docker-leak/</loc>
-    <lastmod>2019-01-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/vulnerability/</loc>
     <lastmod>2019-01-04T00:00:00+00:00</lastmod>
   </url>
   

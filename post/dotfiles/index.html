@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/dotfiles/">How I Over-Engineered My Dotfiles</a></h4>
-    <h5>October 16, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/linux"><kbd class="item-tag">linux</kbd></a>
     
@@ -176,17 +175,12 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>You want to customize your Linux dotfiles, whether you already know it
-or not. After investing way too much time into this, I&rsquo;ve decided to share some
+    <div class="content-width text-justify"><p>You want to customize your Linux dotfiles, whether you already know it
+or not. After investing way too much time into this, I've decided to share some
 results and tricks in this blog post.</p>
-
 <h1 id="general-structure">General Structure</h1>
-
 <p>The first thing to do is to create a general structure for your dotfiles and
 all associated files and scripts. I came up with this structure:</p>
-
 <pre><code>dotfiles
 ├── aliases
 ├── bashrc
@@ -206,43 +200,34 @@ all associated files and scripts. I came up with this structure:</p>
 ├── tmux.conf
 ├── vimrc
 └── zshrc
-</code></pre>
-
-<p>This whole structure can then be managed in a <code>git</code> repository. Using a dotfile manager like <a href="https://github.com/TheLocehiliosan/yadm">yadm</a> makes it easy to deploy the dotfiles on a system. My own approach involves using <em>Ansible</em> as you will see at the end of this post. Using this, it becomes possible to
-deploy the same <em>public</em> dotfiles repository on various systems while maintaining a separate <em>private</em> repository for system-specific configuration values. These &ldquo;secret&rdquo; values can be absolute file system paths that you don&rsquo;t want to expose on GitHub or in
-a public repository at all. All of these values are stored in the <code>secrets-*</code> folders. Of course you shouldn&rsquo;t just go and store your keys in
+</code></pre><p>This whole structure can then be managed in a <code>git</code> repository. Using a dotfile manager like <a href="https://github.com/TheLocehiliosan/yadm">yadm</a> makes it easy to deploy the dotfiles on a system. My own approach involves using <em>Ansible</em> as you will see at the end of this post. Using this, it becomes possible to
+deploy the same <em>public</em> dotfiles repository on various systems while maintaining a separate <em>private</em> repository for system-specific configuration values. These &ldquo;secret&rdquo; values can be absolute file system paths that you don't want to expose on GitHub or in
+a public repository at all. All of these values are stored in the <code>secrets-*</code> folders. Of course you shouldn't just go and store your keys in
 there, there are better ways to do this &ndash; for example using <em>Ansible</em> Vault.</p>
-
 <p>The <code>exports</code> file holds configuration values that will be <code>source</code>d upon
 spawning a shell. This file may hold configuration options for a shell, the whole system itself
 or applications that are going to be spawned using the shell. Its general
 purpose is to gather all customized options in one file.</p>
-
 <p>You may have noticed the <code>Makefile</code> in the directory tree above. It has
 various purposes:</p>
-
 <ul>
-<li><p>Update all submpodules using a single command:</p>
-
+<li>Update all submpodules using a single command:</li>
+</ul>
 <pre><code>update-submodules: ## Update all submodules
 	git submodule update --init --recursive &amp;&amp; \
 	git submodule foreach git pull --recurse-submodules origin master
 
-</code></pre></li>
-
-<li><p>Generate a list with names and links to all Sublime, Vim and VS Code plugins
-that are currently in use - for example:</p>
-
+</code></pre><ul>
+<li>Generate a list with names and links to all Sublime, Vim and VS Code plugins
+that are currently in use - for example:</li>
+</ul>
 <pre><code>gen-vscode-info: ## Generate a list of VS Code plugins
 	code --list-extensions | xargs -d &quot;\n&quot; -rI % python -c &quot;print('- [%](https://marketplace.visualstudio.com/items?itemName=' + '%' + ')')&quot;
-</code></pre></li>
-
-<li><p>Linting all dotfiles using <code>shellcheck</code> after pushing the dotfiles repository. I&rsquo;ve stolen most of this idea and the scripts from <a href="https://twitter.com/jessfraz/">Jessica Frazelle</a>. More on this later.</p></li>
+</code></pre><ul>
+<li>Linting all dotfiles using <code>shellcheck</code> after pushing the dotfiles repository. I've stolen most of this idea and the scripts from <a href="https://twitter.com/jessfraz/">Jessica Frazelle</a>. More on this later.</li>
 </ul>
-
 <p>The <code>Makefile</code> is self-documented. This means that upon executing <code>make</code>,
 a help message will be displayed like this:</p>
-
 <pre><code>$ make
 help                           This help
 push                           Push all changes
@@ -252,24 +237,15 @@ gen-vim-info                   Generate a list of installed vim plugins
 gen-vscode-info                Generate a list of VS Code plugins
 test                           Runs all the tests on the files in the repository.
 shellcheck                     Runs the shellcheck tests on the scripts.
-</code></pre>
-
-<p>This works by generating a default action for the <code>Makefile</code> that parses all
+</code></pre><p>This works by generating a default action for the <code>Makefile</code> that parses all
 commands and prints the comment specified with <code>##</code> after it in a list:</p>
-
 <pre><code>help: ## This help
 	@awk 'BEGIN {FS = &quot;:.*?## &quot;} /^[a-zA-Z_-]+:.*?## / {printf &quot;\033[36m%-30s\033[0m %s\n&quot;, $$1, $$2}' $(MAKEFILE_LIST)
-</code></pre>
-
-<h1 id="shell">Shell</h1>
-
+</code></pre><h1 id="shell">Shell</h1>
 <p>After setting up the structure, the most obvious thing to do is to customize
 the shell.</p>
-
 <h2 id="zsh">ZSH</h2>
-
-<p>You&rsquo;ve probably heard about <code>zsh</code> and the <a href="https://github.com/robbyrussell/oh-my-zsh">OhMyZSH</a> framework, which also acts as a plugin manager. However, only few people seem to use <a href="https://github.com/getantibody/antibody">antibody</a> as a plugin manager instead. Compared to <em>OhMyZSH</em> it comes with less features but with a higher performance instead, since it uses concurrency when starting up a shell. The best thing is that it&rsquo;s still possible to use individual <em>OhMyZSH</em> features in <em>antibody</em>. This is my plugin list:</p>
-
+<p>You've probably heard about <code>zsh</code> and the <a href="https://github.com/robbyrussell/oh-my-zsh">OhMyZSH</a> framework, which also acts as a plugin manager. However, only few people seem to use <a href="https://github.com/getantibody/antibody">antibody</a> as a plugin manager instead. Compared to <em>OhMyZSH</em> it comes with less features but with a higher performance instead, since it uses concurrency when starting up a shell. The best thing is that it's still possible to use individual <em>OhMyZSH</em> features in <em>antibody</em>. This is my plugin list:</p>
 <pre><code>robbyrussell/oh-my-zsh path:plugins/colored-man-pages
 robbyrussell/oh-my-zsh path:plugins/extract
 robbyrussell/oh-my-zsh path:plugins/z
@@ -281,23 +257,15 @@ zsh-users/zsh-autosuggestions
 
 geometry-zsh/geometry
 zdharma/fast-syntax-highlighting
-</code></pre>
-
-<p>Using this, you can get tabbed auto suggestions and all other neat <em>OhMyZSH</em> features back without being slowed down by unnecessary bloat.</p>
-
+</code></pre><p>Using this, you can get tabbed auto suggestions and all other neat <em>OhMyZSH</em> features back without being slowed down by unnecessary bloat.</p>
 <p>Two plugins are of particular interest:</p>
-
 <ul>
-<li><code>extract</code>: Can&rsquo;t remember that stupid <code>tar</code> command to extract an archive? Just use <code>x</code> and the plugin will figure it out for you.</li>
+<li><code>extract</code>: Can't remember that stupid <code>tar</code> command to extract an archive? Just use <code>x</code> and the plugin will figure it out for you.</li>
 <li>With <code>z</code> you can jump in the file system after it has learned about common directories you use. Just type <code>z down</code> and you will land in <code>$HOME/Downloads</code> for example.</li>
 </ul>
-
 <h2 id="aliases">Aliases</h2>
-
-<p>I&rsquo;m just going to drop some cool aliases in here:</p>
-
+<p>I'm just going to drop some cool aliases in here:</p>
 <h3 id="perform-a-web-search-from-terminal">Perform A Web Search From Terminal</h3>
-
 <pre><code>function _web_search() {
     emulate -L zsh
 
@@ -346,20 +314,13 @@ alias youtube='web_search duckduckgo \!yt'
 alias map='web_search duckduckgo \!m'
 alias image='web_search duckduckgo \!i'
 alias ducky='web_search duckduckgo \!'
-</code></pre>
-
-<h3 id="grep-ing-in-all-pdfs"><code>grep</code>ing In All PDFs</h3>
-
+</code></pre><h3 id="greping-in-all-pdfs"><code>grep</code>ing In All PDFs</h3>
 <pre><code>function pdfgrep() {
     # shellcheck disable=SC2156
     find . -name '*.pdf' -exec sh -c '/usr/bin/pdftotext &quot;{}&quot; - | grep --with-filename --label=&quot;{}&quot; --color '&quot;$1&quot; \;
 }
-</code></pre>
-
-<h3 id="cd-and-ls-in-one-command"><code>cd</code> And <code>ls</code> In One Command</h3>
-
-<p>I always execute <code>ls</code> after a <code>cd</code>, so let&rsquo;s just make it one command:</p>
-
+</code></pre><h3 id="cd-and-ls-in-one-command"><code>cd</code> And <code>ls</code> In One Command</h3>
+<p>I always execute <code>ls</code> after a <code>cd</code>, so let's just make it one command:</p>
 <pre><code>alias cd=&quot;cl&quot;
 function cl {
     if [ &quot;$#&quot; -eq 0 ]; then
@@ -369,41 +330,23 @@ function cl {
     fi
     ls -lah --color=auto
 }
-</code></pre>
-
-<h3 id="grep-for-processes"><code>grep</code> For Processes</h3>
-
+</code></pre><h3 id="grep-for-processes"><code>grep</code> For Processes</h3>
 <pre><code>alias pg=&quot;pg&quot;
 function pg {
     pgrep -fa &quot;$1&quot; | grep -E --color &quot;$1&quot;
 }
-</code></pre>
-
-<h3 id="create-encrypted-archives-using-7zip">Create Encrypted Archives Using 7zip</h3>
-
+</code></pre><h3 id="create-encrypted-archives-using-7zip">Create Encrypted Archives Using 7zip</h3>
 <pre><code>mkzip() {
     7z -mhe=on -p a &quot;$@&quot;
 }
-</code></pre>
-
-<p>Invoking <code>mkzip encrypted.7z &lt;directory&gt;</code> will then create an encrypted archive from a directory.</p>
-
+</code></pre><p>Invoking <code>mkzip encrypted.7z &lt;directory&gt;</code> will then create an encrypted archive from a directory.</p>
 <h3 id="search-for-files-and-page-the-results">Search For Files And Page The Results</h3>
-
 <pre><code>function s() { find . -iname &quot;*$**&quot; | less; }
-</code></pre>
-
-<h3 id="receive-notifications-after-command-finished">Receive Notifications After Command Finished</h3>
-
+</code></pre><h3 id="receive-notifications-after-command-finished">Receive Notifications After Command Finished</h3>
 <pre><code>alias alert='notify-send --urgency=low -i &quot;$([ $? = 0 ] &amp;&amp; echo terminal || echo error)&quot; &quot;$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&amp;|]\s*alert$//'\'')&quot;'
-</code></pre>
-
-<p>You can use this with <code>sleep 5 &amp;&amp; alert &quot;YOLO&quot;</code></p>
-
+</code></pre><p>You can use this with <code>sleep 5 &amp;&amp; alert &quot;YOLO&quot;</code></p>
 <h3 id="rm-to-trash"><code>rm</code> To Trash</h3>
-
 <p>Never remove files again by accident :D</p>
-
 <pre><code>alias rm='safedelete'
 function safedelete {
     if command -v gio &gt; /dev/null; then
@@ -432,58 +375,35 @@ function safedelete {
         done
     fi
 }
-</code></pre>
-
-<h3 id="use-clipboard-from-terminal">Use Clipboard From Terminal</h3>
-
+</code></pre><h3 id="use-clipboard-from-terminal">Use Clipboard From Terminal</h3>
 <pre><code># pipe into ccopy --&gt; clipboard
 alias ccopy='xclip -selection clipboard'
 # paste with cpaste
 alias cpaste='xclip -selection clipboard -o'
-</code></pre>
-
-<h3 id="getting-internal-and-public-ips">Getting Internal And Public IPs</h3>
-
+</code></pre><h3 id="getting-internal-and-public-ips">Getting Internal And Public IPs</h3>
 <pre><code>alias pubip=&quot;dig +short myip.opendns.com @resolver1.opendns.com&quot;
 alias localip=&quot;ifconfig | grep -Eo 'inet (addr:)?([0-9]*\\.){3}[0-9]*' | grep -Eo '([0-9]*\\.){3}[0-9]*' | grep -v '127.0.0.1'&quot;
-</code></pre>
-
-<h2 id="key-bindings">Key Bindings</h2>
-
+</code></pre><h2 id="key-bindings">Key Bindings</h2>
 <p>Go backward and forward word with Shift + Arrow keys</p>
-
 <pre><code># key codes determined using cat
 bindkey &quot;^[[1;2C&quot; forward-word
 bindkey &quot;^[[1;2D&quot; backward-word
-</code></pre>
-
-<p>Delete current word with CTRL+W:</p>
-
+</code></pre><p>Delete current word with CTRL+W:</p>
 <pre><code>bindkey &quot;^W&quot; backward-kill-word
-</code></pre>
-
-<h2 id="fzf">FZF</h2>
-
-<p>If you&rsquo;ve used this once, you don&rsquo;t want to use a shell without it ever again.
+</code></pre><h2 id="fzf">FZF</h2>
+<p>If you've used this once, you don't want to use a shell without it ever again.
 Or, to quote the developer of it:</p>
-
-<p><em>It&rsquo;s an interactive Unix filter for command-line that can be used with any
+<p><em>It's an interactive Unix filter for command-line that can be used with any
 list; files, command history, processes, host names, bookmarks, git commits,
 etc.</em></p>
-
 <p>Yes, this is better and faster than the default history search you may know
 from <code>bash</code>:</p>
-
-<p><img src="/img/dotfiles/fzf-shell.gif" alt="fzf shell" /></p>
-
+<p><img src="/img/dotfiles/fzf-shell.gif" alt="fzf shell"></p>
 <p>It also finds files, e.g. starting from the home folder:</p>
-
-<p><img src="/img/dotfiles/fzf-files.gif" alt="fzf files" /></p>
-
+<p><img src="/img/dotfiles/fzf-files.gif" alt="fzf files"></p>
 <p>By default this only works from the current folder downwards. In order do make
 this start from <code>$HOME</code> or even <code>/</code> you can paste this into your <code>bindings</code>
 file:</p>
-
 <pre><code># fzf: override ctrl+t --&gt; ctrl+a using home folder
 fzf-homefolder() {
   # shellcheck disable=SC1001,SC2164
@@ -498,13 +418,9 @@ fzf-homefolder() {
 }
 zle     -N   fzf-homefolder
 bindkey '^A' fzf-homefolder
-</code></pre>
-
-<h3 id="fuzzy-search-in-chrome-history">Fuzzy Search In Chrome History</h3>
-
+</code></pre><h3 id="fuzzy-search-in-chrome-history">Fuzzy Search In Chrome History</h3>
 <p>And you can do even moar. You can search your entire Chrome web browsing
 history using <code>fzf</code> and its fuzzy-finding features:</p>
-
 <pre><code># Browse chrome history
 # https://junegunn.kr/2015/04/browsing-chrome-history-with-fzf/
 chistory() {
@@ -520,73 +436,49 @@ chistory() {
         awk -F $sep '{printf &quot;%-'$cols's  \x1b[36m%s\x1b[m\n&quot;, $1, $2}' |
         fzf --ansi --multi | sed 's#.*\(https*://\)#\1#'
 }
-</code></pre>
-
-<h3 id="tuning-fzf">Tuning FZF</h3>
-
+</code></pre><h3 id="tuning-fzf">Tuning FZF</h3>
 <p>You can speed up <code>fzf</code> even more by making it use <code>ag</code>, a faster version of
 <code>grep</code> if you have it installed. Just add this to the <code>exports</code> file:</p>
-
 <pre><code>export FZF_DEFAULT_COMMAND='ag --nocolor -g &quot;&quot;'
-</code></pre>
-
-<p>It has many more features that are worth reading on the <a href="https://github.com/junegunn/fzf">official GitHub page</a>.
+</code></pre><p>It has many more features that are worth reading on the <a href="https://github.com/junegunn/fzf">official GitHub page</a>.
 Among others, you can also <a href="https://github.com/junegunn/fzf.vim">integrate it into Vim</a>.</p>
-
 <h2 id="tmux">tmux</h2>
-
 <p>Organizing various shells, grouping them and splitting windows becomes possible with <code>tmux</code>. You can find various articles on <code>tmux</code> all over the interwebz, so I will just list my most important configurations here:</p>
-
 <ol>
-<li><p>Create new tmux window and prompt for a name</p>
-
+<li>Create new tmux window and prompt for a name</li>
+</ol>
 <pre><code>bind-key c command-prompt -p &quot;window name:&quot; &quot;new-window; rename-window '%%'&quot;
-</code></pre></li>
-
-<li><p>Turn on mouse support</p>
-
+</code></pre><ol start="2">
+<li>Turn on mouse support</li>
+</ol>
 <pre><code>setw -g mouse on
-</code></pre></li>
-
-<li><p>Use the mouse drag to re-order windows</p>
-
+</code></pre><ol start="3">
+<li>Use the mouse drag to re-order windows</li>
+</ol>
 <pre><code>bind-key -n MouseDrag1Status swap-window -t=
-</code></pre></li>
-
-<li><p>Middle click to paste from the clipboard</p>
-
+</code></pre><ol start="4">
+<li>Middle click to paste from the clipboard</li>
+</ol>
 <pre><code>unbind-key MouseDown2Pane
 bind-key -n MouseDown2Pane run &quot;tmux set-buffer \&quot;$(xclip -o -sel clipboard)\&quot;; tmux paste-buffer&quot;
-</code></pre></li>
-
-<li><p>Scroll History</p>
-
+</code></pre><ol start="5">
+<li>Scroll History</li>
+</ol>
 <pre><code>set -g history-limit 30000
-</code></pre></li>
-
-<li><p>Use <code>|</code> and <code>-</code> for window splitting</p>
-
+</code></pre><ol start="6">
+<li>Use <code>|</code> and <code>-</code> for window splitting</li>
+</ol>
 <pre><code>unbind '&quot;'
 unbind %
 bind | split-window -h
 bind - split-window -v
-</code></pre></li>
-</ol>
-
-<h3 id="tmux-plugins">tmux plugins</h3>
-
+</code></pre><h3 id="tmux-plugins">tmux plugins</h3>
 <p>Most of these and even more can be found <a href="https://github.com/tmux-plugins">here</a>.</p>
-
 <h4 id="powerline">Powerline</h4>
-
 <p>Organize <code>tmux</code> windows with <a href="https://github.com/powerline/powerline">Powerline</a>. This is not a <code>tmux</code> plugin per se but I only use it in combination with <code>tmux</code>. Here is the <code>tmux.conf</code> snippet to include it:</p>
-
 <pre><code>source ~/.powerline.conf
 run-shell &quot;powerline-daemon -q&quot;
-</code></pre>
-
-<p>I display the current network load in <code>tmux</code> via <em>Powerline</em>:</p>
-
+</code></pre><p>I display the current network load in <code>tmux</code> via <em>Powerline</em>:</p>
 <pre><code>{
   &quot;segments&quot;: {
     &quot;right&quot;: [{
@@ -594,12 +486,8 @@ run-shell &quot;powerline-daemon -q&quot;
     },]
   },
 }
-</code></pre>
-
-<h4 id="even-moar-tmux-plugins">Even Moar tmux Plugins</h4>
-
-<p>The <code>tmux</code> plugin manager <code>tpm</code> can be used to manage all other plugins. Here&rsquo;s a list of the plugins I&rsquo;m using:</p>
-
+</code></pre><h4 id="even-moar-tmux-plugins">Even Moar tmux Plugins</h4>
+<p>The <code>tmux</code> plugin manager <code>tpm</code> can be used to manage all other plugins. Here's a list of the plugins I'm using:</p>
 <pre><code>set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-copycat'
 set -g @plugin 'tmux-plugins/tmux-open'
@@ -613,19 +501,13 @@ set -g @extrakto_fzf_tool &quot;$HOME/.dotfiles/fzf/bin/fzf&quot;
 set -g @plugin 'tmux-plugins/tmux-yank'
 set -g @yank_selection 'clipboard'
 set -g @yank_selection_mouse 'clipboard'
-</code></pre>
-
-<p>Let&rsquo;s highlight two of them:</p>
-
+</code></pre><p>Let's highlight two of them:</p>
 <ul>
 <li><a href="https://github.com/tmux-plugins/tmux-copycat">copycat</a>: This reduces using the mouse in a shell by allowing searches using <code>&lt;tmux-prefix&gt; + /</code>. It also has pre-defined regex searches for files, URLs and several other things. The results can be copied and used after <code>copycat</code> found a result in the window buffer.</li>
-<li><a href="https://github.com/laktak/extrakto">extrakto</a>: Let&rsquo;s just quote the readme: <em>You can complete commands that require you to retype text that is already on the screen. This works everywhere, even in remote ssh sessions. You can fuzzy find your text instead of selecting it by hand</em>. Check out the GitHub repository to see it in action, I highly recommend this :)</li>
+<li><a href="https://github.com/laktak/extrakto">extrakto</a>: Let's just quote the readme: <em>You can complete commands that require you to retype text that is already on the screen. This works everywhere, even in remote ssh sessions. You can fuzzy find your text instead of selecting it by hand</em>. Check out the GitHub repository to see it in action, I highly recommend this :)</li>
 </ul>
-
 <h3 id="automatically-launching-tmux">Automatically Launching tmux</h3>
-
-<p>As you will see in a following chapter, I&rsquo;m using custom scripts to launch a terminal from <code>i3</code>. In order to launch <code>tmux</code> automatically, I&rsquo;ve added this to my <code>zshrc</code>:</p>
-
+<p>As you will see in a following chapter, I'm using custom scripts to launch a terminal from <code>i3</code>. In order to launch <code>tmux</code> automatically, I've added this to my <code>zshrc</code>:</p>
 <pre><code># auto start tmux
 if [ &quot;$TMUX&quot; = &quot;&quot; ]; then
     # check for old session
@@ -637,73 +519,51 @@ if [ &quot;$TMUX&quot; = &quot;&quot; ]; then
         tmux
     fi
 fi
-</code></pre>
-
-<h2 id="terminal-emulator">Terminal Emulator</h2>
-
-<p><a href="https://github.com/thestinger/termite">Termite</a> is an efficient and configurable terminal emulator for Linux. Among other things, I&rsquo;ve configured the terminal font to be <a href="https://sourcefoundry.org/hack/">Hack Font</a> for better visuals when working with code:</p>
-
+</code></pre><h2 id="terminal-emulator">Terminal Emulator</h2>
+<p><a href="https://github.com/thestinger/termite">Termite</a> is an efficient and configurable terminal emulator for Linux. Among other things, I've configured the terminal font to be <a href="https://sourcefoundry.org/hack/">Hack Font</a> for better visuals when working with code:</p>
 <pre><code>[options]
 font = Hack 10
 clickable_url = true
 scrollback_lines = 10000
-</code></pre>
-
-<p>Also, the color theme can be customized. I&rsquo;m using a solarized color scheme you can find <a href="https://github.com/ps1337/Dotfiles/blob/master/termite/config">here</a>.</p>
-
+</code></pre><p>Also, the color theme can be customized. I'm using a solarized color scheme you can find <a href="https://github.com/ps1337/Dotfiles/blob/master/termite/config">here</a>.</p>
 <h1 id="vim">Vim</h1>
-
-<p>I&rsquo;m using <a href="https://github.com/VundleVim/Vundle.vim">Vundle</a> as a plugin manager. You can check out my complete plugin list in <a href="https://github.com/ps1337/Dotfiles">this auto generated readme</a>. The important ones for me are:</p>
-
+<p>I'm using <a href="https://github.com/VundleVim/Vundle.vim">Vundle</a> as a plugin manager. You can check out my complete plugin list in <a href="https://github.com/ps1337/Dotfiles">this auto generated readme</a>. The important ones for me are:</p>
 <ul>
 <li><a href="https://github.com/ycm-core/YouCompleteMe">YouCompleteMe</a> adds auto completion for a bunch of stuff like file system paths and several programming lanugages.</li>
 <li><a href="https://github.com/scrooloose/nerdtree">NERDTree</a> allows browsing the file system and creating files and directories from within Vim.</li>
 <li><a href="https://github.com/scrooloose/nerdcommenter">NERDCommenter</a> can comment blocks and source code using a single key combination and is aware of the current programming language.</li>
-<li><a href="https://github.com/mbbill/undotree">UndoTree</a> makes sure you don&rsquo;t lose your changes to a file by keeping a <em>whole tree</em> of file changes that branches out when undoing/redoing changes.</li>
+<li><a href="https://github.com/mbbill/undotree">UndoTree</a> makes sure you don't lose your changes to a file by keeping a <em>whole tree</em> of file changes that branches out when undoing/redoing changes.</li>
 <li><a href="https://github.com/Chiel92/vim-autoformat">vim-autoformat</a> makes code look good automatically.</li>
 <li><a href="https://github.com/easymotion/vim-easymotion">easymotion</a> allows jumping in the current file and therefore reduces mouse usage.</li>
 </ul>
-
 <p>These two things are quite interesting too:</p>
-
 <ol>
-<li><p>Save files using <code>sudo</code> after opening it with user privileges:</p>
-
+<li>Save files using <code>sudo</code> after opening it with user privileges:</li>
+</ol>
 <pre><code>&quot; Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee &gt; /dev/null %
-</code></pre></li>
-
-<li><p>Persistent file history:</p>
-
+</code></pre><ol start="2">
+<li>Persistent file history:</li>
+</ol>
 <pre><code>&quot; Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
-let TheUndoDir = expand(vimDir . '/undo')
-&quot; Create dirs
-call system('mkdir ' . vimDir)
-call system('mkdir ' . TheUndoDir)
-let &amp;undodir = TheUndoDir
-set undofile
+    let TheUndoDir = expand(vimDir . '/undo')
+    &quot; Create dirs
+    call system('mkdir ' . vimDir)
+    call system('mkdir ' . TheUndoDir)
+    let &amp;undodir = TheUndoDir
+    set undofile
 endif
-</code></pre></li>
-</ol>
-
-<p>This way you can even undo previous file changes after closing a file or rebooting the system.</p>
-
+</code></pre><p>This way you can even undo previous file changes after closing a file or rebooting the system.</p>
 <h1 id="i3-window-manager">i3 Window Manager</h1>
-
-<p>Yes, it&rsquo;s true: No more dragging windows like it&rsquo;s 1887.</p>
-
-<p><a href="https://github.com/i3/i3">i3</a> is a tiling window manager that enables an efficient workflow. You can organize applications in a configurable manner and it&rsquo;s scriptable. I recommend <a href="https://www.youtube.com/watch?v=j1I63wGcvU4">this video series</a> for a detailed introduction to <code>i3</code>. It may look complicated at first, especially with custom menus or bars like <a href="https://github.com/polybar/polybar">polybar</a>, but the reality is that it&rsquo;s even more complicated :D</p>
-
+<p>Yes, it's true: No more dragging windows like it's 1887.</p>
+<p><a href="https://github.com/i3/i3">i3</a> is a tiling window manager that enables an efficient workflow. You can organize applications in a configurable manner and it's scriptable. I recommend <a href="https://www.youtube.com/watch?v=j1I63wGcvU4">this video series</a> for a detailed introduction to <code>i3</code>. It may look complicated at first, especially with custom menus or bars like <a href="https://github.com/polybar/polybar">polybar</a>, but the reality is that it's even more complicated :D</p>
 <h2 id="configuration">Configuration</h2>
-
 <p>You need to create a config file first. Mine can be found <a href="https://github.com/ps1337/Dotfiles/tree/master/i3">here</a>. The most important aspects are:</p>
-
 <ul>
 <li>If you want to have an auto-starting application, use the <code>exec</code> directive.</li>
-
-<li><p>Create workspaces according to your needs. For example, you can put Vim and VS Code in the same workspace. This way, all applications are organized according to your personal workflow and the application use cases. Workspaces can be tagged with custom icons. If you&rsquo;re a <em>polybar</em> user, <a href="https://fontawesome.com/">FontAwesome</a> is a good font to use that supports many glyphs that can be copied from <a href="https://fontawesome.com/v4.7.0/icons/">this cheatsheet</a>. The configuration directives for the workspaces are:</p>
-
+<li>Create workspaces according to your needs. For example, you can put Vim and VS Code in the same workspace. This way, all applications are organized according to your personal workflow and the application use cases. Workspaces can be tagged with custom icons. If you're a <em>polybar</em> user, <a href="https://fontawesome.com/">FontAwesome</a> is a good font to use that supports many glyphs that can be copied from <a href="https://fontawesome.com/v4.7.0/icons/">this cheatsheet</a>. The configuration directives for the workspaces are:</li>
+</ul>
 <pre><code># Set the workspace icon/glyph
 set $ws_music &quot;7:&lt;icon&gt;&quot;
 
@@ -713,22 +573,13 @@ assign [class=$music] $ws_music
 [...]
 assign [class=$terminal] $ws_terminal
 assign [class=$sublime] $ws_code
-</code></pre></li>
-</ul>
-
-<p>My workspace overview and <em>polybar</em> look like this:</p>
-
-<p><img src="/img/dotfiles/polybar_workspace.jpg" alt="Twerkspaces" /></p>
-
+</code></pre><p>My workspace overview and <em>polybar</em> look like this:</p>
+<p><img src="/img/dotfiles/polybar_workspace.jpg" alt="Twerkspaces"></p>
 <ul>
-<li><p>Launching shell scripts using a specific key combination can be done with:</p>
-
-<pre><code>bindsym $mod+y exec --no-startup-id ~/.i3/scripts/launchTerminal.sh
-</code></pre></li>
+<li>Launching shell scripts using a specific key combination can be done with:</li>
 </ul>
-
-<p>I&rsquo;m using this approach to launch terminals, file managers and browser using a single key combination, for example:</p>
-
+<pre><code>bindsym $mod+y exec --no-startup-id ~/.i3/scripts/launchTerminal.sh
+</code></pre><p>I'm using this approach to launch terminals, file managers and browser using a single key combination, for example:</p>
 <pre><code>#!/bin/bash
 
 # shellcheck source=/dev/null
@@ -753,35 +604,17 @@ else
 	# shellcheck disable=SC2091
     $(env &quot;$TERMINAL&quot;)
 fi
-</code></pre>
-
-<p>The neat thing is that this re-uses existing terminal windows instead of always creating a fresh one. This way you won&rsquo;t end up with 234562345 abandonned terminal windows at the end of the day. If really a new terminal is required, the same key combination can be used again in order to spawn a new terminal.</p>
-
+</code></pre><p>The neat thing is that this re-uses existing terminal windows instead of always creating a fresh one. This way you won't end up with 234562345 abandonned terminal windows at the end of the day. If really a new terminal is required, the same key combination can be used again in order to spawn a new terminal.</p>
 <h2 id="rofi"><code>rofi</code></h2>
-
 <p>The most efficient way for me to switch and launch applications is <a href="https://github.com/davatorium/rofi">rofi</a>. It can be invoked from <code>i3</code> with a single key combination and accepts input right after. This way, you can switch and launch applications using the fuzzy finding feature of <code>rofi</code> as fast as possible.</p>
-
-<p>I&rsquo;m using this to launch it:</p>
-
+<p>I'm using this to launch it:</p>
 <pre><code>bindsym $mod+q exec --no-startup-id &quot;rofi -combi-modi window,drun -show combi -modi combi&quot;
-</code></pre>
-
-<h2 id="alt-tab">Alt-Tab</h2>
-
-<p>Yes, <code>i3</code> doesn&rsquo;t handle Alt-Tab directly. Boo.</p>
-
-<p>I&rsquo;ve found a Python based script somewhere on Reddit that spawns a daemon that handles just this. The source code can be copied from <a href="https://github.com/ps1337/Dotfiles/blob/master/i3/scripts/alt-tab.py">here</a>. Just launch it on startup and assign alt-tab to a custom script in the <code>i3</code> configuration:</p>
-
-<pre><code>exec_always --no-startup-id ~/.i3/scripts/launch-alt-tab-daemon.sh
-bindsym Mod1+Tab exec --no-startup-id python3 $HOME/.i3/scripts/alt-tab.py --switch
-</code></pre>
-
-<h2 id="media-keys">Media Keys</h2>
-
-<p>Out of the box, <code>i3</code> also doesn&rsquo;t handle media keys. Boo.</p>
-
+</code></pre><h2 id="alttab">Alt-Tab</h2>
+<p>Yes, <code>i3</code> doesn't handle Alt-Tab directly. Boo. Just use <a href="https://github.com/sagb/alttab">this</a> instead.</p>
+<pre><code>exec_always --no-startup-id alttab -d 1 -sc 1
+</code></pre><h2 id="media-keys">Media Keys</h2>
+<p>Out of the box, <code>i3</code> also doesn't handle media keys. Boo.</p>
 <p>Time to do copy-pasta again:</p>
-
 <pre><code># Volume
 bindsym XF86AudioMute        exec --no-startup-id &quot;amixer -q set Master toggle&quot;
 bindsym XF86AudioRaiseVolume exec --no-startup-id &quot;amixer -q set Master 5%+ unmute&quot;
@@ -796,27 +629,17 @@ bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 # Screen brightness controls
 bindsym XF86MonBrightnessUp exec --no-startup-id ~/.i3/scripts/setbrightness.sh 1
 bindsym XF86MonBrightnessDown exec --no-startup-id ~/.i3/scripts/setbrightness.sh 0
-</code></pre>
-
-<h2 id="lockscreen">Lockscreen</h2>
-
-<p><code>i3</code> doesn&rsquo;t come with an integrated lockscreen. I&rsquo;m using <a href="https://bitbucket.org/raymonad/xss-lock/src">xss-lock</a>.</p>
-
+</code></pre><h2 id="lockscreen">Lockscreen</h2>
+<p><code>i3</code> doesn't come with an integrated lockscreen. I'm using <a href="https://bitbucket.org/raymonad/xss-lock/src">xss-lock</a>.</p>
 <h1 id="autorandr">Autorandr</h1>
-
-<p>If you&rsquo;re using a docking station or other setups that involve various monitor setups, this is for you. <a href="https://github.com/phillipberndt/autorandr">Autorandr</a> automatically detects the attached display setup and reconfigures the system according to a pre-defined profile. I recommend installing this from the included <code>Makefile</code> since this will also install hooks in the system that cause <code>autorandr</code> to be invoked as soon as a new monitor setup is present. That way, you can simply undock a laptop and <code>autorandr</code> will do the rest. It can even execute custom scripts with whatever action that may be required on a monitor change.</p>
-
+<p>If you're using a docking station or other setups that involve various monitor setups, this is for you. <a href="https://github.com/phillipberndt/autorandr">Autorandr</a> automatically detects the attached display setup and reconfigures the system according to a pre-defined profile. I recommend installing this from the included <code>Makefile</code> since this will also install hooks in the system that cause <code>autorandr</code> to be invoked as soon as a new monitor setup is present. That way, you can simply undock a laptop and <code>autorandr</code> will do the rest. It can even execute custom scripts with whatever action that may be required on a monitor change.</p>
 <h1 id="automatic-linting">Automatic Linting</h1>
-
-<p>To ensure that all my dotfile shell scripts don&rsquo;t contain obvious errors, I&rsquo;m using <a href="https://github.com/koalaman/shellcheck">shellcheck</a>. This is a great utility that checks shell scripts for scripting errors and bad practices. Also, it has a great wiki that explains how to correct the errors.</p>
-
+<p>To ensure that all my dotfile shell scripts don't contain obvious errors, I'm using <a href="https://github.com/koalaman/shellcheck">shellcheck</a>. This is a great utility that checks shell scripts for scripting errors and bad practices. Also, it has a great wiki that explains how to correct the errors.</p>
 <p>To make this whole thing work, you have to configure Travis CI to run after every push to the dotfiles git repository. The job will:</p>
-
 <ol>
 <li>Clone the dotfiles repository</li>
-
-<li><p>Invoke <code>make test</code> from it:</p>
-
+<li>Invoke <code>make test</code> from it:</li>
+</ol>
 <pre><code>test: shellcheck ## Runs all the tests on the files in the repository.
 
 # if this session isn't interactive, then we don't want to allocate a
@@ -834,11 +657,7 @@ shellcheck: ## Runs the shellcheck tests on the scripts.
 		-v $(CURDIR):/usr/src:ro \
 		--workdir /usr/src \
 		r.j3ss.co/shellcheck ./.test.sh
-</code></pre></li>
-</ol>
-
-<p>This spins up a <code>shellcheck</code> docker container, which internally calls the <code>.test.sh</code> script that in turn performs the linting:</p>
-
+</code></pre><p>This spins up a <code>shellcheck</code> docker container, which internally calls the <code>.test.sh</code> script that in turn performs the linting:</p>
 <pre><code>#!/bin/bash
 # Stolen from: https://github.com/jessfraz/dotfiles/blob/master/test.sh
 
@@ -875,13 +694,9 @@ else
 	echo &quot;These files failed shellcheck: ${ERRORS[*]}&quot;
 	exit 1
 fi
-</code></pre>
-
-<p>To get this really over-engineered you can then send out a <em>Telegram</em> notification indicating success or failure to your mobile phone using <code>curl</code> and a secret <em>Telegram</em> token that&rsquo;s configured in the Travis CI job.</p>
-
+</code></pre><p>To get this really over-engineered you can then send out a <em>Telegram</em> notification indicating success or failure to your mobile phone using <code>curl</code> and a secret <em>Telegram</em> token that's configured in the Travis CI job.</p>
 <h1 id="deployment">Deployment</h1>
-
-<p>Creating dotfiles is cool, but testing whether they can be deployed on various Linux distributions at the same time is something else. For this, I&rsquo;ve created my <a href="https://github.com/ps1337/Dotfile-tools">Dotfile-Tools</a> <em>Ansible</em> project. For more information regarding this, check out one of my <a href="https://bananamafia.dev/post/dotfile-deployment/">previous blog posts</a>.</p>
+<p>Creating dotfiles is cool, but testing whether they can be deployed on various Linux distributions at the same time is something else. For this, I've created my <a href="https://github.com/ps1337/Dotfile-tools">Dotfile-Tools</a> <em>Ansible</em> project. For more information regarding this, check out one of my <a href="https://bananamafia.dev/post/dotfile-deployment/">previous blog posts</a>.</p>
 </div>
 
     
@@ -898,10 +713,9 @@ fi
     
 
     
-    
 
     <h4><a href="/post/dotfile-shellcheck/">Using Shellcheck and Docker to Automatically Lint Dotfiles</a></h4>
-    <h5>March 8, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
     
@@ -920,10 +734,9 @@ fi
     
 
     
-    
 
     <h4><a href="/post/dotfile-deployment/">Automated and Tested Dotfile Deployment Using Ansible and Docker</a></h4>
-    <h5>March 8, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
     
@@ -944,7 +757,7 @@ fi
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

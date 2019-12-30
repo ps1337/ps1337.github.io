@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
-    <h5>January 4, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -176,14 +175,9 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>During an assessment of the Docker platform in November 2018, two information leaks regarding the <code>/proc/asound</code> path were discovered in the OCI (Open Container Initiative) specification. These issues have been <a href="https://github.com/moby/moby/issues/38285">fixed</a> quickly by the Docker security team using the provided suggestions.</p>
-
+    <div class="content-width text-justify"><p>During an assessment of the Docker platform in November 2018, two information leaks regarding the <code>/proc/asound</code> path were discovered in the OCI (Open Container Initiative) specification. These issues have been <a href="https://github.com/moby/moby/issues/38285">fixed</a> quickly by the Docker security team using the provided suggestions.</p>
 <h1 id="leak-of-audio-device-status-of-the-host">Leak of audio device status of the host</h1>
-
 <p>When media is being played on the host, the <code>/proc/asound/card*/pcm*p/sub*/status</code> files may contain information regarding the status of media playback. Consider this command for a demonstration:</p>
-
 <pre><code>docker run --rm \
     ubuntu:latest bash -c \
         &quot;sleep 5; \
@@ -191,16 +185,10 @@
         grep state | \
         cut -d ' ' -f2 | \
         grep RUNNING || echo 'not running'&quot;
-</code></pre>
-
-<p>When playing a media file, watching a video or executing similar actions involving sound output on the host, the above command demonstrates that a containerized process is able to gather information on this status. Therefore a process in a container is able to check whether and what kind of user activity is present on the host system. Also, this may indicate whether a container runs on a desktop system or a server as media playback rarely happens on server systems.</p>
-
+</code></pre><p>When playing a media file, watching a video or executing similar actions involving sound output on the host, the above command demonstrates that a containerized process is able to gather information on this status. Therefore a process in a container is able to check whether and what kind of user activity is present on the host system. Also, this may indicate whether a container runs on a desktop system or a server as media playback rarely happens on server systems.</p>
 <p>The scenario described above is in regard to media playback. Moreover, when examining the <code>/proc/asound/card*/pcm*c/sub*/status</code> files (<code>pcm*c</code> instead of <code>pcm*p</code>) this can also leak information regarding capturing sound, as in recording audio or making calls on the host system.</p>
-
 <h1 id="leak-of-monitor-type">Leak of Monitor Type</h1>
-
 <p>Monitors can also act as sound output devices when connected using a compatible interface like DisplayPort. The listing below illustrates how the model type of the connected monitors can be read from within a container:</p>
-
 <pre><code>docker run --rm \
     ubuntu:latest bash -c \
         &quot;cat /proc/asound/card*/eld* | \
@@ -208,15 +196,10 @@
 
 monitor_name SMS24A650 # (A Samsung monitor)
 monitor_name SMS24A650
-</code></pre>
-
-<p>This information should not be accessible from within a container as it contains specific information on the host and its environment.</p>
-
+</code></pre><p>This information should not be accessible from within a container as it contains specific information on the host and its environment.</p>
 <p>These issues have been reported to the Docker maintainers were fixed by <a href="https://github.com/moby/moby/pull/38299/files">moving</a> <code>/proc/asound</code> to the list of paths that are being masked to make each container manage its own versions of the affected paths. This path list is part of the OCI specification. Therefore, the fix for these issues also propagates to <code>containerd</code> which also uses this specification.</p>
-
 <h1 id="lessons-learned">Lessons Learned</h1>
-
-<p>Containers are a construct of namespaces and cgroups in combination with some C and Go code that tie everything together. This <em>tries</em> to isolate the underlying system by any means necessary (which works pretty well as of today). There&rsquo;s always the possibility of information leaks in case something is missed or newly introduced (either by Linux or the container managers). Theoretically, there can exist more issues of this type in the current state of container managers. Maybe some of them can be found in an automated manner? Hopefully AppArmor or similar mechanisms are in place to at least prevent writing leaked paths to prevent potential breakouts :)</p>
+<p>Containers are a construct of namespaces and cgroups in combination with some C and Go code that tie everything together. This <em>tries</em> to isolate the underlying system by any means necessary (which works pretty well as of today). There's always the possibility of information leaks in case something is missed or newly introduced (either by Linux or the container managers). Theoretically, there can exist more issues of this type in the current state of container managers. Maybe some of them can be found in an automated manner? Hopefully AppArmor or similar mechanisms are in place to at least prevent writing leaked paths to prevent potential breakouts :)</p>
 </div>
 
     
@@ -233,10 +216,28 @@ monitor_name SMS24A650
     
 
     
+
+    <h4><a href="/post/openredirect/">Open Redirects In State Parameters</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/research"><kbd class="item-tag">research</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/web"><kbd class="item-tag">web</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
     
 
     <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
-    <h5>May 18, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -253,10 +254,9 @@ monitor_name SMS24A650
     
 
     
-    
 
     <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
-    <h5>April 10, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -272,24 +272,6 @@ monitor_name SMS24A650
     
 
 </div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/post/rnd-23542352/">Random Note #23542351: Using the GitHub API to improve Dockerfiles</a></h4>
-    <h5>March 20, 2018</h5>
-    
-    <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
-    
-
-</div>
  
 
     <footer>
@@ -297,7 +279,7 @@ monitor_name SMS24A650
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

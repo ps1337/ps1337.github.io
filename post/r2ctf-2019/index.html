@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
-    <h5>September 2, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
     
@@ -180,21 +179,13 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<h1 id="r2boy1">r2boy1</h1>
-
-<p>The first GameBoy challenge was rather easy. The idea was to talk to the Pancake character in-game in order to get the flag. The problem is that Pancake chills behind a wall. One possible solution was to glitch through the wall, however I&rsquo;ve solved this using static analysis.</p>
-
+    <div class="content-width text-justify"><h1 id="r2boy1">r2boy1</h1>
+<p>The first GameBoy challenge was rather easy. The idea was to talk to the Pancake character in-game in order to get the flag. The problem is that Pancake chills behind a wall. One possible solution was to glitch through the wall, however I've solved this using static analysis.</p>
 <p>Going through the strings and searching for a possible dialog yields interesting strings:</p>
-
 <pre><code>[0x00054075]&gt; izzq~pancake
 0x54016 37 36 Find pancake\nthrough a game\nglitch!
 0x5403c 30 29 I am pancake, the\nr2 prophet.
-</code></pre>
-
-<p>Inspecting this region  directly yields the flag in plain text:</p>
-
+</code></pre><p>Inspecting this region  directly yields the flag in plain text:</p>
 <pre><code>[0x00054075]&gt; pxq@0x5403c
 0x0005403c  0x6e6170206d612049  0x6874202c656b6163   I am pancake, th
 0x0005404c  0x6f72702032720a65  0x5202002e74656870   e.r2 prophet...R
@@ -207,115 +198,71 @@
 0x000540bc  0x75705f7961790200  0x30665f656b346b6e   ..yay_punk4ke_f0
 0x000540cc  0x007d02000a646e77  0x6d61472077654e02   wnd...}..New Gam
 
-</code></pre>
-
-<h1 id="r2boy2">r2boy2</h1>
-
-<p>First of all, I&rsquo;m not sure whether I&rsquo;ve solved this in the intended way :D The challenge was to talk to another in-game character and get the flag that way. It turns out that the character won&rsquo;t give out the flag if just you ask him. All he answers is: <code>Don't ask for the flag!</code>. Too bad.</p>
-
-<p>I&rsquo;ve received the flag using two methods and didn&rsquo;t use <code>radare2</code> at all:</p>
-
+</code></pre><h1 id="r2boy2">r2boy2</h1>
+<p>First of all, I'm not sure whether I've solved this in the intended way :D The challenge was to talk to another in-game character and get the flag that way. It turns out that the character won't give out the flag if just you ask him. All he answers is: <code>Don't ask for the flag!</code>. Too bad.</p>
+<p>I've received the flag using two methods and didn't use <code>radare2</code> at all:</p>
 <ol>
-<li><p>The game can be debugged using <a href="http://bgb.bircd.org">bgb</a>. During a debugging session it&rsquo;s possible to read the loaded image data that&rsquo;s being used to display the game environment. This data contains the flag, stored as map image data.</p></li>
-
-<li><p>I&rsquo;ve emulated the ROM using <code>vbam</code>. This emulator implements a convenient feature that allows users to speed up time while holding the space key. All I did was holding the space key while also holding <code>q</code> in order to constantly start the dialog with the character that knows about the flag. Lets&rsquo; check out what happens after a few seconds:</p></li>
+<li>
+<p>The game can be debugged using <a href="http://bgb.bircd.org">bgb</a>. During a debugging session it's possible to read the loaded image data that's being used to display the game environment. This data contains the flag, stored as map image data.</p>
+</li>
+<li>
+<p>I've emulated the ROM using <code>vbam</code>. This emulator implements a convenient feature that allows users to speed up time while holding the space key. All I did was holding the space key while also holding <code>q</code> in order to constantly start the dialog with the character that knows about the flag. Lets&rsquo; check out what happens after a few seconds:</p>
+</li>
 </ol>
-
-<p><img src="/img/r2ctf-2019/r2boy2.gif" alt="lol" /></p>
-
+<p><img src="/img/r2ctf-2019/r2boy2.gif" alt="lol"></p>
 <h1 id="r2baby">r2baby</h1>
-
-<p>This ARM64 challenge prints out the flag that&rsquo;s derived from user input after passing some checks that have to be reversed to let the input pass. My setup was to use QEMU to emulate the ARM binary:</p>
-
+<p>This ARM64 challenge prints out the flag that's derived from user input after passing some checks that have to be reversed to let the input pass. My setup was to use QEMU to emulate the ARM binary:</p>
 <pre><code>qemu-aarch64-static -g 1337 ./babyr2
-</code></pre>
-
-<p>The <code>-g</code> parameter spawns a GDB server that can be accessed with <code>r2</code>:</p>
-
+</code></pre><p>The <code>-g</code> parameter spawns a GDB server that can be accessed with <code>r2</code>:</p>
 <pre><code>r2 -a arm -b 64 -d gdb://127.0.0.1:1337
-</code></pre>
-
-<p>This way, the checks can be observed dynamically. Setting breakpoints didn&rsquo;t work, so I&rsquo;ve used <code>dcu &lt;address&gt;</code> instead.</p>
-
-<p>Let&rsquo;s analyze the checks, directly from the <code>main()</code> function.</p>
-
+</code></pre><p>This way, the checks can be observed dynamically. Setting breakpoints didn't work, so I've used <code>dcu &lt;address&gt;</code> instead.</p>
+<p>Let's analyze the checks, directly from the <code>main()</code> function.</p>
 <h3 id="first-check">First check:</h3>
-
 <pre><code>[...]
 ; argc
 str w0, [arg_2ch]
 [...]
 ldr w0, [arg_2ch]
 cmp w0, 4
-</code></pre>
-
-<p>This is a basic check that&rsquo;s ensures that three command line arguments are passed. Remember that <code>argv[0]</code> is the name of the executable itself.</p>
-
+</code></pre><p>This is a basic check that's ensures that three command line arguments are passed. Remember that <code>argv[0]</code> is the name of the executable itself.</p>
 <h3 id="second-check">Second Check:</h3>
-
 <pre><code>movz w0, 0xcafe
 cmp w1, 0
-</code></pre>
-
-<p>It seems that the first argument has to be <code>0xcafe</code>. So let&rsquo;s pass <code>51966</code>, its decimal representation, as the first argument.</p>
-
+</code></pre><p>It seems that the first argument has to be <code>0xcafe</code>. So let's pass <code>51966</code>, its decimal representation, as the first argument.</p>
 <h3 id="third-and-fourth-check">Third and Fourth Check:</h3>
-
 <pre><code>&lt;Weird Stuff&gt;
 cmp w1, 3
 &lt;Other Stuff&gt;
 cmp w1, 8
-</code></pre>
-
-<p>I&rsquo;ve fiddled around with the second argument in order to pass both checks and didn&rsquo;t bother analyzing in depth&rsquo;s going on. I&rsquo;ve used <code>51977</code> for this. I&rsquo;ve skipped the last check in order to just print the calculated value after passing <code>123</code> as last argument:</p>
-
+</code></pre><p>I've fiddled around with the second argument in order to pass both checks and didn't bother analyzing in depth's going on. I've used <code>51977</code> for this. I've skipped the last check in order to just print the calculated value after passing <code>123</code> as last argument:</p>
 <pre><code>[0x00400508]&gt; dr x0 = 0x0 # Set register value to the expected value
 [0x00400508]&gt; dc
 ok,ok! you are not a baby r2 reverser!
 The key to be a g00d reverser is: r2con{c0ffe7}
-</code></pre>
-
-<p>So it seems pretty obvious that the correct flag has to be <code>r2con{c0ffee}</code>.</p>
-
+</code></pre><p>So it seems pretty obvious that the correct flag has to be <code>r2con{c0ffee}</code>.</p>
 <h1 id="land-of-ecodelia">Land of Ecodelia</h1>
-
 <p>This is a text based adventure that prints the flag after answering all questions correctly. In fact, the string <code>The flag is r2con2019{all_your_answers_in_order_without_spaces}</code> is even embedded in the binary.</p>
-
-<p>Let&rsquo;s check out some functions:</p>
-
+<p>Let's check out some functions:</p>
 <ul>
 <li><code>sym.go.main.main</code>: This function reads user input and calls the following two functions.</li>
 <li><code>sym.go.main.encode</code>: This &ldquo;encodes&rdquo; the user input and returns it.</li>
-<li><code>sym.go.main.check</code>: This compares the user input with the expected value. The application aborts in case the two values don&rsquo;t match.</li>
+<li><code>sym.go.main.check</code>: This compares the user input with the expected value. The application aborts in case the two values don't match.</li>
 </ul>
-
-<p>What&rsquo;s really happening in the <code>sym.go.main.encode</code> function is that it uses an embedded key to XOR encrypt the input:</p>
-
+<p>What's really happening in the <code>sym.go.main.encode</code> function is that it uses an embedded key to XOR encrypt the input:</p>
 <pre><code>0x0048a32b      0fb61416       movzx edx, byte [rsi + rdx]
 0x0048a32f      4131d2         xor r10d, edx
-</code></pre>
-
-<p>The <code>RSI</code> register points to the key and <code>RDX</code> is the current offset in the key. It&rsquo;s important to note that for each question an individual key is being used. The keys are defined here:</p>
-
-<p><img src="/img/r2ctf-2019/ecodelia-keys.jpg" alt="Ecodelia" /></p>
-
+</code></pre><p>The <code>RSI</code> register points to the key and <code>RDX</code> is the current offset in the key. It's important to note that for each question an individual key is being used. The keys are defined here:</p>
+<p><img src="/img/r2ctf-2019/ecodelia-keys.jpg" alt="Ecodelia"></p>
 <p>The look as if they were the answers to the questions but they are not :)</p>
-
 <p>The <code>check()</code> function performs two checks:</p>
-
 <ol>
 <li>Check whether the length of both strings match</li>
-
-<li><p>Compare the values byte by byte:</p>
-
+<li>Compare the values byte by byte:</li>
+</ol>
 <pre><code>0x0048a485      0fb6341a       movzx esi, byte [rdx + rbx] # Value A
 0x0048a489      0fb63c19       movzx edi, byte [rcx + rbx] # Value B
 0x0048a48d      4038fe         cmp sil, dil # CMP RSI, RDI
-</code></pre></li>
-</ol>
-
-<p>My solution was to:</p>
-
+</code></pre><p>My solution was to:</p>
 <ol>
 <li>Set a breakpoint in the <code>encode()</code> function before the key is being used (<code>0x0048a32b</code>).</li>
 <li>Read the currently used key with <code>pxq@rsi</code></li>
@@ -324,17 +271,11 @@ The key to be a g00d reverser is: r2con{c0ffe7}
 <li>Read the expected value from the register, again with <code>pxq</code>.</li>
 <li>Use CyberChef to decrypt the expected value using the current key:</li>
 </ol>
-
-<p><img src="/img/r2ctf-2019/ecodelia-decrypt.jpg" alt="Ecodelia" /></p>
-
-<p>I&rsquo;ve performed these steps for every question. I&rsquo;m sure there are more elegant solutions but it worked anyway :D</p>
-
-<p><img src="/img/r2ctf-2019/ecodelia-flag.jpg" alt="Ecodelia" /></p>
-
+<p><img src="/img/r2ctf-2019/ecodelia-decrypt.jpg" alt="Ecodelia"></p>
+<p>I've performed these steps for every question. I'm sure there are more elegant solutions but it worked anyway :D</p>
+<p><img src="/img/r2ctf-2019/ecodelia-flag.jpg" alt="Ecodelia"></p>
 <h1 id="r2darling">r2darling</h1>
-
 <p>You need to enter the correct password in order to print the flag. While checking out <code>main()</code>, this caught my attention:</p>
-
 <pre><code>0x00401de0      b820000000     mov eax, 0x20
 0x00401de5      89c2           mov edx, eax
 0x00401de7      488b7de8       mov rdi, qword [var_18h]
@@ -342,16 +283,10 @@ The key to be a g00d reverser is: r2con{c0ffe7}
 0x00401df3      e878f2ffff     call 0x401070 # String compare
 0x00401df8      83f800         cmp eax, 0
 0x00401dfb      0f8529000000   jne 0x401e2a # Not correct
-</code></pre>
-
-<p>The obvious thing to do is to print the value of <code>obj.pass</code> as soon as its loaded into <code>RSI</code>:</p>
-
+</code></pre><p>The obvious thing to do is to print the value of <code>obj.pass</code> as soon as its loaded into <code>RSI</code>:</p>
 <pre><code>0x004a5120  0x705f746572633373  0x535f656b416b6e61   s3cret_pankAke_S
 0x004a5130  0x0000002133637534  0x0000000000000000   4uc3!
-</code></pre>
-
-<p>I&rsquo;ve tried to submit this as a flag but nope. However, after using this string as input for the application, the correct flag can be read while executing the string comparison function listed above (<code>0x401070</code>).</p>
-
+</code></pre><p>I've tried to submit this as a flag but nope. However, after using this string as input for the application, the correct flag can be read while executing the string comparison function listed above (<code>0x401070</code>).</p>
 <pre><code>[0x0041eb5a]&gt; pdf
 [...]
 0x0041eb52      0fb60417       movzx eax, byte [rdi + rdx]
@@ -361,53 +296,32 @@ The key to be a g00d reverser is: r2con{c0ffe7}
 [0x0041eb5a]&gt; pxq@rdi
 0x01bcab40  0x74316e756d4d3063  0x7234643472333c79   c0Mmun1ty&lt;3r4d4r
 0x01bcab50  0x031000216e306333  0x5218046e1a101f2e   3c0n!.......n..R
-</code></pre>
-
-<h1 id="cerberus">Cerberus</h1>
-
+</code></pre><h1 id="cerberus">Cerberus</h1>
 <p>Connecting to this challenge drops the user into a pseudo shell. The <code>help</code> function prints these commands:</p>
-
 <pre><code>$help
 Available commands:
 * cat echo env exit help ls set unset login
-</code></pre>
-
-<p>After trying to log in, I&rsquo;ve found that the <code>fcn.00402600</code> function performs the login checks:</p>
-
+</code></pre><p>After trying to log in, I've found that the <code>fcn.00402600</code> function performs the login checks:</p>
 <pre><code>[0x004027e9]&gt; izzq~DENIED
 0x406197 15 14 ACCESS DENIED\n
 [0x004027e9]&gt; axt 0x406197
 fcn.00402600 0x4027c7 [DATA] movabs rdi, str.ACCESS_DENIED
-</code></pre>
-
-<p>I&rsquo;ve pulled the correct login credentials directly from memory by setting a breakpoint before the string comparison function:</p>
-
-<p><img src="/img/r2ctf-2019/cerberus-dbg1.jpg" alt="Cerberus" /></p>
-
-<p>The correct user name is <code>an0nym0us</code> and the password is <code>Intrud3r</code>. After logging in, there&rsquo;s a file present called <code>flag.txt</code> but it can&rsquo;t be read by the current user. After executing <code>env</code> it shows that there&rsquo;s an environment variable present called <code>ADMIN</code> with no value set.</p>
-
+</code></pre><p>I've pulled the correct login credentials directly from memory by setting a breakpoint before the string comparison function:</p>
+<p><img src="/img/r2ctf-2019/cerberus-dbg1.jpg" alt="Cerberus"></p>
+<p>The correct user name is <code>an0nym0us</code> and the password is <code>Intrud3r</code>. After logging in, there's a file present called <code>flag.txt</code> but it can't be read by the current user. After executing <code>env</code> it shows that there's an environment variable present called <code>ADMIN</code> with no value set.</p>
 <p>I decided to search for this string in the whole process memory and found two interesting things:</p>
-
-<p>First, there seems to be an additional <code>su</code> command that isn&rsquo;t printed by the help function:</p>
-
+<p>First, there seems to be an additional <code>su</code> command that isn't printed by the help function:</p>
 <pre><code>0x004081a0  0x7461630074697865  0x6e65006f68636500   exit.cat.echo.en
 0x004081b0  0x6c00706c65680076  0x6e75007465730073   v.help.ls.set.un
 0x004081c0  0x69676f6c00746573  0x007325007573006e   set.login.su.%s.
 0x004081d0  0x286d32333b305b1b  0x7e20296e696d6461   .[0;32m(admin) ~
 0x004081e0  0x0000000000002400  0x0000000000000000   .$..............
-</code></pre>
-
-<p>The <code>su</code> command is present in memory along with a string that looks just like an administrative shell prompt.</p>
-
+</code></pre><p>The <code>su</code> command is present in memory along with a string that looks just like an administrative shell prompt.</p>
 <p>Also, setting the <code>ADMIN</code> environment variable to <code>true</code> seems to enable the admin mode:</p>
-
 <pre><code>0x00408280  0x74746547203e7e20  0x7669727020676e69    ~&gt; Getting priv
 0x00408290  0x2e2e736567656c69  0x004e494d4441002e   ileges....ADMIN.
 0x004082a0  0x00000a0065757274  0x0000000000000000   true............
-</code></pre>
-
-<p>The script to log in as administrator is therefore:</p>
-
+</code></pre><p>The script to log in as administrator is therefore:</p>
 <pre><code>#!/usr/bin/python2.7
 
 from pwn import *
@@ -421,19 +335,12 @@ print io.recvuntil(&quot;$&quot;)
 io.sendline(&quot;su&quot;)
 print io.recvuntil(&quot;admin&quot;)
 io.interactive()
-</code></pre>
-
-<p>Maybe the flag can be read now:</p>
-
-<p><img src="/img/r2ctf-2019/cerberus-noflag.jpg" alt="Cerberus" /></p>
-
-<p>Of course not. Because of maximum trollage you have to read the hidden <code>.flag.txt</code> file that isn&rsquo;t displayed after executing <code>ls</code>. Remember, <code>ls -la</code> doesn&rsquo;t work in this pseudo shell :)</p>
-
+</code></pre><p>Maybe the flag can be read now:</p>
+<p><img src="/img/r2ctf-2019/cerberus-noflag.jpg" alt="Cerberus"></p>
+<p>Of course not. Because of maximum trollage you have to read the hidden <code>.flag.txt</code> file that isn't displayed after executing <code>ls</code>. Remember, <code>ls -la</code> doesn't work in this pseudo shell :)</p>
 <p>This is the correct flag:</p>
-
-<p><img src="/img/r2ctf-2019/cerberus-flag.jpg" alt="Cerberus" /></p>
-
-<p>Thanks for setting up this year&rsquo;s r2CTF :)</p>
+<p><img src="/img/r2ctf-2019/cerberus-flag.jpg" alt="Cerberus"></p>
+<p>Thanks for setting up this year's r2CTF :)</p>
 </div>
 
     
@@ -450,10 +357,28 @@ io.interactive()
     
 
     
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
     
 
     <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
-    <h5>November 19, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
     
@@ -474,10 +399,9 @@ io.interactive()
     
 
     
-    
 
     <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5>October 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
@@ -489,26 +413,6 @@ io.interactive()
     
 
 </div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/post/r2wars-2019/">How Not To Suck At r2wars</a></h4>
-    <h5>October 1, 2019</h5>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2wars"><kbd class="item-tag">r2wars</kbd></a>
-    
-
-</div>
  
 
     <footer>
@@ -516,7 +420,7 @@ io.interactive()
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

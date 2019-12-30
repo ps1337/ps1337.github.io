@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Open Redirects In State Parameters</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/python.min.js"></script> 
+<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
+<script src="https://bananamafia.dev/js/json.min.js"></script> 
+<script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Open Redirects In State Parameters</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/openredirect/">Open Redirects In State Parameters</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/research"><kbd class="item-tag">research</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/web"><kbd class="item-tag">web</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>Now that the deadline to fix this vulnerability has passed, I've decided to publish this blog post that covers a web vulnerability I've found in the login mechanism of a particular company.</p>
+<p>Everything started when I had a look at a more complex part of a public web application of this vendor. The web application that gives out a link to the user that can be used to open up the same user state again at a later point. I've then opened this link from a private tab and examined the web requests in the Burp proxy.</p>
+<h1 id="the-vulnerability">The Vulnerability</h1>
+<p>One link looked particularly interesting, since it contains a <code>redirect_uri</code> parameter:</p>
+<pre><code>https://vulnerable.com/login.html?cl_id=[Some ID]&amp;redirect_uri=https:%2F%2Fwebapp.vulnerable.com%2Fyolo.html&amp;scope=auth&amp;state=ey[Base64]
+</code></pre><p>Parameters like that are often prone to <a href="https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">open redirect vulnerabilities</a> that allow attackers to redirect users to another site after they click on a prepared and allegedly trustworthy link. Some web applications don't check whether this particular parameter has been manipulated and blindly redirect users to the attacker-controlled website after performing a certain action, like performing a login.</p>
+<p>What happened is that in fact the <code>redirect_uri</code> parameter is being sanitized by the web application itself and was therefore not vulnerable to an open redirect attack. I've then decided to check out the <code>state</code> parameter that contains base64 encoded data. Here's the value of the decoded parameter:</p>
+<pre><code>{&quot;request&quot;:&quot;new&quot;,&quot;location&quot;:&quot;[somewhere at vulnerable.com]&quot;,&quot;scroll&quot;:&quot;0&quot;,&quot;configure&quot;:true,&quot;additionalParams&quot;:{},&quot;locale&quot;:&quot;&quot;}
+</code></pre><p>Well, what happens after manipulating the <code>location</code> parameter in the decoded JSON object and putting it back into the login URL?</p>
+<p>The web application redirects the user to the attacker-controlled website.</p>
+<p>Cool. This affects the central login mechanism of the public customer portal.</p>
+<h1 id="the-root-cause">The Root Cause</h1>
+<p>The redirect happens via JavaScript that's hosted at <a href="https://vulnerable.com/login/process.html:">https://vulnerable.com/login/process.html:</a></p>
+<pre><code>let URL = state.oldId ? `${state.location}?id=${state.oldId}` : `${state.location}`;
+[...]
+document.location.replace(URL)
+</code></pre><p>As can be seen, the redirect happens in the last line of the above listing after the correct URL has been read from the <code>state</code> parameter. No sanitation is present for this particular parameter, which should be fixed :)</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p><em>Pls don't sue</em></p>
+</div>
+
+    
+    
+
+    
+
+    <h4 class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/r2-pwndebian/">r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745, CVE-2019-16718)</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploit"><kbd class="item-tag">exploit</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/research"><kbd class="item-tag">research</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+ 
+
+    <footer>
+    <img style="width:42vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+</html>
+    
+
+</main>

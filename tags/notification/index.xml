@@ -17,8 +17,8 @@
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/telegram-notifications/</guid>
-      <description>If you ever wanted to get notified when certain things happen but didn&amp;rsquo;t find a lightweight solution &amp;ndash; here comes captain Telegram.
-Using a simple Telegram bot, it&amp;rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
+      <description>If you ever wanted to get notified when certain things happen but didn&#39;t find a lightweight solution &amp;ndash; here comes captain Telegram.
+Using a simple Telegram bot, it&#39;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
 Registering a bot First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</description>
     </item>
     

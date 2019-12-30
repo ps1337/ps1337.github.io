@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>reversing on BananaMafia</title>
+    <link>https://bananamafia.dev/tags/reversing/</link>
+    <description>Recent content in reversing on BananaMafia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 30 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://bananamafia.dev/tags/reversing/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>36C3 CTF Writeups</title>
+      <link>https://bananamafia.dev/post/36c3ctf/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/36c3ctf/</guid>
+      <description>1337 skills Task description:
+It’s too hard to gain all 1337 h4x0r skills required by nowadays CTFs ._.! I am glad a friendly hacker told me about an App he got during a (growth) hacking course. Sadly, he didn’t wrote down any activations codes.
+Ready for your hacking exam?
+ As can be read above, an Android app was given at the beginning of the challenge, with the hint to get a valid activation code for it.</description>
+    </item>
+    
+  </channel>
+</rss>

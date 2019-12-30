@@ -6,7 +6,7 @@
     <description>Recent content in ctf on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 13 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 30 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
     
@@ -21,12 +21,24 @@
     </item>
     
     <item>
+      <title>36C3 CTF Writeups</title>
+      <link>https://bananamafia.dev/post/36c3ctf/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/36c3ctf/</guid>
+      <description>1337 skills Task description:
+It’s too hard to gain all 1337 h4x0r skills required by nowadays CTFs ._.! I am glad a friendly hacker told me about an App he got during a (growth) hacking course. Sadly, he didn’t wrote down any activations codes.
+Ready for your hacking exam?
+ As can be read above, an Android app was given at the beginning of the challenge, with the hint to get a valid activation code for it.</description>
+    </item>
+    
+    <item>
       <title>Dynamic Instrumentation: Frida And r2frida For Noobs</title>
       <link>https://bananamafia.dev/post/r2frida-1/</link>
       <pubDate>Fri, 13 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2frida-1/</guid>
-      <description>One of my main takeaways from this year&amp;rsquo;s r2con is that Frida is cool and that r2frida, the integration with radare2, is even cooler. Using this, it&amp;rsquo;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of radare2. This is a small tutorial to get started with both Frida and r2frida that&amp;rsquo;s based on the r2xor challenge of the recent r2con CTF. Please note that this is not a complete writeup for r2xor.</description>
+      <description>One of my main takeaways from this year&#39;s r2con is that Frida is cool and that r2frida, the integration with radare2, is even cooler. Using this, it&#39;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of radare2. This is a small tutorial to get started with both Frida and r2frida that&#39;s based on the r2xor challenge of the recent r2con CTF. Please note that this is not a complete writeup for r2xor.</description>
     </item>
     
     <item>
@@ -35,7 +47,7 @@
       <pubDate>Mon, 02 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2ctf-2019/</guid>
-      <description>r2boy1 The first GameBoy challenge was rather easy. The idea was to talk to the Pancake character in-game in order to get the flag. The problem is that Pancake chills behind a wall. One possible solution was to glitch through the wall, however I&amp;rsquo;ve solved this using static analysis.
+      <description>r2boy1 The first GameBoy challenge was rather easy. The idea was to talk to the Pancake character in-game in order to get the flag. The problem is that Pancake chills behind a wall. One possible solution was to glitch through the wall, however I&#39;ve solved this using static analysis.
 Going through the strings and searching for a possible dialog yields interesting strings:
 [0x00054075]&amp;gt; izzq~pancake 0x54016 37 36 Find pancake\nthrough a game\nglitch!</description>
     </item>
@@ -46,7 +58,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/x64-rop-redpwn/</guid>
-      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&amp;rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&amp;rsquo;s using glibc.</description>
+      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&#39;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&#39;s using glibc.</description>
     </item>
     
     <item>
@@ -67,8 +79,9 @@ private static void Main(string[] args) { byte[] sourceArray = File.ReadAllBytes
       <pubDate>Sat, 24 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/php-deserialize-cccamp19/</guid>
-      <description>Deserialization is a vulnerability class that&amp;rsquo;s often overlooked. It&amp;rsquo;s great that this year&amp;rsquo;s CCCamp CTF included an interesting web based challenge that is based on this vulnerability class.
-The Target The challenge includes a link to a web service that allows converting user-supplied images into PDF files. Users can upload image files, add some additional HTML content in a textbox and render the whole thing into a PDF file:</description>
+      <description>Deserialization is a vulnerability class that&#39;s often overlooked. It&#39;s great that this year&#39;s CCCamp CTF included an interesting web based challenge that is based on this vulnerability class.
+The Target The challenge includes a link to a web service that allows converting user-supplied images into PDF files. Users can upload image files, add some additional HTML content in a textbox and render the whole thing into a PDF file:
+A ZIP file with the source code of the web application is also available.</description>
     </item>
     
     <item>
@@ -79,7 +92,7 @@ The Target The challenge includes a link to a web service that allows converting
       <guid>https://bananamafia.dev/post/cryptoctf-1-decodeme/</guid>
       <description>This is short writeup on the Decode Me challenge of the first CryptoCTF.
 The following string has to be decoded into a flag somehow:
-D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey xam lb lbaH  The first thing that comes to mind is that some sort of substitution cipher was being used in the first place. A cipher of this kind is the Caesar cipher which is also known as ROT. Fiddling around with this cipher and a key of 7 yields:</description>
+D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey xam lb lbaH The first thing that comes to mind is that some sort of substitution cipher was being used in the first place. A cipher of this kind is the Caesar cipher which is also known as ROT. Fiddling around with this cipher and a key of 7 yields:</description>
     </item>
     
     <item>
@@ -89,7 +102,7 @@ D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey
       
       <guid>https://bananamafia.dev/post/binary-canary-bruteforce/</guid>
       <description>And now for something more CTF-y: Dealing with stack canaries by brute-forcing their value byte by byte.
-How Stack Canaries Work If you&amp;rsquo;ve ever read the error message *** stack smashing detected ***: &amp;lt;...&amp;gt; terminated, you&amp;rsquo;ve already encountered stack canaries in action. They are being used to detect and stop buffer overflows by placing a per-process randomized value between the local variables and the saved return address. If an attacker somehow manages to write across the boundary of a buffer in order to overwrite the saved return address, he will also overwrite the canary.</description>
+How Stack Canaries Work If you&#39;ve ever read the error message *** stack smashing detected ***: &amp;lt;...&amp;gt; terminated, you&#39;ve already encountered stack canaries in action. They are being used to detect and stop buffer overflows by placing a per-process randomized value between the local variables and the saved return address. If an attacker somehow manages to write across the boundary of a buffer in order to overwrite the saved return address, he will also overwrite the canary.</description>
     </item>
     
   </channel>

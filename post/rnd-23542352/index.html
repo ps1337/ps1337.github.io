@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/rnd-23542352/">Random Note #23542351: Using the GitHub API to improve Dockerfiles</a></h4>
-    <h5>March 20, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -177,14 +176,10 @@
 
     <br>
     <div class="content-width text-justify"><p>When writing Dockerfiles, people often use something like this to download and install software from GitHub:</p>
-
 <pre><code>ENV SOFTWARE_VERSION 1.33.7
 RUN curl -sSL \
     https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb
-</code></pre>
-
-<p>This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:</p>
-
+</code></pre><p>This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:</p>
 <pre><code>curl -sSL \
    $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \
    grep &quot;browser_download_url&quot; | \
@@ -193,10 +188,7 @@ RUN curl -sSL \
    tr --delete \&quot; | \
    tr --delete &quot; &quot;) \
 -o /tmp/software-amd64.deb \
-</code></pre>
-
-<p>As you can see, the endpoint at <code>https://api.github.com/repos/user/repo/releases/latest</code> returns a JSON object which contains the download links for the newest release for each maintained architecture (along with some additional stuff maybe). For example, let&rsquo;s have a look at <a href="https://github.com/atom/atom/">Atom</a>:</p>
-
+</code></pre><p>As you can see, the endpoint at <code>https://api.github.com/repos/user/repo/releases/latest</code> returns a JSON object which contains the download links for the newest release for each maintained architecture (along with some additional stuff maybe). For example, let's have a look at <a href="https://github.com/atom/atom/">Atom</a>:</p>
 <pre><code>&quot;browser_download_url&quot;:
     &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-1.25.0-full.nupkg&quot;
 &quot;browser_download_url&quot;:
@@ -219,9 +211,7 @@ RUN curl -sSL \
     &quot;https://github.com/atom/atom/releases/download/v1.25.0/AtomSetup-x64.exe&quot;
 &quot;browser_download_url&quot;:
     &quot;https://github.com/atom/atom/releases/download/v1.25.0/AtomSetup.exe&quot;
-</code></pre>
-
-<p>This can be parsed with <code>grep</code> and <code>tr</code> like above or <a href="https://starkandwayne.com/blog/how-to-download-the-latest-release-from-github/">by using jq</a>.</p>
+</code></pre><p>This can be parsed with <code>grep</code> and <code>tr</code> like above or <a href="https://starkandwayne.com/blog/how-to-download-the-latest-release-from-github/">by using jq</a>.</p>
 </div>
 
     
@@ -238,10 +228,9 @@ RUN curl -sSL \
     
 
     
-    
 
     <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
-    <h5>January 4, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -256,10 +245,9 @@ RUN curl -sSL \
     
 
     
-    
 
     <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
-    <h5>October 26, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -278,10 +266,9 @@ RUN curl -sSL \
     
 
     
-    
 
     <h4><a href="/post/rnd-632424-2fa-backup/">Random Note #632424: Backup Google Authenticator Data</a></h4>
-    <h5>June 20, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -296,7 +283,7 @@ RUN curl -sSL \
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

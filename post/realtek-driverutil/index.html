@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/realtek-driverutil/">Exploiting Unqoted Service Paths For Fun and No Profit</a></h4>
-    <h5>March 15, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/exploit"><kbd class="item-tag">exploit</kbd></a>
     
@@ -178,25 +177,16 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version <code>1030.6</code>). Note that the <a href="https://www.alfa.com.tw/files/?dir=USB%20Driver/Windows/AWUS036AC">download link</a> points to <code>alfa.com</code> but the driver utility itself says it&rsquo;s developed by REALTEK.</p>
-
+    <div class="content-width text-justify"><p>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version <code>1030.6</code>). Note that the <a href="https://www.alfa.com.tw/files/?dir=USB%20Driver/Windows/AWUS036AC">download link</a> points to <code>alfa.com</code> but the driver utility itself says it's developed by REALTEK.</p>
 <h1 id="the-vulnerability">The vulnerability</h1>
-
 <p>Upon installing the driver utility, two vulnerable services get installed. This can be checked using the following <a href="https://www.commonexploits.com/unquoted-service-paths/">command</a>:</p>
-
 <pre><code>C:\Users\ps&gt;wmic service get name,displayname,pathname,startmode |findstr /i &quot;auto&quot; |findstr /i /v &quot;c:\windows\\&quot; |findstr /i /v &quot;&quot;&quot;
 
 Realtek DHCP Service | RTLDHCPService | C:\Program Files (x86)\REALTEK\USB Wireless LAN Utility\RTLDHCP.exe
 
 RealtekWlanU         | RealtekWlanU   | C:\Program Files (x86)\REALTEK\USB Wireless LAN Utility\RtlService.exe
-</code></pre>
-
-<p>This means, that the service paths of both services, called <code>Realtek DHCP Service</code> and <code>RealtekWlanU</code>, contain spaces and are <strong>not</strong> quoted using <code>&quot;</code>. Therefore, they are vulnerable to this kind of attack.</p>
-
+</code></pre><p>This means, that the service paths of both services, called <code>Realtek DHCP Service</code> and <code>RealtekWlanU</code>, contain spaces and are <strong>not</strong> quoted using <code>&quot;</code>. Therefore, they are vulnerable to this kind of attack.</p>
 <p>A quick C++ <a href="https://github.com/ps1337/getuser">PoC</a> that logs the username of the user that executes a certain <code>.exe</code> file looks like this:</p>
-
 <pre><code>char username[UNLEN+1];
 DWORD username_len = UNLEN+1;
 GetUserName(username, &amp;username_len);
@@ -204,28 +194,16 @@ GetUserName(username, &amp;username_len);
 std::ofstream outfile;
 outfile.open(&quot;C:\\Users\\Public\\userlog.txt&quot;, std::ios_base::app);
 outfile &lt;&lt; username &lt;&lt; std::endl;
-</code></pre>
-
-<p>When executed as a regular user, the binary outputs <code>ps</code>, being a regular user account.</p>
-
+</code></pre><p>When executed as a regular user, the binary outputs <code>ps</code>, being a regular user account.</p>
 <h1 id="the-exploit">The Exploit</h1>
-
 <p>Both service paths share the common string <code>C:\Program Files (x86)\REALTEK\USB Wireless LAN Utility</code>. Note that the substring <code>USB Wireless LAN Utility</code> contains spaces, which is a part of the vulnerability. Exploiting this works by placing a malicious file called <code>USB.exe</code> into <code>C:\Program Files (x86)\REALTEK</code>, making the full path <code>C:\Program Files (x86)\REALTEK\USB.exe</code>. Please not that this can only be performed by administrators <strong>in this case</strong>. So this will get you a privilege ecscalation from <code>Administrator</code> to <code>SYSTEM</code> ¯\<em>(ツ)</em>/¯. The binary supplied by an attacker will be executed as <code>SYSTEM</code> upon restarting the system. This can be seen for both vulnerable services in the log file:</p>
-
 <pre><code>SYSTEM
 SYSTEM
-</code></pre>
-
-<h1 id="the-cause">The cause</h1>
-
+</code></pre><h1 id="the-cause">The cause</h1>
 <p>The string which specifies the service path needs to be quoted to prevent this, as seen in <a href="https://www.commonexploits.com/unquoted-service-paths/">this example</a></p>
-
 <h1 id="additional-note">Additional note</h1>
-
 <p>While quickly testing this for multiple driver utilities by REALTEK, all tested packages seemed to be &ldquo;vulnerable&rdquo;.</p>
-
 <h1 id="credits">Credits</h1>
-
 <ul>
 <li><a href="https://www.commonexploits.com/unquoted-service-paths/">Common Exploits</a> for the cmd command.</li>
 </ul>
@@ -245,10 +223,9 @@ SYSTEM
     
 
     
-    
 
-    <h4><a href="/post/r2-pwndebian/">r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745)</a></h4>
-    <h5>July 30, 2019</h5>
+    <h4><a href="/post/r2-pwndebian/">r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745, CVE-2019-16718)</a></h4>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
     
@@ -262,6 +239,8 @@ SYSTEM
     
     <a href="https://bananamafia.dev/tags/cve"><kbd class="item-tag">cve</kbd></a>
     
+    <a href="https://bananamafia.dev/tags/research"><kbd class="item-tag">research</kbd></a>
+    
 
 </div>
   <div class="item">
@@ -271,10 +250,9 @@ SYSTEM
     
 
     
-    
 
     <h4><a href="/post/write-diary/">Auditing WriteDiary.com</a></h4>
-    <h5>October 27, 2017</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/android"><kbd class="item-tag">android</kbd></a>
     
@@ -289,7 +267,7 @@ SYSTEM
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/cvar-hax/">Runtime Function Patching</a></h4>
-    <h5>August 16, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
     
@@ -180,40 +179,22 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>When it comes to patching certain functions of a binary on ASM level, it&rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.</p>
-
+    <div class="content-width text-justify"><p>When it comes to patching certain functions of a binary on ASM level, it's often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.</p>
 <h1 id="the-target">The Target</h1>
-
-<p>This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles. Using these settings would bring an advantage over clients not being able to use them, hence the protection mechanism. However, it would be convenient to use these settings anyway and remove the protection mechanism on the client side &ndash; that&rsquo;s what function patching is being used for.</p>
-
+<p>This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles. Using these settings would bring an advantage over clients not being able to use them, hence the protection mechanism. However, it would be convenient to use these settings anyway and remove the protection mechanism on the client side &ndash; that's what function patching is being used for.</p>
 <h1 id="looking-for-the-code">Looking for the Code</h1>
-
-<p>The first step is to locate the code segment which is being used to implement the client side protection. An easy way to do this is to search for error messages. There&rsquo;s an error message being displayed in case a client tries to use an illegal CVar which would remove all shadows from the current map:</p>
-
-<p><img src="/img/cvar-hax/cvar-hax-cmd-before.jpg" alt="Error message" /></p>
-
+<p>The first step is to locate the code segment which is being used to implement the client side protection. An easy way to do this is to search for error messages. There's an error message being displayed in case a client tries to use an illegal CVar which would remove all shadows from the current map:</p>
+<p><img src="/img/cvar-hax/cvar-hax-cmd-before.jpg" alt="Error message"></p>
 <p>This can be used to locate the relevant code segment in IDA:</p>
-
-<p><img src="/img/cvar-hax/cvar-hax-search.jpg" alt="IDA String search" /></p>
-
+<p><img src="/img/cvar-hax/cvar-hax-search.jpg" alt="IDA String search"></p>
 <p>Navigate to the machine code by clicking on the cross reference (XRef) of the first search result:</p>
-
-<p><img src="/img/cvar-hax/cvar-hax-xref.jpg" alt="IDA Xref" /></p>
-
+<p><img src="/img/cvar-hax/cvar-hax-xref.jpg" alt="IDA Xref"></p>
 <p>The code in this particular segment prevents the usage of illegal CVar settings and values by <code>call</code>ing an error handling method based on a <code>cmp</code> operation resulting in a conditional jump:</p>
-
-<p><img src="/img/cvar-hax/cvar-hax-before-patching.jpg" alt="Conditional Jump" /></p>
-
-<p>Observing the code on runtime suggests that to remove the protection, it&rsquo;s enough to <em>always</em> perform the conditional jump &ndash; making it a <code>jmp</code> instead of a <code>jnz</code> to skip the error handling. This can also be seen in the corresponding graph view:</p>
-
-<p><img src="/img/cvar-hax/cvar-hax-graph-before.jpg" alt="Conditional Jump" /></p>
-
+<p><img src="/img/cvar-hax/cvar-hax-before-patching.jpg" alt="Conditional Jump"></p>
+<p>Observing the code on runtime suggests that to remove the protection, it's enough to <em>always</em> perform the conditional jump &ndash; making it a <code>jmp</code> instead of a <code>jnz</code> to skip the error handling. This can also be seen in the corresponding graph view:</p>
+<p><img src="/img/cvar-hax/cvar-hax-graph-before.jpg" alt="Conditional Jump"></p>
 <p>Checking the hex view of the conditional shows that the <code>jnz</code> has opcode <code>75</code> (<code>jnz</code> rel 8). This results in the requirement of patching exactly one byte - making it a <code>jmp</code> (rel 8) with <a href="https://c9x.me/x86/html/file_module_x86_id_147.html">opcode</a> <code>EB</code>.</p>
-
 <p>Now this could be patched directly in the binary but it would be way more elegant to patch it in the memory after executing the binary. This is what the Windows API method <code>WriteProcessMemory</code> can be used for. You can see this implemented in <a href="https://github.com/ps1337/q3CvarUnlocker/blob/master/cvarUnlocker.cpp">this</a> proof of concept. Take note of the following things:</p>
-
 <ul>
 <li><code>ADDR</code> holds the memory address of the <code>jnz</code> call, which was obtained via the IDA hex view. This operation uses two bytes: One for the operation and one for the destination address. For this hack, only the operation code has to be patched</li>
 <li><code>CreateToolhelp32Snapshot</code> is being used to map the required process ID (PID) to the executable file name</li>
@@ -221,15 +202,10 @@
 <li>The target process gets halted with <code>DebugActiveProcess</code> to prevent side effects when hot-patching</li>
 <li><code>WriteProcessMemory</code> takes care of all memory protection issues, so no <code>VirtualProtect</code> is required</li>
 </ul>
-
 <p>After executing the code, the graph view in memory looks like this, making the error handling code unreachable:</p>
-
-<p><img src="/img/cvar-hax/cvar-hax-graph-after.jpg" alt="View After Removing the Protection" /></p>
-
-<p>Let&rsquo;s verify the memory patching worked by using an illegal CVar:</p>
-
-<p><img src="/img/cvar-hax/cvar-hax-cmd-after.jpg" alt="Using an Illegal CVar" /></p>
-
+<p><img src="/img/cvar-hax/cvar-hax-graph-after.jpg" alt="View After Removing the Protection"></p>
+<p>Let's verify the memory patching worked by using an illegal CVar:</p>
+<p><img src="/img/cvar-hax/cvar-hax-cmd-after.jpg" alt="Using an Illegal CVar"></p>
 <p>This hack could now be distributed as executable file, making it possible to use it in combination with other modifications which work in-memory.</p>
 </div>
 
@@ -247,10 +223,9 @@
     
 
     
-    
 
     <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5>October 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
@@ -269,10 +244,9 @@
     
 
     
-    
 
     <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
-    <h5>September 13, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
@@ -295,10 +269,9 @@
     
 
     
-    
 
     <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
-    <h5>September 2, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
     
@@ -317,7 +290,7 @@
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

@@ -17,8 +17,8 @@
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/realtek-driverutil/</guid>
-      <description>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version 1030.6). Note that the download link points to alfa.com but the driver utility itself says it&amp;rsquo;s developed by REALTEK.
-The vulnerability Upon installing the driver utility, two vulnerable services get installed.</description>
+      <description>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version 1030.6). Note that the download link points to alfa.com but the driver utility itself says it&#39;s developed by REALTEK.
+The vulnerability Upon installing the driver utility, two vulnerable services get installed. This can be checked using the following command:</description>
     </item>
     
   </channel>

@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
-    <h5>May 18, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -178,74 +177,46 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>Use Docker to run GUI applications they said.</p>
-
+    <div class="content-width text-justify"><p>Use Docker to run GUI applications they said.</p>
 <p>Mount the X11 socket they said.</p>
-
 <p>Allow other users to access your X session they said.</p>
-
 <p>This post covers Docker container breakouts by abusing bad security practices related to the X11 socket.</p>
-
 <h1 id="the-problem">The problem</h1>
-
 <p>To display windows spawned through a Docker container, people often launch containers following these steps:</p>
-
 <ul>
 <li>Use <code>-e DISPLAY=$DISPLAY</code> to share the display variable value</li>
 <li>Specifying <code>-v /tmp/.X11-unix:/tmp/.X11-unix:ro</code> shares the X11 socket - optionally as read only.</li>
-<li>&ldquo;I can&rsquo;t see the window, let&rsquo;s <a href="https://bing.com">google</a>&hellip;&rdquo;</li>
-<li>&ldquo;Let&rsquo;s just execute <code>xhost +local:root</code> and it works!&rdquo;</li>
+<li>&ldquo;I can't see the window, let's <a href="https://bing.com">google</a>&hellip;&rdquo;</li>
+<li>&ldquo;Let's just execute <code>xhost +local:root</code> and it works!&rdquo;</li>
 </ul>
-
-<p>The X11 socket is mounted as read only - it&rsquo;s secure right?</p>
-
-<h1 id="the-breakout-s">The breakout(s)</h1>
-
+<p>The X11 socket is mounted as read only - it's secure right?</p>
+<h1 id="the-breakouts">The breakout(s)</h1>
 <p>These attacks can be performed after gaining access to a Docker container:</p>
-
 <h2 id="reading-window-information">Reading Window Information</h2>
-
-<p>With <code>xwininfo -root -tree</code> it&rsquo;s possible to check which windows are opened on the host system, including the window titles:</p>
-
+<p>With <code>xwininfo -root -tree</code> it's possible to check which windows are opened on the host system, including the window titles:</p>
 <pre><code>[...]
 0xredacted &quot;[i3 con] container around 0xredacted&quot;: (&quot;i3-frame&quot; &quot;i3-frame&quot;) [...]
         1 child:
         0xredacted &quot;Write: super secret thing&quot;: (&quot;Msgcompose&quot; &quot;Thunderbird&quot;) [...]
 [...]
-</code></pre>
-
-<h2 id="taking-screenshots">Taking screenshots</h2>
-
+</code></pre><h2 id="taking-screenshots">Taking screenshots</h2>
 <p>The command <code>xwd -root -screen &gt; screenshot.xwd &amp;&amp; convert screenshot.xwd screenshot.png</code> can be used to create a screenshot of the hosts display which makes it possible to watch every action a user performs on the system.</p>
-
 <h2 id="keylogging">Keylogging</h2>
-
-<p>By mounting the X11 socket into the container a user doesn&rsquo;t just mount the display. Additionally they keyboard also gets shared, so to say. With this, it&rsquo;s possible to log all keystrokes. There may be better tools for this, but during tests <a href="https://github.com/unixdj/xkey">xkey</a> seemed to perform very reliable. Using <code>xkey</code> it&rsquo;s possible to perform a specific action in case a previously defined key gets hit.</p>
-
+<p>By mounting the X11 socket into the container a user doesn't just mount the display. Additionally they keyboard also gets shared, so to say. With this, it's possible to log all keystrokes. There may be better tools for this, but during tests <a href="https://github.com/unixdj/xkey">xkey</a> seemed to perform very reliable. Using <code>xkey</code> it's possible to perform a specific action in case a previously defined key gets hit.</p>
 <h2 id="getting-a-shell">Getting a shell</h2>
-
-<p>Although it&rsquo;s not very stealthy, this method allows getting a shell on the host system. This works by sending keystrokes to the X server in order to open a terminal and execute commands:</p>
-
+<p>Although it's not very stealthy, this method allows getting a shell on the host system. This works by sending keystrokes to the X server in order to open a terminal and execute commands:</p>
 <pre><code>xdotool key &lt;Shortcut to open a terminal&gt;
 xdotool type 'xterm'
 xdotool key Return
 xdotool type --delay 50 '&lt;Desired reverse or bind shell command&gt;'
 xdotool key Return
-</code></pre>
-
-<p><img src="/img/docker-breakout/thisisfine.gif" alt="This is fine" /></p>
-
+</code></pre><p><img src="/img/docker-breakout/thisisfine.gif" alt="This is fine"></p>
 <h1 id="the-mitigation">The mitigation</h1>
-
 <ul>
-<li><a href="https://stackoverflow.com/questions/16296753/can-you-run-gui-apps-in-a-docker-container">Use XAuthority</a> and don&rsquo;t use the root user to spawn an X application.</li>
+<li><a href="https://stackoverflow.com/questions/16296753/can-you-run-gui-apps-in-a-docker-container">Use XAuthority</a> and don't use the root user to spawn an X application.</li>
 <li>Check <a href="https://github.com/mviereck/x11docker">x11docker</a> which basically creates a new X server for isolation purposes.</li>
 </ul>
-
 <h1 id="resources">Resources</h1>
-
 <ul>
 <li><a href="https://zachgrace.com/training/X11.html">X11 Hacking</a></li>
 </ul>
@@ -265,10 +236,9 @@ xdotool key Return
     
 
     
-    
 
     <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
-    <h5>January 4, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -283,10 +253,9 @@ xdotool key Return
     
 
     
-    
 
     <h4><a href="/post/shell-upgrade/">Methods to Upgrade nc Reverse Shells</a></h4>
-    <h5>May 16, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
     
@@ -301,10 +270,9 @@ xdotool key Return
     
 
     
-    
 
     <h4><a href="/post/python-hax/">2 Common Python Security Issues</a></h4>
-    <h5>May 13, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
     
@@ -319,7 +287,7 @@ xdotool key Return
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

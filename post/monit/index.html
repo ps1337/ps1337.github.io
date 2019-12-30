@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/monit/">Monitor All the Things using Docker and Monit</a></h4>
-    <h5>March 16, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -176,12 +175,9 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&rsquo;ve created a <a href="https://hub.docker.com/r/ps1337/monit-docker/">Dockerfile and image for Monit</a> for this.</p>
-
+    <div class="content-width text-justify"><p>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I've created a <a href="https://hub.docker.com/r/ps1337/monit-docker/">Dockerfile and image for Monit</a> for this.</p>
 <p><a href="https://mmonit.com/monit/">Monit</a> is extremely configurable and allows a maximum of flexibility when it comes to monitoring.</p>
-
 <p>Initially, a configuration file is required to get started. To get one, call</p>
-
 <pre><code>docker run \
    -d \
    --name=monit \
@@ -191,12 +187,8 @@
    --entrypoint monit ps1337/monit-docker -I &amp;&amp; \
 docker exec -it monit bash -c &quot;cat /etc/monitrc&quot; &amp;&amp; \
 docker rm -f monit
-</code></pre>
-
-<p>and save the output to <code>monitrc</code>.</p>
-
+</code></pre><p>and save the output to <code>monitrc</code>.</p>
 <p>To finally monitor services on a machine, you can use this command:</p>
-
 <pre><code>docker run \
    -d \
    --name=monit \
@@ -205,26 +197,18 @@ docker rm -f monit
    --expose 2812 \
    -p 127.0.0.1:2812:2812 \
    ps1337/monit:latest
-</code></pre>
-
-<p>This runs Monit on <code>localhost</code> for security reasons - change this if required.</p>
-
+</code></pre><p>This runs Monit on <code>localhost</code> for security reasons - change this if required.</p>
 <p>After doing the initial setup, one can start monitoring for example</p>
-
 <ul>
 <li>Remote services</li>
 <li>Local containers using <code>--link &lt;ContainerName&gt;</code></li>
 <li>System load</li>
 </ul>
-
 <p>You can then refer to the <a href="https://mmonit.com/monit/documentation/monit.html">Monit manual</a> for information on adding hosts to monitor.</p>
-
 <p>One helpful option to use is <code>exec</code>, which executes shell scripts in case a service fails:</p>
-
 <pre><code>check host yolo with address yolo.party
   if (failed port 80 protocol http with timeout 15 s) retry 5 then exec &quot;/opt/scripts/telegramNotification.sh 'FAIL'&quot;
-</code></pre>
-</div>
+</code></pre></div>
 
     
     
@@ -240,10 +224,9 @@ docker rm -f monit
     
 
     
-    
 
     <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
-    <h5>January 4, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -258,10 +241,9 @@ docker rm -f monit
     
 
     
-    
 
     <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
-    <h5>May 18, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -278,10 +260,9 @@ docker rm -f monit
     
 
     
-    
 
     <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
-    <h5>April 10, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -304,7 +285,7 @@ docker rm -f monit
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

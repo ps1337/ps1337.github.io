@@ -18,7 +18,7 @@
       
       <guid>https://bananamafia.dev/post/write-diary/</guid>
       <description>WriteDiary consists of a webapp and an Android app (version 4.72). For the audit, the android app was the primary target.
-The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&amp;rsquo;t described here. However, no response has been received. This is bad, as you will see in the first finding:</description>
+The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&#39;t described here. However, no response has been received. This is bad, as you will see in the first finding:</description>
     </item>
     
   </channel>

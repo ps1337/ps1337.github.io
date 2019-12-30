@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/mserver-crack/">Cracking Music Server Software</a></h4>
-    <h5>May 13, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/cracking"><kbd class="item-tag">cracking</kbd></a>
     
@@ -176,52 +175,33 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<h1 id="tl-dr">tl;dr</h1>
-
+    <div class="content-width text-justify"><h1 id="tldr">tl;dr</h1>
 <p>Generating licenses using <code>MD5(email)</code> is bad.</p>
-
 <p>Validating licenses using HTTP in plain text is bad.</p>
-
 <h1 id="the-software">The Software</h1>
-
-<p>This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&rsquo;t be disclosed.</p>
-
+<p>This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won't be disclosed.</p>
 <h1 id="source-code">Source Code</h1>
-
 <p>The server application consists of a software package written in java. This means that decompilation can easily be performed using <code>jd-gui</code> or similar tools. Afterwards simple <code>grep</code>ing for <code>license</code> yields these interesting methods:</p>
-
 <ul>
 <li><code>void validateLicense()</code></li>
 <li><code>boolean isLicenseValid(String email, String license)</code></li>
 </ul>
-
 <p>Further analysis shows that licensed are validated in two steps:</p>
-
 <ol>
 <li>Local checks using <code>isLicenseValid(String email, String license)</code></li>
-<li>Server side checks using <code>validateLicense()</code>`</li>
+<li>Server side checks using `validateLicense()``</li>
 </ol>
-
 <h1 id="local-checks">Local Checks</h1>
-
 <p>After digging into the source code, this code snippet has been identified to be responsible for local license checks:</p>
-
 <pre><code>public boolean isLicenseValid(String email, String license) {
    if ((email == null) || (license == null)) {
       return false;
    }
    return license.equalsIgnoreCase(StringUtil.md5Hex(email.toLowerCase()));
 }
-</code></pre>
-
-<p>That&rsquo;s right: All licensed issued are basically <code>MD5(email)</code>. Bypassing this check is done by generating a MD5 hash of a random email address. This also means that you can hijack another persons license only by knowing his/her email address.</p>
-
+</code></pre><p>That's right: All licensed issued are basically <code>MD5(email)</code>. Bypassing this check is done by generating a MD5 hash of a random email address. This also means that you can hijack another persons license only by knowing his/her email address.</p>
 <h1 id="remote-checks">Remote Checks</h1>
-
-<p>Bypassing local checks is easily possible - not let&rsquo;s have a look at the API call which triggers server side checks:</p>
-
+<p>Bypassing local checks is easily possible - not let's have a look at the API call which triggers server side checks:</p>
 <pre><code>private void validateLicense() {
    String email = getLicenseEmail();
    Date date = getLicenseDate();
@@ -248,11 +228,8 @@
       LOG.warn(&quot;Failed to validate license.&quot;, x);
    }
 }
-</code></pre>
-
-<p>To bypass the second validation stage, one could perform an easy attack: Redirecting <code>domain</code> locally to an attacker provided server which always returns the string <code>true</code>. However, another approach seemed to require even less work.</p>
-
-<p>By spawning a docker container with the name <code>domain</code> and linking it to the application server, this check seemed to be bypassed. This step basically redirects <code>domain</code> to a non existing server which tricks the validation process into being successfull all the time. Most likely this is intended behaviour because people don&rsquo;t need an internet connection to validate licenses.</p>
+</code></pre><p>To bypass the second validation stage, one could perform an easy attack: Redirecting <code>domain</code> locally to an attacker provided server which always returns the string <code>true</code>. However, another approach seemed to require even less work.</p>
+<p>By spawning a docker container with the name <code>domain</code> and linking it to the application server, this check seemed to be bypassed. This step basically redirects <code>domain</code> to a non existing server which tricks the validation process into being successfull all the time. Most likely this is intended behaviour because people don't need an internet connection to validate licenses.</p>
 </div>
 
     
@@ -269,10 +246,9 @@
     
 
     
-    
 
     <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5>October 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
@@ -291,10 +267,9 @@
     
 
     
-    
 
     <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
-    <h5>September 13, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
@@ -317,10 +292,9 @@
     
 
     
-    
 
     <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
-    <h5>September 2, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
     
@@ -339,7 +313,7 @@
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

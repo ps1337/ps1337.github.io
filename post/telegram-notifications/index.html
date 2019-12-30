@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/telegram-notifications/">Universal Notifications Using Telegram and cURL</a></h4>
-    <h5>March 7, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
     
@@ -180,38 +179,26 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>If you ever wanted to get notified when certain things happen but didn&rsquo;t find a lightweight solution &ndash; here comes captain Telegram.</p>
-
-<p>Using a simple Telegram bot, it&rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is <code>curl</code> installed.</p>
-
+    <div class="content-width text-justify"><p>If you ever wanted to get notified when certain things happen but didn't find a lightweight solution &ndash; here comes captain Telegram.</p>
+<p>Using a simple Telegram bot, it's possible to send notifications to your mobile phone or browser. All the notifier node needs is <code>curl</code> installed.</p>
 <h1 id="registering-a-bot">Registering a bot</h1>
-
 <p>First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</p>
-
 <ul>
 <li>Using your Telegram client, send a message to <code>@BotFather</code> with the command <code>/newbot</code> and follow the instructions.</li>
 <li>Note the bot token you receive after successfully registering the bot.</li>
 <li>Message your bot with a simple message like <code>/start</code> or <code>/test</code>.</li>
 <li>Use <code>curl -i -X GET https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/getUpdates</code> to get the chat ID of the chat you created in the previous chat.</li>
 </ul>
-
 <h1 id="sending-messages">Sending messages</h1>
-
-<p>Now, you should have to following things:
-- Bot API token
-- Chat ID of the chat between you and your newly created bot.</p>
-
-<p>To send a message, it&rsquo;s as simple as using the following command structure</p>
-
+<p>Now, you should have to following things:</p>
+<ul>
+<li>Bot API token</li>
+<li>Chat ID of the chat between you and your newly created bot.</li>
+</ul>
+<p>To send a message, it's as simple as using the following command structure</p>
 <pre><code>curl -i -X GET &quot;https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/sendMessage?chat_id=&lt;CHAT_ID&gt;&amp;text=hello&quot;
-</code></pre>
-
-<h1 id="example-1-jenkins-build-notifications">Example 1: Jenkins build notifications</h1>
-
+</code></pre><h1 id="example-1-jenkins-build-notifications">Example 1: Jenkins build notifications</h1>
 <p>In order to get notified in case a Jenkins build succeeds or fails, you can edit the <code>Jenkinsfile</code> as follows</p>
-
 <pre><code>try {
    // Build steps
 }
@@ -220,21 +207,14 @@ catch(error) {
    error &quot;Exception occurred, aborting&quot;
 }
 // Send Telegram message: Success
-</code></pre>
-
-<h1 id="example-2-travis-notifications">Example 2: Travis notifications</h1>
-
+</code></pre><h1 id="example-2-travis-notifications">Example 2: Travis notifications</h1>
 <p>If you use <a href="https://www.travis-ci.org">Travis CI</a> to build your projects after pushing to GitHub, notifications can be implemented by editing the <code>.travis.yml</code> file:</p>
-
 <pre><code>after_success:
   - curl -iX GET &quot;https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$CHATID&amp;text=Build OK&quot; 2&gt;&amp;1 &gt;/dev/null
 
 after_failure:
   - curl -iX GET &quot;https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$CHATID&amp;text=Build failed&quot; 2&gt;&amp;1 &gt;/dev/null
-</code></pre>
-
-<p>Two things are important here:</p>
-
+</code></pre><p>Two things are important here:</p>
 <ol>
 <li>Redirect the output to <code>/dev/null</code> in order to prevent the chat ID from being logged into the public build log.</li>
 <li>Add your secrets (<code>$TOKEN</code> and <code>$CHATID</code>) to the repository specific settings in Travis to populate the used environment variables in a secure manner.</li>
@@ -255,10 +235,9 @@ after_failure:
     
 
     
-    
 
     <h4><a href="/post/shell-upgrade/">Methods to Upgrade nc Reverse Shells</a></h4>
-    <h5>May 16, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
     
@@ -273,10 +252,9 @@ after_failure:
     
 
     
-    
 
     <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
-    <h5>April 10, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -299,10 +277,9 @@ after_failure:
     
 
     
-    
 
     <h4><a href="/post/dotfile-shellcheck/">Using Shellcheck and Docker to Automatically Lint Dotfiles</a></h4>
-    <h5>March 8, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
     
@@ -321,7 +298,7 @@ after_failure:
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/docker-borg/">Easy and Secure Backups Using Borg and Docker</a></h4>
-    <h5>March 14, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -176,16 +175,10 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p><a href="https://www.borgbackup.org/">BorgBackup</a> is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.</p>
-
+    <div class="content-width text-justify"><p><a href="https://www.borgbackup.org/">BorgBackup</a> is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.</p>
 <h1 id="getting-started">Getting started</h1>
-
-<p>I&rsquo;ve created a <a href="https://github.com/ps1337/borg-docker/blob/master/Dockerfile">Dockerfile</a> based on Alpine Linux which is also available on <a href="https://hub.docker.com/r/ps1337/borg-docker/">DockerHub</a>. It gets built weekly to always stay up to date.</p>
-
+<p>I've created a <a href="https://github.com/ps1337/borg-docker/blob/master/Dockerfile">Dockerfile</a> based on Alpine Linux which is also available on <a href="https://hub.docker.com/r/ps1337/borg-docker/">DockerHub</a>. It gets built weekly to always stay up to date.</p>
 <p>This <code>Makefile</code> can be used to quickly get started using a containerized version of Borg:</p>
-
 <pre><code>SHELL := /bin/bash
 VERSION ?= latest
 
@@ -229,24 +222,15 @@ remove: ## Remove a (running) container
 remove-image-force: ## Remove the latest image (forced)
 	docker rmi -f $(IMAGE_NAME):$(VERSION)
 
-</code></pre>
-
-<p>This <code>docker run</code> call mounts two things:</p>
-
+</code></pre><p>This <code>docker run</code> call mounts two things:</p>
 <ol>
 <li><code>./dir</code> to persistently store the backup data on the container host</li>
 <li><code>./authorized_keys</code> to perform authentication with the OpenSSH server of borg. You have to provide this file to get started.</li>
 </ol>
-
 <h1 id="creating-repositories-and-backups">Creating repositories and backups</h1>
-
 <p>To create a borg backup repository using a specified SSH private key, use</p>
-
 <pre><code>BORG_RSH='ssh -i &lt;/path/to/private/key&gt;' borg init -e repokey &lt;ssh://borg@yourDomain:exposedPort/var/backups/borg/repoName&gt;
-</code></pre>
-
-<p>For each backup repository, you can create a borg backup script like this:</p>
-
+</code></pre><p>For each backup repository, you can create a borg backup script like this:</p>
 <pre><code>#!/bin/sh
 
 export BORG_RSH='&lt;ssh -i /path/to/private/key&gt;'
@@ -321,19 +305,13 @@ fi
 
 exit ${backup_exit}
 
-</code></pre>
-
-<p>This script can be called daily or using a cronjob.</p>
-
+</code></pre><p>This script can be called daily or using a cronjob.</p>
 <p>After creating a few backups, the results can look like this:</p>
-
 <pre><code>                       Original size      Compressed size    Deduplicated size
 This archive:               75.24 GB             61.03 GB             53.69 GB
 All archives:              100.14 GB             84.17 GB             53.69 GB
 
-</code></pre>
-
-<p>Note the deduplicated size vs. original size, showing the amount of space that&rsquo;s possible to save using borg.</p>
+</code></pre><p>Note the deduplicated size vs. original size, showing the amount of space that's possible to save using borg.</p>
 </div>
 
     
@@ -350,10 +328,9 @@ All archives:              100.14 GB             84.17 GB             53.69 GB
     
 
     
-    
 
     <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
-    <h5>January 4, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -368,10 +345,9 @@ All archives:              100.14 GB             84.17 GB             53.69 GB
     
 
     
-    
 
     <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
-    <h5>May 18, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -388,10 +364,9 @@ All archives:              100.14 GB             84.17 GB             53.69 GB
     
 
     
-    
 
     <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
-    <h5>April 10, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -414,7 +389,7 @@ All archives:              100.14 GB             84.17 GB             53.69 GB
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

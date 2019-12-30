@@ -44,13 +44,13 @@
       <pubDate>Tue, 13 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/binary-rop-stackpivot/</guid>
-      <description>Let&amp;rsquo;s check out Return Oriented Programming (ROP) with the pivot32 challenge from ROP Emporium by using radare2. The pivot32 binary is compiled without stack canaries and PIE but has NX enabled.
+      <description>Let&#39;s check out Return Oriented Programming (ROP) with the pivot32 challenge from ROP Emporium by using radare2. The pivot32 binary is compiled without stack canaries and PIE but has NX enabled.
 Basics The general principle behind ROP is that:
-[&amp;hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&amp;rsquo;s memory, called &amp;ldquo;gadgets&amp;rdquo;.</description>
+[&amp;hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&#39;s memory, called &amp;ldquo;gadgets&amp;rdquo;.</description>
     </item>
     
     <item>
-      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745)</title>
+      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745, CVE-2019-16718)</title>
       <link>https://bananamafia.dev/post/r2-pwndebian/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
@@ -59,7 +59,7 @@ Basics The general principle behind ROP is that:
 Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
 The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
 But first some basics for r2.
-Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell out and execute shell commands without leaving the r2 console:</description>
+Shelling Out Via The r2 Shell While running r2, it&#39;s possible to shell out and execute shell commands without leaving the r2 console:</description>
     </item>
     
     <item>
@@ -79,8 +79,8 @@ The features therefore include:
       <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/multihack/</guid>
-      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
-I&amp;rsquo;ve released my multihack source code. These are the implemented features:
+      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&#39;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
+I&#39;ve released my multihack source code. These are the implemented features:
  Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
     </item>
     
@@ -90,7 +90,7 @@ I&amp;rsquo;ve released my multihack source code. These are the implemented feat
       <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/cvar-hax/</guid>
-      <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
+      <description>When it comes to patching certain functions of a binary on ASM level, it&#39;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
 The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
     </item>
     

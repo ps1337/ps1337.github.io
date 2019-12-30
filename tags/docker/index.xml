@@ -68,7 +68,7 @@ Mount the X11 socket they said.
 Allow other users to access your X session they said.
 This post covers Docker container breakouts by abusing bad security practices related to the X11 socket.
 The problem To display windows spawned through a Docker container, people often launch containers following these steps:
- Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.</description>
+ Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.X11-unix:/tmp/.X11-unix:ro shares the X11 socket - optionally as read only.</description>
     </item>
     
     <item>
@@ -77,7 +77,7 @@ The problem To display windows spawned through a Docker container, people often 
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/pairprog/</guid>
-      <description>Recently I&amp;rsquo;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&amp;rsquo;t even have to give them access to your host system - they will be contained just like you and the work that&amp;rsquo;s being done. Using my docker image, it&amp;rsquo;s possible to share a tmux session with a group of people.</description>
+      <description>Recently I&#39;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&#39;t even have to give them access to your host system - they will be contained just like you and the work that&#39;s being done. Using my docker image, it&#39;s possible to share a tmux session with a group of people.</description>
     </item>
     
     <item>
@@ -87,7 +87,7 @@ The problem To display windows spawned through a Docker container, people often 
       
       <guid>https://bananamafia.dev/post/rnd-23542352/</guid>
       <description>When writing Dockerfiles, people often use something like this to download and install software from GitHub:
-ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb  This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
+ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
 curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;quot;browser_download_url&amp;quot; | \ grep &amp;quot;amd64.deb&amp;quot; | \ cut -d &amp;quot;:&amp;quot; -f 2,3 | \ tr --delete \&amp;quot; | \ tr --delete &amp;quot; &amp;quot;) \ -o /tmp/software-amd64.</description>
     </item>
     
@@ -97,7 +97,7 @@ curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest |
       <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/monit/</guid>
-      <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&amp;rsquo;ve created a Dockerfile and image for Monit for this.
+      <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&#39;ve created a Dockerfile and image for Monit for this.
 Monit is extremely configurable and allows a maximum of flexibility when it comes to monitoring.
 Initially, a configuration file is required to get started. To get one, call</description>
     </item>
@@ -109,7 +109,7 @@ Initially, a configuration file is required to get started. To get one, call</de
       
       <guid>https://bananamafia.dev/post/docker-borg/</guid>
       <description>BorgBackup is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.
-Getting started I&amp;rsquo;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
+Getting started I&#39;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
 This Makefile can be used to quickly get started using a containerized version of Borg:
 SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell echo $(shell cd &amp;quot;$(shell dirname &amp;quot;${BASH_SOURCE[0]}&amp;quot; )&amp;quot; &amp;amp;&amp;amp; pwd )) IMAGE_NAME ?</description>
     </item>
@@ -130,7 +130,7 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/dotfile-shellcheck/</guid>
-      <description>In order to prevent errors and side effects, it&amp;rsquo;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
+      <description>In order to prevent errors and side effects, it&#39;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
     </item>
     
     <item>
@@ -139,7 +139,7 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
-      <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
+      <description>Note: This isn&#39;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
  Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
     </item>

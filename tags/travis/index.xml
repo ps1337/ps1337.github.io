@@ -36,7 +36,7 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/dotfile-shellcheck/</guid>
-      <description>In order to prevent errors and side effects, it&amp;rsquo;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
+      <description>In order to prevent errors and side effects, it&#39;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
     </item>
     
     <item>
@@ -45,8 +45,8 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/telegram-notifications/</guid>
-      <description>If you ever wanted to get notified when certain things happen but didn&amp;rsquo;t find a lightweight solution &amp;ndash; here comes captain Telegram.
-Using a simple Telegram bot, it&amp;rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
+      <description>If you ever wanted to get notified when certain things happen but didn&#39;t find a lightweight solution &amp;ndash; here comes captain Telegram.
+Using a simple Telegram bot, it&#39;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
 Registering a bot First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</description>
     </item>
     

@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/dotnet-re-cccamp19/">Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</a></h4>
-    <h5>August 25, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
     
@@ -179,124 +178,100 @@
 
     <br>
     <div class="content-width text-justify"><p>Finally a nice .NET CTF challenge - time to pull out <a href="https://github.com/0xd4d/dnSpy">dnSpy</a> :)</p>
-
 <p>The provided ZIP includes a <code>CampRE.dll</code> file which, according to the challenge description, is a .NET Core application. Time to boot a Windows VM and install the .NET Core runtime environment.</p>
-
 <p>After decompiling the <code>dll</code>, this source code can be inspected:</p>
-
-<pre><code class="language-csharp">private static void Main(string[] args)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
 {
-    byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location);
-    for (int i = 0; i &lt; 1333337; i++)
+    <span style="color:#66d9ef">byte</span>[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(<span style="color:#66d9ef">typeof</span>(Program)).Location);
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i = <span style="color:#ae81ff">0</span>; i &lt; <span style="color:#ae81ff">1</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">7</span>; i++)
     {
         MD5 md = MD5.Create();
-        byte[] bytes = Encoding.ASCII.GetBytes(&quot;i=&quot; + i.ToString());
-        byte[] array = md.ComputeHash(bytes);
+        <span style="color:#66d9ef">byte</span>[] bytes = Encoding.ASCII.GetBytes(<span style="color:#e6db74">&#34;i=&#34;</span> + i.ToString());
+        <span style="color:#66d9ef">byte</span>[] array = md.ComputeHash(bytes);
         MD5 md2 = MD5.Create();
-        byte[] bytes2 = Encoding.ASCII.GetBytes(&quot;i1337=&quot; + i.ToString());
-        byte[] sourceArray2 = md2.ComputeHash(bytes2);
-        byte[] destinationArray = new byte[32];
-        Array.Copy(array, 0, destinationArray, 0, 16);
-        Array.Copy(sourceArray2, 0, destinationArray, 16, 16);
-        byte[] array2 = new byte[16];
+        <span style="color:#66d9ef">byte</span>[] bytes2 = Encoding.ASCII.GetBytes(<span style="color:#e6db74">&#34;i1337=&#34;</span> + i.ToString());
+        <span style="color:#66d9ef">byte</span>[] sourceArray2 = md2.ComputeHash(bytes2);
+        <span style="color:#66d9ef">byte</span>[] destinationArray = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>];
+        Array.Copy(array, <span style="color:#ae81ff">0</span>, destinationArray, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>);
+        Array.Copy(sourceArray2, <span style="color:#ae81ff">0</span>, destinationArray, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>);
+        <span style="color:#66d9ef">byte</span>[] array2 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>];
         MD5 md3 = MD5.Create();
-        byte[] array3 = new byte[10];
-        Array.Copy(sourceArray, 4432, array3, 0, 10);
-        byte[] sourceArray3 = md3.ComputeHash(array3);
-        Array.Copy(sourceArray3, 0, array2, 0, 16);
-        try
+        <span style="color:#66d9ef">byte</span>[] array3 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">1</span><span style="color:#ae81ff">0</span>];
+        Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#ae81ff">4</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>, array3, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">0</span>);
+        <span style="color:#66d9ef">byte</span>[] sourceArray3 = md3.ComputeHash(array3);
+        Array.Copy(sourceArray3, <span style="color:#ae81ff">0</span>, array2, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>);
+        <span style="color:#66d9ef">try</span>
         {
-            global::Aes aes = new global::Aes(array, array2);
-            byte[] rawAssembly = aes.DecryptFromBase64StringAsByte(Program.toDecrypt);
+            <span style="color:#66d9ef">global</span>::Aes aes = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">global</span>::Aes(array, array2);
+            <span style="color:#66d9ef">byte</span>[] rawAssembly = aes.DecryptFromBase64StringAsByte(Program.toDecrypt);
             MethodInfo entryPoint = Assembly.Load(rawAssembly).EntryPoint;
-            entryPoint.Invoke(null, new object[]
+            entryPoint.Invoke(<span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">object</span>[]
             {
-                new string[] { &quot;NOT_A_BADBOY&quot; }
+                <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">string</span>[] { <span style="color:#e6db74">&#34;NOT_A_BADBOY&#34;</span> }
             });
         }
-        catch (Exception ex) {}
+        <span style="color:#66d9ef">catch</span> (Exception ex) {}
     }
 }
-</code></pre>
-
-<p>It seems that the application brute-forces the AES key for an embedded Base64 string in memory and tries to execute it as a binary afterwards. The first thing I did was modifying the <code>dll</code> with <code>dnSpy</code> in order to dump the decrypted binary to a local file:</p>
-
-<pre><code class="language-csharp">byte[] decrypted = new global::Aes(array, array2).DecryptFromBase64StringAsByte(Program.toDecrypt);
-// try to read some assembly info
-Console.WriteLine(Assembly.Load(decrypted).FullName);
-File.WriteAllBytes(&quot;Foo.dll&quot;, decrypted);
-</code></pre>
-
-<p>Obviously this didn&rsquo;t work out of the box. It seems that the application reads some bytes from its own binary file in the beginning:</p>
-
-<pre><code class="language-csharp">byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location);
-[...]
-Array.Copy(sourceArray, 4432, array3, 0, 10);
-</code></pre>
-
-<p>After applying the changes above, these bytes seem to be wrong since the offset changed. My second modification to the application fixes this my making the routine read the untouched file instead of its own binary:</p>
-
-<pre><code class="language-csharp">byte[] sourceArray = File.ReadAllBytes(&quot;original.dll&quot;);
-</code></pre>
-
-<p>After calling the modified binary with <code>dotnet CampRE.dll</code>, a file called <code>Foo.dll</code> has been written. Now it&rsquo;s time to decompile it:</p>
-
-<pre><code class="language-csharp">private static void Main(string[] args)
+</code></pre></div><p>It seems that the application brute-forces the AES key for an embedded Base64 string in memory and tries to execute it as a binary afterwards. The first thing I did was modifying the <code>dll</code> with <code>dnSpy</code> in order to dump the decrypted binary to a local file:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">byte</span>[] decrypted = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">global</span>::Aes(array, array2).DecryptFromBase64StringAsByte(Program.toDecrypt);
+<span style="color:#75715e">// try to read some assembly info
+</span><span style="color:#75715e"></span>Console.WriteLine(Assembly.Load(decrypted).FullName);
+File.WriteAllBytes(<span style="color:#e6db74">&#34;Foo.dll&#34;</span>, decrypted);
+</code></pre></div><p>Obviously this didn't work out of the box. It seems that the application reads some bytes from its own binary file in the beginning:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">byte</span>[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(<span style="color:#66d9ef">typeof</span>(Program)).Location);
+<span style="color:#a6e22e">[...]</span>
+Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#ae81ff">4</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>, array3, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">0</span>);
+</code></pre></div><p>After applying the changes above, these bytes seem to be wrong since the offset changed. My second modification to the application fixes this my making the routine read the untouched file instead of its own binary:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">byte</span>[] sourceArray = File.ReadAllBytes(<span style="color:#e6db74">&#34;original.dll&#34;</span>);
+</code></pre></div><p>After calling the modified binary with <code>dotnet CampRE.dll</code>, a file called <code>Foo.dll</code> has been written. Now it's time to decompile it:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
 {
-    bool flag = args[0] != &quot;BADBOY&quot;;
-    if (flag) { Environment.Exit(-2); }
+    <span style="color:#66d9ef">bool</span> flag = args[<span style="color:#ae81ff">0</span>] != <span style="color:#e6db74">&#34;BADBOY&#34;</span>;
+    <span style="color:#66d9ef">if</span> (flag) { Environment.Exit(-<span style="color:#ae81ff">2</span>); }
 
-    StackTrace stackTrace = new StackTrace();
+    StackTrace stackTrace = <span style="color:#66d9ef">new</span> StackTrace();
     StackFrame[] frames = stackTrace.GetFrames();
-    bool flag2 = frames.Length == 1;
-    if (flag2) { Environment.Exit(-1); }
-    int metadataToken = frames[1].GetMethod().MetadataToken;
-    byte[] array = new byte[32];
-    byte[] array2 = new byte[16];
-    for (int i = 0; i &lt; 8; i++)
+    <span style="color:#66d9ef">bool</span> flag2 = frames.Length == <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">if</span> (flag2) { Environment.Exit(-<span style="color:#ae81ff">1</span>); }
+    <span style="color:#66d9ef">int</span> metadataToken = frames[<span style="color:#ae81ff">1</span>].GetMethod().MetadataToken;
+    <span style="color:#66d9ef">byte</span>[] array = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>];
+    <span style="color:#66d9ef">byte</span>[] array2 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>];
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i = <span style="color:#ae81ff">0</span>; i &lt; <span style="color:#ae81ff">8</span>; i++)
     {
-        byte[] bytes = BitConverter.GetBytes(metadataToken);
+        <span style="color:#66d9ef">byte</span>[] bytes = BitConverter.GetBytes(metadataToken);
         Console.WriteLine(BitConverter.ToString(bytes));
-        Array.Copy(bytes, 0, array, i * 4, 4);
+        Array.Copy(bytes, <span style="color:#ae81ff">0</span>, array, i * <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>);
     }
-    for (int j = 0; j &lt; 4; j++)
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> j = <span style="color:#ae81ff">0</span>; j &lt; <span style="color:#ae81ff">4</span>; j++)
     {
-        byte[] bytes2 = BitConverter.GetBytes(metadataToken);
+        <span style="color:#66d9ef">byte</span>[] bytes2 = BitConverter.GetBytes(metadataToken);
         Console.WriteLine(BitConverter.ToString(bytes2));
-        Array.Copy(bytes2, 0, array2, j * 4, 4);
+        Array.Copy(bytes2, <span style="color:#ae81ff">0</span>, array2, j * <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>);
     }
-    Aes aes = new Aes(array, array2);
-    byte[] bytes3 = aes.DecryptFromBase64String(&quot;fQjMpHu5cK122YUeJHX8T5wzTKbVhVZcNcCvSGSedV8=&quot;);
-    Console.WriteLine(&quot;Good job. Flag: &quot; + Encoding.ASCII.GetString(bytes3));
+    Aes aes = <span style="color:#66d9ef">new</span> Aes(array, array2);
+    <span style="color:#66d9ef">byte</span>[] bytes3 = aes.DecryptFromBase64String(<span style="color:#e6db74">&#34;fQjMpHu5cK122YUeJHX8T5wzTKbVhVZcNcCvSGSedV8=&#34;</span>);
+    Console.WriteLine(<span style="color:#e6db74">&#34;Good job. Flag: &#34;</span> + Encoding.ASCII.GetString(bytes3));
 }
-</code></pre>
-
-<p>It decrypts another Base64 string using a computed AES key. This key results from calling <code>frames[1].GetMethod().MetadataToken</code> and doing some magic stuff with it afterwards. The important thing to notice is that it&rsquo;s using <code>frames[1]</code>, which doesn&rsquo;t exist when executing this second stage as a standalone binary. This stack frame must result from <code>CampRE.dll</code> calling this embedded second stage.</p>
-
+</code></pre></div><p>It decrypts another Base64 string using a computed AES key. This key results from calling <code>frames[1].GetMethod().MetadataToken</code> and doing some magic stuff with it afterwards. The important thing to notice is that it's using <code>frames[1]</code>, which doesn't exist when executing this second stage as a standalone binary. This stack frame must result from <code>CampRE.dll</code> calling this embedded second stage.</p>
 <p>I decided to patch out the <code>BADBOY</code> check above and construct a new loader for the second stage:</p>
-
-<pre><code class="language-csharp">private static void Main(string[] args)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
 {
-    try
+    <span style="color:#66d9ef">try</span>
     {
-        Assembly.Load(File.ReadAllBytes(&quot;Foo.dll&quot;)).EntryPoint.Invoke(null, new object[]
+        Assembly.Load(File.ReadAllBytes(<span style="color:#e6db74">&#34;Foo.dll&#34;</span>)).EntryPoint.Invoke(<span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">object</span>[]
         {
-            new string[]
+            <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">string</span>[]
             {
-                &quot;NOT_A_BADBOY&quot;
+                <span style="color:#e6db74">&#34;NOT_A_BADBOY&#34;</span>
             }
         });
     }
-    catch (Exception) {}
+    <span style="color:#66d9ef">catch</span> (Exception) {}
 }
-</code></pre>
-
-<p>This mimics <code>CampRE.dll</code> decrypting and calling the embedded second stage, while the <code>MetadataToken</code> from which the AES key is computed remains intact since the call stack is the same.</p>
-
+</code></pre></div><p>This mimics <code>CampRE.dll</code> decrypting and calling the embedded second stage, while the <code>MetadataToken</code> from which the AES key is computed remains intact since the call stack is the same.</p>
 <p>After re-compiling and running this, the flag is being printed:</p>
-
-<p><img src="/img/dotnet-re-cccamp19/flag.jpg" alt="yay" /></p>
-
+<p><img src="/img/dotnet-re-cccamp19/flag.jpg" alt="yay"></p>
 <p>Peace out, thanks to <a href="https://twitter.com/allesctf">ALLES CTF</a> and 0x4d5a for this challenge!</p>
 </div>
 
@@ -314,10 +289,28 @@ Array.Copy(sourceArray, 4432, array3, 0, 10);
     
 
     
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
     
 
     <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5>October 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
@@ -336,10 +329,9 @@ Array.Copy(sourceArray, 4432, array3, 0, 10);
     
 
     
-    
 
     <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
-    <h5>September 13, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
@@ -355,28 +347,6 @@ Array.Copy(sourceArray, 4432, array3, 0, 10);
     
 
 </div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
-    <h5>September 2, 2019</h5>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
-    
-
-</div>
  
 
     <footer>
@@ -384,7 +354,7 @@ Array.Copy(sourceArray, 4432, array3, 0, 10);
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

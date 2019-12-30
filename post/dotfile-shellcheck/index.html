@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/dotfile-shellcheck/">Using Shellcheck and Docker to Automatically Lint Dotfiles</a></h4>
-    <h5>March 8, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
     
@@ -180,18 +179,11 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>In order to prevent errors and side effects, it&rsquo;s useful to use <a href="https://www.shellcheck.net/">Shellcheck</a> to lint all shell scripts. While checking out the <a href="https://github.com/jessfraz/dotfiles">Dotfiles of jessfraz</a>, I came across an easy way to integrate this kind of check with <a href="https://www.travis-ci.org">Travis CI</a>. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository. All credits go to the <a href="https://github.com/jessfraz">original author</a> of the docker images and scripts, of course.</p>
-
+    <div class="content-width text-justify"><p>In order to prevent errors and side effects, it's useful to use <a href="https://www.shellcheck.net/">Shellcheck</a> to lint all shell scripts. While checking out the <a href="https://github.com/jessfraz/dotfiles">Dotfiles of jessfraz</a>, I came across an easy way to integrate this kind of check with <a href="https://www.travis-ci.org">Travis CI</a>. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository. All credits go to the <a href="https://github.com/jessfraz">original author</a> of the docker images and scripts, of course.</p>
 <h1 id="activating-travis-ci">Activating Travis CI</h1>
-
-<p>First of all, it&rsquo;s necessary to link your Github account to an account on <a href="https://www.travis-ci.org">Travis CI</a>. To do this, just sign in at the Travis page using your GitHub account. After that, you need to activate Travis for your specific Dotfile repository. You can do this after logging in at Travis. This will add a hook to your repository on GitHub which will trigger the Travis build/linting process after pushing new content.</p>
-
+<p>First of all, it's necessary to link your Github account to an account on <a href="https://www.travis-ci.org">Travis CI</a>. To do this, just sign in at the Travis page using your GitHub account. After that, you need to activate Travis for your specific Dotfile repository. You can do this after logging in at Travis. This will add a hook to your repository on GitHub which will trigger the Travis build/linting process after pushing new content.</p>
 <h1 id="adding-a-travis-job-file">Adding a Travis job file</h1>
-
 <p>To let Travis know which commands should be executed, a <code>.travis.yml</code> file is needed. This can be as simple as:</p>
-
 <pre><code>sudo: required
 dist: trusty
 
@@ -214,19 +206,13 @@ after_success:
 
 after_failure:
   - // dito.
-</code></pre>
-
-<p>This will use a containerized version of <code>shellcheck</code> to lint all existing scripts using <code>.test.sh</code>, which will be prepared in the next step.</p>
-
+</code></pre><p>This will use a containerized version of <code>shellcheck</code> to lint all existing scripts using <code>.test.sh</code>, which will be prepared in the next step.</p>
 <h1 id="preparing-the-test-script">Preparing the test script</h1>
-
 <p>The test script has two jobs:</p>
-
 <ol>
 <li>Get all files which will be linted</li>
-
-<li><p>Execute <code>shellcheck</code> for each file</p>
-
+<li>Execute <code>shellcheck</code> for each file</li>
+</ol>
 <pre><code>#!/bin/bash
 # Stolen from: https://github.com/jessfraz/dotfiles/blob/master/test.sh
 # (modified)
@@ -238,7 +224,7 @@ ERRORS=()
 
 # find all executables and run `shellcheck`
 for f in $(find . -type f \
-    -not -iwholename '*.git*' | sort -u); do
+        -not -iwholename '*.git*' | sort -u); do
 
 
 	if file &quot;$f&quot; | grep --quiet shell; then
@@ -257,13 +243,8 @@ else
 	echo &quot;These files failed shellcheck: ${ERRORS[*]}&quot;
 	exit 1
 fi
-</code></pre></li>
-</ol>
-
-<h1 id="executing-tests">Executing tests</h1>
-
+</code></pre><h1 id="executing-tests">Executing tests</h1>
 <p>If everything has been set up correctly, the output can show the following information:</p>
-
 <pre><code>docker run --rm -i -t \
 		--name df-shellcheck \
 		-v /home/travis/build/ps1337/Dotfiles:/usr/src:ro \
@@ -303,14 +284,9 @@ Status: Downloaded newer image for r.j3ss.co/shellcheck:latest
 [OK]: sucessfully linted ./inputrc
 [OK]: sucessfully linted ./profile
 No errors, hooray
-</code></pre>
-
-<h1 id="bonus-telegram-notifications">Bonus: Telegram notifications</h1>
-
+</code></pre><h1 id="bonus-telegram-notifications">Bonus: Telegram notifications</h1>
 <p>If you want to get notified after the linting process, you can refer to my <a href="https://github.com/ps1337/Dotfiles/blob/master/.travis.yml">Travis configuration</a> and <a href="https://bananamafia.dev/post/telegram-notifications/">one of my previous blog posts on this subject</a>.</p>
-
 <h1 id="credits">Credits</h1>
-
 <ul>
 <li><a href="https://github.com/jessfraz">Jess Frazelle</a></li>
 </ul>
@@ -330,10 +306,9 @@ No errors, hooray
     
 
     
-    
 
     <h4><a href="/post/dotfiles/">How I Over-Engineered My Dotfiles</a></h4>
-    <h5>October 16, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/linux"><kbd class="item-tag">linux</kbd></a>
     
@@ -348,10 +323,9 @@ No errors, hooray
     
 
     
-    
 
     <h4><a href="/post/docker-leak/">Information Leak in Docker</a></h4>
-    <h5>January 4, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -366,10 +340,9 @@ No errors, hooray
     
 
     
-    
 
     <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
-    <h5>May 18, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
@@ -386,7 +359,7 @@ No errors, hooray
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

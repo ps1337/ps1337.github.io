@@ -17,8 +17,9 @@
       <pubDate>Sat, 24 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/php-deserialize-cccamp19/</guid>
-      <description>Deserialization is a vulnerability class that&amp;rsquo;s often overlooked. It&amp;rsquo;s great that this year&amp;rsquo;s CCCamp CTF included an interesting web based challenge that is based on this vulnerability class.
-The Target The challenge includes a link to a web service that allows converting user-supplied images into PDF files. Users can upload image files, add some additional HTML content in a textbox and render the whole thing into a PDF file:</description>
+      <description>Deserialization is a vulnerability class that&#39;s often overlooked. It&#39;s great that this year&#39;s CCCamp CTF included an interesting web based challenge that is based on this vulnerability class.
+The Target The challenge includes a link to a web service that allows converting user-supplied images into PDF files. Users can upload image files, add some additional HTML content in a textbox and render the whole thing into a PDF file:
+A ZIP file with the source code of the web application is also available.</description>
     </item>
     
   </channel>

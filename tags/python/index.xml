@@ -17,7 +17,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/project/canalyzat0r/</guid>
-      <description>Please find CANalyzat0r here on GitHub :)</description>
+      <description></description>
     </item>
     
     <item>
@@ -36,9 +36,9 @@
       
       <guid>https://bananamafia.dev/post/python-hax/</guid>
       <description>tl;dr Be aware that imports can be hijacked for Python2 and Python3 - take care of EUIDs.
-Don&amp;rsquo;t use input() for Python2.x.
+Don&#39;t use input() for Python2.x.
 Module Hijacking When assigning SUID bits to Python scripts, privileges can be escalated easily. Consider the following Python source code:
-#!/usr/bin/python2.7 # -*- coding: utf-8 -*- import hashlib value = raw_input() md5 = hashlib.md5() md5.update(value) print md5.digest()  Note that in case of SUID binaries this code runs as root.</description>
+#!/usr/bin/python2.7 # -*- coding: utf-8 -*- import hashlib value = raw_input() md5 = hashlib.md5() md5.update(value) print md5.digest() Note that in case of SUID binaries this code runs as root.</description>
     </item>
     
   </channel>

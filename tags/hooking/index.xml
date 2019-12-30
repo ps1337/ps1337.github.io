@@ -26,8 +26,8 @@
       <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/multihack/</guid>
-      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
-I&amp;rsquo;ve released my multihack source code. These are the implemented features:
+      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&#39;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
+I&#39;ve released my multihack source code. These are the implemented features:
  Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
     </item>
     

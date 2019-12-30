@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/rnd-632424-2fa-backup/">Random Note #632424: Backup Google Authenticator Data</a></h4>
-    <h5>June 20, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -176,8 +175,7 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you&rsquo;re using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn&rsquo;t require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail. To avoid this, use this script:</p>
-
+    <div class="content-width text-justify"><p>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you're using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn't require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail. To avoid this, use this script:</p>
 <pre><code>#!/bin/bash
 
 # $1: IP
@@ -189,9 +187,7 @@ adb pull /data/data/com.google.android.apps.authenticator2/databases/databases /
 sqlite3 /tmp/.bkp &quot;select * from accounts;&quot;
 rm /tmp/.bkp
 
-</code></pre>
-
-<p>This pulls the SQLite database of Google Authenticator and prints all secret data. You can then use the printed data to backup your Authenticator state and to recover it later in case other restoring mechanisms fail.</p>
+</code></pre><p>This pulls the SQLite database of Google Authenticator and prints all secret data. You can then use the printed data to backup your Authenticator state and to recover it later in case other restoring mechanisms fail.</p>
 </div>
 
     
@@ -208,10 +204,9 @@ rm /tmp/.bkp
     
 
     
-    
 
     <h4><a href="/post/rnd-092345-gdb/">Random Note #092345: Passing binary input via GDB</a></h4>
-    <h5>October 26, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -230,10 +225,9 @@ rm /tmp/.bkp
     
 
     
-    
 
     <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
-    <h5>April 10, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -256,10 +250,9 @@ rm /tmp/.bkp
     
 
     
-    
 
     <h4><a href="/post/rnd-23542352/">Random Note #23542351: Using the GitHub API to improve Dockerfiles</a></h4>
-    <h5>March 20, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
     
@@ -274,7 +267,7 @@ rm /tmp/.bkp
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

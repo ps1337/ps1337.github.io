@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.59.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
         
 
         
@@ -162,10 +162,9 @@
     
 
     
-    
 
     <h4><a href="/post/autohax/">Car Hacking: A Short Overview</a></h4>
-    <h5>October 23, 2018</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/automotive"><kbd class="item-tag">automotive</kbd></a>
     
@@ -178,48 +177,30 @@
 
 
     <br>
-    <div class="content-width text-justify">
-
-<p>Ever wondered about the various techniques that can be applied to hack modern cars? This post documents various ways to do so - you can use it as a cheatsheet</p>
-
+    <div class="content-width text-justify"><p>Ever wondered about the various techniques that can be applied to hack modern cars? This post documents various ways to do so - you can use it as a cheatsheet</p>
 <h1 id="software">Software</h1>
-
-<p>There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It&rsquo;s important to use special adapters that are whitelisted on the car&rsquo;s head unit. Also, not every adapter may be supported after all. For this, it&rsquo;s best to do some research to get a hold of the right devices to use. Once attached to the network, assign a static IP to the interface. Once again it&rsquo;s up to the researcher to get the correct IP range. For a specific car manufacturer, it seems to be <code>192.168.0.0</code> according to KeenLab [1]. It&rsquo;s best to test all IP ranges not being publicly routed. Now, use some <code>nmap</code> to scan for services.</p>
-
+<p>There are multiple ways one can interface with the software stack of a car. The easiest one is to use USB-to-Ethernet adapters in order to attach to the network of the car. It's important to use special adapters that are whitelisted on the car's head unit. Also, not every adapter may be supported after all. For this, it's best to do some research to get a hold of the right devices to use. Once attached to the network, assign a static IP to the interface. Once again it's up to the researcher to get the correct IP range. For a specific car manufacturer, it seems to be <code>192.168.0.0</code> according to KeenLab [1]. It's best to test all IP ranges not being publicly routed. Now, use some <code>nmap</code> to scan for services.</p>
 <p>There can be multiple possible results:</p>
-
 <ul>
 <li>Shells (easy win but rare)</li>
 <li>Forgotten developer or debugging services which may allow command execution</li>
 <li>Challenge/response services that open other ports upon authentication</li>
 <li>(Accidentally) exposed services</li>
 </ul>
-
 <p>All services may run as their own user to prevent compromising the entire system in case a vulnerability is present in one of the applications. Examine the service and fuzz it. For quick tests <a href="https://gitlab.com/akihe/radamsa">radamsa</a> can be of use.</p>
-
-<p>It may also be possible to create a WiFi hotspot using the car&rsquo;s head unit. There may be other services available when entering the created wireless network that are worth examining. If you have a developer unit, using a debugger and examining coredumps can be of use.</p>
-
-<p>From the internal point of view, using <code>netstat</code>, <code>sockstat</code> and other similar tools may reveal other vulnerable services. Potential attack scenarios can be horizontal and vertical privilege escalation, so it&rsquo;s worth checking out all open ports and tracing running applications. In case more information on a target is required, perform static analysis with IDA or a similar disassembler. Be sure to have the whole package ready, including support for foreign architectures. Yes, there&rsquo;s also Java on cars, so reverse engineering of these applications should be way more easier. As always when performing static analysis, keep an eye open for static keys, weak crypto and infrastructure related info. This also includes any MQTT brokers the car may be attached to. As with &ldquo;traditional&rdquo; pentesting, search for SUID binaries and <code>sudo</code>-like mechanisms that may enable privilege escalation.</p>
-
+<p>It may also be possible to create a WiFi hotspot using the car's head unit. There may be other services available when entering the created wireless network that are worth examining. If you have a developer unit, using a debugger and examining coredumps can be of use.</p>
+<p>From the internal point of view, using <code>netstat</code>, <code>sockstat</code> and other similar tools may reveal other vulnerable services. Potential attack scenarios can be horizontal and vertical privilege escalation, so it's worth checking out all open ports and tracing running applications. In case more information on a target is required, perform static analysis with IDA or a similar disassembler. Be sure to have the whole package ready, including support for foreign architectures. Yes, there's also Java on cars, so reverse engineering of these applications should be way more easier. As always when performing static analysis, keep an eye open for static keys, weak crypto and infrastructure related info. This also includes any MQTT brokers the car may be attached to. As with &ldquo;traditional&rdquo; pentesting, search for SUID binaries and <code>sudo</code>-like mechanisms that may enable privilege escalation.</p>
 <h1 id="os">OS</h1>
-
-<p>Various ECUs and devices may run different operating systems you haven&rsquo;t encountered before, like QNX [1]. Search for all info you can get. Evaluate the permissions of all users, kernel versions and known vulnerabilities. For example, if the system service <code>qconn</code> on port 8000 is running, it&rsquo;s a <a href="https://www.blackmoreops.com/2016/06/02/hacking-qnx-systems-over-qconn/">quick win</a>.</p>
-
+<p>Various ECUs and devices may run different operating systems you haven't encountered before, like QNX [1]. Search for all info you can get. Evaluate the permissions of all users, kernel versions and known vulnerabilities. For example, if the system service <code>qconn</code> on port 8000 is running, it's a <a href="https://www.blackmoreops.com/2016/06/02/hacking-qnx-systems-over-qconn/">quick win</a>.</p>
 <h1 id="apps">Apps</h1>
-
 <p>Cars come with their own mobile app and application servers which may be a valuable source of information. In-app purchases for cars, NFC and Bluetooth come to mind. Look out for developer menus and ways the app affects the car and the application server. How does the car unlock process work?</p>
-
 <p>&ldquo;Apps&rdquo; also refers to services running in the car:</p>
-
 <ul>
 <li>Do they run in a browser? Maybe an old browser exploit works</li>
 <li>Are these apps signed and can they be uploaded to the car in any way?</li>
 </ul>
-
 <h1 id="external-media">External Media</h1>
-
 <p>Some things to check:</p>
-
 <ul>
 <li>Can you fuzz the USB stack and crash system services? Maybe code execution can be achieved.</li>
 <li>Are all parts of external update packages signed?</li>
@@ -227,23 +208,16 @@
 <li>Fuzz media files and their embedded information, such as cover art.</li>
 <li>Fuzz CSV files and try to import them from the car.</li>
 </ul>
-
 <h1 id="car-network">Car Network</h1>
-
-<p>It may be valuable to apply the old-fashioned CAN fuzzing to uncover potential problems. Also use the internal wires and not just the OBD-II port as it may be &ldquo;firewalled&rdquo;. Modern cars use VLANs and IPv6, so using the traditional IPv6 attack tools can be of use. Also, issues in the network segmentation can be severe: You shouldn&rsquo;t be able to open the car from a isolated network segment that controls media stuff. Hopping from one ECU to another using interfaces listed in <code>ifconfig</code> or devices under <code>/dev</code> is also possible. The worst case would be sending CAN packets from a hijacked unit.</p>
-
+<p>It may be valuable to apply the old-fashioned CAN fuzzing to uncover potential problems. Also use the internal wires and not just the OBD-II port as it may be &ldquo;firewalled&rdquo;. Modern cars use VLANs and IPv6, so using the traditional IPv6 attack tools can be of use. Also, issues in the network segmentation can be severe: You shouldn't be able to open the car from a isolated network segment that controls media stuff. Hopping from one ECU to another using interfaces listed in <code>ifconfig</code> or devices under <code>/dev</code> is also possible. The worst case would be sending CAN packets from a hijacked unit.</p>
 <p>Check for bus wires that are exposed via car mirrors and antennas!</p>
-
 <h1 id="other-things">Other Things</h1>
-
 <ul>
 <li>Fuzzing the Bluetooth/GPS stack</li>
 <li>Faking GSM and GPS data</li>
 <li>SMS based attacks [1]</li>
 </ul>
-
 <h1 id="references">References</h1>
-
 <ul>
 <li><a href="https://keenlab.tencent.com/en/Experimental_Security_Assessment_of_BMW_Cars_by_KeenLab.pdf">1 - Keen Security Lab BMW Analysis</a></li>
 </ul>
@@ -263,10 +237,9 @@
     
 
     
-    
 
     <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5>October 24, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
@@ -285,10 +258,9 @@
     
 
     
-    
 
     <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
-    <h5>September 13, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
@@ -311,10 +283,9 @@
     
 
     
-    
 
     <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
-    <h5>September 2, 2019</h5>
+    <h5></h5>
     
     <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
     
@@ -333,7 +304,7 @@
 
     <p class="copyright text-muted">
 
-        &copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
     </p>
 </footer>
 </body>

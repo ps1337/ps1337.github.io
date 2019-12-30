@@ -17,7 +17,7 @@
       <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/rnd-632424-2fa-backup/</guid>
-      <description>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you&amp;rsquo;re using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn&amp;rsquo;t require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail.</description>
+      <description>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you&#39;re using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn&#39;t require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail.</description>
     </item>
     
   </channel>
