@@ -392,7 +392,7 @@ sh-5.0$
 
     
 
-    <h4 class="page-header">Related</h4>
+    <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
 
@@ -479,3 +479,33 @@ sh-5.0$
     
 
 </main>
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+    function setMaxWidth() {
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).resize(function () {
+        setMaxWidth();
+    });
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+</script>
