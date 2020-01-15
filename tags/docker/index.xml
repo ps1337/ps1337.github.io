@@ -54,7 +54,8 @@
       
       <guid>https://bananamafia.dev/post/docker-leak/</guid>
       <description>During an assessment of the Docker platform in November 2018, two information leaks regarding the /proc/asound path were discovered in the OCI (Open Container Initiative) specification. These issues have been fixed quickly by the Docker security team using the provided suggestions.
-Leak of audio device status of the host When media is being played on the host, the /proc/asound/card*/pcm*p/sub*/status files may contain information regarding the status of media playback. Consider this command for a demonstration:</description>
+Leak of audio device status of the host When media is being played on the host, the
+/proc/asound/card*/pcm*p/sub*/status files may contain information regarding the status of media playback. Consider this command for a demonstration:</description>
     </item>
     
     <item>

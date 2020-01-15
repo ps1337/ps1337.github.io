@@ -262,12 +262,16 @@ namespace PDFStuff {
 </code></pre><p>This is a modified version of the <code>phar</code> creator that can be found in the <a href="https://www.ixiacom.com/company/blog/exploiting-php-phar-deserialization-vulnerabilities-part-2">second part of Daniel Timofte's great blog post</a>.</p>
 <p>PHP saves objects in <code>phar</code> files according to their namespaces and class names. This means that in order to allow correct deserialization on the target server, the original namespace and class names have to be used for the malicious serialized object. This is why the whole code is wrapped in the correct namespace, as determined using the provided source code.</p>
 <p>Another interesting thing is that we only need to provide the correct names and attributes for the deserialization to work on the other end. No unnecessary other attributes or imports are required.</p>
-<p>Calling <code>php -c php.ini creator.php</code> yields a <code>test.phar</code> that contains the crafted object. After commenting out the file type and exif checks on a local instance of the target web application, this has been found to work perfectly.</p>
+<p>Calling</p>
+<pre><code>php -c php.ini creator.php
+</code></pre><p>yields a <code>test.phar</code> that contains the crafted object. After commenting out the file type and exif checks on a local instance of the target web application, this has been found to work perfectly.</p>
 <h2 id="making-a-phar-jpeg-polyglot">Making A Phar-JPEG Polyglot</h2>
 <p>The only missing thing is that the created <code>phar</code> is in fact not a valid picture file. Therefore this file will be rejected by the target server and can't be uploaded this way.</p>
 <p>The talk mentioned before also contains information on Phar-JPEG polyglot files. These are files that seem to be images but in fact they embed valid <code>phar</code> file inside. This can be built manually or using <a href="https://github.com/kunte0/phar-jpg-polyglot">this great tool</a>. I've used the latter with some slight modifications to make it work with the custom gadget. Of course, <code>$tmpfile</code> has been set to <code>'./flag.php'</code> to get the flag.</p>
 <h1 id="getting-the-flag">Getting The Flag</h1>
-<p>After uploading the flag and modifying the HML to include <code>&lt;img src=&quot;phar://upload/&lt;filename&gt;.jpg&quot;&gt;</code>, the flag can be found in the HTML source code:</p>
+<p>After uploading the flag and modifying the HML to include</p>
+<pre><code>&lt;img src=&quot;phar://upload/&lt;filename&gt;.jpg&quot;&gt;
+</code></pre><p>the flag can be found in the HTML source code:</p>
 <pre><code>$flag = &quot;ALLES{phar_jpeg_polyglot_madness_such_w0w}&quot;
 </code></pre><p>Peace out, thanks to <a href="https://twitter.com/allesctf">ALLES CTF</a> and 0x4d5a for this challenge :)</p>
 </div>

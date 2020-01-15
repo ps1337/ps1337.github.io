@@ -200,7 +200,9 @@
         0xredacted &quot;Write: super secret thing&quot;: (&quot;Msgcompose&quot; &quot;Thunderbird&quot;) [...]
 [...]
 </code></pre><h2 id="taking-screenshots">Taking screenshots</h2>
-<p>The command <code>xwd -root -screen &gt; screenshot.xwd &amp;&amp; convert screenshot.xwd screenshot.png</code> can be used to create a screenshot of the hosts display which makes it possible to watch every action a user performs on the system.</p>
+<p>The command</p>
+<pre><code>xwd -root -screen &gt; screenshot.xwd &amp;&amp; convert screenshot.xwd screenshot.png
+</code></pre><p>can be used to create a screenshot of the hosts display which makes it possible to watch every action a user performs on the system.</p>
 <h2 id="keylogging">Keylogging</h2>
 <p>By mounting the X11 socket into the container a user doesn't just mount the display. Additionally they keyboard also gets shared, so to say. With this, it's possible to log all keystrokes. There may be better tools for this, but during tests <a href="https://github.com/unixdj/xkey">xkey</a> seemed to perform very reliable. Using <code>xkey</code> it's possible to perform a specific action in case a previously defined key gets hit.</p>
 <h2 id="getting-a-shell">Getting a shell</h2>

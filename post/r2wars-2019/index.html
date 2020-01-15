@@ -207,8 +207,8 @@
 </code></pre><p>This executes 150 instructions of bot code and opens the visual mode of <code>radare2</code>. You can now just scroll through the memory view and check for large blocks that consist of only null bytes. Finding such blocks of memory that haven't been overwritten is an indicator for an inefficient bot, since you might also just miss your opponent in battle:</p>
 <p><img src="/img/r2wars-2019/r2wars-profile.gif" alt="r2wars Profiling"></p>
 <p>You can profile variants of your bot using this method and choose the most efficient one afterwards.</p>
-<h1 id="my-captnbananaboii-bot">My <code>CAPTNBANANABOII</code> Bot</h1>
-<p>I won't paste the full code here, you'll have to reverse it yourself :D However, I'm going to describe the general structure:</p>
+<h1 id="my-bot">My Bot</h1>
+<p>It's called <code>CAPTNBANANABOII</code>. I won't paste the full code here, you'll have to reverse it yourself :D However, I'm going to describe the general structure:</p>
 <h2 id="stage-1">Stage 1</h2>
 <p>In the first phase, the bot will populate the registers:</p>
 <pre><code>call init

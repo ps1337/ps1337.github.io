@@ -187,8 +187,10 @@
 <li>Using your Telegram client, send a message to <code>@BotFather</code> with the command <code>/newbot</code> and follow the instructions.</li>
 <li>Note the bot token you receive after successfully registering the bot.</li>
 <li>Message your bot with a simple message like <code>/start</code> or <code>/test</code>.</li>
-<li>Use <code>curl -i -X GET https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/getUpdates</code> to get the chat ID of the chat you created in the previous chat.</li>
 </ul>
+<p>Now use</p>
+<pre><code>curl -i -X GET https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/getUpdates
+</code></pre><p>to get the chat ID of the chat you created in the previous chat.</p>
 <h1 id="sending-messages">Sending messages</h1>
 <p>Now, you should have to following things:</p>
 <ul>

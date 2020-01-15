@@ -189,8 +189,9 @@
 <p>The web application redirects the user to the attacker-controlled website.</p>
 <p>Cool. This affects the central login mechanism of the public customer portal.</p>
 <h1 id="the-root-cause">The Root Cause</h1>
-<p>The redirect happens via JavaScript that's hosted at <a href="https://vulnerable.com/login/process.html:">https://vulnerable.com/login/process.html:</a></p>
-<pre><code>let URL = state.oldId ? `${state.location}?id=${state.oldId}` : `${state.location}`;
+<p>The redirect happens via JavaScript that's hosted at:</p>
+<pre><code>https://vulnerable.com/login/process.html:
+</code></pre><pre><code>let URL = state.oldId ? `${state.location}?id=${state.oldId}` : `${state.location}`;
 [...]
 document.location.replace(URL)
 </code></pre><p>As can be seen, the redirect happens in the last line of the above listing after the correct URL has been read from the <code>state</code> parameter. No sanitation is present for this particular parameter, which should be fixed :)</p>

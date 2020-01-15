@@ -275,7 +275,11 @@ msfvenom -a x86
   -o meter.exe
 </code></pre><p>This yields 30/56 - better but still not zero.</p>
 <h2 id="using-veil">Using Veil</h2>
-<p>Using <a href="https://www.veil-framework.com/">Veil</a>, hiding payloads becomes quite easy using a built-in assistant. Using <code>python/shellcode_inject/aes_encrypt</code> in combination with Pyherion and a shellcode for <code>windows/meterpreter/reverse_tcp</code> decreases the detection rate down to 19/56.</p>
+<p>Using <a href="https://www.veil-framework.com/">Veil</a>, hiding payloads becomes quite easy using a built-in assistant. Using</p>
+<pre><code>python/shellcode_inject/aes_encrypt
+</code></pre><p>in combination with Pyherion and a shellcode for</p>
+<pre><code>windows/meterpreter/reverse_tcp
+</code></pre><p>decreases the detection rate down to 19/56.</p>
 <h2 id="crypters">Crypters</h2>
 <p>Crypters encrypt the malicious shellcode using a secure encryption algorithm. To execute the payload at runtime, the so called stub brute forces the built-in encrypted shellcode in order to invoke it. Using AES-128 and a delayed decryption, it was possible to decrease the detection down to zero for both scantime and runtime. The runtime detection bypass basically delays the start of the decryption routine by performing unnecessary actions like:</p>
 <ul>

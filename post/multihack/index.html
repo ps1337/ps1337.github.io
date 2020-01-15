@@ -324,7 +324,9 @@ if (playerGlowRequired())
 <p>As a neat side effect, adding the <code>RF_DEPTHHACK</code> flag to all entities and not just players also shows entities like doors, weapon and pickups through walls:
 <img src="/img/jka-multihack/entities.jpg" alt="Entities"></p>
 <h2 id="recognizing-teams">Recognizing Teams</h2>
-<p>Normally, an entity's team information is stored in the <code>client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName</code> value. After the pointer arithmetic hackery, the fields of <code>clientinfo</code> structs have somehow been corrupted and point to invalid data. For example, <code>teamName</code> contains parts of the model name for some entities. But let's just search in the memory region of the <code>clientinfo</code> struct!</p>
+<p>Normally, an entity's team information is stored in the</p>
+<pre><code>client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName
+</code></pre><p>value. After the pointer arithmetic hackery, the fields of <code>clientinfo</code> structs have somehow been corrupted and point to invalid data. For example, <code>teamName</code> contains parts of the model name for some entities. But let's just search in the memory region of the <code>clientinfo</code> struct!</p>
 <pre><code>// search for the team in the memory region of the `clientinfo` struct
 // using `.teamName` isn't exact because of memory hackery while determining `client_gameState`
 char red[] = &quot;red&quot;;

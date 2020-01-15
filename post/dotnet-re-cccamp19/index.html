@@ -253,7 +253,9 @@ Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#
     <span style="color:#66d9ef">byte</span>[] bytes3 = aes.DecryptFromBase64String(<span style="color:#e6db74">&#34;fQjMpHu5cK122YUeJHX8T5wzTKbVhVZcNcCvSGSedV8=&#34;</span>);
     Console.WriteLine(<span style="color:#e6db74">&#34;Good job. Flag: &#34;</span> + Encoding.ASCII.GetString(bytes3));
 }
-</code></pre></div><p>It decrypts another Base64 string using a computed AES key. This key results from calling <code>frames[1].GetMethod().MetadataToken</code> and doing some magic stuff with it afterwards. The important thing to notice is that it's using <code>frames[1]</code>, which doesn't exist when executing this second stage as a standalone binary. This stack frame must result from <code>CampRE.dll</code> calling this embedded second stage.</p>
+</code></pre></div><p>It decrypts another Base64 string using a computed AES key. This key results from calling</p>
+<pre><code>frames[1].GetMethod().MetadataToken
+</code></pre><p>and doing some magic stuff with it afterwards. The important thing to notice is that it's using <code>frames[1]</code>, which doesn't exist when executing this second stage as a standalone binary. This stack frame must result from <code>CampRE.dll</code> calling this embedded second stage.</p>
 <p>I decided to patch out the <code>BADBOY</code> check above and construct a new loader for the second stage:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
 {

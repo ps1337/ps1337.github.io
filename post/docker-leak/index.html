@@ -177,7 +177,9 @@
     <br>
     <div class="content-width text-justify"><p>During an assessment of the Docker platform in November 2018, two information leaks regarding the <code>/proc/asound</code> path were discovered in the OCI (Open Container Initiative) specification. These issues have been <a href="https://github.com/moby/moby/issues/38285">fixed</a> quickly by the Docker security team using the provided suggestions.</p>
 <h1 id="leak-of-audio-device-status-of-the-host">Leak of audio device status of the host</h1>
-<p>When media is being played on the host, the <code>/proc/asound/card*/pcm*p/sub*/status</code> files may contain information regarding the status of media playback. Consider this command for a demonstration:</p>
+<p>When media is being played on the host, the</p>
+<pre><code class="language-console" data-lang="console">/proc/asound/card*/pcm*p/sub*/status
+</code></pre><p>files may contain information regarding the status of media playback. Consider this command for a demonstration:</p>
 <pre><code>docker run --rm \
     ubuntu:latest bash -c \
         &quot;sleep 5; \
@@ -186,7 +188,9 @@
         cut -d ' ' -f2 | \
         grep RUNNING || echo 'not running'&quot;
 </code></pre><p>When playing a media file, watching a video or executing similar actions involving sound output on the host, the above command demonstrates that a containerized process is able to gather information on this status. Therefore a process in a container is able to check whether and what kind of user activity is present on the host system. Also, this may indicate whether a container runs on a desktop system or a server as media playback rarely happens on server systems.</p>
-<p>The scenario described above is in regard to media playback. Moreover, when examining the <code>/proc/asound/card*/pcm*c/sub*/status</code> files (<code>pcm*c</code> instead of <code>pcm*p</code>) this can also leak information regarding capturing sound, as in recording audio or making calls on the host system.</p>
+<p>The scenario described above is in regard to media playback. Moreover, when examining the</p>
+<pre><code>/proc/asound/card*/pcm*c/sub*/status
+</code></pre><p>files (<code>pcm*c</code> instead of <code>pcm*p</code>) this can also leak information regarding capturing sound, as in recording audio or making calls on the host system.</p>
 <h1 id="leak-of-monitor-type">Leak of Monitor Type</h1>
 <p>Monitors can also act as sound output devices when connected using a compatible interface like DisplayPort. The listing below illustrates how the model type of the connected monitors can be read from within a container:</p>
 <pre><code>docker run --rm \

@@ -241,7 +241,9 @@ ok,ok! you are not a baby r2 reverser!
 The key to be a g00d reverser is: r2con{c0ffe7}
 </code></pre><p>So it seems pretty obvious that the correct flag has to be <code>r2con{c0ffee}</code>.</p>
 <h1 id="land-of-ecodelia">Land of Ecodelia</h1>
-<p>This is a text based adventure that prints the flag after answering all questions correctly. In fact, the string <code>The flag is r2con2019{all_your_answers_in_order_without_spaces}</code> is even embedded in the binary.</p>
+<p>This is a text based adventure that prints the flag after answering all questions correctly. In fact, the string</p>
+<pre><code>The flag is r2con2019{all_your_answers_in_order_without_spaces}
+</code></pre><p>is even embedded in the binary.</p>
 <p>Let's check out some functions:</p>
 <ul>
 <li><code>sym.go.main.main</code>: This function reads user input and calls the following two functions.</li>
