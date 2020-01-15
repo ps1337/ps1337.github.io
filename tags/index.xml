@@ -6,7 +6,7 @@
     <description>Recent content in Tags on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 30 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,25 +14,61 @@
     <item>
       <title>ctf</title>
       <link>https://bananamafia.dev/tags/ctf/</link>
-      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/ctf/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>cutter</title>
+      <link>https://bananamafia.dev/tags/cutter/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/cutter/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>exploiting</title>
       <link>https://bananamafia.dev/tags/exploiting/</link>
-      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/exploiting/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>heap</title>
+      <link>https://bananamafia.dev/tags/heap/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/heap/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>r2</title>
+      <link>https://bananamafia.dev/tags/r2/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/r2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>radare2</title>
+      <link>https://bananamafia.dev/tags/radare2/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/radare2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>reversing</title>
       <link>https://bananamafia.dev/tags/reversing/</link>
-      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/reversing/</guid>
       <description></description>
@@ -80,24 +116,6 @@
       <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/exploitation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>r2</title>
-      <link>https://bananamafia.dev/tags/r2/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/r2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>radare2</title>
-      <link>https://bananamafia.dev/tags/radare2/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/radare2/</guid>
       <description></description>
     </item>
     

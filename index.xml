@@ -6,7 +6,7 @@
     <description>Recent content on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 30 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/index.xml" rel="self" type="application/rss+xml" />
     
@@ -35,7 +35,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/project/canalyzat0r/</guid>
-      <description></description>
+      <description>Please find CANalyzat0r here on GitHub :)</description>
     </item>
     
     <item>
@@ -138,6 +138,17 @@
     </item>
     
     <item>
+      <title>Exploiting A Use-After-Free With radare2 - CTF Challenge</title>
+      <link>https://bananamafia.dev/post/uaf-1/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/uaf-1/</guid>
+      <description>This writeup is about a 36C3 junior CTF challenge called minifd which can be found here. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here&#39;s the challenge description:
+This is a simple file manager implementation supporting basic functionality to create, read, and write files.
+Please note: This is a prototype implementation. At this point of time, only 16 files can be managed at the same time.</description>
+    </item>
+    
+    <item>
       <title>36C3 CTF Writeups</title>
       <link>https://bananamafia.dev/post/36c3ctf/</link>
       <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
@@ -166,7 +177,8 @@ Everything started when I had a look at a more complex part of a public web appl
       
       <guid>https://bananamafia.dev/post/rop-arm-1/</guid>
       <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&#39;s what I&#39;ve found:
-nothingCool. That&#39;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&#39;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
+nothing
+Cool. That&#39;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&#39;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
     </item>
     
     <item>

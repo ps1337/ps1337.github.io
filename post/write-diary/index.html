@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.0" />
         
 
         
@@ -181,22 +181,56 @@
 <p>Yes, really. The developer decided to embed his <em>personal</em> GMail credential in
 the Android app. These credentials may or may not work in the management
 interface of this product - of course I haven't tried ;)</p>
-<h1 id="cve201715581-lack-of-httpsusage-lack-of-user-data-encryption-when-transmitting">CVE-2017-15581: Lack of HTTPS-usage, lack of user data encryption when transmitting</h1>
+<h1 id="cve-2017-15581-lack-of-https-usage-lack-of-user-data-encryption-when-transmitting">CVE-2017-15581: Lack of HTTPS-usage, lack of user data encryption when transmitting</h1>
 <p>In the &ldquo;Diary with lock&rdquo; (aka WriteDiary) application 4.72 for Android, neither HTTPS nor other encryption is used for transmitting data, despite the <a href="http://writediary.com/">website</a> states that the product is intended for &ldquo;a personal journal of secrets and feelings,&rdquo; which allows remote attackers to obtain sensitive information by sniffing the network during <code>LoginActivity</code> or <code>NoteActivity</code> execution. You can simply check the file <code>strings.xml</code> for <code>api_url_prod</code> with the value of <code>http://diary.adpog.com/api2</code>.</p>
 <p><img src="/img/write-diary/cleartext_pw.png" alt="Password transmission in plain text"></p>
 <p><img src="/img/write-diary/cleartext_body.png" alt="Plaintet body"></p>
 <h2 id="summary">Summary</h2>
 <p>The CVE details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15581">here</a></p>
-<!-- raw HTML omitted -->
-<h1 id="cve201715582-usage-of-static-aes-parameters">CVE-2017-15582: Usage of static AES parameters</h1>
+<table width=100% border=1>
+	<tr>
+		<td align="center" valign="middle"><b>Vulnerability Type</b></td>
+		<td align="center" valign="middle">Plaintext data transport</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+		<td align="center" valign="middle">WriteDiary - 4.72</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Component</b></td>
+		<td align="center" valign="middle">LoginActivity, NoteActivity</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Impact</b></td>
+		<td align="center" valign="middle">Information disclosure of sensitive user data</td>
+	</tr>
+</table>
+<h1 id="cve-2017-15582-usage-of-static-aes-parameters">CVE-2017-15582: Usage of static AES parameters</h1>
 <p>In <code>net.MCrypt</code> in the &ldquo;Diary with lock&rdquo; (aka WriteDiary) application 4.72 for Android, hardcoded <code>SecretKey</code> and <code>iv</code> variables are used for the AES parameters, which makes it easier for attackers to obtain the cleartext of stored diary entries:</p>
 <p><img src="/img/write-diary/staticAES.png" alt="Static AES parameters"></p>
 <p>As you can see, the specific values are:</p>
 <pre><code>secret key = &quot;f8djD2kfdU31wuRu&quot;
 iv = &quot;aBcNvn71dkdjf8hf&quot;
-</code></pre><h2 id="summary1">Summary</h2>
+</code></pre><h2 id="summary-1">Summary</h2>
 <p>The CVE details can be found <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15582">here</a></p>
-<!-- raw HTML omitted -->
+<table width=100% border=1>
+	<tr>
+		<td align="center" valign="middle"><b>Vulnerability Type</b></td>
+		<td align="center" valign="middle">Hard coded AES parameters</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Product Code Base</b></td>
+		<td align="center" valign="middle">WriteDiary - 4.72</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Affected Component</b></td>
+		<td align="center" valign="middle">net.MCrypt</td>
+	</tr>
+	<tr>
+		<td align="center" valign="middle"><b>Impact</b></td>
+		<td align="center" valign="middle">Information disclosure of sensitive user data</td>
+	</tr>
+</table>
 <h1 id="additional-note">Additional note</h1>
 <p>Further analysis showed that the data stored on the web application server is not encrypted. This means, that the whole concept isn't as private as it claims it is. On top of that, there's a built-in backdoor which lets the administrator access the confidential diary entries of every user.</p>
 </div>

@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.60.1" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.0" />
         
 
         
@@ -182,7 +182,7 @@
 
     <br>
     <div class="content-width text-justify"><p>Exploit development on ARM with <code>radare2</code> seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here's what I've found:</p>
-<p><!-- raw HTML omitted -->nothing<!-- raw HTML omitted --></p>
+<p><marquee>nothing</marquee></p>
 <p>Cool. That's the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is <code>stack6</code> from <a href="https://azeria-labs.com/part-3-stack-overflow-challenges/">Azeria Labs</a> and <code>radare2</code> will be used as a debugger. If you're a beginner I suggest reading the ARM assembly basics <a href="https://azeria-labs.com/writing-arm-assembly-part-1/">on the same site</a> first before starting the challenges from the beginning with <code>stack0</code>. The exploitation techniques covered in this post are ROP, ret2plt and ret2libc.</p>
 <h1 id="emulation-vs-real-hardware">Emulation VS Real Hardware</h1>
 <p>Many people are using a QEMU-based virtual ARM machine for research and exploitation purposes. If you want to go this way, check out <a href="https://azeria-labs.com/emulate-raspberry-pi-with-qemu/">this guide</a>.</p>
@@ -271,7 +271,7 @@ AAABAACAADAA[...]
 </code></pre><p>Let's integrate it into the debugging setup by changing the <code>p.sendline()</code> call and debug it:</p>
 <ol>
 <li>The target executes <code>gets()</code> to read user input in a function called <code>getpath()</code></li>
-<li>At the end of <code>getpath()` </code>(0x0001054c)<code>it executes</code>pop {r4, fp, pc}<code> which loads the instruction pointer (</code>pc`) from the stack.</li>
+<li>At the end of <code>getpath()</code> <code>(0x0001054c)</code> it executes <code>pop {r4, fp, pc}</code> which loads the instruction pointer (<code>pc</code>) from the stack.</li>
 <li>This value is under our control and is currently filled with <code>0x41416241</code></li>
 </ol>
 <p>The offset of this value in the pattern can be determined right from the <code>radare2</code> debugging session:</p>
@@ -397,8 +397,9 @@ p<span style="color:#f92672">.</span>sendline(payload)
 p<span style="color:#f92672">.</span>interactive()
 </code></pre></div><p>This is pretty straight forward If you've understood the previous ROP chain. This input overflows the buffer again and redirects the execution flow to the <code>POP</code> gadget. After populating all registers, <code>system(&quot;/bin/sh&quot;)</code> is getting called via the <code>blx r3</code> instruction in the <code>MOV_CALL</code> gadget:</p>
 <p><img src="/img/rop-arm-1/rop-arm-1-1.gif" alt="Shellz"></p>
-<!-- raw HTML omitted -->
-</div>
+<center>
+    <b>That's it!</b>
+</center></div>
 
     
     
@@ -408,6 +409,33 @@ p<span style="color:#f92672">.</span>interactive()
     <h4 class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/cutter"><kbd class="item-tag">cutter</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/heap"><kbd class="item-tag">heap</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -444,27 +472,6 @@ p<span style="color:#f92672">.</span>interactive()
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
     <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
     
     <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
     
