@@ -199,7 +199,7 @@
 </ul>
 <p>The first thing to do, after playing around with the service itself, is to load the challenge binary into a 1337 hacker tool like <code>Cutter</code>. This is a handy GUI for <code>radare2</code>. By making use of the graph view, one can get a good overview of the implementation. Let's have a look at how files are created in <code>sym.create</code>:</p>
 <p><img src="/img/uaf-1/sym_create.png" alt="Graph: sym_create()"></p>
-<p>A few things can be noticed here: First of all, the files are being allocated on the heap - hence the call to <code>calloc()</code>. Also, the size of a single file seems to be 80 bytes in total since that's the amount of bytes that being requested. After requesting a memory chunk, it's being initialized as a new file.</p>
+<p>A few things can be noticed here: First of all, the files are being allocated on the heap - hence the call to <code>calloc()</code>. Also, the size of a single file seems to be 80 bytes (<code>0x50</code>) in total since that's the requested chunk size. After requesting a memory chunk, it's being initialized as a new file.</p>
 <h1 id="reversing-the-data-structure">Reversing The Data Structure</h1>
 <p>From the disassembled instructions it's possible to reconstruct the structure that represents a file in memory:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">struct</span> file {
@@ -291,7 +291,7 @@ file
 <li>The file <code>a</code> gets duplicated so that there exist two file handles that have pointers to the same chunk of heap memory</li>
 <li>The rest of the file table gets filled with files</li>
 <li>At this point the reference count for <code>a</code> is <code>0x2</code> since there are two pointers that reference to it. Now the <code>dup()</code> call will be performed for the file <code>a</code> exactly 255 times. This causes the reference count to wrap around and to contain the value <code>0x1</code> now</li>
-<li>One of the file handles for <code>a</code> gets closed now. The reference count for <code>a</code> is now at <code>0x0</code> and therefore the associated memory chunk with size <code>0x50</code> gets freed. However, there's still a handle available that points to this freed memory region. This is called a dangling pointer.</li>
+<li>One of the file handles for <code>a</code> gets closed now. The reference count for <code>a</code> is now at <code>0x0</code> and therefore the associated memory chunk with size <code>0x50</code> gets freed. However, there's still a handle available that points to this freed memory region. This is called a dangling pointer</li>
 <li>A <code>write</code> operation to <code>b</code> follows. This write has to be exactly of size <code>0x50</code> (80 bytes) to cause the heap manager to place the written bytes into the memory region that was freed previously. The <code>calloc()</code> call will return the same address again. This places a fake object in memory that also contains more or less valid function pointers :)</li>
 <li>An arbitrary operation that involves one of the four function pointers is now being invoked on the remaining handle to <code>a</code>. This causes the application to make a <code>call</code> to the attacker-controlled function pointer</li>
 </ol>
@@ -421,6 +421,7 @@ p<span style="color:#f92672">.</span>interactive()
 </code></pre></div><h1 id="references">References</h1>
 <ul>
 <li>I've got the idea to reverse engineer and load the <code>file</code> structure from <a href="https://github.com/Dvd848/CTFs/blob/master/2019_36C3_Junior/minifd.md">here</a></li>
+<li>Read more about use-after-frees <a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/use_after_free/">over here</a></li>
 </ul>
 </div>
 
@@ -514,6 +515,13 @@ p<span style="color:#f92672">.</span>interactive()
 <script>
     var width = 200;
     $(document).ready(function () {
+        init();
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function init() {
         $("pre > code").css("display", "none");
         $("pre").css("display", "none");
 
@@ -521,21 +529,15 @@ p<span style="color:#f92672">.</span>interactive()
 
         $("pre > code").css("display", "block");
         $("pre").css("display", "block");
-
-        setMaxWidth();
-        $(window).bind("resize", setMaxWidth);
-    });
+    }
 
     function setMaxWidth() {
         $("pre > code").css("maxWidth", (width) + "px");
         $("pre").css("maxWidth", (width) + "px");
     }
 
-    $(window).resize(function () {
-        setMaxWidth();
-    });
-
     $(window).on('resize', function () {
+        init();
         setMaxWidth();
     });
 
