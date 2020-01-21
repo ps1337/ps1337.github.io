@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.0" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
         
 
         
@@ -153,7 +153,7 @@
         </nav>
 
 
-<main>
+<main id="main">
 
     <div class="item">
 
@@ -307,7 +307,10 @@ Ok bye.</div>
 </div>
  
 
-    <footer>
+    
+
+</main>
+<footer id="footer">
     <img style="width:42vh" src="/img/tag.png">
 
     <p class="copyright text-muted">
@@ -317,21 +320,42 @@ Ok bye.</div>
 </footer>
 </body>
 
-</html>
-    
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
 
-</main>
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
 
 <script>
     var width = 200;
     $(document).ready(function () {
-        init();
         setMaxWidth();
         $(window).bind("resize", setMaxWidth);
     });
 
 
-    function init() {
+    function setMaxWidth() {
         $("pre > code").css("display", "none");
         $("pre").css("display", "none");
 
@@ -339,16 +363,19 @@ Ok bye.</div>
 
         $("pre > code").css("display", "block");
         $("pre").css("display", "block");
-    }
 
-    function setMaxWidth() {
         $("pre > code").css("maxWidth", (width) + "px");
         $("pre").css("maxWidth", (width) + "px");
     }
 
     $(window).on('resize', function () {
-        init();
         setMaxWidth();
     });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
 
 </script>
