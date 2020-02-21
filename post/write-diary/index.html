@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -176,11 +176,11 @@
 
     <br>
     <div class="content-width text-justify"><p>WriteDiary consists of a <a href="http://www.WriteDiary.com">webapp</a> and an <a href="https://play.google.com/store/apps/details?id=com.adpog.diary">Android app</a> (version 4.72). For the audit, the android app was the primary target.</p>
-<p><em>The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn't described here. However, no response has been received.</em> This is bad, as you will see in the first finding:</p>
+<p><em>The developer and owner of both the webapp and android app has been contacted multiple times to develop a quick fix for the issues addressed in this blog post and a vulnerability concerning the webapp which isn&rsquo;t described here. However, no response has been received.</em> This is bad, as you will see in the first finding:</p>
 <h1 id="embedded-management-credentails">Embedded Management Credentails</h1>
 <p>Yes, really. The developer decided to embed his <em>personal</em> GMail credential in
 the Android app. These credentials may or may not work in the management
-interface of this product - of course I haven't tried ;)</p>
+interface of this product - of course I haven&rsquo;t tried ;)</p>
 <h1 id="cve-2017-15581-lack-of-https-usage-lack-of-user-data-encryption-when-transmitting">CVE-2017-15581: Lack of HTTPS-usage, lack of user data encryption when transmitting</h1>
 <p>In the &ldquo;Diary with lock&rdquo; (aka WriteDiary) application 4.72 for Android, neither HTTPS nor other encryption is used for transmitting data, despite the <a href="http://writediary.com/">website</a> states that the product is intended for &ldquo;a personal journal of secrets and feelings,&rdquo; which allows remote attackers to obtain sensitive information by sniffing the network during <code>LoginActivity</code> or <code>NoteActivity</code> execution. You can simply check the file <code>strings.xml</code> for <code>api_url_prod</code> with the value of <code>http://diary.adpog.com/api2</code>.</p>
 <p><img src="/img/write-diary/cleartext_pw.png" alt="Password transmission in plain text"></p>
@@ -232,7 +232,7 @@ iv = &quot;aBcNvn71dkdjf8hf&quot;
 	</tr>
 </table>
 <h1 id="additional-note">Additional note</h1>
-<p>Further analysis showed that the data stored on the web application server is not encrypted. This means, that the whole concept isn't as private as it claims it is. On top of that, there's a built-in backdoor which lets the administrator access the confidential diary entries of every user.</p>
+<p>Further analysis showed that the data stored on the web application server is not encrypted. This means, that the whole concept isn&rsquo;t as private as it claims it is. On top of that, there&rsquo;s a built-in backdoor which lets the administrator access the confidential diary entries of every user.</p>
 </div>
 
     

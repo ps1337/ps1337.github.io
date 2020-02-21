@@ -17,9 +17,9 @@
       <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/rop-arm-1/</guid>
-      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&#39;s what I&#39;ve found:
+      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&amp;rsquo;s what I&amp;rsquo;ve found:
 nothing
-Cool. That&#39;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&#39;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
+Cool. That&amp;rsquo;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&amp;rsquo;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
     </item>
     
     <item>
@@ -28,7 +28,7 @@ Cool. That&#39;s the reason why this post covers the setup I came up with, as we
       <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/x64-rop-redpwn/</guid>
-      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&#39;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&#39;s using glibc.</description>
+      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&amp;rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&amp;rsquo;s using glibc.</description>
     </item>
     
     <item>
@@ -37,9 +37,9 @@ Cool. That&#39;s the reason why this post covers the setup I came up with, as we
       <pubDate>Tue, 13 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/binary-rop-stackpivot/</guid>
-      <description>Let&#39;s check out Return Oriented Programming (ROP) with the pivot32 challenge from ROP Emporium by using radare2. The pivot32 binary is compiled without stack canaries and PIE but has NX enabled.
+      <description>Let&amp;rsquo;s check out Return Oriented Programming (ROP) with the pivot32 challenge from ROP Emporium by using radare2. The pivot32 binary is compiled without stack canaries and PIE but has NX enabled.
 Basics The general principle behind ROP is that:
-[&amp;hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&#39;s memory, called &amp;ldquo;gadgets&amp;rdquo;.</description>
+[&amp;hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&amp;rsquo;s memory, called &amp;ldquo;gadgets&amp;rdquo;.</description>
     </item>
     
     <item>

@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -182,17 +182,17 @@
 <pre><code>K: ti edoced tsuE 4E6HoWSHY4lbwZYQ6MSa8HnL6QzSkIYex57S8PlTfIYOw6PNztnMPI5L :galf eht si sihO
 </code></pre><p>And reversed:</p>
 <pre><code>Ohis is the flag: L5IPMntzNP6wOYIfTlP8S75xeYIkSzQ6LnH8aSM6QYZwbl4YHSWoH6E4 Eust decode it :K
-</code></pre><p>The odd thing is that some characters, the <code>O</code> in <code>Ohis</code>, the <code>E</code> in <code>Eust</code> and the smiley and the end of the line seem broken. Playing around with other keys and ciphers like Affine cipher or Vigenère didn't work. Also just decoding the alleged flag with Base64 and other encodings didn't produce anything useful.</p>
+</code></pre><p>The odd thing is that some characters, the <code>O</code> in <code>Ohis</code>, the <code>E</code> in <code>Eust</code> and the smiley and the end of the line seem broken. Playing around with other keys and ciphers like Affine cipher or Vigenère didn&rsquo;t work. Also just decoding the alleged flag with Base64 and other encodings didn&rsquo;t produce anything useful.</p>
 <p>While trying to fix the corrupted characters, it has been observed that with a ROT key of <code>12</code>, the corrupted characters seem to be included correctly in the plaintext when merging it with the result with key <code>7</code>:</p>
 <pre><code>Tmnx nx ymj kqfl: Q5NURsyeSU6bTDNkYqU8X75cjDNpXeV6QsM8fXR6VDEbgq4DMXBtM6J4 Jzxy ijhtij ny :P
 </code></pre><p>Base64 decoding this prints:</p>
 <pre><code>CTF̞INL3db&lt;_\3i]zB&lt;}tzT1pm3x%
 </code></pre><p>This at least starts with the <code>CTF</code> string&hellip;</p>
-<p>The assumption that has been made is that the alleged flag is encoded with Base64. It's known that all flags start with the <code>CCTF{</code> string in this particular CTF, so Base64 encoding this prints: <code>Q0NURns=</code> as reference. Therefore the encoded flag has to start with this string or a substring of it.</p>
-<p>The decryption result with key <code>12</code> starts with <code>Q5NUR</code> which is quite similar to the string that's being searched for. Let's line up both decryption results:</p>
+<p>The assumption that has been made is that the alleged flag is encoded with Base64. It&rsquo;s known that all flags start with the <code>CCTF{</code> string in this particular CTF, so Base64 encoding this prints: <code>Q0NURns=</code> as reference. Therefore the encoded flag has to start with this string or a substring of it.</p>
+<p>The decryption result with key <code>12</code> starts with <code>Q5NUR</code> which is quite similar to the string that&rsquo;s being searched for. Let&rsquo;s line up both decryption results:</p>
 <pre><code>L5IPMntzNP6wOYIfTlP8S75xeYIkSzQ6LnH8aSM6QYZwbl4YHSWoH6E4 (key 7)
 Q5NURsyeSU6bTDNkYqU8X75cjDNpXeV6QsM8fXR6VDEbgq4DMXBtM6J4 (key 12)
-</code></pre><p>It was striking that the <em>numbers</em> weren't rotated when decrypting the string with <a href="https://gchq.github.io/CyberChef">CyberChef</a>. According to the reference above, the second character has to be a zero but it's a five. So I've decided to just add <code>5</code> to every number that's present in the second decryption result (second line in the listing above):</p>
+</code></pre><p>It was striking that the <em>numbers</em> weren&rsquo;t rotated when decrypting the string with <a href="https://gchq.github.io/CyberChef">CyberChef</a>. According to the reference above, the second character has to be a zero but it&rsquo;s a five. So I&rsquo;ve decided to just add <code>5</code> to every number that&rsquo;s present in the second decryption result (second line in the listing above):</p>
 <pre><code>Q0NURsyeSU1bTDNkYqU3X20cjDNpXeV1QsM3fXR1VDEbgq9DMXBtM1J9
 </code></pre><p>And Base64-decoded:</p>
 <pre><code>CCTF̞IM[L3db7_m3i]uB7}tuT11pm3R}
@@ -201,7 +201,7 @@ Q5NURsyeSU6bTDNkYqU8X75cjDNpXeV6QsM8fXR6VDEbgq4DMXBtM6J4 (key 12)
 <pre><code>Q0NURntzSU1wTDNfYlU3X20xeDNkXzV1QnM3aXR1VDEwbl9DMXBoM1J9
 </code></pre><p>And Base64-decoded:</p>
 <pre><code>CCTF{sIMpL3_bU7_m1x3d_5uBs7ituT10n_C1ph3R}
-</code></pre><p>What to take away from this? I don't know. Maybe that</p>
+</code></pre><p>What to take away from this? I don&rsquo;t know. Maybe that</p>
 <pre><code>Base64Encode(CCTF{) = Q0NURns=
 Base64Decode(Q0NURnt=) = CCTF{
 </code></pre><p>So this means that there are various inputs for Base64 decoding that decode to the same string.</p>

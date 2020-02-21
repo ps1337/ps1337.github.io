@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -227,7 +227,7 @@
 └── updateDotfiles.yml
 
 </code></pre><h2 id="role-example">Role example</h2>
-<p>When using Ansible, it's important to use the predefined modules in order to have idempotency for all actions. Unwanted side effects can occur if this isn't taken care of. For example, cloning a Dotfiles repository can be as simple as:</p>
+<p>When using Ansible, it&rsquo;s important to use the predefined modules in order to have idempotency for all actions. Unwanted side effects can occur if this isn&rsquo;t taken care of. For example, cloning a Dotfiles repository can be as simple as:</p>
 <pre><code>- name: Clone Dotfiles repo
   git:
     repo: 'https://github.com/ps1337/Dotfiles.git'
@@ -326,7 +326,7 @@ after_success:
 
 after_failure:
   - // e.g. send notification using Telegram
-</code></pre><p>As you can see, it's pretty easy to test the Dotfile provisioning on Arch, Ubuntu and Debian at the same time using Docker and Travis. For each value for <code>BUILD_CFG</code>, a separate deploying process will be started. In each spawned container, Ansible gets installed and all Ansible roles will be executed locally in the container to simulate deploying the Dotfiles and dependencies on a real host.</p>
+</code></pre><p>As you can see, it&rsquo;s pretty easy to test the Dotfile provisioning on Arch, Ubuntu and Debian at the same time using Docker and Travis. For each value for <code>BUILD_CFG</code>, a separate deploying process will be started. In each spawned container, Ansible gets installed and all Ansible roles will be executed locally in the container to simulate deploying the Dotfiles and dependencies on a real host.</p>
 <p>This can also be performed in intervals using cron jobs to ensure a working deployment suite.</p>
 <p>As a bonus, the dependencies of all plugins, helper scripts and other fancy stuff you use will be documented within Ansible roles if done correctly.</p>
 </div>

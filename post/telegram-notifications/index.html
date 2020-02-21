@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -179,8 +179,8 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>If you ever wanted to get notified when certain things happen but didn't find a lightweight solution &ndash; here comes captain Telegram.</p>
-<p>Using a simple Telegram bot, it's possible to send notifications to your mobile phone or browser. All the notifier node needs is <code>curl</code> installed.</p>
+    <div class="content-width text-justify"><p>If you ever wanted to get notified when certain things happen but didn&rsquo;t find a lightweight solution &ndash; here comes captain Telegram.</p>
+<p>Using a simple Telegram bot, it&rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is <code>curl</code> installed.</p>
 <h1 id="registering-a-bot">Registering a bot</h1>
 <p>First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</p>
 <ul>
@@ -197,7 +197,7 @@
 <li>Bot API token</li>
 <li>Chat ID of the chat between you and your newly created bot.</li>
 </ul>
-<p>To send a message, it's as simple as using the following command structure</p>
+<p>To send a message, it&rsquo;s as simple as using the following command structure</p>
 <pre><code>curl -i -X GET &quot;https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/sendMessage?chat_id=&lt;CHAT_ID&gt;&amp;text=hello&quot;
 </code></pre><h1 id="example-1-jenkins-build-notifications">Example 1: Jenkins build notifications</h1>
 <p>In order to get notified in case a Jenkins build succeeds or fails, you can edit the <code>Jenkinsfile</code> as follows</p>

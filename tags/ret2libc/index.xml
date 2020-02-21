@@ -18,7 +18,7 @@
       
       <guid>https://bananamafia.dev/post/binary-aslr-dep-32/</guid>
       <description>This post covers basic basics of bypassing ASLR and DEP with r2. For this, a vulnerable application, yolo.c, is required:
-#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); } 64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow. Since normally ASLR and DEP are enabled, the following things don&#39;t just work out of the box:</description>
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); } 64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow. Since normally ASLR and DEP are enabled, the following things don&amp;rsquo;t just work out of the box:</description>
     </item>
     
   </channel>

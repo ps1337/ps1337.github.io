@@ -6,7 +6,7 @@
     <description>Recent content in fuzzing on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 24 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Feb 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/fuzzing/index.xml" rel="self" type="application/rss+xml" />
     
@@ -21,12 +21,22 @@
     </item>
     
     <item>
+      <title>Fuzzing A GameBoy Emulator With AFL&#43;&#43;</title>
+      <link>https://bananamafia.dev/post/gb-fuzz/</link>
+      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/gb-fuzz/</guid>
+      <description>Recently I&amp;rsquo;ve started a little fuzzing project. After doing some research, I&amp;rsquo;ve decided to fuzz a gaming emulator. The target of choice is a GameBoy and GameBoy Advance emulator called VisualBoyAdvance-M, which is also called VBA-M. At the time of writing the emulator was still being maintained. VBA-M seems to be a fork of VisualBoyAdvance, for which development seems to have stopped in 2006.
+Disclaimer: I&amp;rsquo;m publishing this blog post to share some fuzzing methodology and tooling and not to blame the developers.</description>
+    </item>
+    
+    <item>
       <title>In-Process Fuzzing With Frida</title>
       <link>https://bananamafia.dev/post/frida-fuzz/</link>
       <pubDate>Thu, 24 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/frida-fuzz/</guid>
-      <description>In a previous post I&#39;ve already covered Frida and its instrumentation abilities. But check this out: You can also use Frida to perform fuzzing. What&#39;s even greater is that Frida allows in-process fuzzing.
+      <description>In a previous post I&amp;rsquo;ve already covered Frida and its instrumentation abilities. But check this out: You can also use Frida to perform fuzzing. What&amp;rsquo;s even greater is that Frida allows in-process fuzzing.
 Why would you want to do this? There may be various reasons, but the most outstanding one for me is building a fuzzing harness for closed source applications and libraries. Just take Counter Strike GO as an example:</description>
     </item>
     

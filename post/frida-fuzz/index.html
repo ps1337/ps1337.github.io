@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -179,12 +179,12 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>In a <a href="https://bananamafia.dev/post/r2frida-1/">previous post</a> I've already covered <a href="https://www.frida.re/">Frida</a> and its instrumentation abilities. But check this out: You can also use Frida to perform fuzzing. What's even greater is that Frida allows in-process fuzzing.</p>
+    <div class="content-width text-justify"><p>In a <a href="https://bananamafia.dev/post/r2frida-1/">previous post</a> I&rsquo;ve already covered <a href="https://www.frida.re/">Frida</a> and its instrumentation abilities. But check this out: You can also use Frida to perform fuzzing. What&rsquo;s even greater is that Frida allows in-process fuzzing.</p>
 <p>Why would you want to do this? There may be various reasons, but the most outstanding one for me is building a fuzzing harness for closed source applications and libraries. Just take Counter Strike GO as an example:</p>
-<p>If you want to fuzz the map loading routines with maximum speed, you'd (ideally) want to create a minimized environment that only performs the map loading. Now the CS:GO client is a graphical application that performs all kinds of stuff when being launched and it's not scriptable to an extent that allows efficient fuzzing. To avoid executing all this code that's not even related to map loading, a fuzzing harness is required. A great example of such a harness for CS:GO can be found <a href="https://phoenhex.re/2018-08-26/csgo-fuzzing-bsp">here</a> - the harness consists of a custom wrapper and some patches.</p>
+<p>If you want to fuzz the map loading routines with maximum speed, you&rsquo;d (ideally) want to create a minimized environment that only performs the map loading. Now the CS:GO client is a graphical application that performs all kinds of stuff when being launched and it&rsquo;s not scriptable to an extent that allows efficient fuzzing. To avoid executing all this code that&rsquo;s not even related to map loading, a fuzzing harness is required. A great example of such a harness for CS:GO can be found <a href="https://phoenhex.re/2018-08-26/csgo-fuzzing-bsp">here</a> - the harness consists of a custom wrapper and some patches.</p>
 <p>This of course allows very specific fuzzing at a great speed, but also requires quite some effort to pull of. An approach that <em>might</em> be easier to pull involves using Frida and in-process fuzzing. This, of course, comes with a much higher fuzzing performance impact compared to the native approach.</p>
 <h1 id="ok-how">OK HOW?</h1>
-<p>Let's Consider this very sophisticated fuzzing target:</p>
+<p>Let&rsquo;s Consider this very sophisticated fuzzing target:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
@@ -199,9 +199,9 @@
 {
     lol(argv[<span style="color:#ae81ff">1</span>]);
 }
-</code></pre></div><p>Yes, the vulnerability is obvious and yes, you can find it using simple reverse engineering but I don't want to build a better PoC just for people to stop complaining, okay? :)</p>
+</code></pre></div><p>Yes, the vulnerability is obvious and yes, you can find it using simple reverse engineering but I don&rsquo;t want to build a better PoC just for people to stop complaining, okay? :)</p>
 <p>The idea is to inject some code into the target process and use it to perform the fuzzing directly in the process as soon as the target function would be called regularly. This causes the target to execute all setup routines for us, up to the point where the harness would also hand over the work to the fuzzer. The target function will then be called in an infinite loop, with some optional cleanup in between, while mutating the input. This mutation can also happen directly in memory, if applicable.</p>
-<p>I've created this highly complex fuzzing setup using Frida's Python bindings:</p>
+<p>I&rsquo;ve created this highly complex fuzzing setup using Frida&rsquo;s Python bindings:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python3</span>
 
 <span style="color:#f92672">import</span> frida
@@ -274,19 +274,19 @@ script<span style="color:#f92672">.</span>load()
 frida<span style="color:#f92672">.</span>resume(pid)
 
 sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>read()
-</code></pre></div><p>Ok cool, what does this all do? Here's the output:</p>
+</code></pre></div><p>Ok cool, what does this all do? Here&rsquo;s the output:</p>
 <pre><code>[i] lol() is at 0x5560a8bc5149
 [i] Original argument: hello
 [*] Fuzzing now
 *** stack smashing detected ***: &lt;unknown&gt; terminated
 [!] Crash found for size 1353
-</code></pre><p>The script causes Frida to spawn the process, inject the JavaScript code into it and resume the target afterwards. The target process will then proceed with its normal execution up to the point where <code>lol()</code> gets called. The JavaScript code defines a hook for this function that hijacks the program flow and causes the target to fuzz itself using mutated input. This mutation happens directly in memory using a buffer that Frida allocated for itself. This mutation can do all kinds of things, for the example it's enough to simply grow the string length over time until the target crashes.</p>
+</code></pre><p>The script causes Frida to spawn the process, inject the JavaScript code into it and resume the target afterwards. The target process will then proceed with its normal execution up to the point where <code>lol()</code> gets called. The JavaScript code defines a hook for this function that hijacks the program flow and causes the target to fuzz itself using mutated input. This mutation happens directly in memory using a buffer that Frida allocated for itself. This mutation can do all kinds of things, for the example it&rsquo;s enough to simply grow the string length over time until the target crashes.</p>
 <p>For a real-world fuzzing setup you would use <code>Process.enumerateModulesSync()</code> and <code>Module.enumerateSymbols(&quot;&lt;module&gt;&quot;)</code> to get the addresses of the target functions in order to hijack the program flow. The Frida hooks would then allow mutating the input data and calling the fuzzed function.</p>
 <h1 id="dis-sucks-i-want-better">Dis Sucks, I Want Better</h1>
-<p>Luckily <a href="https://twitter.com/dennismantz">@dennismantz</a> and <a href="https://twitter.com/lod108">@lod108</a> have released <a href="https://github.com/demantz/frizzer">Frizzer</a> recently! It's a <em>coverage-guided blackbox fuzzer based on the Frida instrumentation framework</em>. It's still a work in progress project but I think it's in a very useful state that can be adapted to own projects pretty quickly at this point.</p>
+<p>Luckily <a href="https://twitter.com/dennismantz">@dennismantz</a> and <a href="https://twitter.com/lod108">@lod108</a> have released <a href="https://github.com/demantz/frizzer">Frizzer</a> recently! It&rsquo;s a <em>coverage-guided blackbox fuzzer based on the Frida instrumentation framework</em>. It&rsquo;s still a work in progress project but I think it&rsquo;s in a very useful state that can be adapted to own projects pretty quickly at this point.</p>
 <p>The best feature is that it uses coverage information provided by <a href="https://www.frida.re/news/2017/08/25/frida-10-5-released/">Frida/Stalker</a> in order to find new execution paths while fuzzing and mutating the input accordingly. This mutation is based on a pre-defined set of corpus files.</p>
 <h2 id="frizzer-example">Frizzer Example</h2>
-<p>You can find some fuzzing targets in the Frizzer repository, but I've built one myself in order to see how Frizzer performs and what it expects. I'm using a target modified from my <a href="https://bananamafia.dev/post/binary-canary-bruteforce/">previous stack canary post</a>:</p>
+<p>You can find some fuzzing targets in the Frizzer repository, but I&rsquo;ve built one myself in order to see how Frizzer performs and what it expects. I&rsquo;m using a target modified from my <a href="https://bananamafia.dev/post/binary-canary-bruteforce/">previous stack canary post</a>:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
 </span><span style="color:#75715e"></span><span style="color:#75715e">#</span><span style="color:#75715e">include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
@@ -378,7 +378,7 @@ sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>
 
     <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
 }
-</code></pre></div><p>This is a simple server application that accepts user input via TCP. This was compiled using <code>gcc -no-pie test.c -o test</code>. Disabling PIE theoretically isn't necessary because Frizzer <em>could</em> get the address of the function to fuzz directly on run time, as seen in the first example at the beginning of this post.</p>
+</code></pre></div><p>This is a simple server application that accepts user input via TCP. This was compiled using <code>gcc -no-pie test.c -o test</code>. Disabling PIE theoretically isn&rsquo;t necessary because Frizzer <em>could</em> get the address of the function to fuzz directly on run time, as seen in the first example at the beginning of this post.</p>
 <p>This is the script used to start the fuzzing process:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
 </span><span style="color:#75715e"></span>
@@ -402,15 +402,15 @@ cat &gt; tmpprojdir/config <span style="color:#e6db74">&lt;&lt;EOF
 
 frizzer add -p tmpprojdir indir
 frizzer fuzz -p tmpprojdir
-</code></pre></div><p>As can be seen, Frizzer requires the address of the target function that's going to be fuzzed. I've determined this address using <code>radare2</code> like this:</p>
+</code></pre></div><p>As can be seen, Frizzer requires the address of the target function that&rsquo;s going to be fuzzed. I&rsquo;ve determined this address using <code>radare2</code> like this:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ r2 -A -c <span style="color:#e6db74">&#34;afl~pwned&#34;</span> -q test
 0x00401294    <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">179</span>          sym.pwned
 </code></pre></div><p>Also, Frizzer seems to mutate the first parameter of the target function during fuzzing - in this case a <code>char*</code> value. If you find yourself trying to fuzz something different you might have to customize Frizzer to your needs :)</p>
-<p>The directory <code>indir</code> will be filled with files that contain corpus data. This data is the basis for all the fuzzing that's going on.</p>
-<p>Let's see Frizzer in action:</p>
+<p>The directory <code>indir</code> will be filled with files that contain corpus data. This data is the basis for all the fuzzing that&rsquo;s going on.</p>
+<p>Let&rsquo;s see Frizzer in action:</p>
 <p><img src="/img/frida-fuzz/frizzer.gif" alt="Frizzer"></p>
-<p>And that's it :)</p>
-<p>As you can see, fuzzing using Frida seems to be a promising and quite interesting approach. I'm quite interested to see how Frizzer evolves and what kind of vulnerabilities it's going to find.</p>
+<p>And that&rsquo;s it :)</p>
+<p>As you can see, fuzzing using Frida seems to be a promising and quite interesting approach. I&rsquo;m quite interested to see how Frizzer evolves and what kind of vulnerabilities it&rsquo;s going to find.</p>
 <p><marquee>K THX BYE</marquee></p>
 </div>
 
@@ -422,6 +422,25 @@ frizzer fuzz -p tmpprojdir
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/gb-fuzz/">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -464,31 +483,6 @@ frizzer fuzz -p tmpprojdir
     <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
     
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
 
 </div>

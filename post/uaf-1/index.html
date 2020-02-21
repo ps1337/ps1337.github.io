@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -185,11 +185,11 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>This writeup is about a 36C3 junior CTF challenge called <code>minifd</code> which can be found <a href="https://github.com/fkt/36c3-junior-ctf-pub/tree/master/minifd/distrib">here</a>. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here's the challenge description:</p>
+    <div class="content-width text-justify"><p>This writeup is about a 36C3 junior CTF challenge called <code>minifd</code> which can be found <a href="https://github.com/fkt/36c3-junior-ctf-pub/tree/master/minifd/distrib">here</a>. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here&rsquo;s the challenge description:</p>
 <p><em>This is a simple file manager implementation supporting basic functionality to create, read, and write files.</em></p>
 <p><em>Please note: This is a prototype implementation. At this point of time, only 16 files can be managed at the same time.</em></p>
 <hr>
-<p>The 16 files are managed in a list that's being held in memory. Files can be created, deleted, edited and duplicated with these commands:</p>
+<p>The 16 files are managed in a list that&rsquo;s being held in memory. Files can be created, deleted, edited and duplicated with these commands:</p>
 <ul>
 <li><code>create &lt;string&gt;</code></li>
 <li><code>close &lt;fd&gt;</code></li>
@@ -197,11 +197,11 @@
 <li><code>read &lt;fd&gt; &lt;n&gt;</code></li>
 <li><code>write &lt;fd&gt; &lt;n&gt; &lt;string&gt;</code></li>
 </ul>
-<p>The first thing to do, after playing around with the service itself, is to load the challenge binary into a 1337 hacker tool like <code>Cutter</code>. This is a handy GUI for <code>radare2</code>. By making use of the graph view, one can get a good overview of the implementation. Let's have a look at how files are created in <code>sym.create</code>:</p>
+<p>The first thing to do, after playing around with the service itself, is to load the challenge binary into a 1337 hacker tool like <code>Cutter</code>. This is a handy GUI for <code>radare2</code>. By making use of the graph view, one can get a good overview of the implementation. Let&rsquo;s have a look at how files are created in <code>sym.create</code>:</p>
 <p><img src="/img/uaf-1/sym_create.png" alt="Graph: sym_create()"></p>
-<p>A few things can be noticed here: First of all, the files are being allocated on the heap - hence the call to <code>calloc()</code>. Also, the size of a single file seems to be 80 bytes (<code>0x50</code>) in total since that's the requested chunk size. After requesting a memory chunk, it's being initialized as a new file.</p>
+<p>A few things can be noticed here: First of all, the files are being allocated on the heap - hence the call to <code>calloc()</code>. Also, the size of a single file seems to be 80 bytes (<code>0x50</code>) in total since that&rsquo;s the requested chunk size. After requesting a memory chunk, it&rsquo;s being initialized as a new file.</p>
 <h1 id="reversing-the-data-structure">Reversing The Data Structure</h1>
-<p>From the disassembled instructions it's possible to reconstruct the structure that represents a file in memory:</p>
+<p>From the disassembled instructions it&rsquo;s possible to reconstruct the structure that represents a file in memory:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">struct</span> file {
     uint8_t refcount; <span style="color:#75715e">// +0x0: mov byte [rax], 1
 </span><span style="color:#75715e"></span>    uint8_t unused_1; <span style="color:#75715e">// +0x1
@@ -221,7 +221,7 @@
 <li><strong>sym.do_dup()</strong>
 <img src="/img/uaf-1/sym_do_dup.png" alt="Graph: sym_do_dup()"></li>
 </ul>
-<p>The first byte of the structure is being checked in <code>sym.do_dup()</code>. If it's not zero, then a call to <code>[rbx + 0x48]</code> is being made. As listed in the structure above, this is a pointer to <code>sym.c3ctf_file_dup()</code>:</p>
+<p>The first byte of the structure is being checked in <code>sym.do_dup()</code>. If it&rsquo;s not zero, then a call to <code>[rbx + 0x48]</code> is being made. As listed in the structure above, this is a pointer to <code>sym.c3ctf_file_dup()</code>:</p>
 <ul>
 <li><strong>sym.c3ctf_file_dup()</strong>
 <br></li>
@@ -234,7 +234,7 @@
 <li><strong>sym.c3ctf_file_write()</strong>
 <img src="/img/uaf-1/sym_c3ctf_file_write.png" alt="Graph: sym_c3ctf_file_write.png"></li>
 </ul>
-<p>The value at <code>rdi + 4</code> is being compared to the second argument of the function, which is the amount of bytes the user requested to write. If it's below the other value, a jump is being made that skips the re-allocation of the data <code>rbp + 8</code> points to. This essentially re-uses the space of a previous allocation in case the space is sufficient for the new content. If it's not, then a new allocation takes place. By putting this together you can determine that the value at offset <code>+4</code> is the data length and that offset <code>+8</code> points to a heap segment that's filled with data.</p>
+<p>The value at <code>rdi + 4</code> is being compared to the second argument of the function, which is the amount of bytes the user requested to write. If it&rsquo;s below the other value, a jump is being made that skips the re-allocation of the data <code>rbp + 8</code> points to. This essentially re-uses the space of a previous allocation in case the space is sufficient for the new content. If it&rsquo;s not, then a new allocation takes place. By putting this together you can determine that the value at offset <code>+4</code> is the data length and that offset <code>+8</code> points to a heap segment that&rsquo;s filled with data.</p>
 <h1 id="loading-the-struct-in-radare2">Loading The Struct In <code>radare2</code></h1>
 <p>Now that the data structure is known, the best thing to do is to load it into <code>radare2</code> so it can cast memory at a given address to this data type. This is pretty easy and only requires a single command:</p>
 <pre><code class="language-console" data-lang="console">[0x004007c0]&gt; t?
@@ -249,7 +249,7 @@ Usage: t   # cparse types commands
 
 [0x004007c0]&gt; ts
 file
-</code></pre><p>After that it's possible to print a given memory segment as a <code>file</code>:</p>
+</code></pre><p>After that it&rsquo;s possible to print a given memory segment as a <code>file</code>:</p>
 <pre><code class="language-console" data-lang="console">[0x00400ad5]&gt; tp file 0x00a5a3f0
    refcount : 0x00a5a3f0 = 0x01
    unused_1 : 0x00a5a3f1 = 0x00
@@ -291,11 +291,11 @@ file
 <li>The file <code>a</code> gets duplicated so that there exist two file handles that have pointers to the same chunk of heap memory</li>
 <li>The rest of the file table gets filled with files</li>
 <li>At this point the reference count for <code>a</code> is <code>0x2</code> since there are two pointers that reference to it. Now the <code>dup()</code> call will be performed for the file <code>a</code> exactly 255 times. This causes the reference count to wrap around and to contain the value <code>0x1</code> now</li>
-<li>One of the file handles for <code>a</code> gets closed now. The reference count for <code>a</code> is now at <code>0x0</code> and therefore the associated memory chunk with size <code>0x50</code> gets freed. However, there's still a handle available that points to this freed memory region. This is called a dangling pointer</li>
+<li>One of the file handles for <code>a</code> gets closed now. The reference count for <code>a</code> is now at <code>0x0</code> and therefore the associated memory chunk with size <code>0x50</code> gets freed. However, there&rsquo;s still a handle available that points to this freed memory region. This is called a dangling pointer</li>
 <li>A <code>write</code> operation to <code>b</code> follows. This write has to be exactly of size <code>0x50</code> (80 bytes) to cause the heap manager to place the written bytes into the memory region that was freed previously. The <code>calloc()</code> call will return the same address again. This places a fake object in memory that also contains more or less valid function pointers :)</li>
 <li>An arbitrary operation that involves one of the four function pointers is now being invoked on the remaining handle to <code>a</code>. This causes the application to make a <code>call</code> to the attacker-controlled function pointer</li>
 </ol>
-<p>Let's see how it looks like from a memory perspective. This is the file list after step 6:</p>
+<p>Let&rsquo;s see how it looks like from a memory perspective. This is the file list after step 6:</p>
 <pre><code class="language-console" data-lang="console">-----------------------------------------
 | fd |         file name                |
 -----------------------------------------
@@ -346,7 +346,7 @@ file
 0x006020f0  0x00000000012f0a90  0x00000000012f0af0   ../......./.....
 0x00602100  0x00000000012f0b50  0x00000000012f0bb0   P./......./.....
 0x00602110  0x00000000012f0c10  0x00000000012f0c70   ../.....p./.....
-</code></pre><p>Now the contents of the third slot are being printed - that's the corrupted file:</p>
+</code></pre><p>Now the contents of the third slot are being printed - that&rsquo;s the corrupted file:</p>
 <pre><code class="language-console" data-lang="console">[0x7fe5d93a73f2]&gt; tp file 0x00000000012f0730
    refcount : 0x012f0730 = 0x41
    unused_1 : 0x012f0731 = 0x41
@@ -420,7 +420,7 @@ p<span style="color:#f92672">.</span>interactive()
 
 </code></pre></div><h1 id="references">References</h1>
 <ul>
-<li>I've got the idea to reverse engineer and load the <code>file</code> structure from <a href="https://github.com/Dvd848/CTFs/blob/master/2019_36C3_Junior/minifd.md">here</a></li>
+<li>I&rsquo;ve got the idea to reverse engineer and load the <code>file</code> structure from <a href="https://github.com/Dvd848/CTFs/blob/master/2019_36C3_Junior/minifd.md">here</a></li>
 <li>Read more about use-after-frees <a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/use_after_free/">over here</a></li>
 </ul>
 </div>
@@ -433,6 +433,25 @@ p<span style="color:#f92672">.</span>interactive()
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/gb-fuzz/">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -471,27 +490,6 @@ p<span style="color:#f92672">.</span>interactive()
     <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
     
     <a href="https://bananamafia.dev/tags/arm"><kbd class="item-tag">arm</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
 
 </div>

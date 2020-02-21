@@ -17,7 +17,7 @@
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/uaf-1/</guid>
-      <description>This writeup is about a 36C3 junior CTF challenge called minifd which can be found here. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here&#39;s the challenge description:
+      <description>This writeup is about a 36C3 junior CTF challenge called minifd which can be found here. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here&amp;rsquo;s the challenge description:
 This is a simple file manager implementation supporting basic functionality to create, read, and write files.
 Please note: This is a prototype implementation. At this point of time, only 16 files can be managed at the same time.</description>
     </item>

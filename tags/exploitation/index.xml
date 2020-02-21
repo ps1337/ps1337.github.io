@@ -17,9 +17,9 @@
       <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/rop-arm-1/</guid>
-      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&#39;s what I&#39;ve found:
+      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&amp;rsquo;s what I&amp;rsquo;ve found:
 nothing
-Cool. That&#39;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&#39;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
+Cool. That&amp;rsquo;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&amp;rsquo;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
     </item>
     
   </channel>

@@ -17,7 +17,7 @@
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
-      <description>Note: This isn&#39;t up to date anymore, instead use img .
+      <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
  Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
     </item>

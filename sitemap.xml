@@ -60,7 +60,37 @@
   
   <url>
     <loc>https://bananamafia.dev/</loc>
-    <lastmod>2020-01-15T00:00:00+00:00</lastmod>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/exploiting/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/fuzzing/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/gb-fuzz/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/reversing/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -70,11 +100,6 @@
   
   <url>
     <loc>https://bananamafia.dev/tags/cutter/</loc>
-    <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/exploiting/</loc>
     <lastmod>2020-01-15T00:00:00+00:00</lastmod>
   </url>
   
@@ -89,27 +114,12 @@
   </url>
   
   <url>
-    <loc>https://bananamafia.dev/post/</loc>
-    <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://bananamafia.dev/tags/r2/</loc>
     <lastmod>2020-01-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://bananamafia.dev/tags/radare2/</loc>
-    <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/reversing/</loc>
-    <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/</loc>
     <lastmod>2020-01-15T00:00:00+00:00</lastmod>
   </url>
   
@@ -160,11 +170,6 @@
   
   <url>
     <loc>https://bananamafia.dev/tags/frida/</loc>
-    <lastmod>2019-10-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/fuzzing/</loc>
     <lastmod>2019-10-24T00:00:00+00:00</lastmod>
   </url>
   

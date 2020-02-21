@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -180,8 +180,8 @@
 
     <br>
     <div class="content-width text-justify"><h1 id="what">What?</h1>
-<p>This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called <a href="https://en.wikipedia.org/wiki/Star_Wars_Jedi_Knight:_Jedi_Academy">Jedi Academy</a>. I've found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.</p>
-<p>I've released my <a href="https://github.com/ps1337/jka-multihack">multihack</a> source code. These are the implemented features:</p>
+<p>This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called <a href="https://en.wikipedia.org/wiki/Star_Wars_Jedi_Knight:_Jedi_Academy">Jedi Academy</a>. I&rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.</p>
+<p>I&rsquo;ve released my <a href="https://github.com/ps1337/jka-multihack">multihack</a> source code. These are the implemented features:</p>
 <ul>
 <li>Wallhack (seeing enemies through walls)</li>
 <li>Player Glow (Enemies are glowing)</li>
@@ -200,23 +200,23 @@
 <p>What parts of the game should be altered? Identify values and/or methods which should be modified/patched.</p>
 </li>
 <li>
-<p>Find a way to inject custom code into the process. In case of anti cheat mechanisms, search for techniques to hide the code injection process. This is necessary for most modern games but won't be covered in this post.</p>
+<p>Find a way to inject custom code into the process. In case of anti cheat mechanisms, search for techniques to hide the code injection process. This is necessary for most modern games but won&rsquo;t be covered in this post.</p>
 </li>
 <li>
-<p>Write the code that will be injected into the game in a way that doesn't break the game.</p>
+<p>Write the code that will be injected into the game in a way that doesn&rsquo;t break the game.</p>
 </li>
 <li>
 <p>Profit?</p>
 </li>
 </ol>
 <h2 id="hookless-hacks">Hookless Hacks</h2>
-<p>Before talking about API hooks and what they are, let's quickly check out a way to alter a remote process by directly patching functions in memory. This has already been covered in <a href="https://bananamafia.dev/post/cvar-hax/">one of my previous posts</a>. The basic approach is the identify function  and memory addresses of interesting data and code and to modify it by spawning a thread in the target process or by overwriting them directly. A good example of this approach can be found <a href="http://aimbots.net/threads/17415-Completely-hookless-wallhack-for-Quake-3-engine-based-games">here</a>.</p>
-<p>This approach might look easy and elegant. However, finding the correct offsets and memory addresses can be hard. Also, after game updates these values don't match anymore. Because of this, it may be easier to use hooking to alter a remote process.</p>
+<p>Before talking about API hooks and what they are, let&rsquo;s quickly check out a way to alter a remote process by directly patching functions in memory. This has already been covered in <a href="https://bananamafia.dev/post/cvar-hax/">one of my previous posts</a>. The basic approach is the identify function  and memory addresses of interesting data and code and to modify it by spawning a thread in the target process or by overwriting them directly. A good example of this approach can be found <a href="http://aimbots.net/threads/17415-Completely-hookless-wallhack-for-Quake-3-engine-based-games">here</a>.</p>
+<p>This approach might look easy and elegant. However, finding the correct offsets and memory addresses can be hard. Also, after game updates these values don&rsquo;t match anymore. Because of this, it may be easier to use hooking to alter a remote process.</p>
 <h2 id="api-hooking">API Hooking</h2>
 <p>Hooking basically means intercepting function calls in order to execute code before or after the original function. In this blog post, I hooked a Windows API function in the context of the remote process to intercept calls to the game engine DLLs. This effectively forces the game to execute custom code. Please note that it may not work to be possible to just hook an arbitrary game method with pure API hooking. The best way to get started is to trace target methods to system calls and hooking the system calls instead.</p>
 <p>There are easy-to-use API hooking libraries available, like <a href="https://github.com/martona/mhook">mhook</a>. The usage of this particular library will also be discussed in this post.</p>
 <h1 id="dll-injection">DLL Injection</h1>
-<p>To hook game engines methods, it's necessary to install the hook from the context of the target application. This can be accomplished with a technique called DLL injection. Using this, the target process gets forced to load and execute a custom DLL in which contains our code. There are many approaches to do this &ndash; this post covers the <code>LoadLibraryA</code> method of injection DLLs.</p>
+<p>To hook game engines methods, it&rsquo;s necessary to install the hook from the context of the target application. This can be accomplished with a technique called DLL injection. Using this, the target process gets forced to load and execute a custom DLL in which contains our code. There are many approaches to do this &ndash; this post covers the <code>LoadLibraryA</code> method of injection DLLs.</p>
 <p><em>Note: To simplify things, disable unicode and the usage of pre-compiled headers in VisualStudio or things will get ugly.</em></p>
 <h2 id="building-the-dll-loader">Building The DLL Loader</h2>
 <p>The DLL loader has to take care of these things:</p>
@@ -241,10 +241,10 @@ WriteProcessMemory(procHandle, allocatedMem, dllPath, MAX_PATH, nullptr);
 // which loads the DLL using the path we allocated previously.
 HANDLE threadHandle = CreateRemoteThread(procHandle, nullptr, NULL, LPTHREAD_START_ROUTINE(loadFunctionAddress), allocatedMem, NULL, nullptr);
 </code></pre><p>Please note that error handling has been removed for a better overview.</p>
-<p>At this point the DLL has been injected into the target process and its <code>DllMain</code> method should have been called. Now, let's build a simple DLL to test the injection process</p>
+<p>At this point the DLL has been injected into the target process and its <code>DllMain</code> method should have been called. Now, let&rsquo;s build a simple DLL to test the injection process</p>
 <h2 id="dll-structure">DLL Structure</h2>
-<p>The starting point for this is a new DLL project created by VisualStudio. Don't create a static library because this won't work!</p>
-<p>After creating the project, the file <code>dllmain.cpp</code> should have already been created. Let's create a simple PoC that spawns a message box upon loading the DLL:</p>
+<p>The starting point for this is a new DLL project created by VisualStudio. Don&rsquo;t create a static library because this won&rsquo;t work!</p>
+<p>After creating the project, the file <code>dllmain.cpp</code> should have already been created. Let&rsquo;s create a simple PoC that spawns a message box upon loading the DLL:</p>
 <pre><code>extern &quot;C&quot; __declspec(dllexport) void Initialize()
 {
 	MessageBox(0, &quot;Locked and Loaded.&quot;, &quot;DLL Injection Successful!&quot;, 0);
@@ -267,10 +267,10 @@ BOOL APIENTRY DllMain
     }
     return TRUE;
 }
-</code></pre><p>Compile this DLL, pass it to the loader and check out the created message box. Let's proceed with identifying the required hooks and game modifications.</p>
+</code></pre><p>Compile this DLL, pass it to the loader and check out the created message box. Let&rsquo;s proceed with identifying the required hooks and game modifications.</p>
 <h1 id="know-your-target">Know Your Target</h1>
 <p>The target game is based on the Quake3 engine. Therefore, information on internal structures and processes are required in order to, for example, implement a wallhack. A Quake3 game is being executed in a &ldquo;VM&rdquo; that implements its own &ldquo;system calls&rdquo;.</p>
-<p>The Q3 engine methods are present in a separate DLL called <code>cgamex86.dll</code> which will be loaded by the game process. To load DLLs, the Windows API call <code>GetProcAddress</code> is being used to get the address of a specific function in a DLL. This means that by hooking <code>GetProcAddress</code> it's possible to intercept calls to the game engine:</p>
+<p>The Q3 engine methods are present in a separate DLL called <code>cgamex86.dll</code> which will be loaded by the game process. To load DLLs, the Windows API call <code>GetProcAddress</code> is being used to get the address of a specific function in a DLL. This means that by hooking <code>GetProcAddress</code> it&rsquo;s possible to intercept calls to the game engine:</p>
 <pre><code>// create the hook which serves as entry point for this
 if (!Mhook_SetHook((PVOID *)&amp;originalGetProcAddress, hookGetProcAddress))
 {
@@ -283,11 +283,11 @@ if (!Mhook_SetHook((PVOID *)&amp;originalGetProcAddress, hookGetProcAddress))
 <li><code>dllEntry</code>: Used to execute additional Q3 system calls</li>
 </ol>
 <p>According to the Q3 engine <a href="https://github.com/id-Software/Quake-III-Arena/blob/master/code/cgame/cg_main.c#L46">source code</a>, <code>vmMain</code> contains code to <code>CG_DrawActiveFrame</code> &ndash; a function to draw a game frame. This may be handy later on.</p>
-<p><em>Note for OpenJK Users: Because the maintainers of OpenJK decided to update the syscall process of the game, it's required to modify <code>CL_BindCGame</code> to use legacy q3 VM system calls.</em></p>
-<p>Similar to this, <code>dllEntry</code> accepts the <code>CG_R_ADDREFENTITYTOSCENE</code> system call that adds an entity (a player, a weapon, &hellip;) to the scene to be rendered. The parameter for this is a pointer to an entity. All entities are stored in a container called <code>backEndData</code>, which gets used by <code>RE_RenderScene</code> to display all entities. By modifying entities before <code>RE_RenderScene</code> gets called, entities can always be displayed - no matter if there's a wall between the player and the entity.</p>
-<p>Luckily, the Q3 engine implements a flag called <code>RF_DEPTHHACK</code> which does just this: It makes the engine ignore an entity's depth, making it align with all entities in the same depth. By adding this flag, entities will be effectively displayed on top of walls!</p>
+<p><em>Note for OpenJK Users: Because the maintainers of OpenJK decided to update the syscall process of the game, it&rsquo;s required to modify <code>CL_BindCGame</code> to use legacy q3 VM system calls.</em></p>
+<p>Similar to this, <code>dllEntry</code> accepts the <code>CG_R_ADDREFENTITYTOSCENE</code> system call that adds an entity (a player, a weapon, &hellip;) to the scene to be rendered. The parameter for this is a pointer to an entity. All entities are stored in a container called <code>backEndData</code>, which gets used by <code>RE_RenderScene</code> to display all entities. By modifying entities before <code>RE_RenderScene</code> gets called, entities can always be displayed - no matter if there&rsquo;s a wall between the player and the entity.</p>
+<p>Luckily, the Q3 engine implements a flag called <code>RF_DEPTHHACK</code> which does just this: It makes the engine ignore an entity&rsquo;s depth, making it align with all entities in the same depth. By adding this flag, entities will be effectively displayed on top of walls!</p>
 <h1 id="using-game-engine-data">Using Game Engine Data</h1>
-<p>At this point, it's possible to execute code in the context of the target process and all required information on how to implement a wallhack are available. However, we still need access to the games internal entity values. These values are nested C-structs containing all kinds of information on players and objects in the game. By hooking the right system calls, the values of these structs can be obtained in the context of the thread in the injected DLL. Two steps are required for this:</p>
+<p>At this point, it&rsquo;s possible to execute code in the context of the target process and all required information on how to implement a wallhack are available. However, we still need access to the games internal entity values. These values are nested C-structs containing all kinds of information on players and objects in the game. By hooking the right system calls, the values of these structs can be obtained in the context of the thread in the injected DLL. Two steps are required for this:</p>
 <ul>
 <li>Add the official SDK to the DLL in order to get information on the structs.</li>
 <li><a href="https://github.com/ps1337/jka-multihack/blob/master/dll/dllmain.cpp#L245">Hook a Q3 system call</a> to get access all entity structs.</li>
@@ -298,7 +298,7 @@ if (!Mhook_SetHook((PVOID *)&amp;originalGetProcAddress, hookGetProcAddress))
     snapshot_t* snap;
     [...]
 } cg_t;
-</code></pre><p>By <a href="https://github.com/ps1337/jka-multihack/blob/master/dll/dllmain.cpp#L272">hooking</a> <code>CG_GETSNAPSHOT</code> it's possible get the current game snapshot &ndash; a <code>snapshot_t</code> pointer value. We are <strong>not</strong> able to directly get a <code>cg_t</code> engine struct by hooking system calls but we know that the <code>snapshot_t</code> pointer is nested in a <code>cg_t</code> struct. By using some pointer arithmetic it's still possible to get the parent struct, a <code>cg_t</code> value:</p>
+</code></pre><p>By <a href="https://github.com/ps1337/jka-multihack/blob/master/dll/dllmain.cpp#L272">hooking</a> <code>CG_GETSNAPSHOT</code> it&rsquo;s possible get the current game snapshot &ndash; a <code>snapshot_t</code> pointer value. We are <strong>not</strong> able to directly get a <code>cg_t</code> engine struct by hooking system calls but we know that the <code>snapshot_t</code> pointer is nested in a <code>cg_t</code> struct. By using some pointer arithmetic it&rsquo;s still possible to get the parent struct, a <code>cg_t</code> value:</p>
 <pre><code>snapshot_t *snap = (snapshot_t *)arg[1];
 // temp value
 cg_t *tmp = 0;
@@ -324,9 +324,9 @@ if (playerGlowRequired())
 <p>As a neat side effect, adding the <code>RF_DEPTHHACK</code> flag to all entities and not just players also shows entities like doors, weapon and pickups through walls:
 <img src="/img/jka-multihack/entities.jpg" alt="Entities"></p>
 <h2 id="recognizing-teams">Recognizing Teams</h2>
-<p>Normally, an entity's team information is stored in the</p>
+<p>Normally, an entity&rsquo;s team information is stored in the</p>
 <pre><code>client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName
-</code></pre><p>value. After the pointer arithmetic hackery, the fields of <code>clientinfo</code> structs have somehow been corrupted and point to invalid data. For example, <code>teamName</code> contains parts of the model name for some entities. But let's just search in the memory region of the <code>clientinfo</code> struct!</p>
+</code></pre><p>value. After the pointer arithmetic hackery, the fields of <code>clientinfo</code> structs have somehow been corrupted and point to invalid data. For example, <code>teamName</code> contains parts of the model name for some entities. But let&rsquo;s just search in the memory region of the <code>clientinfo</code> struct!</p>
 <pre><code>// search for the team in the memory region of the `clientinfo` struct
 // using `.teamName` isn't exact because of memory hackery while determining `client_gameState`
 char red[] = &quot;red&quot;;
@@ -347,7 +347,7 @@ while (base &lt; end)
 // then he must be blue &lt;:
 </code></pre><p>This works because <code>CG_TeamName</code> puts a string containg either <code>RED</code> or <code>BLUE</code> in an entities <code>clientinfo</code>. By searching for these values in memory, we can get around the corrupted pointers and can obtain team information quickly. This has also been optimized to cache search results to prevent searching for these value every time.</p>
 <h1 id="pulling-the-trigger">Pulling The Trigger</h1>
-<p>Implementing a trigger bot is pretty straight forward once the we are able to modify each frame. By hooking the <code>CG_DRAW_ACTIVE_FRAME</code> command, we can check if we're aiming at an enemy by checking the value of <code>crosshairClientNum</code>:</p>
+<p>Implementing a trigger bot is pretty straight forward once the we are able to modify each frame. By hooking the <code>CG_DRAW_ACTIVE_FRAME</code> command, we can check if we&rsquo;re aiming at an enemy by checking the value of <code>crosshairClientNum</code>:</p>
 <pre><code>// only trigger with a shootable weapon
 if (ps-&gt;weapon &gt; WP_SABER &amp;&amp; ps-&gt;weapon != WP_THERMAL &amp;&amp; ps-&gt;weapon != WP_TRIP_MINE &amp;&amp; ps-&gt;weapon != WP_DET_PACK)
 {

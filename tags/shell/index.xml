@@ -28,8 +28,8 @@
       <guid>https://bananamafia.dev/post/shell-upgrade/</guid>
       <description>Ended up with a cheap nc shell and want to upgrade to a &amp;ldquo;real&amp;rdquo; shell with a proper TTY and navigation?
 Say no more &amp;lt;:
-1. Upgrading using shell magic This doesn&#39;t always work - however if Python is present on the victims machine, it&#39;s worth a try.
- Use bash on the attacker machine, zsh doesn&#39;t seem to work. Get the nc shell. In the shell, execute:  python -c &amp;#39;import pty; pty.</description>
+1. Upgrading using shell magic This doesn&amp;rsquo;t always work - however if Python is present on the victims machine, it&amp;rsquo;s worth a try.
+ Use bash on the attacker machine, zsh doesn&amp;rsquo;t seem to work. Get the nc shell. In the shell, execute:  python -c &amp;#39;import pty; pty.</description>
     </item>
     
     <item>
@@ -38,7 +38,7 @@ Say no more &amp;lt;:
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/pairprog/</guid>
-      <description>Recently I&#39;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&#39;t even have to give them access to your host system - they will be contained just like you and the work that&#39;s being done. Using my docker image, it&#39;s possible to share a tmux session with a group of people.</description>
+      <description>Recently I&amp;rsquo;ve created a small docker container to perform remote pair programming. Shared shell sessions are an easy way to remotely interact with coworkers or other people. With additional docker magic you now don&amp;rsquo;t even have to give them access to your host system - they will be contained just like you and the work that&amp;rsquo;s being done. Using my docker image, it&amp;rsquo;s possible to share a tmux session with a group of people.</description>
     </item>
     
     <item>
@@ -57,7 +57,7 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/dotfile-shellcheck/</guid>
-      <description>In order to prevent errors and side effects, it&#39;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
+      <description>In order to prevent errors and side effects, it&amp;rsquo;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
     </item>
     
     <item>
@@ -66,8 +66,8 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/telegram-notifications/</guid>
-      <description>If you ever wanted to get notified when certain things happen but didn&#39;t find a lightweight solution &amp;ndash; here comes captain Telegram.
-Using a simple Telegram bot, it&#39;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
+      <description>If you ever wanted to get notified when certain things happen but didn&amp;rsquo;t find a lightweight solution &amp;ndash; here comes captain Telegram.
+Using a simple Telegram bot, it&amp;rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
 Registering a bot First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</description>
     </item>
     

@@ -17,7 +17,7 @@
       <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/monit/</guid>
-      <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&#39;ve created a Dockerfile and image for Monit for this.
+      <description>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&amp;rsquo;ve created a Dockerfile and image for Monit for this.
 Monit is extremely configurable and allows a maximum of flexibility when it comes to monitoring.
 Initially, a configuration file is required to get started. To get one, call</description>
     </item>

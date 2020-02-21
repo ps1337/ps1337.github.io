@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -191,7 +191,7 @@
 <p>Other values are illegal and the program aborts when attempting to load such a value into the instruction pointer register, e.g. after a <code>ret</code> instruction. A valid value for the user space memory region would therefore be <code>0x0000414141414141</code> and <strong>not</strong> <code>0x4141414141414141</code>. This is important to keep in mind while fuzzing.</p>
 <h1 id="passing-parameters">Passing Parameters</h1>
 <p>A second aspect of x64 exploitation is that function parameters are being passed using the <code>RDI</code>, <code>RSI</code>, <code>RDX</code>, <code>RCX</code>, <code>R8D</code> and <code>R9D</code> <a href="https://www.felixcloutier.com/x86/ret">registers</a>. All remaining parameters are passed using the stack. This is different than the x86 semantics where parameters are being passed using the stack.</p>
-<p>This makes x64 exploitation a bit more difficult if you want to call a function that's already existing because function parameters have to be loaded into the respective registers prior to executing as function in the target process. For this, a very small ROP payload can be used to populate the required registers first and <code>ret</code>urn or jump to the payload afterwards.</p>
+<p>This makes x64 exploitation a bit more difficult if you want to call a function that&rsquo;s already existing because function parameters have to be loaded into the respective registers prior to executing as function in the target process. For this, a very small ROP payload can be used to populate the required registers first and <code>ret</code>urn or jump to the payload afterwards.</p>
 <p>To accomplish this, the <code>/R</code> search of <code>r2</code> can be used, e.g. like this:</p>
 <pre><code>r2 split -c &quot;/R pop rdi; ret&quot;
   0x00400883                 5f  pop rdi
@@ -244,6 +244,25 @@ Ok bye.</div>
 
     
 
+    <h4><a href="/post/gb-fuzz/">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
     <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
     <h5></h5>
     
@@ -279,29 +298,6 @@ Ok bye.</div>
     <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
     
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/arm"><kbd class="item-tag">arm</kbd></a>
     
 
 </div>

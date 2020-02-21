@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -183,18 +183,18 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>One of my main takeaways from this year's r2con is that <a href="https://www.frida.re">Frida</a> is cool and that <a href="https://github.com/nowsecure/r2frida">r2frida</a>, the integration with <code>radare2</code>, is even cooler. Using this, it's possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of <code>radare2</code>. This is a small tutorial to get started with both Frida and <code>r2frida</code> that's based on the <a href="/misc/r2frida-1/re.rada.con.ctf.r2xor.apk">r2xor</a> challenge of the recent r2con CTF. Please note that this is <em>not</em> a complete writeup for <code>r2xor</code>.</p>
+    <div class="content-width text-justify"><p>One of my main takeaways from this year&rsquo;s r2con is that <a href="https://www.frida.re">Frida</a> is cool and that <a href="https://github.com/nowsecure/r2frida">r2frida</a>, the integration with <code>radare2</code>, is even cooler. Using this, it&rsquo;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of <code>radare2</code>. This is a small tutorial to get started with both Frida and <code>r2frida</code> that&rsquo;s based on the <a href="/misc/r2frida-1/re.rada.con.ctf.r2xor.apk">r2xor</a> challenge of the recent r2con CTF. Please note that this is <em>not</em> a complete writeup for <code>r2xor</code>.</p>
 <h1 id="the-challenge">The Challenge</h1>
 <p>An Android <code>apk</code> file is given that contains the flag somewhere embedded into it. Based on the challenge name, it can be assumed that the flag is stored as a XOR encrypted value somewhere in the app, along with a static decryption key for it. The plan is to instrument the app using Frida in order to dump the flag. This is possible because the app uses the function:</p>
 <pre><code>sym.check_flag_char_const___char_const(int32_t arg_4h, int32_t arg_8h)
 </code></pre><p>to check whether the user provided the correct flag. It takes two string pointer parameters: A pointer to the user input and a pointer to the correct flag, in whichever form. By hooking this function, the expected flag value can be read and the challenge is solved. Good plan for now.</p>
-<p>The app comes bundled with a native library called <code>libnative-lib.so</code> that contains the validation function above. Therefore hooking has to be performed in this native library. Also, the app checks whether the device its running on is rooted. If this is the case, the app won't run and will display a blank screen instead.</p>
+<p>The app comes bundled with a native library called <code>libnative-lib.so</code> that contains the validation function above. Therefore hooking has to be performed in this native library. Also, the app checks whether the device its running on is rooted. If this is the case, the app won&rsquo;t run and will display a blank screen instead.</p>
 <h1 id="working-environment">Working Environment</h1>
-<p>I've used the <a href="https://www.genymotion.com/">Genymotion</a> Android emulator. This runs x86 based pre-rooted Android devices on a local machine and exposes an <code>adb</code> port for easy shell access. I've replaced the <code>adb</code> binary of Genymotion with my local version to prevent errors caused by incompatible <code>adb</code> versions.</p>
-<p>Frida comes with both a server and a client component. Therefore the next thing to prepare is a new <code>pipenv</code> with the Frida client installed. If you don't use the newest version, a <a href="https://github.com/frida/frida-java-bridge/issues/29">bug</a> can occur that prevents hooking functions that are executed early in the application life cycle, such as <code>onCreate()</code>. Calling <code>frida-ls-devices</code> should show a virtual Android USB device in case the Genymotion VM is running.</p>
+<p>I&rsquo;ve used the <a href="https://www.genymotion.com/">Genymotion</a> Android emulator. This runs x86 based pre-rooted Android devices on a local machine and exposes an <code>adb</code> port for easy shell access. I&rsquo;ve replaced the <code>adb</code> binary of Genymotion with my local version to prevent errors caused by incompatible <code>adb</code> versions.</p>
+<p>Frida comes with both a server and a client component. Therefore the next thing to prepare is a new <code>pipenv</code> with the Frida client installed. If you don&rsquo;t use the newest version, a <a href="https://github.com/frida/frida-java-bridge/issues/29">bug</a> can occur that prevents hooking functions that are executed early in the application life cycle, such as <code>onCreate()</code>. Calling <code>frida-ls-devices</code> should show a virtual Android USB device in case the Genymotion VM is running.</p>
 <p>The <a href="https://github.com/frida/frida/releases">latest Frida server release</a> can be downloaded with the correct architecture, x86 in this case, and uploaded to the running Android device:</p>
 <pre><code>adb push frida-server /data/local/tmp
-</code></pre><p>Don't forget to set the executable bit and to run the Frida server as root from an <code>adb</code> shell.</p>
+</code></pre><p>Don&rsquo;t forget to set the executable bit and to run the Frida server as root from an <code>adb</code> shell.</p>
 <p>The last thing to do is to install <code>r2frida</code> using the <code>radare2</code> packet manager:</p>
 <pre><code>r2pm -ci r2frida
 </code></pre><h1 id="bypassing-root-detection">Bypassing Root Detection</h1>
@@ -210,7 +210,7 @@
     }
 }
 </code></pre><p>The app terminates in case <code>n()</code> returns <code>true</code>. The first thing <code>n()</code> does is creating an instance of the <code>RootDetection</code> class and proceeding with the root check. In order to run this app on the rooted device, it would therefore be convenient to force <code>n()</code> to always return <code>false</code> &ndash; Frida to the rescue.</p>
-<p>The plan is to launch the app using Frida while replacing <code>n()</code> with a function that just performs a <code>return false</code>. I've used this script for this task:</p>
+<p>The plan is to launch the app using Frida while replacing <code>n()</code> with a function that just performs a <code>return false</code>. I&rsquo;ve used this script for this task:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python3</span>
 
 <span style="color:#f92672">import</span> frida
@@ -249,22 +249,22 @@ sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">[!] Exiting</span><span style="color:#e6db74">&#34;</span>)
 </code></pre></div><p>Frida itself spawns the app on the device, sets up the hooks, injects JavaScript code into the target process and resumes the process afterwards. This allows various modifications to an application, such as the ones defined in the <code>js</code> variable. Lets&rsquo; break it down:</p>
 <ol>
-<li>It's required to hook a function of the <code>MainActivity</code> class. In order to do this, we retrieve the class and assign it to a variable with <code>Java.use()</code> for later use.</li>
+<li>It&rsquo;s required to hook a function of the <code>MainActivity</code> class. In order to do this, we retrieve the class and assign it to a variable with <code>Java.use()</code> for later use.</li>
 <li>The <code>n()</code> function will be replaced with our own version that just returns <code>false</code> every time. The <code>implementation()</code> function performs just this. You could also call the original function with <code>this.n()</code> in case you would want to inject code before or after the original function.</li>
-<li>That's it! Root check bypassed.</li>
+<li>That&rsquo;s it! Root check bypassed.</li>
 </ol>
-<p>It's important to call <code>device.resume()</code> after <code>script.load()</code>. Otherwise early functions, such as <code>onCreate()</code>, can't be hooked correctly in case you are required to do so.</p>
+<p>It&rsquo;s important to call <code>device.resume()</code> after <code>script.load()</code>. Otherwise early functions, such as <code>onCreate()</code>, can&rsquo;t be hooked correctly in case you are required to do so.</p>
 <p>Calling this script will spawn the application on the device, with the root check bypassed:</p>
 <center>
 ![r2xor App](/img/r2frida-1/r2xor-gui.jpg)
 </center>
 <p>Time to get the flag.</p>
 <h1 id="tracing-function-calls-with-r2frida">Tracing Function Calls With r2frida</h1>
-<p>It's now necessary to get the values of the parameters for the <code>check_flag()</code> function. You could solve this entirely with Frida, but I've decided to utilize <code>r2frida</code> and its tracing capabilities. Tracing in this context means that function calls can be <a href="https://www.frida.re/docs/frida-trace/">observed dynamically</a> while printing the passed parameters.</p>
-<p>Let's open the application in r2frida:</p>
+<p>It&rsquo;s now necessary to get the values of the parameters for the <code>check_flag()</code> function. You could solve this entirely with Frida, but I&rsquo;ve decided to utilize <code>r2frida</code> and its tracing capabilities. Tracing in this context means that function calls can be <a href="https://www.frida.re/docs/frida-trace/">observed dynamically</a> while printing the passed parameters.</p>
+<p>Let&rsquo;s open the application in r2frida:</p>
 <pre><code>r2 frida://usb//&lt;PID&gt;
 </code></pre><p>Tracing can be set up with the <code>\dtf</code> command, as seen in <a href="https://github.com/enovella/r2frida-wiki/blob/master/README.md">this wiki page</a>. Remember, all <code>r2frida</code> commands have to be prefixed with a slash.</p>
-<p>Let's check the help text of this command:</p>
+<p>Let&rsquo;s check the help text of this command:</p>
 <pre><code>[0x00000000]&gt; \dt?~dtf
  dtf    trace format
 [0x00000000]&gt; \dtf?
@@ -289,7 +289,7 @@ Undocumented: Z, S
 [...]
 </code></pre><p>Now the address of the function to be traced can be calculated using the library start address and the offset:</p>
 <pre><code>0xcad88000 + 0x00007330 = 0xcad8f330
-</code></pre><p>Let's set up the tracing:</p>
+</code></pre><p>Let&rsquo;s set up the tracing:</p>
 <pre><code>[0x00000000]&gt; \dtf 0xcad8f330 zz^
 </code></pre><p>This traces the function when entering it and prints the values of two string pointer parameters.</p>
 <p>Clicking the <em>Validate</em> button in the app now prints this in <code>r2frida</code>:</p>

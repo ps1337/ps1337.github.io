@@ -26,7 +26,7 @@
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/uaf-1/</guid>
-      <description>This writeup is about a 36C3 junior CTF challenge called minifd which can be found here. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here&#39;s the challenge description:
+      <description>This writeup is about a 36C3 junior CTF challenge called minifd which can be found here. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here&amp;rsquo;s the challenge description:
 This is a simple file manager implementation supporting basic functionality to create, read, and write files.
 Please note: This is a prototype implementation. At this point of time, only 16 files can be managed at the same time.</description>
     </item>
@@ -37,9 +37,9 @@ Please note: This is a prototype implementation. At this point of time, only 16 
       <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/rop-arm-1/</guid>
-      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&#39;s what I&#39;ve found:
+      <description>Exploit development on ARM with radare2 seems like a great idea until you start searching for resources, searching for a nice and automated debugging setup. Here&amp;rsquo;s what I&amp;rsquo;ve found:
 nothing
-Cool. That&#39;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&#39;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
+Cool. That&amp;rsquo;s the reason why this post covers the setup I came up with, as well as basics for ROP on the ARM architecture. The exploit target is stack6 from Azeria Labs and radare2 will be used as a debugger. If you&amp;rsquo;re a beginner I suggest reading the ARM assembly basics on the same site first before starting the challenges from the beginning with stack0.</description>
     </item>
     
     <item>
@@ -48,8 +48,8 @@ Cool. That&#39;s the reason why this post covers the setup I came up with, as we
       <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2wars-2019/</guid>
-      <description>As every year at r2con, the r2wars competition was hosted by sanguinawer and the r2 overlord pancake. I&#39;ve made it to the second place in this year&#39;s battles, so I&#39;ve promised to create a writeup for my participation &amp;ndash; and here it is. Welcome to the nerdiest game in town.
-Lol What&#39;s r2wars Again? The r2wars competition is based on radare2&#39;s ESIL (Evaluable Strings Intermediate Language) engine. It&#39;s normally used to emulate instructions of various architectures during reverse engineering.</description>
+      <description>As every year at r2con, the r2wars competition was hosted by sanguinawer and the r2 overlord pancake. I&amp;rsquo;ve made it to the second place in this year&amp;rsquo;s battles, so I&amp;rsquo;ve promised to create a writeup for my participation &amp;ndash; and here it is. Welcome to the nerdiest game in town.
+Lol What&amp;rsquo;s r2wars Again? The r2wars competition is based on radare2&#39;s ESIL (Evaluable Strings Intermediate Language) engine. It&amp;rsquo;s normally used to emulate instructions of various architectures during reverse engineering.</description>
     </item>
     
     <item>
@@ -58,7 +58,7 @@ Lol What&#39;s r2wars Again? The r2wars competition is based on radare2&#39;s ES
       <pubDate>Fri, 13 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2frida-1/</guid>
-      <description>One of my main takeaways from this year&#39;s r2con is that Frida is cool and that r2frida, the integration with radare2, is even cooler. Using this, it&#39;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of radare2. This is a small tutorial to get started with both Frida and r2frida that&#39;s based on the r2xor challenge of the recent r2con CTF. Please note that this is not a complete writeup for r2xor.</description>
+      <description>One of my main takeaways from this year&amp;rsquo;s r2con is that Frida is cool and that r2frida, the integration with radare2, is even cooler. Using this, it&amp;rsquo;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of radare2. This is a small tutorial to get started with both Frida and r2frida that&amp;rsquo;s based on the r2xor challenge of the recent r2con CTF. Please note that this is not a complete writeup for r2xor.</description>
     </item>
     
     <item>
@@ -67,7 +67,7 @@ Lol What&#39;s r2wars Again? The r2wars competition is based on radare2&#39;s ES
       <pubDate>Mon, 02 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/r2ctf-2019/</guid>
-      <description>r2boy1 The first GameBoy challenge was rather easy. The idea was to talk to the Pancake character in-game in order to get the flag. The problem is that Pancake chills behind a wall. One possible solution was to glitch through the wall, however I&#39;ve solved this using static analysis.
+      <description>r2boy1 The first GameBoy challenge was rather easy. The idea was to talk to the Pancake character in-game in order to get the flag. The problem is that Pancake chills behind a wall. One possible solution was to glitch through the wall, however I&amp;rsquo;ve solved this using static analysis.
 Going through the strings and searching for a possible dialog yields interesting strings:
 [0x00054075]&amp;gt; izzq~pancake 0x54016 37 36 Find pancake\nthrough a game\nglitch!</description>
     </item>
@@ -78,7 +78,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/x64-rop-redpwn/</guid>
-      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&#39;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&#39;s using glibc.</description>
+      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&amp;rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&amp;rsquo;s using glibc.</description>
     </item>
     
     <item>
@@ -87,9 +87,9 @@ Going through the strings and searching for a possible dialog yields interesting
       <pubDate>Tue, 13 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/binary-rop-stackpivot/</guid>
-      <description>Let&#39;s check out Return Oriented Programming (ROP) with the pivot32 challenge from ROP Emporium by using radare2. The pivot32 binary is compiled without stack canaries and PIE but has NX enabled.
+      <description>Let&amp;rsquo;s check out Return Oriented Programming (ROP) with the pivot32 challenge from ROP Emporium by using radare2. The pivot32 binary is compiled without stack canaries and PIE but has NX enabled.
 Basics The general principle behind ROP is that:
-[&amp;hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&#39;s memory, called &amp;ldquo;gadgets&amp;rdquo;.</description>
+[&amp;hellip;] an attacker gains control of the call stack to hijack program control flow and then executes carefully chosen machine instruction sequences that are already present in the machine&amp;rsquo;s memory, called &amp;ldquo;gadgets&amp;rdquo;.</description>
     </item>
     
     <item>
@@ -99,7 +99,7 @@ Basics The general principle behind ROP is that:
       
       <guid>https://bananamafia.dev/post/binary-canary-bruteforce/</guid>
       <description>And now for something more CTF-y: Dealing with stack canaries by brute-forcing their value byte by byte.
-How Stack Canaries Work If you&#39;ve ever read the error message *** stack smashing detected ***: &amp;lt;...&amp;gt; terminated, you&#39;ve already encountered stack canaries in action. They are being used to detect and stop buffer overflows by placing a per-process randomized value between the local variables and the saved return address. If an attacker somehow manages to write across the boundary of a buffer in order to overwrite the saved return address, he will also overwrite the canary.</description>
+How Stack Canaries Work If you&amp;rsquo;ve ever read the error message *** stack smashing detected ***: &amp;lt;...&amp;gt; terminated, you&amp;rsquo;ve already encountered stack canaries in action. They are being used to detect and stop buffer overflows by placing a per-process randomized value between the local variables and the saved return address. If an attacker somehow manages to write across the boundary of a buffer in order to overwrite the saved return address, he will also overwrite the canary.</description>
     </item>
     
     <item>
@@ -112,7 +112,7 @@ How Stack Canaries Work If you&#39;ve ever read the error message *** stack smas
 Everyone knows: This years r2con, the conference about radare2, has a very special challenge &amp;ndash; PwnDebian:
 The almighty blenk92 and me decided to assist the radare2 project in finding such an exploit an we think we were quite successful :)
 But first some basics for r2.
-Shelling Out Via The r2 Shell While running r2, it&#39;s possible to shell out and execute shell commands without leaving the r2 console:</description>
+Shelling Out Via The r2 Shell While running r2, it&amp;rsquo;s possible to shell out and execute shell commands without leaving the r2 console:</description>
     </item>
     
     <item>
@@ -132,7 +132,7 @@ RIP &amp;amp; Canonical Addresses The first thing one notices when trying to gai
       
       <guid>https://bananamafia.dev/post/binary-aslr-dep-32/</guid>
       <description>This post covers basic basics of bypassing ASLR and DEP with r2. For this, a vulnerable application, yolo.c, is required:
-#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); } 64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow. Since normally ASLR and DEP are enabled, the following things don&#39;t just work out of the box:</description>
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; void lol(char *b) { char buffer[1337]; strcpy(buffer, b); } int main(int argc, char **argv) { lol(argv[1]); } 64-Bit vs 32-Bit Binaries The issue here should be quite obvious - strcpy blindly copies the user-controlled input buffer b into buffer which causes a buffer overflow. Since normally ASLR and DEP are enabled, the following things don&amp;rsquo;t just work out of the box:</description>
     </item>
     
   </channel>

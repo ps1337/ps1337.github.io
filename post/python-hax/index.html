@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -177,7 +177,7 @@
     <br>
     <div class="content-width text-justify"><h1 id="tldr">tl;dr</h1>
 <p>Be aware that imports can be hijacked for Python2 and Python3 - take care of EUIDs.</p>
-<p>Don't use <code>input()</code> for Python2.x.</p>
+<p>Don&rsquo;t use <code>input()</code> for Python2.x.</p>
 <h1 id="module-hijacking">Module Hijacking</h1>
 <p>When assigning SUID bits to Python scripts, privileges can be escalated easily. Consider the following Python source code:</p>
 <pre><code>#!/usr/bin/python2.7
@@ -204,7 +204,7 @@ print md5.digest()
 </code></pre><p>By manipulating the call to <code>hashlib.md5()</code>, the <code>id</code> command has been executed as root.</p>
 <p>This works for Python2.x and Python3 because <code>sys.path</code> includes the current working directory as first value.</p>
 <h1 id="abusing-input">Abusing input()</h1>
-<p>This only works for Python2.x but it's great. It turns out that snippets like <code>value = input()</code> in fact evaluate the user supplied input. This means that a server can be attacked by injecting Python code into user supplied values as follows:</p>
+<p>This only works for Python2.x but it&rsquo;s great. It turns out that snippets like <code>value = input()</code> in fact evaluate the user supplied input. This means that a server can be attacked by injecting Python code into user supplied values as follows:</p>
 <pre><code>__import__(&quot;os&quot;).system(&quot;uname -a&quot;)
 </code></pre><p>This will run the supplied command in a local context or on a remote server.</p>
 <h1 id="resources">Resources</h1>

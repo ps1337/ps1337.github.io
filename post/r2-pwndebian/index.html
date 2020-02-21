@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -191,7 +191,7 @@
 <p>The almighty <a href="https://github.com/blenk92">blenk92</a> and me decided to assist the <code>radare2</code> project in finding such an exploit an we think we were quite successful :)</p>
 <p>But first some basics for <code>r2</code>.</p>
 <h1 id="shelling-out-via-the-r2-shell">Shelling Out Via The r2 Shell</h1>
-<p>While running <code>r2</code>, it's possible to shell out and execute shell commands without leaving the <code>r2</code> console:</p>
+<p>While running <code>r2</code>, it&rsquo;s possible to shell out and execute shell commands without leaving the <code>r2</code> console:</p>
 <pre><code>[0x00000000]&gt; ! echo YOLO
 YOLO
 [...]
@@ -199,13 +199,13 @@ YOLO
 0x5645965b5060
 </code></pre><p>As can be seen, the <code>!</code> and backtick characters are treated in quite a special way in the <code>r2</code> shell. In fact, they cause the arguments to be executed by <code>sh -c</code> via <code>r_sys_cmd_str()</code> and similar functions from <code>libr/util/sys.c</code>.</p>
 <h1 id="the--command">The <code>.</code> command</h1>
-<p>Another important aspect is that the <code>.</code> command also has a special function in <code>r2</code>. Let's consult the help function in the <code>radare2</code> shell:</p>
+<p>Another important aspect is that the <code>.</code> command also has a special function in <code>r2</code>. Let&rsquo;s consult the help function in the <code>radare2</code> shell:</p>
 <pre><code>[0x00000000]&gt; .?
 .r2cmd: interpret the output of the command as r2 commands
 </code></pre><p>This is similar to an <code>eval()</code> function that takes the raw input, in this case the output from an arbitrary <code>r2</code> command, and executes it as if it was typed directly into the <code>r2</code> shell.</p>
-<h1 id="grep-it-like-its-hot">Grep It Like It's Hot</h1>
-<p>While searching through the git log with <code>git log --grep</code>, we've found an <a href="https://github.com/radare/radare2/commit/5ecd4c352bae1114730321fec2bde72332f8f090">interesting commit</a> that seems to fix code injection issues in the <code>ir*</code> and <code>is*</code> commands. In particular, the fixes in <code>libr/core/cbin.c</code> seem to fix this by wrapping the output of these commands in quotes. This seems strange, since these changes happen in <code>r_cons_printf()</code> calls that only print text to the terminal.</p>
-<p>This situation has been cleared up for us after we've stumbled across usages of <code>.&lt;command&gt;*</code> in the <code>radare2</code> code after grepping with <code>ag &quot;\&quot;\.&quot; | ag cmd</code>.</p>
+<h1 id="grep-it-like-its-hot">Grep It Like It&rsquo;s Hot</h1>
+<p>While searching through the git log with <code>git log --grep</code>, we&rsquo;ve found an <a href="https://github.com/radare/radare2/commit/5ecd4c352bae1114730321fec2bde72332f8f090">interesting commit</a> that seems to fix code injection issues in the <code>ir*</code> and <code>is*</code> commands. In particular, the fixes in <code>libr/core/cbin.c</code> seem to fix this by wrapping the output of these commands in quotes. This seems strange, since these changes happen in <code>r_cons_printf()</code> calls that only print text to the terminal.</p>
+<p>This situation has been cleared up for us after we&rsquo;ve stumbled across usages of <code>.&lt;command&gt;*</code> in the <code>radare2</code> code after grepping with <code>ag &quot;\&quot;\.&quot; | ag cmd</code>.</p>
 <p>An interesting example of this is present in the <code>r_core_file_reopen_debug()</code> function in <code>libr/core/cmd_open.c</code>:</p>
 <pre><code>[...]
 r_core_cmd0 (core, &quot;.is*&quot;);
@@ -221,7 +221,7 @@ f sym.imp.sigismember 16 0x00000000
 [...]
 </code></pre><p>This seems like a good attack vector, since the symbol names after <code>sym.imp</code> are user controlled and taken directly from the analyzed binary.</p>
 <h1 id="crafting-a-payload">Crafting A Payload</h1>
-<p>After some tests, it turned out that no sanitation of the symbol names is taking place. Therefore the first idea was to force a new line and append a command prefixed with <code>!</code>. As this didn't seem to work properly, another approach was used.</p>
+<p>After some tests, it turned out that no sanitation of the symbol names is taking place. Therefore the first idea was to force a new line and append a command prefixed with <code>!</code>. As this didn&rsquo;t seem to work properly, another approach was used.</p>
 <p>It turns out that commands can be injected by wrapping them in:</p>
 <pre><code>`! &lt;cmd&gt;`
 </code></pre><p>and inserting them into an existing command. A simple example of this approach is:</p>
@@ -230,23 +230,23 @@ f sym.imp.sigismember 16 0x00000000
 <p>Our exploit uses our all-time favorite target: <code>/bin/ls</code>.</p>
 <p>By replacing a symbol name like <code>gethostname</code> with</p>
 <pre><code>`! &lt;cmd&gt;`
-</code></pre><p>using <code>r2</code> or a hex editor, it becomes possible to provide an arbitrary shell command withing a binary. Since it's quite common to analyse and debug untrusted and malicious binaries, this seems like a great attack scenario since this is largely invisible for potential victims. Also, the shell command doesn't even get printed into the console after it has been executed:</p>
+</code></pre><p>using <code>r2</code> or a hex editor, it becomes possible to provide an arbitrary shell command withing a binary. Since it&rsquo;s quite common to analyse and debug untrusted and malicious binaries, this seems like a great attack scenario since this is largely invisible for potential victims. Also, the shell command doesn&rsquo;t even get printed into the console after it has been executed:</p>
 <pre><code>|ERROR| Invalid command 'f sym.imp.p 99`AAAAAAAAAAA 16 0x557aa086c000' (0x66)
-</code></pre><p>No sign of the <code>sleep</code> command: The victim doesn't even realize it has been pwned in case a more APT-like payload is being used &lt;:</p>
+</code></pre><p>No sign of the <code>sleep</code> command: The victim doesn&rsquo;t even realize it has been pwned in case a more APT-like payload is being used &lt;:</p>
 <h1 id="executing-the-payload">Executing The Payload</h1>
-<p>As already mentioned, the function that's executing <code>r_core_cmd0 (core, &quot;.is*&quot;)</code> internally is called <code>r_core_file_reopen_debug()</code>. This smells like the <code>ood</code> command!</p>
+<p>As already mentioned, the function that&rsquo;s executing <code>r_core_cmd0 (core, &quot;.is*&quot;)</code> internally is called <code>r_core_file_reopen_debug()</code>. This smells like the <code>ood</code> command!</p>
 <pre><code>r2 -c &quot;ood&quot; -d /tmp/hax
 --&gt; PWNED
 </code></pre><p>Therefore you can get pwned by executing <code>ood</code> after opening the binary, which is quite a common thing to do.</p>
 <h1 id="demo-time">Demo Time</h1>
-<p>Let's see it in action:</p>
+<p>Let&rsquo;s see it in action:</p>
 <p><img src="/img/r2-pwndebian/calc.gif" alt="Calculator Exploit">
 <img src="/img/r2-pwndebian/sleep.gif" alt="Sleep Exploit"></p>
 <h1 id="pocs">PoCs</h1>
 <p>The proof of concept exploits shown above can be found <a href="https://github.com/ps1337/r2-pwndebian-exploits">here</a>.</p>
 <p>Please note that the calculator exploit calls <code>gnome-calculator</code>, so you need that installed. If you dont&rsquo; have it, try the <code>sleep</code> exploit.</p>
 <h1 id="the-hotfix">The Hotfix</h1>
-<p>We've thought really hard about this.</p>
+<p>We&rsquo;ve thought really hard about this.</p>
 <p><img src="/img/r2-pwndebian/thinking.gif" alt="Hmmmm"></p>
 <p>We decided to quote the entire command:</p>
 <pre><code>f sym.imp.__sprintf_chk 16 0x00000000
@@ -257,13 +257,13 @@ f sym.imp.sigismember 16 0x00000000
 <pre><code>f sym.A`!sleep 99`AAAAAAAAAAA 8 0x000222c0
 </code></pre><p>becomes</p>
 <pre><code>&quot;f sym.A`!sleep 99`AAAAAAAAAAA 8 0x000222c0&quot;
-</code></pre><p>and therefore doesn't get executed*. Therefore, the old Debian <code>3.2.1</code> release is affected and the current master isn't :)</p>
+</code></pre><p>and therefore doesn&rsquo;t get executed*. Therefore, the old Debian <code>3.2.1</code> release is affected and the current master isn&rsquo;t :)</p>
 <p><em>* Well at least not this time, however the fix is not complete yet :) Pull request coming soon™</em></p>
 <p>The PR for the hotfix can be found <a href="https://github.com/radare/radare2/pull/14690">here</a>.</p>
-<p>And now update <code>r2</code> for Debian pls and don't forget to <code>git pull</code>.</p>
+<p>And now update <code>r2</code> for Debian pls and don&rsquo;t forget to <code>git pull</code>.</p>
 <p>CVE-2019-14745 has been assigned to this.</p>
 <hr>
-<p><strong>Update</strong>: We've presented this at r2con 2019 and you can find the recorded talk <a href="https://www.youtube.com/watch?v=tcUQbDFNn_c&amp;feature=youtu.be&amp;t=2951">here</a>. While preparing the talk shortly before the presentation, we've discovered CVE-2019-16718 which bypasses the implemented fixes for the original exploit.</p>
+<p><strong>Update</strong>: We&rsquo;ve presented this at r2con 2019 and you can find the recorded talk <a href="https://www.youtube.com/watch?v=tcUQbDFNn_c&amp;feature=youtu.be&amp;t=2951">here</a>. While preparing the talk shortly before the presentation, we&rsquo;ve discovered CVE-2019-16718 which bypasses the implemented fixes for the original exploit.</p>
 <hr>
 <p>Thanks for reading, I love you all, see you at r2con!</p>
 </div>

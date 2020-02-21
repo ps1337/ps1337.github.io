@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -183,7 +183,7 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>Based on the <em>Stop, ROP, n&rsquo;, Roll</em> challenge from this year's Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it's using <em>glibc</em>. Of course, everything will be done with <code>radare2</code> and <code>pwntools</code>.</p>
+    <div class="content-width text-justify"><p>Based on the <em>Stop, ROP, n&rsquo;, Roll</em> challenge from this year&rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&rsquo;s using <em>glibc</em>. Of course, everything will be done with <code>radare2</code> and <code>pwntools</code>.</p>
 <p>The challenge binary can be found <a href="/misc/x64-rop-redpwn/srnr">here</a>.</p>
 <h1 id="ret2csu-basics">ret2csu Basics</h1>
 <p>The <em>ret2csu</em> technique, which has been presented at Black Hat Asia in 2018, is based on two specific ROP gadgets that are present in the <code>__libc_csu_init()</code> function. Lets&rsquo; quote the authors of the <a href="/misc/x64-rop-redpwn/asia-18-Marco-return-to-csu-a-new-method-to-bypass-the-64-bit-Linux-ASLR-wp.pdf">ret2csu paper</a> to explain why this function is even there:</p>
@@ -193,9 +193,9 @@ executable that is not coming from the source code of the application. In other 
 resulting ELF executable contains not only the compiled source code from the application
 but already compiled code from statically linked libraries &ldquo;.a&rdquo; and object files &ldquo;.o&rdquo; even
 when it is dynamically compiled.</em></p>
-<p>In other words, if a binary is dynamically linked and it's using <em>glibc</em>, these gadgets will be present &ndash; even if it's only a simple <em>Hello World</em> application. These gadgets can be handy in order to populate certain registers and alter the program flow. Moreover, the gadgets will always be mapped since <code>__libc_csu_init()</code> is getting executed <em>before</em> <code>main()</code>. There's a lot more to this exploitation technique and to fully understand it I recommend checking out the original paper linked above.</p>
+<p>In other words, if a binary is dynamically linked and it&rsquo;s using <em>glibc</em>, these gadgets will be present &ndash; even if it&rsquo;s only a simple <em>Hello World</em> application. These gadgets can be handy in order to populate certain registers and alter the program flow. Moreover, the gadgets will always be mapped since <code>__libc_csu_init()</code> is getting executed <em>before</em> <code>main()</code>. There&rsquo;s a lot more to this exploitation technique and to fully understand it I recommend checking out the original paper linked above.</p>
 <h2 id="ok-so-what-are-those-gadgets">Ok So What Are Those Gadgets?</h2>
-<p>It seems that the structure of the first gadget <a href="https://ropemporium.com/challenge/ret2csu.html">varies depending on the compiler version</a>. I've found quite a few variations of it, so it's always worth a check. Below you can find the first gadget as found in the challenge binary:</p>
+<p>It seems that the structure of the first gadget <a href="https://ropemporium.com/challenge/ret2csu.html">varies depending on the compiler version</a>. I&rsquo;ve found quite a few variations of it, so it&rsquo;s always worth a check. Below you can find the first gadget as found in the challenge binary:</p>
 <pre><code>mov rdx, r15
 mov rsi, r14
 mov edi, r13d
@@ -208,7 +208,7 @@ pop r13
 pop r14
 pop r15
 </code></pre><p>Cool.</p>
-<p>Let's analyze the challenge binary before finding a way to make use of those gadgets.</p>
+<p>Let&rsquo;s analyze the challenge binary before finding a way to make use of those gadgets.</p>
 <h1 id="the-target">The Target</h1>
 <p>Upon executing the binary, it asks for an input:</p>
 <pre><code>[#] number of bytes:
@@ -222,17 +222,17 @@ mov edx, 0x186a0 # size
 mov rsi, rax # *buf
 mov edi, ecx # file descriptor
 call sym.imp.read
-</code></pre><p>This means that in order to input additional data via <code>read()</code>, the file descriptor has to be <code>0</code> which corresponds to <code>STDIN</code>. Using this <code>read()</code> call it's possible to overflow <code>buf</code> which resides at <code>RBP - 0x9</code>. The overflow happens after 17 bytes, as determined by passing a De Bruijn pattern using <code>ragg2 -r  -P 100</code>.</p>
-<p>First, set a breakpoint in <code>read()</code> at the <code>ret</code> instruction. Using this breakpoint it's possible to check what's about to be loaded into the instruction pointer:</p>
+</code></pre><p>This means that in order to input additional data via <code>read()</code>, the file descriptor has to be <code>0</code> which corresponds to <code>STDIN</code>. Using this <code>read()</code> call it&rsquo;s possible to overflow <code>buf</code> which resides at <code>RBP - 0x9</code>. The overflow happens after 17 bytes, as determined by passing a De Bruijn pattern using <code>ragg2 -r  -P 100</code>.</p>
+<p>First, set a breakpoint in <code>read()</code> at the <code>ret</code> instruction. Using this breakpoint it&rsquo;s possible to check what&rsquo;s about to be loaded into the instruction pointer:</p>
 <pre><code>[0x7fda3bd53338]&gt; pxr @rsp # Check what's on the top of the stack
 0x7fff9bea9518 0x4941414841414741   AGAAHAAI @rsp ascii ('A') # This will be loaded into the instruction pointer
 0x7fff9bea9520 0x41414b41414a4141   AAJAAKAA ascii ('A')
 [...]
 [0x7fda3bd53338]&gt; wopO 0x4941414841414741 # Search for this value in the passed pattern
 17
-</code></pre><p>Now that the instruction pointer is under control, it's necessary to develop a plan for the exploitation. While digging around in the binary, the following things can be found:</p>
+</code></pre><p>Now that the instruction pointer is under control, it&rsquo;s necessary to develop a plan for the exploitation. While digging around in the binary, the following things can be found:</p>
 <ul>
-<li>The string at <code>0x00400860</code> contains some gibberish that ends in <code>/bin//sh</code> which suggests that a shell can be spawned through exploitation. The double slashes don't matter in this case.</li>
+<li>The string at <code>0x00400860</code> contains some gibberish that ends in <code>/bin//sh</code> which suggests that a shell can be spawned through exploitation. The double slashes don&rsquo;t matter in this case.</li>
 <li>One of the unnamed functions, <code>sym.sub_1337</code> contains a <code>syscall</code> gadget.</li>
 </ul>
 <p>Combining these two aspects suggests that a shell can be spawned using a system call somehow. Therefore something like <code>execve(&quot;/bin/sh&quot;, 0, 0)</code> could potentially be executed.</p>
@@ -256,13 +256,13 @@ call sym.imp.read
 <li><code>pop r12; pop r13; pop r14; pop r15</code> at <code>0x0040081c</code> (<em>POP</em> gadget)</li>
 </ul>
 <p>Sure enough, the first gadget can be used to set <code>RDX</code> using <code>r15</code>, which in turn can be controlled with the second gadget.</p>
-<p>There's only one problem: The <code>call qword [r12 + rbx*8]</code> instruction at the end of the first gadget will fail in case <code>r12</code> isn't set up properly, since this register may point into some weird memory locations we can't <code>call</code> into. The <code>RBX</code> register is zero at the point of executing this instruction, so this doesn't have to be addressed.</p>
+<p>There&rsquo;s only one problem: The <code>call qword [r12 + rbx*8]</code> instruction at the end of the first gadget will fail in case <code>r12</code> isn&rsquo;t set up properly, since this register may point into some weird memory locations we can&rsquo;t <code>call</code> into. The <code>RBX</code> register is zero at the point of executing this instruction, so this doesn&rsquo;t have to be addressed.</p>
 <h2 id="dealing-with-the-call-instruction">Dealing With The Call Instruction</h2>
-<p>Since <code>r12</code> is under control using the second <em>ret2csu</em> gadget, we only have to find a fitting memory location to jump to that doesn't break the program flow. It makes sense to let the <code>call</code> instruction jump to the <code>syscall</code> gadget since all registers can be set accordingly up to this point. These things are known now:</p>
+<p>Since <code>r12</code> is under control using the second <em>ret2csu</em> gadget, we only have to find a fitting memory location to jump to that doesn&rsquo;t break the program flow. It makes sense to let the <code>call</code> instruction jump to the <code>syscall</code> gadget since all registers can be set accordingly up to this point. These things are known now:</p>
 <ul>
-<li><code>r12</code> has to point to a memory location that <em>contains the address</em> of the <code>syscall</code> gadget. Remember, it's <code>call [r12]</code> and not <code>call r12</code>.</li>
+<li><code>r12</code> has to point to a memory location that <em>contains the address</em> of the <code>syscall</code> gadget. Remember, it&rsquo;s <code>call [r12]</code> and not <code>call r12</code>.</li>
 <li>We have <code>scanf()</code> available which can write user input into a desired location.</li>
-<li>There's a writable memory location available in the memory space of the process, beginning at <code>0x602000</code>. This was determined with the <code>dm</code> command of <code>radare2</code> while debugging the application. Luckily, the start of the memory location doesn't seem to be used yet :)</li>
+<li>There&rsquo;s a writable memory location available in the memory space of the process, beginning at <code>0x602000</code>. This was determined with the <code>dm</code> command of <code>radare2</code> while debugging the application. Luckily, the start of the memory location doesn&rsquo;t seem to be used yet :)</li>
 </ul>
 <p>With all these things combined, a call to <code>scanf(&quot;%zu&quot;, 0x602000)</code> could solve this problem. The <code>pwntools</code> library will be utilized to send the address of the <code>syscall</code> gadget into the target process after calling <code>scanf()</code> with the ROP chain.</p>
 <h2 id="getting-the-syscall-number">Getting The Syscall Number</h2>
@@ -285,7 +285,7 @@ call sym.imp.read
 |           0x00400735      488b45f8       mov rax, qword [var_8h] # RAX = Result
 |           0x00400739      c9             leave
 \           0x0040073a      c3             ret
-</code></pre><p>The integer that's being read is stored in <code>RAX</code> which is just what's required to call <code>execve</code> at this point.</p>
+</code></pre><p>The integer that&rsquo;s being read is stored in <code>RAX</code> which is just what&rsquo;s required to call <code>execve</code> at this point.</p>
 <h2 id="ok-how-to-build-the-rop-chain">Ok How To Build The ROP Chain?</h2>
 <p>Like this:</p>
 <ol>
@@ -348,9 +348,9 @@ p.sendline(SYSCALL) # Address of the syscall gadget
 p.sendline(&quot;59&quot;)
 
 p.interactive()
-</code></pre><p>Here's a demo of the exploit, starting from the last ROP gadget:</p>
+</code></pre><p>Here&rsquo;s a demo of the exploit, starting from the last ROP gadget:</p>
 <p><img src="/img/x64-rop-redpwn/ret2csu.gif" alt="ret2csu Demo"></p>
-<p>That's it.</p>
+<p>That&rsquo;s it.</p>
 </div>
 
     
@@ -361,6 +361,25 @@ p.interactive()
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/gb-fuzz/">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -403,29 +422,6 @@ p.interactive()
     <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
     
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/arm"><kbd class="item-tag">arm</kbd></a>
     
 
 </div>

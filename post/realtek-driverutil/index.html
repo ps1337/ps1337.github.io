@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -177,7 +177,7 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version <code>1030.6</code>). Note that the <a href="https://www.alfa.com.tw/files/?dir=USB%20Driver/Windows/AWUS036AC">download link</a> points to <code>alfa.com</code> but the driver utility itself says it's developed by REALTEK.</p>
+    <div class="content-width text-justify"><p>This kind of vulnerability is really old. However, vendors still fail to properly address this issue. This is just another example of exploiting this kind of vulnerability on Windows 10 with the most up-to-date ALFA AWUS036AC driver utility (version <code>1030.6</code>). Note that the <a href="https://www.alfa.com.tw/files/?dir=USB%20Driver/Windows/AWUS036AC">download link</a> points to <code>alfa.com</code> but the driver utility itself says it&rsquo;s developed by REALTEK.</p>
 <h1 id="the-vulnerability">The vulnerability</h1>
 <p>Upon installing the driver utility, two vulnerable services get installed. This can be checked using the following <a href="https://www.commonexploits.com/unquoted-service-paths/">command</a>:</p>
 <pre><code>C:\Users\ps&gt;wmic service get name,displayname,pathname,startmode |findstr /i &quot;auto&quot; |findstr /i /v &quot;c:\windows\\&quot; |findstr /i /v &quot;&quot;&quot;

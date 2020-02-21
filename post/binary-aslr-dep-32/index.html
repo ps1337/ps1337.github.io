@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -197,7 +197,7 @@ int main(int argc, char **argv)
     lol(argv[1]);
 }
 </code></pre><h1 id="64-bit-vs-32-bit-binaries">64-Bit vs 32-Bit Binaries</h1>
-<p>The issue here should be quite obvious - <code>strcpy</code> blindly copies the user-controlled input buffer <code>b</code> into <code>buffer</code> which causes a buffer overflow. Since normally ASLR and DEP are enabled, the following things don't just work out of the box:</p>
+<p>The issue here should be quite obvious - <code>strcpy</code> blindly copies the user-controlled input buffer <code>b</code> into <code>buffer</code> which causes a buffer overflow. Since normally ASLR and DEP are enabled, the following things don&rsquo;t just work out of the box:</p>
 <ul>
 <li>Providing shellcode via user input: DEP prevents executing this code and the application would just crash</li>
 <li>Using a library like <code>libc</code> and spawning a shell (e.g. using <code>ret2libc</code>) because the start address of the library is randomized after each start of a process:</li>
@@ -266,7 +266,7 @@ relro    partial
 <pre><code>#!/usr/bin/python2.7
 
 print &quot;A&quot; * 2000
-</code></pre><p>Now let's debug the application with <code>r2</code>:</p>
+</code></pre><p>Now let&rsquo;s debug the application with <code>r2</code>:</p>
 <pre><code>$ r2 -d yolo
 [0xf7f3e0b0]&gt; ood `!python2.7 b.py`
 [...]
@@ -303,7 +303,7 @@ child stopped with signal 11
 <li>The offset of the <code>system()</code> call</li>
 <li>(The offset of <code>exit()</code> to prevent the application from crashing after the shell has exited)</li>
 </ul>
-<p>The idea is to cause the application to use gadgets already present in its memory space to spawn a shell. Because no gadgets of the user input are in use, DEP won't kick in. If everything works as expected, the application will call <code>system(/bin/sh)</code> upon successful exploitation. The layout of the input buffer is as follows:</p>
+<p>The idea is to cause the application to use gadgets already present in its memory space to spawn a shell. Because no gadgets of the user input are in use, DEP won&rsquo;t kick in. If everything works as expected, the application will call <code>system(/bin/sh)</code> upon successful exploitation. The layout of the input buffer is as follows:</p>
 <pre><code>&lt;Junk Byte&gt; * 1349 (Offset)
 &lt;Address of system()&gt; (new EIP)
 &lt;Address of exit()&gt; (new return address)
@@ -402,6 +402,25 @@ sh-5.0$
 
     
 
+    <h4><a href="/post/gb-fuzz/">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
     <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
     <h5></h5>
     
@@ -437,29 +456,6 @@ sh-5.0$
     <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
     
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/arm"><kbd class="item-tag">arm</kbd></a>
     
 
 </div>

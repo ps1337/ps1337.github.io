@@ -6,10 +6,20 @@
     <description>Recent content in reversing on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Feb 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/reversing/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Fuzzing A GameBoy Emulator With AFL&#43;&#43;</title>
+      <link>https://bananamafia.dev/post/gb-fuzz/</link>
+      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/gb-fuzz/</guid>
+      <description>Recently I&amp;rsquo;ve started a little fuzzing project. After doing some research, I&amp;rsquo;ve decided to fuzz a gaming emulator. The target of choice is a GameBoy and GameBoy Advance emulator called VisualBoyAdvance-M, which is also called VBA-M. At the time of writing the emulator was still being maintained. VBA-M seems to be a fork of VisualBoyAdvance, for which development seems to have stopped in 2006.
+Disclaimer: I&amp;rsquo;m publishing this blog post to share some fuzzing methodology and tooling and not to blame the developers.</description>
+    </item>
     
     <item>
       <title>Exploiting A Use-After-Free With radare2 - CTF Challenge</title>
@@ -17,7 +27,7 @@
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/uaf-1/</guid>
-      <description>This writeup is about a 36C3 junior CTF challenge called minifd which can be found here. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here&#39;s the challenge description:
+      <description>This writeup is about a 36C3 junior CTF challenge called minifd which can be found here. The goal is to find and exploit a user-after-free vulnerability in order to spawn a shell on the remote system. Here&amp;rsquo;s the challenge description:
 This is a simple file manager implementation supporting basic functionality to create, read, and write files.
 Please note: This is a prototype implementation. At this point of time, only 16 files can be managed at the same time.</description>
     </item>

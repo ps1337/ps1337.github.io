@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -189,24 +189,24 @@
 <li>Aimbot: Automatically aim at the head of the nearest enemy</li>
 </ul>
 <h1 id="tooling--setup">Tooling &amp; Setup</h1>
-<p>Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this. There are <code>pince</code> and <code>scanmem</code> available but they only provide a limited set of the required features. In the Windows world, there's handy tool called <a href="https://github.com/cheat-engine/cheat-engine">Cheat Engine</a> that is capable of all the required tasks, like:</p>
+<p>Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this. There are <code>pince</code> and <code>scanmem</code> available but they only provide a limited set of the required features. In the Windows world, there&rsquo;s handy tool called <a href="https://github.com/cheat-engine/cheat-engine">Cheat Engine</a> that is capable of all the required tasks, like:</p>
 <ul>
 <li>Searching for addresses in the memory of the target process by performing filter-based searches</li>
 <li>Pointer scan: Search for pointers to addresses</li>
 <li>Debugger: Determine functions that read and write specific values and addresses</li>
 </ul>
-<p>Fortunately, Cheat Engine is split into two parts: <a href="https://aur.archlinux.org/packages/ceserver/"><code>ceserver</code></a> and the GUI. It's therefore possible to launch the Linux version of <code>ceserver</code> natively and launch the GUI using <code>wine</code>. The GUI can then be connected to the server using a local socket. Of course, <code>ceserver</code> has to be run as <code>root</code> in order to read and write memory of arbitrary target processes. This setup is semi-stable but still the best for Linux at the moment.</p>
+<p>Fortunately, Cheat Engine is split into two parts: <a href="https://aur.archlinux.org/packages/ceserver/"><code>ceserver</code></a> and the GUI. It&rsquo;s therefore possible to launch the Linux version of <code>ceserver</code> natively and launch the GUI using <code>wine</code>. The GUI can then be connected to the server using a local socket. Of course, <code>ceserver</code> has to be run as <code>root</code> in order to read and write memory of arbitrary target processes. This setup is semi-stable but still the best for Linux at the moment.</p>
 <h1 id="basics">Basics</h1>
 <p>Once Cheat Engine is attached to the CS:GO process, it can access the whole memory region of that process. This also includes the shared objects that are present in the target memory. The memory layout can be inspected with <code>cat /proc/&lt;PID&gt;/maps</code>.</p>
-<p>Once a game client is connected to a network game, it doesn't only know the local player's health and location but also the respective values of all team mates and enemies. The game wouldn't show it of course, but the information is present in the process memory. Objects and structures in this memory are structured according to the game engine's <a href="https://github.com/ValveSoftware/source-sdk-2013/">source code</a>. The developers of CS:GO however applied some changes in regard to the released SDK, so some things may still be different in the actual game memory. For example, the class <code>CBaseEntity</code> is, among other things, responsible to manage the data of player objects. All values present in that memory structure can be found in the <a href="https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/game/server/baseentity.h">SDK source code</a>.</p>
-<p>A general therefore is to find the exact location of these structures in the game memory and analyze it accordingly. For example, enemy locations can be read and other values can be written in order to achieve a certain goal. Please note that it's not as simple as finding a memory location and using the address of the memory structure in the hack because this value changes upon restarting the game. To get around this, a <em>static</em> pointer to the address or a static pointer to a pointer to the address are required. The game executable and the loaded libraries may contain static pointers that lead to the start of a structure in game memory at runtime.</p>
+<p>Once a game client is connected to a network game, it doesn&rsquo;t only know the local player&rsquo;s health and location but also the respective values of all team mates and enemies. The game wouldn&rsquo;t show it of course, but the information is present in the process memory. Objects and structures in this memory are structured according to the game engine&rsquo;s <a href="https://github.com/ValveSoftware/source-sdk-2013/">source code</a>. The developers of CS:GO however applied some changes in regard to the released SDK, so some things may still be different in the actual game memory. For example, the class <code>CBaseEntity</code> is, among other things, responsible to manage the data of player objects. All values present in that memory structure can be found in the <a href="https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/game/server/baseentity.h">SDK source code</a>.</p>
+<p>A general therefore is to find the exact location of these structures in the game memory and analyze it accordingly. For example, enemy locations can be read and other values can be written in order to achieve a certain goal. Please note that it&rsquo;s not as simple as finding a memory location and using the address of the memory structure in the hack because this value changes upon restarting the game. To get around this, a <em>static</em> pointer to the address or a static pointer to a pointer to the address are required. The game executable and the loaded libraries may contain static pointers that lead to the start of a structure in game memory at runtime.</p>
 <p>For example, the library that manages the players in the game is called <code>client_panorama_client.so</code>. This library, at a specific offset, contains a static pointer to a structure in game memory that in turn contains the <code>CBaseEntity</code> object of the current player at a specific offset:</p>
 <p><img src="/img/csgo-multihack/mem_ptr.png" alt="Using Static Pointers"></p>
 <p>Using this so called <em>multi level pointer</em>, all required memory structures can be found by using a single static pointer and by following it to the desired location.</p>
 <p>The <em>pointer scan</em> feature of Cheat Engine helps in this analysis step by searching for all pointers that point to a given address, like the beginning of the <code>CBaseEntity</code>. Upon restarting the game, some of these addresses should still point to valid data and can therefore be used in the cheat.</p>
 <p>After the game is being updated, some offsets and addresses may be changed. Because of this, dumpers such as <a href="https://github.com/Teklad/tuxdump">tuxdump</a> may be used. These tools are able to read the offsets to various in-game structures using pattern matching approches.</p>
 <h1 id="bunnyhop-bot">Bunnyhop Bot</h1>
-<p>With the <code>CBaseEntity</code>, or sometimes called <em>local player</em>, being found it's possible to detect whether the player is on the ground or not. When analyzing the memory region of the local player structure when playing, one specific bit can be determined that holds the information to the current players status in regard to touching the floor. This can be checked in the hack - the only thing required for bunnyhopping is invoking jumps. Of course, sending a key event may be a working solution. However, the cheat can't be sure which key the player actually uses for jumping. Because of this, an other approach has been implemented.</p>
+<p>With the <code>CBaseEntity</code>, or sometimes called <em>local player</em>, being found it&rsquo;s possible to detect whether the player is on the ground or not. When analyzing the memory region of the local player structure when playing, one specific bit can be determined that holds the information to the current players status in regard to touching the floor. This can be checked in the hack - the only thing required for bunnyhopping is invoking jumps. Of course, sending a key event may be a working solution. However, the cheat can&rsquo;t be sure which key the player actually uses for jumping. Because of this, an other approach has been implemented.</p>
 <p>The game uses certain memory addresses as interrupts. As soon as a special value is in this address, the game invokes a jump all by itself. The jump interrupt address can be found with the following approach:</p>
 <ul>
 <li>Scan for <em>unknown initial 4 byte value</em> in Cheat Engine</li>
@@ -216,27 +216,27 @@
 <li>Search for <em>changed value</em></li>
 <li>Repeat until only a few addresses are remaining</li>
 </ul>
-<p>By reverse engineering the game, it can be found that writing the value <code>0x06</code> to the correct interrupt address will cause the player to perform a jump. The remaining addresses can be filtered by writing this value to them. If no jump has been invoked, it's the wrong address.</p>
+<p>By reverse engineering the game, it can be found that writing the value <code>0x06</code> to the correct interrupt address will cause the player to perform a jump. The remaining addresses can be filtered by writing this value to them. If no jump has been invoked, it&rsquo;s the wrong address.</p>
 <p>After finding a static pointer to this interrupt address, bunny hopping can be implemented easily.</p>
 <h1 id="no-flash">No Flash</h1>
-<p>It turns out that the game keeps an internal counter that's being set to a high value once the player is <em>flashed</em>. Each frame this counter is being decremented and the flash effect will keep being present as long as this counter isn't zero. To stop the flash effect it's therefore required to zero this specific address.</p>
+<p>It turns out that the game keeps an internal counter that&rsquo;s being set to a high value once the player is <em>flashed</em>. Each frame this counter is being decremented and the flash effect will keep being present as long as this counter isn&rsquo;t zero. To stop the flash effect it&rsquo;s therefore required to zero this specific address.</p>
 <p>The following animation illustrates this:</p>
 <p><img src="/img/csgo-multihack/noflash.gif" alt="NoFlash Demo"></p>
 <p>Cheat engine once again helps in finding the correct address and static pointer to this value.</p>
 <h1 id="aimbot">Aimbot</h1>
-<p>There are quite some steps required in order to get this work. The local player's location, as in X, Y and Z coordinates can be found in the <code>CBaseEntity</code> structure that has been found before. Every additional required step is covered in its own section.</p>
+<p>There are quite some steps required in order to get this work. The local player&rsquo;s location, as in X, Y and Z coordinates can be found in the <code>CBaseEntity</code> structure that has been found before. Every additional required step is covered in its own section.</p>
 <h2 id="getting-enemy-locations">Getting Enemy Locations</h2>
 <p>The enemy locations can be found via various methods. In the cheat the <code>GlowObjectManager</code> has been used. This is a structure in memory that, for whatever reason, holds structures that include pointers to all entities on the map (<code>CBaseEntity</code> structures). Each sub-structure is <code>0x40</code> bytes large and starts with the entity pointer element. The manager structure also contains a counter value that can be used in order to loop through all available entities in a <code>for</code> loop.</p>
 <p>After filtering out dead enemies and team mates from all available entities by making use of other member values of <code>CBaseEntity</code>, their location can be read directly from memory. Determining the offset of the entity locations can be done by pushing players around and watching the memory change:</p>
 <p><img src="/img/csgo-multihack/entitypos.gif" alt="Getting Enemy Entity Location"></p>
 <p>Of course, the determined memory regions have to be converted to <code>float</code>s before processing this data any further.</p>
 <h2 id="getting-the-nearest-enemy">Getting the Nearest Enemy</h2>
-<p>With the local player's and all enemy coordinates ready, it's quite easy to determine the nearest enemy using mad math skills:</p>
+<p>With the local player&rsquo;s and all enemy coordinates ready, it&rsquo;s quite easy to determine the nearest enemy using mad math skills:</p>
 <pre><code>return std::sqrt(std::pow(entity_x - own_x, 2) + std::pow(entity_y - own_y, 2) + std::pow(entity_z - own_z, 2));
 </code></pre><h2 id="setting-the-camera-angle">Setting the Camera Angle</h2>
 <p>Using the in-game console command <code>cl_showpos 1</code>, the current camera angle can bee seen. By moving the mouse and searching for changed values in Cheat Engine, multiple addresses can be found that hold the current camera angle. However, only one can be used to actually set this angle programmatically.</p>
 <h2 id="calculating-the-camera-angle">Calculating the Camera Angle</h2>
-<p>The only thing that's still required is the calculating the camera angle in order to automatically aim at the enemy. The following function takes the local player's and the enemy coordinates and magically calculates this angle:</p>
+<p>The only thing that&rsquo;s still required is the calculating the camera angle in order to automatically aim at the enemy. The following function takes the local player&rsquo;s and the enemy coordinates and magically calculates this angle:</p>
 <pre><code>// Slightly modified standard `CalculateAngle` function.
 std::vector&lt;float&gt; MadMath::calcAngle(std::vector&lt;float&gt; src, std::vector&lt;float&gt; dst)
 {
@@ -255,7 +255,7 @@ std::vector&lt;float&gt; MadMath::calcAngle(std::vector&lt;float&gt; src, std::v
 
     return angles;
 }
-</code></pre><p>This works because of reasons and it's great.</p>
+</code></pre><p>This works because of reasons and it&rsquo;s great.</p>
 <h1 id="playing-online">Playing Online</h1>
 <p>It definitively works but you will get banned because the aimbot just aims through walls, no matter if the enemy can actually be seen or not :D</p>
 <h1 id="references">References</h1>

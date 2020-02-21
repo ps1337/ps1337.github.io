@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -186,14 +186,14 @@
 <ul>
 <li>Use <code>-e DISPLAY=$DISPLAY</code> to share the display variable value</li>
 <li>Specifying <code>-v /tmp/.X11-unix:/tmp/.X11-unix:ro</code> shares the X11 socket - optionally as read only.</li>
-<li>&ldquo;I can't see the window, let's <a href="https://bing.com">google</a>&hellip;&rdquo;</li>
-<li>&ldquo;Let's just execute <code>xhost +local:root</code> and it works!&rdquo;</li>
+<li>&ldquo;I can&rsquo;t see the window, let&rsquo;s <a href="https://bing.com">google</a>&hellip;&rdquo;</li>
+<li>&ldquo;Let&rsquo;s just execute <code>xhost +local:root</code> and it works!&rdquo;</li>
 </ul>
-<p>The X11 socket is mounted as read only - it's secure right?</p>
+<p>The X11 socket is mounted as read only - it&rsquo;s secure right?</p>
 <h1 id="the-breakouts">The breakout(s)</h1>
 <p>These attacks can be performed after gaining access to a Docker container:</p>
 <h2 id="reading-window-information">Reading Window Information</h2>
-<p>With <code>xwininfo -root -tree</code> it's possible to check which windows are opened on the host system, including the window titles:</p>
+<p>With <code>xwininfo -root -tree</code> it&rsquo;s possible to check which windows are opened on the host system, including the window titles:</p>
 <pre><code>[...]
 0xredacted &quot;[i3 con] container around 0xredacted&quot;: (&quot;i3-frame&quot; &quot;i3-frame&quot;) [...]
         1 child:
@@ -204,9 +204,9 @@
 <pre><code>xwd -root -screen &gt; screenshot.xwd &amp;&amp; convert screenshot.xwd screenshot.png
 </code></pre><p>can be used to create a screenshot of the hosts display which makes it possible to watch every action a user performs on the system.</p>
 <h2 id="keylogging">Keylogging</h2>
-<p>By mounting the X11 socket into the container a user doesn't just mount the display. Additionally they keyboard also gets shared, so to say. With this, it's possible to log all keystrokes. There may be better tools for this, but during tests <a href="https://github.com/unixdj/xkey">xkey</a> seemed to perform very reliable. Using <code>xkey</code> it's possible to perform a specific action in case a previously defined key gets hit.</p>
+<p>By mounting the X11 socket into the container a user doesn&rsquo;t just mount the display. Additionally they keyboard also gets shared, so to say. With this, it&rsquo;s possible to log all keystrokes. There may be better tools for this, but during tests <a href="https://github.com/unixdj/xkey">xkey</a> seemed to perform very reliable. Using <code>xkey</code> it&rsquo;s possible to perform a specific action in case a previously defined key gets hit.</p>
 <h2 id="getting-a-shell">Getting a shell</h2>
-<p>Although it's not very stealthy, this method allows getting a shell on the host system. This works by sending keystrokes to the X server in order to open a terminal and execute commands:</p>
+<p>Although it&rsquo;s not very stealthy, this method allows getting a shell on the host system. This works by sending keystrokes to the X server in order to open a terminal and execute commands:</p>
 <pre><code>xdotool key &lt;Shortcut to open a terminal&gt;
 xdotool type 'xterm'
 xdotool key Return
@@ -215,7 +215,7 @@ xdotool key Return
 </code></pre><p><img src="/img/docker-breakout/thisisfine.gif" alt="This is fine"></p>
 <h1 id="the-mitigation">The mitigation</h1>
 <ul>
-<li><a href="https://stackoverflow.com/questions/16296753/can-you-run-gui-apps-in-a-docker-container">Use XAuthority</a> and don't use the root user to spawn an X application.</li>
+<li><a href="https://stackoverflow.com/questions/16296753/can-you-run-gui-apps-in-a-docker-container">Use XAuthority</a> and don&rsquo;t use the root user to spawn an X application.</li>
 <li>Check <a href="https://github.com/mviereck/x11docker">x11docker</a> which basically creates a new X server for isolation purposes.</li>
 </ul>
 <h1 id="resources">Resources</h1>

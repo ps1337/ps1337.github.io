@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -218,13 +218,13 @@
 <span style="color:#75715e">// try to read some assembly info
 </span><span style="color:#75715e"></span>Console.WriteLine(Assembly.Load(decrypted).FullName);
 File.WriteAllBytes(<span style="color:#e6db74">&#34;Foo.dll&#34;</span>, decrypted);
-</code></pre></div><p>Obviously this didn't work out of the box. It seems that the application reads some bytes from its own binary file in the beginning:</p>
+</code></pre></div><p>Obviously this didn&rsquo;t work out of the box. It seems that the application reads some bytes from its own binary file in the beginning:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">byte</span>[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(<span style="color:#66d9ef">typeof</span>(Program)).Location);
 <span style="color:#a6e22e">[...]</span>
 Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#ae81ff">4</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>, array3, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">0</span>);
 </code></pre></div><p>After applying the changes above, these bytes seem to be wrong since the offset changed. My second modification to the application fixes this my making the routine read the untouched file instead of its own binary:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">byte</span>[] sourceArray = File.ReadAllBytes(<span style="color:#e6db74">&#34;original.dll&#34;</span>);
-</code></pre></div><p>After calling the modified binary with <code>dotnet CampRE.dll</code>, a file called <code>Foo.dll</code> has been written. Now it's time to decompile it:</p>
+</code></pre></div><p>After calling the modified binary with <code>dotnet CampRE.dll</code>, a file called <code>Foo.dll</code> has been written. Now it&rsquo;s time to decompile it:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
 {
     <span style="color:#66d9ef">bool</span> flag = args[<span style="color:#ae81ff">0</span>] != <span style="color:#e6db74">&#34;BADBOY&#34;</span>;
@@ -255,7 +255,7 @@ Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#
 }
 </code></pre></div><p>It decrypts another Base64 string using a computed AES key. This key results from calling</p>
 <pre><code>frames[1].GetMethod().MetadataToken
-</code></pre><p>and doing some magic stuff with it afterwards. The important thing to notice is that it's using <code>frames[1]</code>, which doesn't exist when executing this second stage as a standalone binary. This stack frame must result from <code>CampRE.dll</code> calling this embedded second stage.</p>
+</code></pre><p>and doing some magic stuff with it afterwards. The important thing to notice is that it&rsquo;s using <code>frames[1]</code>, which doesn&rsquo;t exist when executing this second stage as a standalone binary. This stack frame must result from <code>CampRE.dll</code> calling this embedded second stage.</p>
 <p>I decided to patch out the <code>BADBOY</code> check above and construct a new loader for the second stage:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
 {

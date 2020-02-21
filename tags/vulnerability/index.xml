@@ -17,7 +17,7 @@
       <pubDate>Tue, 17 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/openredirect/</guid>
-      <description>Now that the deadline to fix this vulnerability has passed, I&#39;ve decided to publish this blog post that covers a web vulnerability I&#39;ve found in the login mechanism of a particular company.
+      <description>Now that the deadline to fix this vulnerability has passed, I&amp;rsquo;ve decided to publish this blog post that covers a web vulnerability I&amp;rsquo;ve found in the login mechanism of a particular company.
 Everything started when I had a look at a more complex part of a public web application of this vendor. The web application that gives out a link to the user that can be used to open up the same user state again at a later point.</description>
     </item>
     

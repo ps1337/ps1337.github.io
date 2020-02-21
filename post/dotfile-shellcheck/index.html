@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -179,9 +179,9 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>In order to prevent errors and side effects, it's useful to use <a href="https://www.shellcheck.net/">Shellcheck</a> to lint all shell scripts. While checking out the <a href="https://github.com/jessfraz/dotfiles">Dotfiles of jessfraz</a>, I came across an easy way to integrate this kind of check with <a href="https://www.travis-ci.org">Travis CI</a>. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository. All credits go to the <a href="https://github.com/jessfraz">original author</a> of the docker images and scripts, of course.</p>
+    <div class="content-width text-justify"><p>In order to prevent errors and side effects, it&rsquo;s useful to use <a href="https://www.shellcheck.net/">Shellcheck</a> to lint all shell scripts. While checking out the <a href="https://github.com/jessfraz/dotfiles">Dotfiles of jessfraz</a>, I came across an easy way to integrate this kind of check with <a href="https://www.travis-ci.org">Travis CI</a>. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository. All credits go to the <a href="https://github.com/jessfraz">original author</a> of the docker images and scripts, of course.</p>
 <h1 id="activating-travis-ci">Activating Travis CI</h1>
-<p>First of all, it's necessary to link your Github account to an account on <a href="https://www.travis-ci.org">Travis CI</a>. To do this, just sign in at the Travis page using your GitHub account. After that, you need to activate Travis for your specific Dotfile repository. You can do this after logging in at Travis. This will add a hook to your repository on GitHub which will trigger the Travis build/linting process after pushing new content.</p>
+<p>First of all, it&rsquo;s necessary to link your Github account to an account on <a href="https://www.travis-ci.org">Travis CI</a>. To do this, just sign in at the Travis page using your GitHub account. After that, you need to activate Travis for your specific Dotfile repository. You can do this after logging in at Travis. This will add a hook to your repository on GitHub which will trigger the Travis build/linting process after pushing new content.</p>
 <h1 id="adding-a-travis-job-file">Adding a Travis job file</h1>
 <p>To let Travis know which commands should be executed, a <code>.travis.yml</code> file is needed. This can be as simple as:</p>
 <pre><code>sudo: required

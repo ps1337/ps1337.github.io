@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Fuzzing A GameBoy Emulator With AFL&#43;&#43;</title>
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/python.min.js"></script> 
+<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
+<script src="https://bananamafia.dev/js/json.min.js"></script> 
+<script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
+        
+
+        
+    </head>
+
+    
+
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/gb-fuzz/">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>Recently I&rsquo;ve started a little fuzzing project. After doing some <a href="https://mgba.io/2016/09/13/fuzzing-emulators/">research</a>, I&rsquo;ve decided to fuzz a gaming emulator. The target of choice is a GameBoy and GameBoy Advance emulator called <a href="https://github.com/visualboyadvance-m/visualboyadvance-m">VisualBoyAdvance-M</a>, which is also called VBA-M. At the time of writing the emulator was still being maintained. VBA-M seems to be a fork of <a href="https://github.com/x3ro/VisualBoyAdvance">VisualBoyAdvance</a>, for which development seems to have stopped in 2006.</p>
+<p><em>Disclaimer: I&rsquo;m publishing this blog post to share some fuzzing methodology and tooling and not to blame the developers. I&rsquo;ve previously reported all my fuzzing discoveries to the developer team of VBA-M on GitHub.</em></p>
+<p>The attack surface of emulators is quite large because of their complex functionality and various ways to pass user input to the application. There&rsquo;s parsing functionality for the game ROMs and the save states, built-in cheating support and then there&rsquo;s all that video and audio I/O related stuff.</p>
+<p>I&rsquo;ve decided to fuzz the GameBoy ROM files. The general approach is as follows:</p>
+<ol>
+<li>Let the emulator load a ROM</li>
+<li>Let it parse the file and do initialization</li>
+<li>Run the game for a few frames. This catches bugs that only occur after some time, like corrupting internal memory of the emulator while playing a game.</li>
+</ol>
+<h1 id="building-a-fuzzing-harness">Building A Fuzzing Harness</h1>
+<p>Of course the emulator spins up a GUI every time it&rsquo;s launched. Since this is quite slow and is not required for the fuzzer at all, this has to be skipped. The same applies for any other functionality that&rsquo;s not required for the fuzzing harness to work.</p>
+<p>There are two front ends that use the emulation library provided by VBA-M: One is based on SDL and one on <a href="https://www.wxwidgets.org/">WxWidgets</a>. My fuzzing harness is a modified version of the SDL front end, since it&rsquo;s more minimal compared to the other one. The <code>SDL</code> sub directory can be found <a href="https://github.com/visualboyadvance-m/visualboyadvance-m/tree/master/src/sdl">here</a> and contains all files related for this front end.</p>
+<p>Here&rsquo;s an overview of the changes I&rsquo;ve applied to transform the SDL front end to a fuzzing harness:</p>
+<ol>
+<li>I&rsquo;ve added a counter that&rsquo;s being decremented after the emulator has performed one full cycle in <code>gbEmulate()</code>. The emulator shuts down with <code>exit(0)</code> as soon as this value hits the zero value. This is required for the fuzzer since I want it to stop in case no memory corruption happens within a certain amount of frames.</li>
+<li>Initialization routines for key maps, user preferences and GameBoy Advance ROMs were removed.</li>
+<li>The routines for sound and video were kept intact because bugs may be present in those too. This makes the fuzzer slower but increases coverage. However, the actual output was patched out. This means that for example the internal video states are still being calculated up to a certain point but nothing is actually being shown on the GUI. For example, functions that perform screen output were simply replaced with <code>return</code> statements.</li>
+</ol>
+<p>And that&rsquo;s basically it.</p>
+<h1 id="llvm-mode-and-persistent-mode">LLVM Mode And Persistent Mode</h1>
+<p>One additional change was made to the <code>main()</code> function of the emulator. I&rsquo;ve added the <code>__AFL_LOOP(10000)</code> directive. This tells AFL to perform in-process fuzzing for a given amount of times before spinning up a new target process. This means that one VBA-M invocation happens for every 10000 inputs, which ultimately speeds up fuzzing. Of course, you have to make sure to not introduce any side effects when using this feature. This mode is also called AFL persistent mode and you can read more about it <a href="https://lcamtuf.blogspot.com/2015/06/new-in-afl-persistent-mode.html">here</a>.</p>
+<p>Compiling the fuzzing harness in <a href="https://github.com/vanhauser-thc/AFLplusplus/blob/master/llvm_mode/README.md">LLVM Mode</a> and with <a href="https://github.com/vanhauser-thc/AFLplusplus">AFL++</a> provides much better performance than using something like plain GCC and provides more features, including the persistent mode mentioned above. After compiling AFL++ with LLVM9 or newer, the magic <code>afl-clang-fast++</code> and <code>afl-clang-fast</code> compilers are available. If your distribution doesn&rsquo;t provide these packages yet, AFL++ <a href="https://github.com/vanhauser-thc/AFLplusplus/blob/master/Dockerfile">has you covered once again with a Dockerfile</a>.</p>
+<p>I&rsquo;ve then used these compilers to build VBA-M with full ASAN enabled:</p>
+<pre><code class="language-console" data-lang="console">$ cmake .. -DCMAKE_CXX_COMPILER=afl-clang-fast++ -DCMAKE_CC_COMPILER=afl-clang-fast
+$ AFL_USE_ASAN=1 make -j32
+</code></pre><p>Now it&rsquo;s time to create some input files for the fuzzer.</p>
+<h1 id="building-input-files">Building Input Files</h1>
+<p>I&rsquo;ve created multiple minimal GameBoy ROMs using <a href="https://www.gbstudio.dev/">GBStudio</a> and minimized them afterwards. This worked by deleting some parts using a hex editor and checking if the ROM still works afterwards. Minimizing input files can make the fuzzing process more efficient.</p>
+<h1 id="system-configuration">System Configuration</h1>
+<p>I&rsquo;ve used a 32 core machine from <a href="https://www.hetzner.com/cloud">Hetzner Cloud</a> as fuzzing server.</p>
+<p>Before starting to fuzz, you have to make sure that the system is configured properly or you won&rsquo;t have the best performance possible. The <a href="https://github.com/vanhauser-thc/AFLplusplus/blob/master/afl-system-config">afl-system-config</a> script does this automatically for you. Just be sure to reset the affected values after fuzzing has finished, since this also disables ASLR. Or just throw the fuzzing server away.</p>
+<p>By putting the AFL working directory on a RAM disk, you can potentially gain some additional speed and avoid wearing out the disks at the same time. I&rsquo;ve created my RAM disk as follows:</p>
+<pre><code>$ mkdir /mnt/ramdisk
+$ mount -t tmpfs -o size=100G tmpfs /mnt/ramdisk
+</code></pre><h1 id="running-the-fuzzer">Running The Fuzzer</h1>
+<p>I want to start one AFL instance per core. To make this as convenient as possible, I&rsquo;ve used an AFL start script from <a href="https://gamozolabs.github.io/fuzzing/2018/09/16/scaling_afl.html">here</a> and modified it to make it fit my needs:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python3</span>
+
+<span style="color:#75715e"># Original from: https://gamozolabs.github.io/fuzzing/2018/09/16/scaling_afl.html</span>
+
+<span style="color:#f92672">import</span> subprocess<span style="color:#f92672">,</span> threading<span style="color:#f92672">,</span> time<span style="color:#f92672">,</span> shutil<span style="color:#f92672">,</span> os
+<span style="color:#f92672">import</span> random<span style="color:#f92672">,</span> string
+<span style="color:#f92672">import</span> multiprocessing
+
+NUM_CPUS <span style="color:#f92672">=</span> multiprocessing<span style="color:#f92672">.</span>cpu_count()
+
+RAMDISK <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/mnt/ramdisk</span><span style="color:#e6db74">&#34;</span>
+INPUT_DIR <span style="color:#f92672">=</span> RAMDISK <span style="color:#f92672">+</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/afl_in</span><span style="color:#e6db74">&#34;</span>
+OUTPUT_DIR <span style="color:#f92672">=</span> RAMDISK <span style="color:#f92672">+</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/afl_out</span><span style="color:#e6db74">&#34;</span>
+BACKUP_DIR <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/opt/afl_backup</span><span style="color:#e6db74">&#34;</span>
+BIN_PATH <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/opt/vbam/visualboyadvance-m/build/vbam</span><span style="color:#e6db74">&#34;</span>
+
+SCHEDULES <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">coe</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">fast</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">explore</span><span style="color:#e6db74">&#34;</span>]
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Using </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> CPU Cores</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NUM_CPUS))
+
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">do_work</span>(cpu):
+    <span style="color:#66d9ef">if</span> cpu <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        fuzzer_arg <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-M</span><span style="color:#e6db74">&#34;</span>
+        schedule <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">exploit</span><span style="color:#e6db74">&#34;</span>
+    <span style="color:#66d9ef">else</span>:
+        fuzzer_arg <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-S</span><span style="color:#e6db74">&#34;</span>
+        schedule <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>choice(SCHEDULES)
+
+    os<span style="color:#f92672">.</span>mkdir(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu))
+
+    <span style="color:#75715e"># Restart if it dies, which happens on startup a bit</span>
+    <span style="color:#66d9ef">while</span> True:
+        <span style="color:#66d9ef">try</span>:
+            args <span style="color:#f92672">=</span> [
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">taskset</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-c</span><span style="color:#e6db74">&#34;</span>,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> cpu, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">afl-fuzz</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-f</span><span style="color:#e6db74">&#34;</span>,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">/a.gb.gz</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu), <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-p</span><span style="color:#e6db74">&#34;</span>, schedule, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-m</span><span style="color:#e6db74">&#34;</span>,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">none</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-i</span><span style="color:#e6db74">&#34;</span>, INPUT_DIR, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-o</span><span style="color:#e6db74">&#34;</span>, OUTPUT_DIR, fuzzer_arg,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">fuzzer</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> cpu, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">--</span><span style="color:#e6db74">&#34;</span>, BIN_PATH,
+                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">/a.gb.gz</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu)
+            ]
+            sp <span style="color:#f92672">=</span> subprocess<span style="color:#f92672">.</span>Popen(args,
+                                  stdout<span style="color:#f92672">=</span>subprocess<span style="color:#f92672">.</span>PIPE,
+                                  stderr<span style="color:#f92672">=</span>subprocess<span style="color:#f92672">.</span>PIPE)
+            sp<span style="color:#f92672">.</span>wait()
+        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+            <span style="color:#66d9ef">print</span>(str(e))
+            <span style="color:#66d9ef">pass</span>
+
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">CPU </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> afl-fuzz instance died</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> cpu)
+
+        <span style="color:#75715e"># Some backoff if we fail to run</span>
+        time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1.0</span>)
+
+
+<span style="color:#66d9ef">assert</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(INPUT_DIR), <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Invalid input directory</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(BACKUP_DIR):
+    os<span style="color:#f92672">.</span>mkdir(BACKUP_DIR)
+
+<span style="color:#66d9ef">if</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(OUTPUT_DIR):
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Backing up old output directory</span><span style="color:#e6db74">&#34;</span>)
+    shutil<span style="color:#f92672">.</span>move(
+        OUTPUT_DIR, BACKUP_DIR <span style="color:#f92672">+</span> os<span style="color:#f92672">.</span>sep <span style="color:#f92672">+</span>
+        <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>join(random<span style="color:#f92672">.</span>choice(string<span style="color:#f92672">.</span>ascii_uppercase) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>)))
+
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Creating output directory</span><span style="color:#e6db74">&#34;</span>)
+os<span style="color:#f92672">.</span>mkdir(OUTPUT_DIR)
+
+<span style="color:#75715e"># Disable AFL affinity as we do it better</span>
+os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">AFL_NO_AFFINITY</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">1</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#66d9ef">for</span> cpu <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, NUM_CPUS):
+    threading<span style="color:#f92672">.</span>Timer(<span style="color:#ae81ff">0.0</span>, do_work, args<span style="color:#f92672">=</span>[cpu])<span style="color:#f92672">.</span>start()
+
+    <span style="color:#75715e"># Let fuzzer stabilize first</span>
+    <span style="color:#66d9ef">if</span> cpu <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">5.0</span>)
+
+<span style="color:#66d9ef">while</span> threading<span style="color:#f92672">.</span>active_count() <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
+    time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">5.0</span>)
+
+    <span style="color:#66d9ef">try</span>:
+        subprocess<span style="color:#f92672">.</span>check_call([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">afl-whatsup</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-s</span><span style="color:#e6db74">&#34;</span>, OUTPUT_DIR])
+    <span style="color:#66d9ef">except</span>:
+        <span style="color:#66d9ef">pass</span>
+</code></pre></div><p>This spawns one master AFL instance and several slaves with each one assigned to an own CPU core. Also, every slave gets its own randomized <a href="https://github.com/vanhauser-thc/AFLplusplus/#5-power-schedules">power schedule</a>.</p>
+<p>The only thing that&rsquo;s left is to start this script on the server in a <code>tmux</code> session to detach it from the current SSH session. Here&rsquo;s what the results look like after running it for a while:</p>
+<pre><code class="language-console" data-lang="console">Summary stats
+=============
+
+       Fuzzers alive : 32
+      Total run time : 33 days, 4 hours
+         Total execs : 59 million
+    Cumulative speed : 1200 execs/sec
+       Pending paths : 392 faves, 159374 total
+  Pending per fuzzer : 12 faves, 4980 total (on average)
+       Crashes found : 3662 locally unique
+</code></pre><p>The total fuzzing speed could be higher but I went for maximum coverage, so I could catch more potential bugs. Time consuming operations like audio and video I/O certainly slow things down.</p>
+<h1 id="fuzzing-results">Fuzzing Results</h1>
+<p>Some of my results can only be reproduced using an ASAN build of VBA-M since heap memory corruption doesn&rsquo;t necessarily crash the target.</p>
+<p>Fuzzing was performed on commit <code>951e8e0ebeeab4fc130e05bfb2c143a394a97657</code>. I&rsquo;ve found 11 unique crashes in total. Here are the interesting ones:</p>
+<h2 id="overflow-of-global-variable-in-mappertama5ram">Overflow of Global Variable in <code>mapperTAMA5RAM()</code></h2>
+<pre><code>==22758==ERROR: AddressSanitizer: global-buffer-overflow on address 0x55780a09da1c at pc 0x557809b0a468 bp 0x7ffd30d551e0 sp 0x7ffd30d551d8
+WRITE of size 4 at 0x55780a09da1c thread T0
+    #0 0x557809b0a467 in mapperTAMA5RAM(unsigned short, unsigned char) /path/to/vbam/visualboyadvance-m/src/gb/gbMemory.cpp:1247:73
+    #1 0x557809abd7be in gbWriteMemory(unsigned short, unsigned char) /path/to/vbam/visualboyadvance-m/src/gb/GB.cpp:991:13
+    #2 0x557809aeaac0 in gbEmulate(int) /path/to/vbam/visualboyadvance-m/src/gb/gbCodes.h
+    #3 0x557809695d4d in main /path/to/vbam/visualboyadvance-m/src/sdl/SDL.cpp:1858:17
+    #4 0x7f2498e41152 in __libc_start_main (/usr/lib/libc.so.6+0x27152)
+    #5 0x5578095ad6ad in _start (/path/to/vbam/ge/build/vbam+0xb66ad)
+
+Address 0x55780a09da1c is a wild pointer.
+SUMMARY: AddressSanitizer: global-buffer-overflow /path/to/vbam/visualboyadvance-m/src/gb/gbMemory.cpp:1247:73 in mapperTAMA5RAM(unsigned short, unsigned char)
+</code></pre><p>This is a case where the indexing of a global variable goes wrong. Check out this code snippet that seems to cover special cases for Tamagotchi on the GameBoy platform:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">mapperTAMA5RAM</span>(<span style="color:#66d9ef">uint16_t</span> address, <span style="color:#66d9ef">uint8_t</span> value)
+{
+    <span style="color:#66d9ef">if</span> ((address <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xffff</span>) <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0xa001</span>)
+    {
+        <span style="color:#66d9ef">switch</span> (address <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">1</span>)
+        {
+        <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#75715e">// &#39;Values&#39; Register
+</span><span style="color:#75715e"></span>        {
+            value <span style="color:#f92672">&amp;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0xf</span>;
+            gbDataTAMA5.mapperCommands[gbDataTAMA5.mapperCommandNumber] <span style="color:#f92672">=</span> value;
+            [...]
+        }
+        [...]
+        }
+        [...]
+    }
+    [...]
+}
+</code></pre></div><p>The fuzzer found various inputs file that cause the value of <code>gbDataTAMA5.mapperCommandNumber</code> to become larger than the <code>gbDataTAMA5.mapperCommands</code> array, which is static and always holds 16 entries. This results in a write operation of 4 bytes that goes beyond the <code>gbDataTAMA5</code> structure. In fact, it was possible to write to other structures nearby. There&rsquo;s a limitation that restricts the overflow from going beyond the offset <code>0xFF</code> since VBA-M reads only a single byte into the index. This happens even though the data type of the index itself is an integer.</p>
+<p>Since I had over 850 unique cases that trigger this bug, I&rsquo;ve checked how much each one overflows the array using a GDB batch script called <code>dump.gdb</code>:</p>
+<pre><code>break *mapperTAMA5RAM+153
+r
+i r rax
+</code></pre><p>The value of <code>RAX</code> at the breakpoint is the offset of the write operation. I&rsquo;ve launched GDB like this:</p>
+<pre><code>for f in *; do cp &quot;$f&quot; /tmp/yolo.gb.gz &amp;&amp; gdb --batch --command=dump.gdb --args /path/to/vbam/visualboyadvance-m/build/vbam /tmp/yolo.gb.gz | tail -1; done
+</code></pre><p>This executes the emulator until the buggy write operation happens, prints the offset and exits. During a debugging session it can also be observed which data structure is getting manipulated by the write operation:</p>
+<pre><code>p &amp;gbDataTAMA5.mapperCommands[gbDataTAMA5.mapperCommandNumber]
+$2 = (int *) 0x5555557ed6dc &lt;gbSgbSaveStructV3+124&gt; &lt;-- of out bounds
+</code></pre><p>This clearly isn&rsquo;t pointing to anything inside <code>gbDataTAMA5</code> and therefore demonstrates that memory can be corrupted using this bug. However, I haven&rsquo;t found a way to gain code execution using this :( Writing to a function pointer using a partial overwrite or something similar would be a way to exploit this. The only things that I was able to manipulate were sound settings and a structure that defines how many days there are in a given month :D</p>
+<p>Too bad.</p>
+<h2 id="overflow-of-global-variable-in-mapperhuc3ram">Overflow of Global Variable in <code>mapperHuC3RAM()</code></h2>
+<pre><code class="language-console" data-lang="console">==21687==ERROR: AddressSanitizer: global-buffer-overflow on address 0x561152cdf760 at pc 0x56115274a793 bp 0x7ffedd4cab10 sp 0x7ffedd4cab08
+WRITE of size 4 at 0x561152cdf760 thread T0
+    #0 0x56115274a792 in mapperHuC3RAM(unsigned short, unsigned char) /path/to/vbam/visualboyadvance-m/src/gb/gbMemory.cpp:1090:57
+    #1 0x5611526ff7be in gbWriteMemory(unsigned short, unsigned char) /path/to/vbam/visualboyadvance-m/src/gb/GB.cpp:991:13
+    #2 0x56115272a547 in gbEmulate(int) /path/to/vbam/visualboyadvance-m/src/gb/gbCodes.h:1246:1
+    #3 0x5611522d7d4d in main /path/to/vbam/visualboyadvance-m/src/sdl/SDL.cpp:1858:17
+    #4 0x7f39eb078152 in __libc_start_main (/usr/lib/libc.so.6+0x27152)
+    #5 0x5611521ef6ad in _start (/path/to/vbam/triage/build/vbam+0xb66ad)
+
+0x561152cdf760 is located 32 bytes to the left of global variable 'gbDataTAMA5' defined in '/path/to/vbam/visualboyadvance-m/src/gb/gbMemory.cpp:1138:13' (0x561152cdf780) of size 168
+0x561152cdf760 is located 4 bytes to the right of global variable 'gbDataHuC3' defined in '/path/to/vbam/visualboyadvance-m/src/gb/gbMemory.cpp:991:12' (0x561152cdf720) of size 60
+SUMMARY: AddressSanitizer: global-buffer-overflow /path/to/vbam/visualboyadvance-m/src/gb/gbMemory.cpp:1090:57 in mapperHuC3RAM(unsigned short, unsigned char)
+</code></pre><p>The function <code>mapperHuC3RAM()</code> gets called by <code>gbWriteMemory()</code>. The corruption happens after these lines:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">p <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>gbDataHuC3.mapperRegister2;
+<span style="color:#f92672">*</span>(p <span style="color:#f92672">+</span> gbDataHuC3.mapperRegister1<span style="color:#f92672">+</span><span style="color:#f92672">+</span>) <span style="color:#f92672">=</span> value <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0f</span>;
+</code></pre></div><p>The value of <code>p</code> points to invalid memory next to the <code>gbDataHuC3</code> variable in the fuzzing case. Therefore the write operation happens outside of it and can potentially be used to overwrite other content on the stack. However, it wasn&rsquo;t possible to properly control the write operation and therefore no critical locations could be overwritten.</p>
+<h2 id="user-after-free-in-gbcopymemory">User-After-Free in <code>gbCopyMemory()</code></h2>
+<pre><code class="language-console" data-lang="console">==13939==ERROR: AddressSanitizer: heap-use-after-free on address 0x615000003680 at pc 0x55b3dc38388b bp 0x7ffcecd0e1e0 sp 0x7ffcecd0e1d8
+READ of size 1 at 0x615000003680 thread T0
+    #0 0x55b3dc38388a in gbCopyMemory(unsigned short, unsigned short, int) /path/to/vbam/visualboyadvance-m/src/gb/GB.cpp:882:44
+    #1 0x55b3dc38388a in gbWriteMemory(unsigned short, unsigned char) /path/to/vbam/visualboyadvance-m/src/gb/GB.cpp:1428:9
+    #2 0x55b3dc3a931c in gbEmulate(int) /path/to/vbam/visualboyadvance-m/src/gb/gbCodes.h
+    #3 0x55b3dbf55d4d in main /path/to/vbam/visualboyadvance-m/src/sdl/SDL.cpp:1858:17
+    #4 0x7f5f9d50e152 in __libc_start_main (/usr/lib/libc.so.6+0x27152)
+    #5 0x55b3dbe6d6ad in _start (/path/to/vbam/triage/build/vbam+0xb66ad)
+
+0x615000003680 is located 384 bytes inside of 488-byte region [0x615000003500,0x6150000036e8)
+freed by thread T0 here:
+    #0 0x55b3dbf0e8a9 in free (/path/to/vbam/triage/build/vbam+0x1578a9)
+    #1 0x7f5f9d55bd03 in fclose@@GLIBC_2.2.5 (/usr/lib/libc.so.6+0x74d03)
+
+previously allocated by thread T0 here:
+    #0 0x55b3dbf0ebd9 in malloc (/path/to/vbam/triage/build/vbam+0x157bd9)
+    #1 0x7f5f9d55c5ee in __fopen_internal (/usr/lib/libc.so.6+0x755ee)
+    #2 0x672f303030312f71  (&lt;unknown module&gt;)
+</code></pre><p>This bugs seems to be triggered upon doing HDMA (<em>Horizontal Blanking Direct Memory Access</em>) using this helper function:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">gbCopyMemory</span>(<span style="color:#66d9ef">uint16_t</span> d, <span style="color:#66d9ef">uint16_t</span> s, <span style="color:#66d9ef">int</span> count)
+{
+    <span style="color:#66d9ef">while</span> (count) {
+        gbMemoryMap[d <span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">12</span>][d <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0fff</span>] <span style="color:#f92672">=</span> gbMemoryMap[s <span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">12</span>][s <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0fff</span>];
+        s<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+        d<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
+        count<span style="color:#f92672">-</span><span style="color:#f92672">-</span>;
+    }
+}
+</code></pre></div><p>The fuzzer found a case where the source of the DMA write operation points to memory which has been freed previously. In case the allocation of this address can be controlled, the write operation could therefore also be controlled partially. Maybe. Maybe not :)</p>
+<h2 id="null-dereference-in-gbreadmemory">Null Dereference in <code>gbReadMemory()</code></h2>
+<pre><code>==16217==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x5629cb1be6ae bp 0x000000000000 sp 0x7ffe9ccb8c40 T0)
+==16217==The signal is caused by a READ memory access.
+==16217==Hint: address points to the zero page.
+    #0 0x5629cb1be6ad in gbReadMemory(unsigned short) /path/to/vbam/visualboyadvance-m/src/gb/GB.cpp:1801:20
+    #1 0x5629cb1d59dd in gbEmulate(int) /path/to/vbam/visualboyadvance-m/src/gb/GB.cpp:4637:42
+    #2 0x5629cad8fd4d in main /path/to/vbam/visualboyadvance-m/src/sdl/SDL.cpp:1858:17
+    #3 0x7fa13d83d152 in __libc_start_main (/usr/lib/libc.so.6+0x27152)
+    #4 0x5629caca76ad in _start (/path/to/vbam/ge/build/vbam+0xb66ad)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /path/to/vbam/visualboyadvance-m/src/gb/GB.cpp:1801:20 in gbReadMemory(unsigned short)
+==16217==ABORTING
+
+</code></pre><p>The bug happens in these lines:</p>
+<pre><code>if (mapperReadRAM)
+    return mapperReadRAM(address);
+return gbMemoryMap[address &gt;&gt; 12][address &amp; 0x0fff]; &lt;-- null deref happens here
+</code></pre><p>The <code>gbMemoryMap</code> entry at index <code>10</code> is being accessed, which is <code>NULL</code>. This is only a DoS though and I&rsquo;ve also found two more <code>NULL</code> dereference bugs like this in other locations.</p>
+<h2 id="dos-caused-by-invalid-calculated-size">DoS Caused By Invalid Calculated Size</h2>
+<p>AFL also found another case where it was possible to cause a DoS on the emulator. This is caused by an invalid and very large size parameter that&rsquo;s being passed to a <code>malloc()</code> call. Here&rsquo;s why that happens:</p>
+<ol>
+<li>The size of the ROM is being read from the ROM header, which can be controlled by an attacker</li>
+<li>This value is the size parameter for a <code>malloc()</code> call. If the attacker places a negative value in the respective header field, the emulator will just use this value without any prior checks and pass it to <code>malloc()</code>.</li>
+<li>Since <code>malloc()</code> only accepts signed values of type <code>size_t</code>, the negative value will be converted to an unsigned value and will therefore by very huge.</li>
+<li><code>malloc()</code> tries to allocate several gigabytes of memory, which causes the process to hang.</li>
+</ol>
+<p>The fix would be to use an unsigned value for the size value. Also, an additional sanitation should be added after reading the value, since GameBoy games rarely use more than a few gigabytes of memory :)</p>
+<h2 id="static-analysis-overflow-of-global-filename-variable">Static Analysis: Overflow of Global <code>filename</code> Variable</h2>
+<p>Before fuzzing I&rsquo;ve also performed some static analysis of the SDL front end. I&rsquo;ve found that by simply calling <code>vbam</code> with a very long GameBoy ROM file path, a global variable called <code>filename</code> can be corrupted. It&rsquo;s defined in <code>SDL.cpp</code> as <code>char filename[2048]</code>. On startup, the following code is being executed:</p>
+<pre><code>utilStripDoubleExtension(szFile, filename);
+</code></pre><p>The <code>szFile</code> variable contains the input string which was passed to the emulator and <code>filename</code> is the global variable mentioned before. This is the implementation of <code>utilStripDoubleExtension()</code>:</p>
+<pre><code>// strip .gz or .z off end
+void utilStripDoubleExtension(const char *file, char *buffer)
+{
+        if (buffer != file) // allows conversion in place
+                strcpy(buffer, file);
+        [...]
+}
+</code></pre><p>This is a quite standard buffer overflow vulnerability that overwrites the global variable <code>filename</code>. Overwriting it doesn&rsquo;t trigger any canary checks since it&rsquo;s not a local variable. Because of the overflow it&rsquo;s possible to overwrite the global variables that were defined <em>before</em> <code>filename</code>. A way to exploit this would be to overwrite a function pointer or something similar. In fact, there are function pointers available to be overwritten just before <code>filename</code>:</p>
+<pre><code>struct EmulatedSystem emulator = {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL, &lt;- These are all function pointers
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    false,
+    0
+};
+[...]
+uint32_t systemColorMap32[0x10000];
+uint16_t systemColorMap16[0x10000];
+uint16_t systemGbPalette[24];
+
+char filename[2048];
+[...]
+</code></pre><p>Notice the size of <code>systemColorMap32</code> and <code>systemColorMap16</code>: These are huge arrays which prevent <code>filename</code> from overflowing into the <code>emulator</code> struct since there&rsquo;s a limit which restricts the size of the arguments passed to applications via the command line. Exploiting this would have been a funny CTF challenge but oh well :(</p>
+<center>
+<marquee>
+<b>OK BYE!</b>
+</marquee>
+</center></div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/cutter"><kbd class="item-tag">cutter</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/heap"><kbd class="item-tag">heap</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -179,7 +179,7 @@
 <p>Generating licenses using <code>MD5(email)</code> is bad.</p>
 <p>Validating licenses using HTTP in plain text is bad.</p>
 <h1 id="the-software">The Software</h1>
-<p>This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won't be disclosed.</p>
+<p>This post covers reverse engineering and cracking the license validation process of a popular and closed source self hosted music server application. The developer has been notified about the findings, however no reply has been received. The validation issues still exist as of now and affects all issued licenses. Because of this, the name of the application won&rsquo;t be disclosed.</p>
 <h1 id="source-code">Source Code</h1>
 <p>The server application consists of a software package written in java. This means that decompilation can easily be performed using <code>jd-gui</code> or similar tools. Afterwards simple <code>grep</code>ing for <code>license</code> yields these interesting methods:</p>
 <ul>
@@ -199,9 +199,9 @@
    }
    return license.equalsIgnoreCase(StringUtil.md5Hex(email.toLowerCase()));
 }
-</code></pre><p>That's right: All licensed issued are basically <code>MD5(email)</code>. Bypassing this check is done by generating a MD5 hash of a random email address. This also means that you can hijack another persons license only by knowing his/her email address.</p>
+</code></pre><p>That&rsquo;s right: All licensed issued are basically <code>MD5(email)</code>. Bypassing this check is done by generating a MD5 hash of a random email address. This also means that you can hijack another persons license only by knowing his/her email address.</p>
 <h1 id="remote-checks">Remote Checks</h1>
-<p>Bypassing local checks is easily possible - not let's have a look at the API call which triggers server side checks:</p>
+<p>Bypassing local checks is easily possible - not let&rsquo;s have a look at the API call which triggers server side checks:</p>
 <pre><code>private void validateLicense() {
    String email = getLicenseEmail();
    Date date = getLicenseDate();
@@ -229,7 +229,7 @@
    }
 }
 </code></pre><p>To bypass the second validation stage, one could perform an easy attack: Redirecting <code>domain</code> locally to an attacker provided server which always returns the string <code>true</code>. However, another approach seemed to require even less work.</p>
-<p>By spawning a docker container with the name <code>domain</code> and linking it to the application server, this check seemed to be bypassed. This step basically redirects <code>domain</code> to a non existing server which tricks the validation process into being successfull all the time. Most likely this is intended behaviour because people don't need an internet connection to validate licenses.</p>
+<p>By spawning a docker container with the name <code>domain</code> and linking it to the application server, this check seemed to be bypassed. This step basically redirects <code>domain</code> to a non existing server which tricks the validation process into being successfull all the time. Most likely this is intended behaviour because people don&rsquo;t need an internet connection to validate licenses.</p>
 </div>
 
     

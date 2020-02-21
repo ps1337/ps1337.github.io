@@ -17,8 +17,8 @@
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/telegram-notifications/</guid>
-      <description>If you ever wanted to get notified when certain things happen but didn&#39;t find a lightweight solution &amp;ndash; here comes captain Telegram.
-Using a simple Telegram bot, it&#39;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
+      <description>If you ever wanted to get notified when certain things happen but didn&amp;rsquo;t find a lightweight solution &amp;ndash; here comes captain Telegram.
+Using a simple Telegram bot, it&amp;rsquo;s possible to send notifications to your mobile phone or browser. All the notifier node needs is curl installed.
 Registering a bot First of all, a Telegram bot has to be registered in order to send messages later on. Follow these steps to get started:</description>
     </item>
     
@@ -28,7 +28,7 @@ Registering a bot First of all, a Telegram bot has to be registered in order to 
       <pubDate>Mon, 15 Jan 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
-      <description>Note: This isn&#39;t up to date anymore, instead use img .
+      <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
  Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
     </item>

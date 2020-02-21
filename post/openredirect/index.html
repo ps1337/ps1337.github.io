@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -177,19 +177,19 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>Now that the deadline to fix this vulnerability has passed, I've decided to publish this blog post that covers a web vulnerability I've found in the login mechanism of a particular company.</p>
-<p>Everything started when I had a look at a more complex part of a public web application of this vendor. The web application that gives out a link to the user that can be used to open up the same user state again at a later point. I've then opened this link from a private tab and examined the web requests in the Burp proxy.</p>
+    <div class="content-width text-justify"><p>Now that the deadline to fix this vulnerability has passed, I&rsquo;ve decided to publish this blog post that covers a web vulnerability I&rsquo;ve found in the login mechanism of a particular company.</p>
+<p>Everything started when I had a look at a more complex part of a public web application of this vendor. The web application that gives out a link to the user that can be used to open up the same user state again at a later point. I&rsquo;ve then opened this link from a private tab and examined the web requests in the Burp proxy.</p>
 <h1 id="the-vulnerability">The Vulnerability</h1>
 <p>One link looked particularly interesting, since it contains a <code>redirect_uri</code> parameter:</p>
 <pre><code>https://vulnerable.com/login.html?cl_id=[Some ID]&amp;redirect_uri=https:%2F%2Fwebapp.vulnerable.com%2Fyolo.html&amp;scope=auth&amp;state=ey[Base64]
-</code></pre><p>Parameters like that are often prone to <a href="https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">open redirect vulnerabilities</a> that allow attackers to redirect users to another site after they click on a prepared and allegedly trustworthy link. Some web applications don't check whether this particular parameter has been manipulated and blindly redirect users to the attacker-controlled website after performing a certain action, like performing a login.</p>
-<p>What happened is that in fact the <code>redirect_uri</code> parameter is being sanitized by the web application itself and was therefore not vulnerable to an open redirect attack. I've then decided to check out the <code>state</code> parameter that contains base64 encoded data. Here's the value of the decoded parameter:</p>
+</code></pre><p>Parameters like that are often prone to <a href="https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">open redirect vulnerabilities</a> that allow attackers to redirect users to another site after they click on a prepared and allegedly trustworthy link. Some web applications don&rsquo;t check whether this particular parameter has been manipulated and blindly redirect users to the attacker-controlled website after performing a certain action, like performing a login.</p>
+<p>What happened is that in fact the <code>redirect_uri</code> parameter is being sanitized by the web application itself and was therefore not vulnerable to an open redirect attack. I&rsquo;ve then decided to check out the <code>state</code> parameter that contains base64 encoded data. Here&rsquo;s the value of the decoded parameter:</p>
 <pre><code>{&quot;request&quot;:&quot;new&quot;,&quot;location&quot;:&quot;[somewhere at vulnerable.com]&quot;,&quot;scroll&quot;:&quot;0&quot;,&quot;configure&quot;:true,&quot;additionalParams&quot;:{},&quot;locale&quot;:&quot;&quot;}
 </code></pre><p>Well, what happens after manipulating the <code>location</code> parameter in the decoded JSON object and putting it back into the login URL?</p>
 <p>The web application redirects the user to the attacker-controlled website.</p>
 <p>Cool. This affects the central login mechanism of the public customer portal.</p>
 <h1 id="the-root-cause">The Root Cause</h1>
-<p>The redirect happens via JavaScript that's hosted at:</p>
+<p>The redirect happens via JavaScript that&rsquo;s hosted at:</p>
 <pre><code>https://vulnerable.com/login/process.html:
 </code></pre><pre><code>let URL = state.oldId ? `${state.location}?id=${state.oldId}` : `${state.location}`;
 [...]
@@ -208,7 +208,7 @@ document.location.replace(URL)
 | 05/12/2019 | Received answer: "Be assured that steps are undertaken to remediate to vulnerability you have reported" |
 | 31/12/2019 | Publishing this blog post                                                                               |
  -->
-<p><em>Pls don't sue</em></p>
+<p><em>Pls don&rsquo;t sue</em></p>
 </div>
 
     

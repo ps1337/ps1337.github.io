@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -203,7 +203,7 @@ monitor_name SMS24A650
 </code></pre><p>This information should not be accessible from within a container as it contains specific information on the host and its environment.</p>
 <p>These issues have been reported to the Docker maintainers were fixed by <a href="https://github.com/moby/moby/pull/38299/files">moving</a> <code>/proc/asound</code> to the list of paths that are being masked to make each container manage its own versions of the affected paths. This path list is part of the OCI specification. Therefore, the fix for these issues also propagates to <code>containerd</code> which also uses this specification.</p>
 <h1 id="lessons-learned">Lessons Learned</h1>
-<p>Containers are a construct of namespaces and cgroups in combination with some C and Go code that tie everything together. This <em>tries</em> to isolate the underlying system by any means necessary (which works pretty well as of today). There's always the possibility of information leaks in case something is missed or newly introduced (either by Linux or the container managers). Theoretically, there can exist more issues of this type in the current state of container managers. Maybe some of them can be found in an automated manner? Hopefully AppArmor or similar mechanisms are in place to at least prevent writing leaked paths to prevent potential breakouts :)</p>
+<p>Containers are a construct of namespaces and cgroups in combination with some C and Go code that tie everything together. This <em>tries</em> to isolate the underlying system by any means necessary (which works pretty well as of today). There&rsquo;s always the possibility of information leaks in case something is missed or newly introduced (either by Linux or the container managers). Theoretically, there can exist more issues of this type in the current state of container managers. Maybe some of them can be found in an automated manner? Hopefully AppArmor or similar mechanisms are in place to at least prevent writing leaked paths to prevent potential breakouts :)</p>
 </div>
 
     

@@ -35,7 +35,7 @@
       <pubDate>Wed, 16 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/dotfiles/</guid>
-      <description>You want to customize your Linux dotfiles, whether you already know it or not. After investing way too much time into this, I&#39;ve decided to share some results and tricks in this blog post.
+      <description>You want to customize your Linux dotfiles, whether you already know it or not. After investing way too much time into this, I&amp;rsquo;ve decided to share some results and tricks in this blog post.
 General Structure The first thing to do is to create a general structure for your dotfiles and all associated files and scripts. I came up with this structure:
 dotfiles ├── aliases ├── bashrc ├── bindings: Additional key bindings ├── exports: Shell-wide exports ├── i3: Config and bar for i3 window manager │ ├── config │ ├── polybar │ └── scripts ├── Makefile: Generate readme and call shellcheck on push [.</description>
     </item>
@@ -56,7 +56,7 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/dotfile-shellcheck/</guid>
-      <description>In order to prevent errors and side effects, it&#39;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
+      <description>In order to prevent errors and side effects, it&amp;rsquo;s useful to use Shellcheck to lint all shell scripts. While checking out the Dotfiles of jessfraz, I came across an easy way to integrate this kind of check with Travis CI. The mentioned approach triggers a travis linting process after pushing to to the Dotfiles repository on GitHub. This post will explain all necessary steps to integrate this process into your own repository.</description>
     </item>
     
   </channel>

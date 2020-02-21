@@ -6,10 +6,37 @@
     <description>Recent content in Tags on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Feb 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>exploiting</title>
+      <link>https://bananamafia.dev/tags/exploiting/</link>
+      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/exploiting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>fuzzing</title>
+      <link>https://bananamafia.dev/tags/fuzzing/</link>
+      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/fuzzing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>reversing</title>
+      <link>https://bananamafia.dev/tags/reversing/</link>
+      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/reversing/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>ctf</title>
@@ -26,15 +53,6 @@
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/cutter/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>exploiting</title>
-      <link>https://bananamafia.dev/tags/exploiting/</link>
-      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/exploiting/</guid>
       <description></description>
     </item>
     
@@ -62,15 +80,6 @@
       <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/radare2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>reversing</title>
-      <link>https://bananamafia.dev/tags/reversing/</link>
-      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/reversing/</guid>
       <description></description>
     </item>
     
@@ -134,15 +143,6 @@
       <pubDate>Thu, 24 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/frida/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>fuzzing</title>
-      <link>https://bananamafia.dev/tags/fuzzing/</link>
-      <pubDate>Thu, 24 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/fuzzing/</guid>
       <description></description>
     </item>
     

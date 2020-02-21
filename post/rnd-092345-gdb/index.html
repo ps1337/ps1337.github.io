@@ -89,7 +89,7 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.62.2" />
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
         
 
         
@@ -179,7 +179,7 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>When trying to exploit an application it's useful to send the input via <code>gdb</code> to immediately check how the input is being processed. But once the <code>gdb</code> is open it's sometimes not clear how to pass binary input to applications reading from stdin, e.g. using <code>read</code>. An easy way is to start the debugging session with <code>gdb ./binary</code> and using</p>
+    <div class="content-width text-justify"><p>When trying to exploit an application it&rsquo;s useful to send the input via <code>gdb</code> to immediately check how the input is being processed. But once the <code>gdb</code> is open it&rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using <code>read</code>. An easy way is to start the debugging session with <code>gdb ./binary</code> and using</p>
 <pre><code>run &lt; &lt;(printf &quot;\xAA\xAA\xAA&quot;)
 </code></pre><p>from the <code>gdb</code> session to send arbitrary bytes.</p>
 </div>
@@ -192,6 +192,25 @@
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/gb-fuzz/">Fuzzing A GameBoy Emulator With AFL&#43;&#43;</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -234,27 +253,6 @@
     <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
     
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
 
 </div>
