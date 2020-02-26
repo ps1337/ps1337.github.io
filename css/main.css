@@ -171,7 +171,6 @@ a:hover {
 
 nav {
     background-color: var(--nav-background-color) !important;
-    transition: background-color 0.4s linear;
 }
 
 footer {
