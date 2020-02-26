@@ -189,11 +189,13 @@
 
         $(".fa-adjust").on("click", function () {
             const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
             if (currentTheme == "dark") {
                 setLight();
             } else {
                 setDark();
             }
+            $("body").removeClass("transition-bg");
         });
     </script>
 

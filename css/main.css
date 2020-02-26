@@ -25,13 +25,20 @@ html, body {
     --header-color: #333333;
 }
 
+.transition-bg {
+    transition: background-color 0.4s linear;
+}
+
+.transition-all {
+    transition: all-color 0.4s linear;
+}
+
 body {
     padding-top: 55px;
     display: flex;
     text-align: center;
     flex-direction: column;
     background-color: var(--body-background-color) !important;
-    transition: background-color 0.4s linear;
 }
 
 a, p, li, b {
