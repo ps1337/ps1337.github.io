@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en-us">
-    <head>
-         
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>mitm-fuzz0r</title>
-        <style>
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>mitm-fuzz0r</title>
+    <style>
 
     html body {
         font-family: 'Raleway', sans-serif;
@@ -89,69 +90,116 @@
 <script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
 
 
-<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script> <meta name="generator" content="Hugo 0.64.0" />
-        
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
-        
-    </head>
 
+ <meta name="generator" content="Hugo 0.64.0" />
     
 
+    
+</head>
 
-    <body>
-         
-        <nav class="navbar navbar-default navbar-fixed-top">
 
-            <div class="container">
 
-                <div class="navbar-header">
 
-                    <a class="navbar-brand visible-xs" href="#">mitm-fuzz0r</a>
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
 
-                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+        <div class="container">
 
-                </div>
+            <div class="navbar-header">
 
-                <div class="collapse navbar-collapse">
+                <a class="navbar-brand visible-xs" href="#">mitm-fuzz0r</a>
 
-                    
-                        <ul class="nav navbar-nav">
-                            
-                                <li><a href="/">Home</a></li>
-                            
-                                <li><a href="/post/">Posts</a></li>
-                            
-                                <li><a href="/project/">Projects</a></li>
-                            
-                        </ul>
-                    
-
-                    
-                        <ul class="nav navbar-nav navbar-right">
-                            
-                                <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
-                            
-                                <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
-                            
-                                <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
-                            
-                                <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
-                            
-                                <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
-                            
-                        </ul>
-                    
-
-                </div>
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
 
             </div>
 
-        </nav>
+            <div class="collapse navbar-collapse">
 
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-adjust"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        $(".fa-adjust").parent().removeAttr("href");
+        $(".fa-adjust").hide();
+
+        
+        setMode();
+        $(document).ready(function () {
+            setMode();
+        })
+
+        function setMode() {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "dark") {
+                setDark();
+            }
+            else {
+                setLight();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+        }
+
+        $(".fa-adjust").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+        });
+    </script>
 
 <main id="main">
 

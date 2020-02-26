@@ -2,12 +2,42 @@ html, body {
     height: 100%;
 }
 
+
+[data-theme="dark"] {
+    --body-background-color: #002b36;
+    --inline-code-text-color: black;
+    --inline-code-tag-color: #ffe135;
+    --nav-background-color: #002b36;
+    --text-color:#93a1a1;
+    --header-color:#93a1a1;
+}
+
+
+[data-theme="light"] {
+    --body-background-color: white;
+    --inline-code-text-color: black;
+    --inline-code-tag-color: #ffe13566;
+    --nav-background-color: #f8f8f8;
+    --text-color: #333;
+    --header-color: #333333;
+}
+
 body {
     padding-top: 55px;
     display: flex;
     text-align: center;
     flex-direction: column;
+    background-color: var(--body-background-color) !important;
 }
+
+a, p, li {
+    color: var(--text-color) !important;
+}
+
+h1, h2:not(.homeText), h3, h4, h5, h6 {
+    color: var(--header-color) !important;
+}
+
 
 main {
     margin: auto;
@@ -58,10 +88,9 @@ main {
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
-
 code {
-    color: #000;
-    background-color: #ffe13566;
+    color: var(--inline-code-text-color);
+    background-color: var(--inline-code-tag-color);
 }
 
 pre code {
@@ -115,6 +144,10 @@ a:hover {
 
 .navbar.navbar-default {
     border-top: var(--border-width) solid var(--accent);
+}
+
+nav {
+    background-color: var(--nav-background-color) !important;
 }
 
 footer {
