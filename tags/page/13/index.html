@@ -172,11 +172,11 @@
         function setMode() {
             const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
 
-            if (currentTheme == "dark") {
-                setDark();
+            if (currentTheme == "light") {
+                setLight();
             }
             else {
-                setLight();
+                setDark();
             }
         }
 
@@ -199,8 +199,12 @@
             } else {
                 setDark();
             }
-            $("body").removeClass("transition-bg");
-            $("nav").removeClass("transition-bg");
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 2000);
+
         });
     </script>
 
