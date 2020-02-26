@@ -172,7 +172,7 @@
         function setMode() {
             const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
 
-            if (currentTheme == "light") {
+            if (currentTheme == "light" || currentTheme == null) {
                 setLight();
             }
             else {
