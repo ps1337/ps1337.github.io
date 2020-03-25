@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
- <meta name="generator" content="Hugo 0.64.0" />
+ <meta name="generator" content="Hugo 0.68.1" />
     
 
     
@@ -275,37 +275,37 @@ $ mount -t tmpfs -o size=100G tmpfs /mnt/ramdisk
 
 NUM_CPUS <span style="color:#f92672">=</span> multiprocessing<span style="color:#f92672">.</span>cpu_count()
 
-RAMDISK <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/mnt/ramdisk</span><span style="color:#e6db74">&#34;</span>
-INPUT_DIR <span style="color:#f92672">=</span> RAMDISK <span style="color:#f92672">+</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/afl_in</span><span style="color:#e6db74">&#34;</span>
-OUTPUT_DIR <span style="color:#f92672">=</span> RAMDISK <span style="color:#f92672">+</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/afl_out</span><span style="color:#e6db74">&#34;</span>
-BACKUP_DIR <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/opt/afl_backup</span><span style="color:#e6db74">&#34;</span>
-BIN_PATH <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/opt/vbam/visualboyadvance-m/build/vbam</span><span style="color:#e6db74">&#34;</span>
+RAMDISK <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/mnt/ramdisk&#34;</span>
+INPUT_DIR <span style="color:#f92672">=</span> RAMDISK <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/afl_in&#34;</span>
+OUTPUT_DIR <span style="color:#f92672">=</span> RAMDISK <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/afl_out&#34;</span>
+BACKUP_DIR <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/opt/afl_backup&#34;</span>
+BIN_PATH <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/opt/vbam/visualboyadvance-m/build/vbam&#34;</span>
 
-SCHEDULES <span style="color:#f92672">=</span> [<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">coe</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">fast</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">explore</span><span style="color:#e6db74">&#34;</span>]
+SCHEDULES <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;coe&#34;</span>, <span style="color:#e6db74">&#34;fast&#34;</span>, <span style="color:#e6db74">&#34;explore&#34;</span>]
 
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Using </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> CPU Cores</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NUM_CPUS))
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Using </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> CPU Cores&#34;</span> <span style="color:#f92672">%</span> (NUM_CPUS))
 
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">do_work</span>(cpu):
     <span style="color:#66d9ef">if</span> cpu <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
-        fuzzer_arg <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-M</span><span style="color:#e6db74">&#34;</span>
-        schedule <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">exploit</span><span style="color:#e6db74">&#34;</span>
+        fuzzer_arg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;-M&#34;</span>
+        schedule <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;exploit&#34;</span>
     <span style="color:#66d9ef">else</span>:
-        fuzzer_arg <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-S</span><span style="color:#e6db74">&#34;</span>
+        fuzzer_arg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;-S&#34;</span>
         schedule <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>choice(SCHEDULES)
 
-    os<span style="color:#f92672">.</span>mkdir(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu))
+    os<span style="color:#f92672">.</span>mkdir(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu))
 
     <span style="color:#75715e"># Restart if it dies, which happens on startup a bit</span>
     <span style="color:#66d9ef">while</span> True:
         <span style="color:#66d9ef">try</span>:
             args <span style="color:#f92672">=</span> [
-                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">taskset</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-c</span><span style="color:#e6db74">&#34;</span>,
-                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> cpu, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">afl-fuzz</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-f</span><span style="color:#e6db74">&#34;</span>,
-                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">/a.gb.gz</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu), <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-p</span><span style="color:#e6db74">&#34;</span>, schedule, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-m</span><span style="color:#e6db74">&#34;</span>,
-                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">none</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-i</span><span style="color:#e6db74">&#34;</span>, INPUT_DIR, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-o</span><span style="color:#e6db74">&#34;</span>, OUTPUT_DIR, fuzzer_arg,
-                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">fuzzer</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> cpu, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">--</span><span style="color:#e6db74">&#34;</span>, BIN_PATH,
-                <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">/a.gb.gz</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu)
+                <span style="color:#e6db74">&#34;taskset&#34;</span>, <span style="color:#e6db74">&#34;-c&#34;</span>,
+                <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> cpu, <span style="color:#e6db74">&#34;afl-fuzz&#34;</span>, <span style="color:#e6db74">&#34;-f&#34;</span>,
+                <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">/a.gb.gz&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu), <span style="color:#e6db74">&#34;-p&#34;</span>, schedule, <span style="color:#e6db74">&#34;-m&#34;</span>,
+                <span style="color:#e6db74">&#34;none&#34;</span>, <span style="color:#e6db74">&#34;-i&#34;</span>, INPUT_DIR, <span style="color:#e6db74">&#34;-o&#34;</span>, OUTPUT_DIR, fuzzer_arg,
+                <span style="color:#e6db74">&#34;fuzzer</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> cpu, <span style="color:#e6db74">&#34;--&#34;</span>, BIN_PATH,
+                <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">/a.gb.gz&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu)
             ]
             sp <span style="color:#f92672">=</span> subprocess<span style="color:#f92672">.</span>Popen(args,
                                   stdout<span style="color:#f92672">=</span>subprocess<span style="color:#f92672">.</span>PIPE,
@@ -315,28 +315,28 @@ SCHEDULES <span style="color:#f92672">=</span> [<span style="color:#e6db74"></sp
             <span style="color:#66d9ef">print</span>(str(e))
             <span style="color:#66d9ef">pass</span>
 
-        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">CPU </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> afl-fuzz instance died</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> cpu)
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;CPU </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> afl-fuzz instance died&#34;</span> <span style="color:#f92672">%</span> cpu)
 
         <span style="color:#75715e"># Some backoff if we fail to run</span>
         time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1.0</span>)
 
 
-<span style="color:#66d9ef">assert</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(INPUT_DIR), <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Invalid input directory</span><span style="color:#e6db74">&#34;</span>
+<span style="color:#66d9ef">assert</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(INPUT_DIR), <span style="color:#e6db74">&#34;Invalid input directory&#34;</span>
 
 <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(BACKUP_DIR):
     os<span style="color:#f92672">.</span>mkdir(BACKUP_DIR)
 
 <span style="color:#66d9ef">if</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(OUTPUT_DIR):
-    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Backing up old output directory</span><span style="color:#e6db74">&#34;</span>)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Backing up old output directory&#34;</span>)
     shutil<span style="color:#f92672">.</span>move(
         OUTPUT_DIR, BACKUP_DIR <span style="color:#f92672">+</span> os<span style="color:#f92672">.</span>sep <span style="color:#f92672">+</span>
-        <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>join(random<span style="color:#f92672">.</span>choice(string<span style="color:#f92672">.</span>ascii_uppercase) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>)))
+        <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(random<span style="color:#f92672">.</span>choice(string<span style="color:#f92672">.</span>ascii_uppercase) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>)))
 
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Creating output directory</span><span style="color:#e6db74">&#34;</span>)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Creating output directory&#34;</span>)
 os<span style="color:#f92672">.</span>mkdir(OUTPUT_DIR)
 
 <span style="color:#75715e"># Disable AFL affinity as we do it better</span>
-os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">AFL_NO_AFFINITY</span><span style="color:#e6db74">&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">1</span><span style="color:#e6db74">&#34;</span>
+os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#34;AFL_NO_AFFINITY&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;1&#34;</span>
 
 <span style="color:#66d9ef">for</span> cpu <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, NUM_CPUS):
     threading<span style="color:#f92672">.</span>Timer(<span style="color:#ae81ff">0.0</span>, do_work, args<span style="color:#f92672">=</span>[cpu])<span style="color:#f92672">.</span>start()
@@ -349,7 +349,7 @@ os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74"></span
     time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">5.0</span>)
 
     <span style="color:#66d9ef">try</span>:
-        subprocess<span style="color:#f92672">.</span>check_call([<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">afl-whatsup</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">-s</span><span style="color:#e6db74">&#34;</span>, OUTPUT_DIR])
+        subprocess<span style="color:#f92672">.</span>check_call([<span style="color:#e6db74">&#34;afl-whatsup&#34;</span>, <span style="color:#e6db74">&#34;-s&#34;</span>, OUTPUT_DIR])
     <span style="color:#66d9ef">except</span>:
         <span style="color:#66d9ef">pass</span>
 </code></pre></div><p>This spawns one master AFL instance and several slaves with each one assigned to an own CPU core. Also, every slave gets its own randomized <a href="https://github.com/vanhauser-thc/AFLplusplus/#5-power-schedules">power schedule</a>.</p>
@@ -383,13 +383,13 @@ SUMMARY: AddressSanitizer: global-buffer-overflow /path/to/vbam/visualboyadvance
 </code></pre><p>This is a case where the indexing of a global variable goes wrong. Check out this code snippet that seems to cover special cases for Tamagotchi on the GameBoy platform:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">mapperTAMA5RAM</span>(<span style="color:#66d9ef">uint16_t</span> address, <span style="color:#66d9ef">uint8_t</span> value)
 {
-    <span style="color:#66d9ef">if</span> ((address <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xffff</span>) <span style="color:#f92672">&lt;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0xa001</span>)
+    <span style="color:#66d9ef">if</span> ((address <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xffff</span>) <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0xa001</span>)
     {
         <span style="color:#66d9ef">switch</span> (address <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">1</span>)
         {
         <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#75715e">// &#39;Values&#39; Register
 </span><span style="color:#75715e"></span>        {
-            value <span style="color:#f92672">&amp;</span><span style="color:#f92672">=</span> <span style="color:#ae81ff">0xf</span>;
+            value <span style="color:#f92672">&amp;=</span> <span style="color:#ae81ff">0xf</span>;
             gbDataTAMA5.mapperCommands[gbDataTAMA5.mapperCommandNumber] <span style="color:#f92672">=</span> value;
             [...]
         }
@@ -426,7 +426,7 @@ WRITE of size 4 at 0x561152cdf760 thread T0
 SUMMARY: AddressSanitizer: global-buffer-overflow /path/to/vbam/visualboyadvance-m/src/gb/gbMemory.cpp:1090:57 in mapperHuC3RAM(unsigned short, unsigned char)
 </code></pre><p>The function <code>mapperHuC3RAM()</code> gets called by <code>gbWriteMemory()</code>. The corruption happens after these lines:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">p <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>gbDataHuC3.mapperRegister2;
-<span style="color:#f92672">*</span>(p <span style="color:#f92672">+</span> gbDataHuC3.mapperRegister1<span style="color:#f92672">+</span><span style="color:#f92672">+</span>) <span style="color:#f92672">=</span> value <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0f</span>;
+<span style="color:#f92672">*</span>(p <span style="color:#f92672">+</span> gbDataHuC3.mapperRegister1<span style="color:#f92672">++</span>) <span style="color:#f92672">=</span> value <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0f</span>;
 </code></pre></div><p>The value of <code>p</code> points to invalid memory next to the <code>gbDataHuC3</code> variable in the fuzzing case. Therefore the write operation happens outside of it and can potentially be used to overwrite other content on the stack. However, it wasn&rsquo;t possible to properly control the write operation and therefore no critical locations could be overwritten.</p>
 <h2 id="user-after-free-in-gbcopymemory">User-After-Free in <code>gbCopyMemory()</code></h2>
 <pre><code class="language-console" data-lang="console">==13939==ERROR: AddressSanitizer: heap-use-after-free on address 0x615000003680 at pc 0x55b3dc38388b bp 0x7ffcecd0e1e0 sp 0x7ffcecd0e1d8
@@ -451,10 +451,10 @@ previously allocated by thread T0 here:
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">gbCopyMemory</span>(<span style="color:#66d9ef">uint16_t</span> d, <span style="color:#66d9ef">uint16_t</span> s, <span style="color:#66d9ef">int</span> count)
 {
     <span style="color:#66d9ef">while</span> (count) {
-        gbMemoryMap[d <span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">12</span>][d <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0fff</span>] <span style="color:#f92672">=</span> gbMemoryMap[s <span style="color:#f92672">&gt;</span><span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">12</span>][s <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0fff</span>];
-        s<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
-        d<span style="color:#f92672">+</span><span style="color:#f92672">+</span>;
-        count<span style="color:#f92672">-</span><span style="color:#f92672">-</span>;
+        gbMemoryMap[d <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">12</span>][d <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0fff</span>] <span style="color:#f92672">=</span> gbMemoryMap[s <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">12</span>][s <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0fff</span>];
+        s<span style="color:#f92672">++</span>;
+        d<span style="color:#f92672">++</span>;
+        count<span style="color:#f92672">--</span>;
     }
 }
 </code></pre></div><p>The fuzzer found a case where the source of the DMA write operation points to memory which has been freed previously. In case the allocation of this address can be controlled, the write operation could therefore also be controlled partially. Maybe. Maybe not :)</p>

@@ -6,10 +6,46 @@
     <description>Recent content in Tags on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 21 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ctf</title>
+      <link>https://bananamafia.dev/tags/ctf/</link>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/ctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>forensics</title>
+      <link>https://bananamafia.dev/tags/forensics/</link>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/forensics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>volatility</title>
+      <link>https://bananamafia.dev/tags/volatility/</link>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/volatility/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>exploit</title>
+      <link>https://bananamafia.dev/tags/exploit/</link>
+      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/exploit/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>exploiting</title>
@@ -35,15 +71,6 @@
       <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/reversing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ctf</title>
-      <link>https://bananamafia.dev/tags/ctf/</link>
-      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/ctf/</guid>
       <description></description>
     </item>
     
@@ -242,15 +269,6 @@
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/cve/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>exploit</title>
-      <link>https://bananamafia.dev/tags/exploit/</link>
-      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/exploit/</guid>
       <description></description>
     </item>
     

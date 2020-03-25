@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MemLabs: An Introduction To Memory Forensics</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/python.min.js"></script> 
+<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
+<script src="https://bananamafia.dev/js/json.min.js"></script> 
+<script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+ <meta name="generator" content="Hugo 0.68.1" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">MemLabs: An Introduction To Memory Forensics</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-adjust"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        $(".fa-adjust").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function setMode() {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+        }
+
+        $(".fa-adjust").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+    </script>
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/mem/">MemLabs: An Introduction To Memory Forensics</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/forensics"><kbd class="item-tag">forensics</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/volatility"><kbd class="item-tag">volatility</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>Since you&rsquo;re all isolated, grumpy and bored I&rsquo;ve decided to create a little introduction to memory forensics. The test subject is the first stage of <a href="https://github.com/stuxnet999/MemLabs">MemLabs</a>, a set of CTF challenges focused on memory forensics by <a href="https://twitter.com/_abhiramkumar">@_abhiramkumar</a>. Each stage has its own memory dump that was taken from a live system using a tool like <a href="https://www.aldeid.com/wiki/Dumpit">DumpIt</a>. The goal for the first stage of MemLabs is to obtain all three flags.</p>
+<p>Since we&rsquo;re hip and cool, we&rsquo;re using free and open source software for the analysis tasks. A very convenient and powerful tool for memory forensics is <a href="https://github.com/volatilityfoundation/volatility">volatility</a>. It&rsquo;s a Python based memory forensics framework for all kinds of memory analyses - just have a look at the huge list of available analysis commands. It&rsquo;s under active development by the <a href="https://www.volatilityfoundation.org/">Volatility Foundation</a>, which has shared some introductory words in the <a href="https://github.com/volatilityfoundation/volatility/wiki">wiki</a>. Before you ask - yes it supports Windows, Linux and OSX memory dumps.</p>
+<p>To get started quickly, a cheatsheet like <a href="https://digital-forensics.sans.org/media/volatility-memory-forensics-cheat-sheet.pdf">this one</a> may be helpful :)</p>
+<h1 id="basic-image-analysis">Basic Image Analysis</h1>
+<p>Ok we have a memory dump, what now? The first thing to check is the type of OS the image originates from using <code>volatility</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">vol<span style="color:#f92672">.</span>py <span style="color:#f92672">-</span>f <span style="color:#f92672">./</span>MemoryDump_Lab1<span style="color:#f92672">.</span>raw imageinfo
+Volatility Foundation Volatility Framework <span style="color:#ae81ff">2.6</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+INFO    : volatility<span style="color:#f92672">.</span>debug    : Determining profile based on KDBG search<span style="color:#f92672">...</span>
+          Suggested Profile(s) : Win7SP1x64, Win7SP0x64, Win2008R2SP0x64, Win2008R2SP1x64_24000
+[<span style="color:#f92672">...</span>]
+</code></pre></div><p>Seems like a Windows 7 machine.</p>
+<p>Another <code>volatility</code> command lists all the processes that were running on the machine when the image was taken, just like magic:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">vol<span style="color:#f92672">.</span>py  <span style="color:#f92672">-</span>f <span style="color:#f92672">./</span>MemoryDump_Lab1<span style="color:#f92672">.</span>raw <span style="color:#f92672">--</span>profile<span style="color:#f92672">=</span>Win7SP1x64 pslist
+Volatility Foundation Volatility Framework <span style="color:#ae81ff">2.6</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+Offset(V)          Name                    PID   PPID   Thds     Hnds   Sess  Wow64 Start                          Exit
+<span style="color:#f92672">------------------</span> <span style="color:#f92672">--------------------</span> <span style="color:#f92672">------</span> <span style="color:#f92672">------</span> <span style="color:#f92672">------</span> <span style="color:#f92672">--------</span> <span style="color:#f92672">------</span> <span style="color:#f92672">------</span> <span style="color:#f92672">------------------------------</span> <span style="color:#f92672">------------------------------</span>
+<span style="color:#ae81ff">0xfffffa8000ca0040</span> System                    <span style="color:#ae81ff">4</span>      <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">80</span>      <span style="color:#ae81ff">570</span> <span style="color:#f92672">------</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">13</span>:<span style="color:#ae81ff">41</span>:<span style="color:#ae81ff">25</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+[<span style="color:#f92672">...</span>]
+<span style="color:#ae81ff">0xfffffa80022199e0</span> svchost<span style="color:#f92672">.</span>exe            <span style="color:#ae81ff">2368</span>    <span style="color:#ae81ff">484</span>      <span style="color:#ae81ff">9</span>      <span style="color:#ae81ff">365</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">51</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+<span style="color:#ae81ff">0xfffffa8002222780</span> cmd<span style="color:#f92672">.</span>exe                <span style="color:#ae81ff">1984</span>    <span style="color:#ae81ff">604</span>      <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">21</span>      <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">34</span>:<span style="color:#ae81ff">54</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+<span style="color:#ae81ff">0xfffffa8002227140</span> conhost<span style="color:#f92672">.</span>exe            <span style="color:#ae81ff">2692</span>    <span style="color:#ae81ff">368</span>      <span style="color:#ae81ff">2</span>       <span style="color:#ae81ff">50</span>      <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">34</span>:<span style="color:#ae81ff">54</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+<span style="color:#ae81ff">0xfffffa80022bab30</span> mspaint<span style="color:#f92672">.</span>exe            <span style="color:#ae81ff">2424</span>    <span style="color:#ae81ff">604</span>      <span style="color:#ae81ff">6</span>      <span style="color:#ae81ff">128</span>      <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">35</span>:<span style="color:#ae81ff">14</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+[<span style="color:#f92672">...</span>]
+<span style="color:#ae81ff">0xfffffa8000f4db30</span> dwm<span style="color:#f92672">.</span>exe                <span style="color:#ae81ff">3004</span>    <span style="color:#ae81ff">852</span>      <span style="color:#ae81ff">5</span>       <span style="color:#ae81ff">72</span>      <span style="color:#ae81ff">2</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">37</span>:<span style="color:#ae81ff">14</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+<span style="color:#ae81ff">0xfffffa8000f4c670</span> explorer<span style="color:#f92672">.</span>exe           <span style="color:#ae81ff">2504</span>   <span style="color:#ae81ff">3000</span>     <span style="color:#ae81ff">34</span>      <span style="color:#ae81ff">825</span>      <span style="color:#ae81ff">2</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">37</span>:<span style="color:#ae81ff">14</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+[<span style="color:#f92672">...</span>]
+<span style="color:#ae81ff">0xfffffa8000ecea60</span> SearchFilterHo         <span style="color:#ae81ff">1720</span>    <span style="color:#ae81ff">480</span>      <span style="color:#ae81ff">5</span>       <span style="color:#ae81ff">90</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">37</span>:<span style="color:#ae81ff">21</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+<span style="color:#ae81ff">0xfffffa8001010b30</span> WinRAR<span style="color:#f92672">.</span>exe             <span style="color:#ae81ff">1512</span>   <span style="color:#ae81ff">2504</span>      <span style="color:#ae81ff">6</span>      <span style="color:#ae81ff">207</span>      <span style="color:#ae81ff">2</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">37</span>:<span style="color:#ae81ff">23</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+<span style="color:#ae81ff">0xfffffa8001020b30</span> SearchProtocol         <span style="color:#ae81ff">2868</span>    <span style="color:#ae81ff">480</span>      <span style="color:#ae81ff">8</span>      <span style="color:#ae81ff">279</span>      <span style="color:#ae81ff">0</span>      <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">37</span>:<span style="color:#ae81ff">23</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+<span style="color:#ae81ff">0xfffffa8001048060</span> DumpIt<span style="color:#f92672">.</span>exe              <span style="color:#ae81ff">796</span>    <span style="color:#ae81ff">604</span>      <span style="color:#ae81ff">2</span>       <span style="color:#ae81ff">45</span>      <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">11</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">37</span>:<span style="color:#ae81ff">54</span> UTC<span style="color:#f92672">+</span><span style="color:#ae81ff">0000</span>
+[<span style="color:#f92672">...</span>]
+</code></pre></div><p>We can use this list of processes to map out some candidates for further analysis. Of course, <code>DumpIt.exe</code> can be ignored since it was called to create the analyzed image. The other interesting running processes are <code>cmd.exe</code>, <code>mspaint.exe</code> and <code>WinRAR.exe</code>.</p>
+<p><em>Hint: You can also use the</em> <code>pstree</code> <em>command to show the process relationships using</em> <code>volatility</code>.</p>
+<p>Another cool thing that&rsquo;s possible is creating &ldquo;<a href="https://volatility-labs.blogspot.com/2012/10/movp-43-taking-screenshots-from-memory.html">screenshots</a>&rdquo; from the memory dump:</p>
+<pre><code>mkdir shots &amp;&amp; \
+vol.py -f ./MemoryDump_Lab1.raw --profile=Win7SP1x64 screenshot --dump-dir=shots
+</code></pre><p>Note that this only shows the general structure of the screen and not the actual contents. However, this may be helpful in a forensic case or if one needs some additional clues:</p>
+<p><img src="/img/mem/screenshot.jpg" alt="Screenshotz"></p>
+<p>Considering this was reconstructed from a memory dump, I&rsquo;d say that&rsquo;s still pretty impressive. Now it&rsquo;s time to analyze the candidates one after another.</p>
+<h1 id="flag-1-cmdexe">Flag 1: <code>cmd.exe</code></h1>
+<p>One particular analysis task for <code>cmd.exe</code> processes is to read the entire history, including the command outputs. Check this out:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">vol<span style="color:#f92672">.</span>py  <span style="color:#f92672">-</span>f <span style="color:#f92672">./</span>MemoryDump_Lab1<span style="color:#f92672">.</span>raw <span style="color:#f92672">--</span>profile<span style="color:#f92672">=</span>Win7SP1x64 consoles
+Volatility Foundation Volatility Framework <span style="color:#ae81ff">2.6</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+<span style="color:#f92672">**************************************************</span>
+ConsoleProcess: conhost<span style="color:#f92672">.</span>exe Pid: <span style="color:#ae81ff">2692</span>
+Console: <span style="color:#ae81ff">0xff756200</span> CommandHistorySize: <span style="color:#ae81ff">50</span>
+HistoryBufferCount: <span style="color:#ae81ff">1</span> HistoryBufferMax: <span style="color:#ae81ff">4</span>
+OriginalTitle: <span style="color:#f92672">%</span>SystemRoot<span style="color:#f92672">%</span>\system32\cmd<span style="color:#f92672">.</span>exe
+Title: C:\Windows\system32\cmd<span style="color:#f92672">.</span>exe <span style="color:#f92672">-</span> St4G3<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">1</span>
+AttachedProcess: cmd<span style="color:#f92672">.</span>exe Pid: <span style="color:#ae81ff">1984</span> Handle: <span style="color:#ae81ff">0x60</span>
+<span style="color:#f92672">----</span>
+CommandHistory: <span style="color:#ae81ff">0x1fe9c0</span> Application: cmd<span style="color:#f92672">.</span>exe Flags: Allocated, Reset
+CommandCount: <span style="color:#ae81ff">1</span> LastAdded: <span style="color:#ae81ff">0</span> LastDisplayed: <span style="color:#ae81ff">0</span>
+FirstCommand: <span style="color:#ae81ff">0</span> CommandCountMax: <span style="color:#ae81ff">50</span>
+ProcessHandle: <span style="color:#ae81ff">0x60</span>
+Cmd <span style="color:#75715e">#0 at 0x1de3c0: St4G3$1</span>
+<span style="color:#f92672">----</span>
+Screen <span style="color:#ae81ff">0x1e0f70</span> X:<span style="color:#ae81ff">80</span> Y:<span style="color:#ae81ff">300</span>
+Dump:
+Microsoft Windows [Version <span style="color:#ae81ff">6.1</span><span style="color:#f92672">.</span><span style="color:#ae81ff">7601</span>]
+Copyright (c) <span style="color:#ae81ff">2009</span> Microsoft Corporation<span style="color:#f92672">.</span>  All rights reserved<span style="color:#f92672">.</span>
+
+C:\Users\SmartNet<span style="color:#f92672">&gt;</span>St4G3<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#ae81ff">1</span>
+ZmxhZ3t0aDFzXzFzX3RoM18xc3Rfc3Q0ZzMhIX0<span style="color:#f92672">=</span>
+[<span style="color:#f92672">...</span>]
+</code></pre></div><p>And there&rsquo;s the first flag:</p>
+<pre><code>echo -ne &quot;ZmxhZ3t0aDFzXzFzX3RoM18xc3Rfc3Q0ZzMhIX0=&quot; | base64 -d
+flag{th1s_1s_th3_1st_st4g3!!}
+</code></pre><h1 id="flag-2-mspaintexe">Flag 2: <code>mspaint.exe</code></h1>
+<p>This is my favorite one. It&rsquo;s possible to reconstruct the image shown in Paint from the memory dump using a 1337 hacker tool called <code>gimp</code>. Here&rsquo;s how to do it:</p>
+<ol>
+<li>Dump the process memory of <code>mspaint.exe</code> using this command and the process ID <code>2424</code>:</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">vol<span style="color:#f92672">.</span>py <span style="color:#f92672">-</span>f MemoryDump_Lab1<span style="color:#f92672">.</span>raw <span style="color:#f92672">--</span>profile<span style="color:#f92672">=</span>Win7SP1x64 memdump <span style="color:#f92672">-</span>p <span style="color:#ae81ff">2424</span> <span style="color:#f92672">-</span>D <span style="color:#f92672">.</span>
+</code></pre></div><ol start="2">
+<li>
+<p>Afterwards, just rename the created file <code>2424.dmp</code> to <code>2424.data</code> in order to make <code>gimp</code> recognize it as raw image data.</p>
+</li>
+<li>
+<p>Open it in <code>gimp</code> and have patience: It&rsquo;s required to figure out the correct width, height and offset in the image dialog to display the image properly:</p>
+</li>
+</ol>
+<center>
+<img src="/img/mem/gimp.gif" width="50%" height="50%">
+</center>
+<p>As you can see, the values don&rsquo;t have to be 100 percent accurate though. Flip and mirror the image get the second flag:</p>
+<center>
+<img src="/img/mem/gimpflag.jpg" width="80%" height="80%">
+</center>
+<p>Ok that handwriting is awful.</p>
+<h1 id="flag-3-winrarexe">Flag 3: <code>WinRAR.exe</code></h1>
+<p>Considering WinRAR was running on the machine, the obvious thing to do is to scan the memory dump for archive files. Of course <code>volatility</code> can do this out of the box:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">vol<span style="color:#f92672">.</span>py <span style="color:#f92672">-</span>f MemoryDump_Lab1<span style="color:#f92672">.</span>raw <span style="color:#f92672">--</span>profile<span style="color:#f92672">=</span>Win7SP1x64 filescan <span style="color:#f92672">|</span> egrep <span style="color:#e6db74">&#34;zip|rar|7z&#34;</span>
+Volatility Foundation Volatility Framework <span style="color:#ae81ff">2.6</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+[<span style="color:#f92672">...</span>]
+<span style="color:#ae81ff">0x000000003fb48bc0</span>      <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">0</span> R<span style="color:#f92672">--</span>r<span style="color:#f92672">--</span> \Device\HarddiskVolume2\Users\Alissa Simpson\Documents\Important<span style="color:#f92672">.</span>rar
+[<span style="color:#f92672">...</span>]
+</code></pre></div><p>The <code>Important.rar</code> file seems to be important. Just extract it by specifying the correct offset:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">vol<span style="color:#f92672">.</span>py <span style="color:#f92672">-</span>f MemoryDump_Lab1<span style="color:#f92672">.</span>raw <span style="color:#f92672">--</span>profile<span style="color:#f92672">=</span>Win7SP1x64 dumpfiles <span style="color:#f92672">-</span>Q <span style="color:#ae81ff">0x000000003fb48bc0</span> <span style="color:#f92672">-</span>D <span style="color:#f92672">.</span> <span style="color:#f92672">&amp;&amp;</span> \
+mv file<span style="color:#f92672">.</span>None<span style="color:#f92672">.</span><span style="color:#ae81ff">0xfffffa8001034450</span><span style="color:#f92672">.</span>dat flag<span style="color:#f92672">.</span>rar
+</code></pre></div><p>Inside of the <code>rar</code> file, there&rsquo;s a hint that says:</p>
+<pre><code class="language-console" data-lang="console">Password is NTLM hash(in uppercase) of Alissa's account passwd.
+</code></pre><p>Well OK, let&rsquo;s use <code>volatility</code> to dump the LM/NTLM hashes directly from memory:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">vol<span style="color:#f92672">.</span>py <span style="color:#f92672">-</span>f MemoryDump_Lab1<span style="color:#f92672">.</span>raw <span style="color:#f92672">--</span>profile<span style="color:#f92672">=</span>Win7SP1x64 hashdump
+Volatility Foundation Volatility Framework <span style="color:#ae81ff">2.6</span><span style="color:#f92672">.</span><span style="color:#ae81ff">1</span>
+Administrator:<span style="color:#ae81ff">500</span>:aad3b435b51404eeaad3b435b51404ee:<span style="color:#ae81ff">31</span>d6cfe0d16ae931b73c59d7e0c089c0:::
+Guest:<span style="color:#ae81ff">501</span>:aad3b435b51404eeaad3b435b51404ee:<span style="color:#ae81ff">31</span>d6cfe0d16ae931b73c59d7e0c089c0:::
+SmartNet:<span style="color:#ae81ff">1001</span>:aad3b435b51404eeaad3b435b51404ee:<span style="color:#ae81ff">4943</span>abb39473a6f32c11301f4987e7e0:::
+HomeGroupUser<span style="color:#960050;background-color:#1e0010">$</span>:<span style="color:#ae81ff">1002</span>:aad3b435b51404eeaad3b435b51404ee:f0fc3d257814e08fea06e63c5762ebd5:::
+Alissa Simpson:<span style="color:#ae81ff">1003</span>:aad3b435b51404eeaad3b435b51404ee:f4ff64c8baac57d22f22edc681055ba6:::
+</code></pre></div><p>Seems like the correct password is <code>F4FF64C8BAAC57D22F22EDC681055BA6</code>. The flag can then be found inside of the decrypted archive:</p>
+<center>
+<img src="/img/mem/flag3.png" width="30%" height="30%">
+</center>
+<p>And that&rsquo;s it for the first stage. Now go and have fun with the remaining stages. Have a look at some additional plugins, you may need them.</p>
+<br>
+<center>
+Shoutouts to <a href="https://twitter.com/carloz_spicy"><code>@carloz_spicy</code></a>
+</center></div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/cutter"><kbd class="item-tag">cutter</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/heap"><kbd class="item-tag">heap</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

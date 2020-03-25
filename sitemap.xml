@@ -60,6 +60,41 @@
   
   <url>
     <loc>https://bananamafia.dev/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/ctf/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/forensics/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/mem/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/volatility/</loc>
+    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/exploit/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url>
   
@@ -79,23 +114,8 @@
   </url>
   
   <url>
-    <loc>https://bananamafia.dev/post/</loc>
-    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://bananamafia.dev/tags/reversing/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/</loc>
-    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/ctf/</loc>
-    <lastmod>2020-01-15T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -280,11 +300,6 @@
   
   <url>
     <loc>https://bananamafia.dev/tags/cve/</loc>
-    <lastmod>2019-07-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/exploit/</loc>
     <lastmod>2019-07-30T00:00:00+00:00</lastmod>
   </url>
   

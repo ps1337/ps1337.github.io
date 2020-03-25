@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
- <meta name="generator" content="Hugo 0.64.0" />
+ <meta name="generator" content="Hugo 0.68.1" />
     
 
     
@@ -235,7 +235,7 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> Main(<span style="color:#66d9ef">string</span>[] args)
 {
     <span style="color:#66d9ef">byte</span>[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(<span style="color:#66d9ef">typeof</span>(Program)).Location);
-    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i = <span style="color:#ae81ff">0</span>; i &lt; <span style="color:#ae81ff">1</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">7</span>; i++)
+    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i = <span style="color:#ae81ff">0</span>; i &lt; <span style="color:#ae81ff">1333337</span>; i++)
     {
         MD5 md = MD5.Create();
         <span style="color:#66d9ef">byte</span>[] bytes = Encoding.ASCII.GetBytes(<span style="color:#e6db74">&#34;i=&#34;</span> + i.ToString());
@@ -243,15 +243,15 @@
         MD5 md2 = MD5.Create();
         <span style="color:#66d9ef">byte</span>[] bytes2 = Encoding.ASCII.GetBytes(<span style="color:#e6db74">&#34;i1337=&#34;</span> + i.ToString());
         <span style="color:#66d9ef">byte</span>[] sourceArray2 = md2.ComputeHash(bytes2);
-        <span style="color:#66d9ef">byte</span>[] destinationArray = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>];
-        Array.Copy(array, <span style="color:#ae81ff">0</span>, destinationArray, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>);
-        Array.Copy(sourceArray2, <span style="color:#ae81ff">0</span>, destinationArray, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>);
-        <span style="color:#66d9ef">byte</span>[] array2 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>];
+        <span style="color:#66d9ef">byte</span>[] destinationArray = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">32</span>];
+        Array.Copy(array, <span style="color:#ae81ff">0</span>, destinationArray, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">16</span>);
+        Array.Copy(sourceArray2, <span style="color:#ae81ff">0</span>, destinationArray, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">16</span>);
+        <span style="color:#66d9ef">byte</span>[] array2 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">16</span>];
         MD5 md3 = MD5.Create();
-        <span style="color:#66d9ef">byte</span>[] array3 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">1</span><span style="color:#ae81ff">0</span>];
-        Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#ae81ff">4</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>, array3, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">0</span>);
+        <span style="color:#66d9ef">byte</span>[] array3 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">10</span>];
+        Array.Copy(sourceArray, <span style="color:#ae81ff">4432</span>, array3, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">10</span>);
         <span style="color:#66d9ef">byte</span>[] sourceArray3 = md3.ComputeHash(array3);
-        Array.Copy(sourceArray3, <span style="color:#ae81ff">0</span>, array2, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>);
+        Array.Copy(sourceArray3, <span style="color:#ae81ff">0</span>, array2, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">16</span>);
         <span style="color:#66d9ef">try</span>
         {
             <span style="color:#66d9ef">global</span>::Aes aes = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">global</span>::Aes(array, array2);
@@ -273,7 +273,7 @@ File.WriteAllBytes(<span style="color:#e6db74">&#34;Foo.dll&#34;</span>, decrypt
 </code></pre></div><p>Obviously this didn&rsquo;t work out of the box. It seems that the application reads some bytes from its own binary file in the beginning:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">byte</span>[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(<span style="color:#66d9ef">typeof</span>(Program)).Location);
 <span style="color:#a6e22e">[...]</span>
-Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#ae81ff">4</span><span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>, array3, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span><span style="color:#ae81ff">0</span>);
+Array.Copy(sourceArray, <span style="color:#ae81ff">4432</span>, array3, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">10</span>);
 </code></pre></div><p>After applying the changes above, these bytes seem to be wrong since the offset changed. My second modification to the application fixes this my making the routine read the untouched file instead of its own binary:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#66d9ef">byte</span>[] sourceArray = File.ReadAllBytes(<span style="color:#e6db74">&#34;original.dll&#34;</span>);
 </code></pre></div><p>After calling the modified binary with <code>dotnet CampRE.dll</code>, a file called <code>Foo.dll</code> has been written. Now it&rsquo;s time to decompile it:</p>
@@ -287,8 +287,8 @@ Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#
     <span style="color:#66d9ef">bool</span> flag2 = frames.Length == <span style="color:#ae81ff">1</span>;
     <span style="color:#66d9ef">if</span> (flag2) { Environment.Exit(-<span style="color:#ae81ff">1</span>); }
     <span style="color:#66d9ef">int</span> metadataToken = frames[<span style="color:#ae81ff">1</span>].GetMethod().MetadataToken;
-    <span style="color:#66d9ef">byte</span>[] array = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">3</span><span style="color:#ae81ff">2</span>];
-    <span style="color:#66d9ef">byte</span>[] array2 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">1</span><span style="color:#ae81ff">6</span>];
+    <span style="color:#66d9ef">byte</span>[] array = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">32</span>];
+    <span style="color:#66d9ef">byte</span>[] array2 = <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span>[<span style="color:#ae81ff">16</span>];
     <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i = <span style="color:#ae81ff">0</span>; i &lt; <span style="color:#ae81ff">8</span>; i++)
     {
         <span style="color:#66d9ef">byte</span>[] bytes = BitConverter.GetBytes(metadataToken);
@@ -344,6 +344,25 @@ Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#
 
     
 
+    <h4><a href="/post/mem/">MemLabs: An Introduction To Memory Forensics</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/forensics"><kbd class="item-tag">forensics</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/volatility"><kbd class="item-tag">volatility</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
     <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
     <h5></h5>
     
@@ -379,27 +398,6 @@ Array.Copy(sourceArray, <span style="color:#ae81ff">4</span><span style="color:#
     <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
     
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
 
 </div>

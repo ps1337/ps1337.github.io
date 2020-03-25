@@ -6,7 +6,7 @@
     <description>Recent content in ctf on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
     
@@ -18,6 +18,15 @@
       
       <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>MemLabs: An Introduction To Memory Forensics</title>
+      <link>https://bananamafia.dev/post/mem/</link>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/mem/</guid>
+      <description>Since you&amp;rsquo;re all isolated, grumpy and bored I&amp;rsquo;ve decided to create a little introduction to memory forensics. The test subject is the first stage of MemLabs, a set of CTF challenges focused on memory forensics by @_abhiramkumar. Each stage has its own memory dump that was taken from a live system using a tool like DumpIt. The goal for the first stage of MemLabs is to obtain all three flags.</description>
     </item>
     
     <item>

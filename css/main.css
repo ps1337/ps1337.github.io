@@ -41,7 +41,7 @@ body {
     background-color: var(--body-background-color) !important;
 }
 
-a, p, li, b {
+a, p, li, b, center {
     color: var(--text-color) !important;
     transition: all 0.4s linear;
 }

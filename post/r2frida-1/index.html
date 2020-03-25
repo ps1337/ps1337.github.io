@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
- <meta name="generator" content="Hugo 0.64.0" />
+ <meta name="generator" content="Hugo 0.68.1" />
     
 
     
@@ -269,16 +269,16 @@
 <span style="color:#f92672">import</span> time
 <span style="color:#f92672">import</span> sys
 
-js <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">Java.perform(function() {</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">       var mainActivity = Java.use(</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">re.rada.con.ctf.r2xor.MainActivity</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">);</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">       mainActivity.n.implementation = function() {</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">           console.log(</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">[*] Root check called</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">);</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">           return false;</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">        }</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">       console.log(</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">[+] Hooking complete</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">)</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">})</span><span style="color:#e6db74">
-</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+js <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">Java.perform(function() {
+</span><span style="color:#e6db74">       var mainActivity = Java.use(&#34;re.rada.con.ctf.r2xor.MainActivity&#34;);
+</span><span style="color:#e6db74">       mainActivity.n.implementation = function() {
+</span><span style="color:#e6db74">           console.log(&#34;[*] Root check called&#34;);
+</span><span style="color:#e6db74">           return false;
+</span><span style="color:#e6db74">        }
+</span><span style="color:#e6db74">       console.log(&#34;[+] Hooking complete&#34;)
+</span><span style="color:#e6db74">})
+</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
 
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">on_message</span>(message, data):
@@ -286,19 +286,19 @@ js <span style="color:#f92672">=</span> <span style="color:#e6db74"></span><span
 
 
 device <span style="color:#f92672">=</span> frida<span style="color:#f92672">.</span>get_usb_device()
-pid <span style="color:#f92672">=</span> device<span style="color:#f92672">.</span>spawn([<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">re.rada.con.ctf.r2xor</span><span style="color:#e6db74">&#39;</span>])
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">[+] Got PID </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (pid))
+pid <span style="color:#f92672">=</span> device<span style="color:#f92672">.</span>spawn([<span style="color:#e6db74">&#39;re.rada.con.ctf.r2xor&#39;</span>])
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[+] Got PID </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (pid))
 session <span style="color:#f92672">=</span> device<span style="color:#f92672">.</span>attach(pid)
 script <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>create_script(js)
 
 <span style="color:#75715e"># Callback function</span>
-script<span style="color:#f92672">.</span>on(<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">message</span><span style="color:#e6db74">&#39;</span>, on_message)
+script<span style="color:#f92672">.</span>on(<span style="color:#e6db74">&#39;message&#39;</span>, on_message)
 script<span style="color:#f92672">.</span>load()
 
 device<span style="color:#f92672">.</span>resume(pid)
 
 sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>read()
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74"></span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">[!] Exiting</span><span style="color:#e6db74">&#34;</span>)
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;[!] Exiting&#34;</span>)
 </code></pre></div><p>Frida itself spawns the app on the device, sets up the hooks, injects JavaScript code into the target process and resumes the process afterwards. This allows various modifications to an application, such as the ones defined in the <code>js</code> variable. Lets&rsquo; break it down:</p>
 <ol>
 <li>It&rsquo;s required to hook a function of the <code>MainActivity</code> class. In order to do this, we retrieve the class and assign it to a variable with <code>Java.use()</code> for later use.</li>
@@ -365,6 +365,25 @@ Undocumented: Z, S
 
     
 
+    <h4><a href="/post/mem/">MemLabs: An Introduction To Memory Forensics</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/forensics"><kbd class="item-tag">forensics</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/volatility"><kbd class="item-tag">volatility</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
     <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
     <h5></h5>
     
@@ -400,29 +419,6 @@ Undocumented: Z, S
     <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
     
     <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/rop-arm-1/">ROP on ARM with radare2</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/arm"><kbd class="item-tag">arm</kbd></a>
     
 
 </div>
