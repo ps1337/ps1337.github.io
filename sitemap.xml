@@ -60,12 +60,52 @@
   
   <url>
     <loc>https://bananamafia.dev/</loc>
-    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://bananamafia.dev/tags/ctf/</loc>
-    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/exploit/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/exploitation/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/r2/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/radare2/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/rop/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/srop/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -79,23 +119,8 @@
   </url>
   
   <url>
-    <loc>https://bananamafia.dev/post/</loc>
-    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/</loc>
-    <lastmod>2020-03-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://bananamafia.dev/tags/volatility/</loc>
     <lastmod>2020-03-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/exploit/</loc>
-    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -134,16 +159,6 @@
   </url>
   
   <url>
-    <loc>https://bananamafia.dev/tags/r2/</loc>
-    <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/radare2/</loc>
-    <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://bananamafia.dev/post/36c3ctf/</loc>
     <lastmod>2019-12-30T00:00:00+00:00</lastmod>
   </url>
@@ -170,16 +185,6 @@
   
   <url>
     <loc>https://bananamafia.dev/tags/arm/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/exploitation/</loc>
-    <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/rop/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
   </url>
   

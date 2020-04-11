@@ -6,7 +6,7 @@
     <description>Recent content in Tags on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 11 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,9 +14,54 @@
     <item>
       <title>ctf</title>
       <link>https://bananamafia.dev/tags/ctf/</link>
-      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/ctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>exploit</title>
+      <link>https://bananamafia.dev/tags/exploit/</link>
+      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/exploit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>exploitation</title>
+      <link>https://bananamafia.dev/tags/exploitation/</link>
+      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/exploitation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>r2</title>
+      <link>https://bananamafia.dev/tags/r2/</link>
+      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/r2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>radare2</title>
+      <link>https://bananamafia.dev/tags/radare2/</link>
+      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/radare2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rop</title>
+      <link>https://bananamafia.dev/tags/rop/</link>
+      <pubDate>Sat, 11 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/rop/</guid>
       <description></description>
     </item>
     
@@ -35,15 +80,6 @@
       <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/volatility/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>exploit</title>
-      <link>https://bananamafia.dev/tags/exploit/</link>
-      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/exploit/</guid>
       <description></description>
     </item>
     
@@ -93,24 +129,6 @@
     </item>
     
     <item>
-      <title>r2</title>
-      <link>https://bananamafia.dev/tags/r2/</link>
-      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/r2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>radare2</title>
-      <link>https://bananamafia.dev/tags/radare2/</link>
-      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/radare2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>research</title>
       <link>https://bananamafia.dev/tags/research/</link>
       <pubDate>Tue, 17 Dec 2019 00:00:00 +0000</pubDate>
@@ -143,24 +161,6 @@
       <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/arm/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>exploitation</title>
-      <link>https://bananamafia.dev/tags/exploitation/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/exploitation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>rop</title>
-      <link>https://bananamafia.dev/tags/rop/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/rop/</guid>
       <description></description>
     </item>
     
