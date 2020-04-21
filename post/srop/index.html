@@ -233,7 +233,7 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>Recently I&rsquo;ve discovered a <a href="https://cs.vu.nl/~herbertb/papers/srop_sp14.pdf">paper</a> that demonstrates a fancy ROP-style exploitation technique for Linux based systems. It&rsquo;s called <em>Sigreturn-oriented programming</em> (SROP) and was released by two students of the university of Amsterdam in 2014. This post contains background information on this exploitation technique and shows how to pull it off using <code>radare2</code> and <code>pwntools</code>.</p>
+    <div class="content-width text-justify"><p>Recently I&rsquo;ve discovered a <a href="https://cs.vu.nl/~herbertb/papers/srop_sp14.pdf">paper</a> that demonstrates a fancy ROP-style exploitation technique for Linux based systems. It&rsquo;s called <em>Sigreturn-oriented programming</em> (SROP) and was released by two dudes of the <em>Vrije Universiteit Amsterdam</em> in 2014. This post contains background information on this exploitation technique and shows how to pull it off using <code>radare2</code> and <code>pwntools</code>.</p>
 <h1 id="sigreturn-oriented-programming">Sigreturn-Oriented Programming</h1>
 <p>The cool thing about this technique is that only one or two gadgets are required in order to get control over <em>all</em> registers of the target process. Two preconditions have to be met:</p>
 <ol>
