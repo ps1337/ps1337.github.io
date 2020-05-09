@@ -5,7 +5,7 @@
      
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Creating A Multiplayer Game Hack</title>
+    <title>Game Hacking #1: Developing Hacks for idTech3 Based Games</title>
     <style>
 
     html body {
@@ -110,7 +110,7 @@
 
             <div class="navbar-header">
 
-                <a class="navbar-brand visible-xs" href="#">Creating A Multiplayer Game Hack</a>
+                <a class="navbar-brand visible-xs" href="#">Game Hacking #1: Developing Hacks for idTech3 Based Games</a>
 
                 <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                     <span class="icon-bar"></span>
@@ -215,7 +215,7 @@
 
     
 
-    <h4><a href="/post/multihack/">Creating A Multiplayer Game Hack</a></h4>
+    <h4><a href="/post/multihack/">Game Hacking #1: Developing Hacks for idTech3 Based Games</a></h4>
     <h5></h5>
     
     <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
@@ -226,201 +226,389 @@
     
     <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
     
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
 
 </div>
 
 
     <br>
-    <div class="content-width text-justify"><h1 id="what">What?</h1>
-<p>This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called <a href="https://en.wikipedia.org/wiki/Star_Wars_Jedi_Knight:_Jedi_Academy">Jedi Academy</a>. I&rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.</p>
-<p>I&rsquo;ve released my <a href="https://github.com/ps1337/jka-multihack">multihack</a> source code. These are the implemented features:</p>
+    <div class="content-width text-justify"><p>The <em>idTech3</em> game engine is most known for being used in games like <a href="https://github.com/id-Software/Quake-III-Arena">Quake III Arena</a>, <a href="https://github.com/id-Software/Enemy-Territory">Wolfenstein: ET</a> and <a href="https://github.com/ps1337/jediacademy">Star Wars: Jedi Knight - Jedi Academy</a>. Sometimes people just simply refer to this engine as <em>the Quake3 engine</em>. This post teaches you how to create hacks for games that are based on this game engine. The target of choice is the game <em>Jedi Academy</em>, which was released in 2003. Oldschool, I know - but most of the injection and hooking techniques can also be applied to modern games.</p>
+<p>My plan was to implement the following features:</p>
 <ul>
-<li>Wallhack (seeing enemies through walls)</li>
-<li>Player Glow (Enemies are glowing)</li>
-<li>Cheat Unlocker (Use otherwise blocked client side settings)</li>
-<li>Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)</li>
+<li>Wallhack: Seeing enemies through walls</li>
+<li>Aimbot: Automatically aim at enemies and selected targets</li>
+<li>Triggerbot: Automatically pull the trigger and shoot at enemies once they are present in the crosshair</li>
+<li>Anti Grip: Enemies are able to choke our local player, so this feature tries to prevent that. It detects if an enemy is force gripping the local player and automatically breaks the force grip by aiming at the enemy and applying a force push.</li>
+<li>Anti Mind Trick: There&rsquo;s a force power in the game that mind tricks other players, so they&rsquo;re not able to see the attacker for a period of time. We want to disable this for our local player and see the enemy anyways :)</li>
+<li>Player Glow: Enemies are glowing for better visibility</li>
+<li>CVar Unlocker: Use blocked client side settings</li>
 </ul>
-<p>This is what the wallhack and player glow looks like:</p>
-<p><img src="/img/jka-multihack/wallhax.jpg" alt="Wallhax"></p>
-<h1 id="game-hacking-approaches">Game Hacking Approaches</h1>
-<p>First of all, what are the necessary steps to influence another process in a way that it acts according to our intentions? Basically, you have to</p>
+<p>I&rsquo;ve released the public part my source code <a href="https://github.com/ps1337/jka-multihack">here</a> in case you want to take a look.</p>
+<h1 id="the-game-engine">The Game Engine</h1>
+<p>Before creating a game hack, it&rsquo;s important to understand some key aspects of the underlying game engine. For idTech3, there&rsquo;s a great architecture review available <a href="http://fabiensanglard.net/quake3/index.php">here</a>. What&rsquo;s particularly interesting for cheat development is that the engine separates tasks into individual virtual machines. These are called QVMs in the idTech3 world. QVMs contain bytecode, which makes them portable.</p>
+<p>On the client side, there are the <code>cgame</code> and <code>ui</code> virtual machines that may receive messages from the engine: <code>quake3.exe</code> or in our case <code>jamp.exe</code> for the Jedi Academy multiplayer executable:</p>
+<p>The <code>cgame</code> QVM is responsible for predicting player states and telling the sound and graphic renderers what to do. For our purposes, this is the most interesting VM to hook and manipulate at runtime.</p>
+<p>Each QVM exports a <code>vmMain()</code> and a <code>dllEntry()</code> function:</p>
+<pre><code class="language-console" data-lang="console">$ r2 -A cgamex86.dll
+[0x3006fb45]&gt; iE
+[Exports]
+
+nth paddr       vaddr      bind   type size lib          name
+―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+0    0x0005a8e0 0x3005a8e0 GLOBAL FUNC 0    cgamex86.dll dllEntry
+1    0x0003f690 0x3003f690 GLOBAL FUNC 0    cgamex86.dll vmMain
+</code></pre><p>The <code>vmMain()</code> function acts as a dispatcher which forwards the requested calls and parameters from the main executable to the internal QVM bytecode functions. This function accepts these parameters:</p>
+<ul>
+<li>An <code>int</code> parameter called <code>command</code>. There&rsquo;s a huge <code>switch</code> statement in <code>vmMain()</code> which has a <code>case</code> block for each possible command</li>
+<li>Twelve additional <code>int</code> parameters. These are parameters for the requested QVM command</li>
+</ul>
+<p>The QVM can also call back into the main executable <code>jamp.exe</code> using a system call function pointer. Please note that the term <em>system call</em> is game engine and QVM specific and not related to OS syscalls. This function pointer gets passed to the QVM using the exported <code>dllEntry()</code> function. It&rsquo;s usually implemented as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">Q_EXPORT <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">dllEntry</span>( intptr_t (QDECL <span style="color:#f92672">*</span>syscallptr)( intptr_t arg,... ) ) {
+    Q_syscall <span style="color:#f92672">=</span> syscallptr;
+
+    TranslateSyscalls();
+}
+</code></pre></div><p>The <code>syscallptr</code> is being used to implement a call-back mechanism: The QVM can use this function pointer to execute functions implemented in the main executable.</p>
+<h1 id="hooking-functions">Hooking Functions</h1>
+<p>In order to set up the required hooks, the plan is as follows:</p>
 <ol>
-<li>
-<p>Inspect the target: What technologies are being used? Which game engine is in place? How do people write mods for the game in order to modify its logic? Is there some SDK available or is there any open source code?</p>
-</li>
-<li>
-<p>What parts of the game should be altered? Identify values and/or methods which should be modified/patched.</p>
-</li>
-<li>
-<p>Find a way to inject custom code into the process. In case of anti cheat mechanisms, search for techniques to hide the code injection process. This is necessary for most modern games but won&rsquo;t be covered in this post.</p>
-</li>
-<li>
-<p>Write the code that will be injected into the game in a way that doesn&rsquo;t break the game.</p>
-</li>
-<li>
-<p>Profit?</p>
-</li>
+<li>Hook the <code>GetProcAddress()</code> function of the game process. This function is being used to retrieve addresses from DLL exports. It&rsquo;s being called  as soon as the game starts. Using this hook we can replace calls to <code>vmMain()</code> and <code>dllEntry()</code> with our own implementations.</li>
+<li>Our <code>vmMain()</code> function checks which system call is being used and either manipulates the execution or just forwards the call to the original function</li>
+<li>By replacing <code>dllEntry</code> with our own function, we are able to steal the passed <code>syscallptr</code> value, which is a function pointer to the game executable&rsquo;s system call interface. Using this function pointer, it&rsquo;s then possible to implement our own version of this function. Based on the requested system call, modifications can then be applied dynamically. Also, it&rsquo;s possible to just execute system calls ourselves.</li>
 </ol>
+<p>Let&rsquo;s discuss how these manipulations can be applied at runtime.</p>
 <h2 id="hookless-hacks">Hookless Hacks</h2>
-<p>Before talking about API hooks and what they are, let&rsquo;s quickly check out a way to alter a remote process by directly patching functions in memory. This has already been covered in <a href="https://bananamafia.dev/post/cvar-hax/">one of my previous posts</a>. The basic approach is the identify function  and memory addresses of interesting data and code and to modify it by spawning a thread in the target process or by overwriting them directly. A good example of this approach can be found <a href="http://aimbots.net/threads/17415-Completely-hookless-wallhack-for-Quake-3-engine-based-games">here</a>.</p>
-<p>This approach might look easy and elegant. However, finding the correct offsets and memory addresses can be hard. Also, after game updates these values don&rsquo;t match anymore. Because of this, it may be easier to use hooking to alter a remote process.</p>
+<p>Before talking about API hooks, let&rsquo;s quickly check out a way to alter a remote process by directly patching functions in memory. This has already been covered in <a href="https://bananamafia.dev/post/cvar-hax/">one of my previous posts</a>. The basic approach is the identify function and memory addresses of interesting data and code and to modify it by spawning a thread in the target process or by overwriting them directly from another process. A good example of this approach can be found <a href="http://aimbots.net/threads/17415-Completely-hookless-wallhack-for-Quake-3-engine-based-games">here</a>.</p>
+<p>This approach might look easy and elegant. However, finding the correct offsets and memory addresses can be tedious. Also, after game updates these values don&rsquo;t match anymore. Because of this, it may be easier to use hooking to alter a given process.</p>
 <h2 id="api-hooking">API Hooking</h2>
-<p>Hooking basically means intercepting function calls in order to execute code before or after the original function. In this blog post, I hooked a Windows API function in the context of the remote process to intercept calls to the game engine DLLs. This effectively forces the game to execute custom code. Please note that it may not work to be possible to just hook an arbitrary game method with pure API hooking. The best way to get started is to trace target methods to system calls and hooking the system calls instead.</p>
 <p>There are easy-to-use API hooking libraries available, like <a href="https://github.com/martona/mhook">mhook</a>. The usage of this particular library will also be discussed in this post.</p>
-<h1 id="dll-injection">DLL Injection</h1>
-<p>To hook game engines methods, it&rsquo;s necessary to install the hook from the context of the target application. This can be accomplished with a technique called DLL injection. Using this, the target process gets forced to load and execute a custom DLL in which contains our code. There are many approaches to do this &ndash; this post covers the <code>LoadLibraryA</code> method of injection DLLs.</p>
-<p><em>Note: To simplify things, disable unicode and the usage of pre-compiled headers in VisualStudio or things will get ugly.</em></p>
-<h2 id="building-the-dll-loader">Building The DLL Loader</h2>
+<h2 id="dll-injection">DLL Injection</h2>
+<p>In order to hook functions of a given process, it&rsquo;s necessary to install the hook from the context of the target application. This can be accomplished with a technique called DLL injection. This involves loading a custom DLL into the target process and spawning a designated thread for it. There are many approaches to do this &ndash; this post covers the <code>LoadLibraryA()</code> method.</p>
+<p><em>Note: I&rsquo;m building the DLL loader and the DLL itself using Visual Studio. To simplify things, I&rsquo;ve disabled unicode and the usage of pre-compiled headers in VisualStudio or things will get ugly. Also, I made sure to set the target architecture according to the target process &ndash; in this case it&rsquo;s x86.</em></p>
+<h3 id="building-the-dll-loader">Building The DLL Loader</h3>
 <p>The DLL loader has to take care of these things:</p>
 <ol>
 <li>Execute the game binary</li>
 <li>Get a handle of the game process</li>
 <li>Locate the DLL to be injected</li>
-<li>Load the DLL in the context of the game</li>
+<li>Load the DLL in the context of the game process</li>
+<li>Start a remote thread for the DLL</li>
 </ol>
-<p>Of course the trickiest part of this is the last point, loading the DLL. This code segment does just this:</p>
-<pre><code>// Get the address of LoadLibraryA in kernel32.dll, used to
-// pass it to the remote process in order to load our dll later on
-LPVOID loadFunctionAddress = (LPVOID)GetProcAddress(GetModuleHandle(&quot;kernel32.dll&quot;), &quot;LoadLibraryA&quot;);
+<p>Take a look at this simplified loader code snippet:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// Get the address of LoadLibraryA in kernel32.dll, used to
+</span><span style="color:#75715e">// pass it to the remote process in order to load our dll later on
+</span><span style="color:#75715e"></span>LPVOID loadFunctionAddress <span style="color:#f92672">=</span> (LPVOID)GetProcAddress(GetModuleHandle(<span style="color:#e6db74">&#34;kernel32.dll&#34;</span>), <span style="color:#e6db74">&#34;LoadLibraryA&#34;</span>);
 
-// Allocate space in the target process for our DLL **PATH**
-LPVOID allocatedMem = LPVOID(VirtualAllocEx(procHandle, nullptr, MAX_PATH, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE));
+<span style="color:#75715e">// Allocate space in the target process for our DLL **PATH**
+</span><span style="color:#75715e"></span>LPVOID allocatedMem <span style="color:#f92672">=</span> LPVOID(VirtualAllocEx(procHandle, nullptr, MAX_PATH, MEM_RESERVE <span style="color:#f92672">|</span> MEM_COMMIT, PAGE_READWRITE));
 
-// Write the **PATH** of our DLL in the allocated memory of the remote process
-WriteProcessMemory(procHandle, allocatedMem, dllPath, MAX_PATH, nullptr);
+<span style="color:#75715e">// Write the **PATH** of our DLL in the allocated memory of the remote process
+</span><span style="color:#75715e"></span>WriteProcessMemory(procHandle, allocatedMem, dllPath, MAX_PATH, nullptr);
 
-// Load the DLL by causing the remote process to spawn a thread which calls LoadLibraryA
-// which loads the DLL using the path we allocated previously.
-HANDLE threadHandle = CreateRemoteThread(procHandle, nullptr, NULL, LPTHREAD_START_ROUTINE(loadFunctionAddress), allocatedMem, NULL, nullptr);
-</code></pre><p>Please note that error handling has been removed for a better overview.</p>
-<p>At this point the DLL has been injected into the target process and its <code>DllMain</code> method should have been called. Now, let&rsquo;s build a simple DLL to test the injection process</p>
-<h2 id="dll-structure">DLL Structure</h2>
-<p>The starting point for this is a new DLL project created by VisualStudio. Don&rsquo;t create a static library because this won&rsquo;t work!</p>
-<p>After creating the project, the file <code>dllmain.cpp</code> should have already been created. Let&rsquo;s create a simple PoC that spawns a message box upon loading the DLL:</p>
-<pre><code>extern &quot;C&quot; __declspec(dllexport) void Initialize()
-{
-	MessageBox(0, &quot;Locked and Loaded.&quot;, &quot;DLL Injection Successful!&quot;, 0);
-}
-
-BOOL APIENTRY DllMain
+<span style="color:#75715e">// Load the DLL by causing the remote process to spawn a thread which calls LoadLibraryA
+</span><span style="color:#75715e">// which loads the DLL using the path we allocated previously.
+</span><span style="color:#75715e"></span>HANDLE threadHandle <span style="color:#f92672">=</span> CreateRemoteThread(procHandle, nullptr, NULL, LPTHREAD_START_ROUTINE(loadFunctionAddress), allocatedMem, NULL, nullptr);
+</code></pre></div><p>Please note that error handling has been removed for a better overview. The full loader source code can be found <a href="https://github.com/ps1337/jka-multihack/blob/master/loader/loader.cpp">here</a>.</p>
+<p>As soon as the DLL is injected into the target process, the DLL&rsquo;s <code>DllMain()</code> function will be executed. Now, let&rsquo;s build a simple DLL to test the injection process.</p>
+<h3 id="dll-structure">DLL Structure</h3>
+<p>The starting point for this is a new DLL project created by VisualStudio. After creating the project, the file <code>dllmain.cpp</code> should have already been created. Let&rsquo;s create a simple PoC that spawns a message box upon loading the DLL:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">BOOL APIENTRY <span style="color:#a6e22e">DllMain</span>
 (
 	HMODULE hModule,
 	DWORD  ul_reason_for_call,
 	LPVOID lpReserved
 )
 {
-    switch (ul_reason_for_call)
+    <span style="color:#66d9ef">switch</span> (ul_reason_for_call)
     {
-		case DLL_PROCESS_ATTACH:
-			// Do not need the thread based attach/detach messages in this DLL
-			DisableThreadLibraryCalls(hModule);
-			Initialize();
-        break;
+		<span style="color:#66d9ef">case</span> DLL_PROCESS_ATTACH:
+			MessageBox(<span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;Injected!&#34;</span>, <span style="color:#e6db74">&#34;DLL&#34;</span>, <span style="color:#ae81ff">0</span>);
+        <span style="color:#66d9ef">break</span>;
     }
-    return TRUE;
+    <span style="color:#66d9ef">return</span> TRUE;
 }
-</code></pre><p>Compile this DLL, pass it to the loader and check out the created message box. Let&rsquo;s proceed with identifying the required hooks and game modifications.</p>
-<h1 id="know-your-target">Know Your Target</h1>
-<p>The target game is based on the Quake3 engine. Therefore, information on internal structures and processes are required in order to, for example, implement a wallhack. A Quake3 game is being executed in a &ldquo;VM&rdquo; that implements its own &ldquo;system calls&rdquo;.</p>
-<p>The Q3 engine methods are present in a separate DLL called <code>cgamex86.dll</code> which will be loaded by the game process. To load DLLs, the Windows API call <code>GetProcAddress</code> is being used to get the address of a specific function in a DLL. This means that by hooking <code>GetProcAddress</code> it&rsquo;s possible to intercept calls to the game engine:</p>
-<pre><code>// create the hook which serves as entry point for this
-if (!Mhook_SetHook((PVOID *)&amp;originalGetProcAddress, hookGetProcAddress))
-{
-    MessageBox(0, &quot;Couldn't create hook&quot;, &quot;:(&quot;, 0);
-}
-</code></pre><p>The original and unmodified call to <code>GetProcAddress</code> will be stored in <code>originalGetProcAddress</code> and our own function <code>hookGetProcAddress</code> will be executed instead of the real function.</p>
-<p>While tracing the executed functions of <code>cgamex86.dll</code>, two calls have been identified as interesting in the game:</p>
-<ol>
-<li><code>vmMain</code>: Main function of the Q3 VM, accepting system calls</li>
-<li><code>dllEntry</code>: Used to execute additional Q3 system calls</li>
-</ol>
-<p>According to the Q3 engine <a href="https://github.com/id-Software/Quake-III-Arena/blob/master/code/cgame/cg_main.c#L46">source code</a>, <code>vmMain</code> contains code to <code>CG_DrawActiveFrame</code> &ndash; a function to draw a game frame. This may be handy later on.</p>
-<p><em>Note for OpenJK Users: Because the maintainers of OpenJK decided to update the syscall process of the game, it&rsquo;s required to modify <code>CL_BindCGame</code> to use legacy q3 VM system calls.</em></p>
-<p>Similar to this, <code>dllEntry</code> accepts the <code>CG_R_ADDREFENTITYTOSCENE</code> system call that adds an entity (a player, a weapon, &hellip;) to the scene to be rendered. The parameter for this is a pointer to an entity. All entities are stored in a container called <code>backEndData</code>, which gets used by <code>RE_RenderScene</code> to display all entities. By modifying entities before <code>RE_RenderScene</code> gets called, entities can always be displayed - no matter if there&rsquo;s a wall between the player and the entity.</p>
-<p>Luckily, the Q3 engine implements a flag called <code>RF_DEPTHHACK</code> which does just this: It makes the engine ignore an entity&rsquo;s depth, making it align with all entities in the same depth. By adding this flag, entities will be effectively displayed on top of walls!</p>
-<h1 id="using-game-engine-data">Using Game Engine Data</h1>
-<p>At this point, it&rsquo;s possible to execute code in the context of the target process and all required information on how to implement a wallhack are available. However, we still need access to the games internal entity values. These values are nested C-structs containing all kinds of information on players and objects in the game. By hooking the right system calls, the values of these structs can be obtained in the context of the thread in the injected DLL. Two steps are required for this:</p>
+</code></pre></div><p>Compile this DLL, pass it to the loader and check out the created message box.</p>
+<h2 id="accessing-engine-data-structures">Accessing Engine Data Structures</h2>
+<p>At this point, it&rsquo;s possible to execute code in the context of the target process. However, we still need access to the games internal engine data structures in order to actually implement the hack. These data structures contain all kinds of information on the environment, players and objects in the game. By hooking the right QVM system calls, the values of these structures can be obtained in the context of the injected DLL. Two steps are required for this:</p>
 <ul>
-<li>Add the official SDK to the DLL in order to get information on the structs.</li>
-<li><a href="https://github.com/ps1337/jka-multihack/blob/master/dll/dllmain.cpp#L245">Hook a Q3 system call</a> to get access all entity structs.</li>
+<li>Add the official SDK to the Visual Studio project. There are some useful header files that include the definitions for the data structures we are looking for.</li>
+<li>Hook some QVM system calls.</li>
 </ul>
-<p>While observing the required data and available syscalls, it became clear that not all game structs will be accessible by just hooking calls and saving their parameter values. Image a <a href="https://github.com/id-Software/Quake-III-Arena/blob/master/code/cgame/cg_local.h#L454">nested engine struct</a> containing this data:</p>
-<pre><code>typedef struct {
+<p>Let&rsquo;s add the hook for <code>GetProcAddress()</code> to the DLL&rsquo;s main function:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>Mhook_SetHook((PVOID <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>originalGetProcAddress, hookGetProcAddress)) {
+    MessageBox(<span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#34;Couldn&#39;t create hook&#34;</span>, <span style="color:#e6db74">&#34;:(&#34;</span>, <span style="color:#ae81ff">0</span>);
+}
+</code></pre></div><p>Below is our own version of <code>GetProcAddress()</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">FARPROC WINAPI <span style="color:#a6e22e">hookGetProcAddress</span>(HMODULE hModule, LPCSTR lpProcName) {
+    CHAR moduleName[MAX_PATH];
+
+    <span style="color:#75715e">// check in which dll the call will be executed
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>GetModuleFileName(hModule, moduleName, <span style="color:#66d9ef">sizeof</span>(moduleName))) {
+        <span style="color:#66d9ef">return</span> (FARPROC)originalGetProcAddress(hModule, lpProcName);
+    }
+
+    <span style="color:#75715e">// are we in the game vm?
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (isSubstr(moduleName, <span style="color:#e6db74">&#34;cgamex86.dll&#34;</span>)) {
+
+        <span style="color:#66d9ef">if</span> (isSubstr(lpProcName, <span style="color:#e6db74">&#34;dllEntry&#34;</span>)) {
+            <span style="color:#75715e">// Modify returned function here
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// --&gt; execute modified function instead
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// (modified function calls original function after doing hax using `originalDLLEntry`)
+</span><span style="color:#75715e"></span>            originalDLLEntry <span style="color:#f92672">=</span> (DLLENTRY)originalGetProcAddress(hModule, lpProcName);
+            <span style="color:#66d9ef">return</span> (PROC)hookDLLEntry;
+        }
+
+        <span style="color:#75715e">// Save things as above, only for vmMain
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (isSubstr(lpProcName, <span style="color:#e6db74">&#34;vmMain&#34;</span>)) {
+            originalVMMain <span style="color:#f92672">=</span> (VMMain)originalGetProcAddress(hModule, lpProcName);
+            <span style="color:#66d9ef">return</span> (PROC)hookVMMain;
+        }
+
+    }
+    <span style="color:#66d9ef">return</span> (FARPROC)originalGetProcAddress(hModule, lpProcName);
+}
+</code></pre></div><p>As soon as the main game executable tries to resolve the address for <code>dllEntry()</code> or <code>vmMain()</code> inside of the <code>cgame</code> QVM, the hook returns the address of our own version of one of these functions. Of course, our implementations need to accept the same parameters values or otherwise execution may fail and we&rsquo;re not able to call the original function too.</p>
+<p>Here&rsquo;s an example for <code>dllEntry()</code> that steals the passed syscall function pointer and uses our own syscall function instead:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// Type used to hook QVM system calls
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span>(QDECL<span style="color:#f92672">*</span> syscall)(<span style="color:#66d9ef">int</span> arg, ...) <span style="color:#f92672">=</span> (<span style="color:#66d9ef">int</span>(QDECL<span style="color:#f92672">*</span>)(<span style="color:#66d9ef">int</span>, ...)) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+
+<span style="color:#75715e">// this will be called instead of the original `dllEntry`
+</span><span style="color:#75715e">// the result type and parameters result from the original
+</span><span style="color:#75715e">// engine code
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hookDLLEntry</span>(<span style="color:#66d9ef">int</span>(QDECL<span style="color:#f92672">*</span> syscallptr)(<span style="color:#66d9ef">int</span> arg, ...)) {
+    syscall <span style="color:#f92672">=</span> syscallptr;
+    originalDLLEntry(syscall_hook);
+}
+
+<span style="color:#75715e">// This is now being called for every QVM syscall
+</span><span style="color:#75715e">// We can steal parameters or modify them, based on the requested syscall / `cmd` value
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">syscall_hook</span>(<span style="color:#66d9ef">int</span> cmd, ...) {
+
+    <span style="color:#75715e">// this is a variadic function, so this gets all parameters
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// using va_arg
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> arg[<span style="color:#ae81ff">14</span>];
+    va_list arglist;
+    <span style="color:#66d9ef">int</span> count;
+    va_start(arglist, cmd);
+    <span style="color:#66d9ef">for</span> (count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; count <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">14</span>; count<span style="color:#f92672">++</span>)
+    {
+        arg[count] <span style="color:#f92672">=</span> va_arg(arglist, <span style="color:#66d9ef">int</span>);
+    }
+    va_end(arglist);
+
+    <span style="color:#75715e">// check which syscall has been requested
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">switch</span> (cmd)
+    {
+
+    <span style="color:#75715e">// Gets information on an entity
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">case</span> CG_GETDEFAULTSTATE:
+    {
+        centity_t<span style="color:#f92672">*</span> cur <span style="color:#f92672">=</span> (centity_t<span style="color:#f92672">*</span>)arg[<span style="color:#ae81ff">1</span>];
+        pEntities[arg[<span style="color:#ae81ff">0</span>]] <span style="color:#f92672">=</span> cur;
+
+        <span style="color:#75715e">// if it&#39;s our local player entity, save the pointer
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (ps <span style="color:#f92672">&amp;&amp;</span> cur<span style="color:#f92672">-&gt;</span>currentState.clientNum <span style="color:#f92672">==</span> ps<span style="color:#f92672">-&gt;</span>clientNum) {
+            pPlayerEnt <span style="color:#f92672">=</span> cur;
+        }
+        <span style="color:#66d9ef">break</span>;
+    }
+
+    <span style="color:#75715e">// the VM processed the current game state
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// --&gt; steal the parameters
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">case</span> CG_GETGAMESTATE:
+    {
+        gameState <span style="color:#f92672">=</span> (gameState_t<span style="color:#f92672">*</span>)arg[<span style="color:#ae81ff">0</span>];
+        <span style="color:#75715e">// the gameState_t* element is wrapped by a cgs_t struct, so
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// using pointer arithmetic it&#39;s possible to get the &#34;parent&#34; element
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// --&gt; the cgs_t struct
+</span><span style="color:#75715e"></span>        cgs_t<span style="color:#f92672">*</span> _tmp <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        client_gameState <span style="color:#f92672">=</span> (cgs_t<span style="color:#f92672">*</span>)((<span style="color:#66d9ef">int</span>)gameState <span style="color:#f92672">-</span> (<span style="color:#66d9ef">int</span>)<span style="color:#f92672">&amp;</span>_tmp<span style="color:#f92672">-&gt;</span>gameState);
+        <span style="color:#66d9ef">break</span>;
+    }
+
+    <span style="color:#75715e">// get own playerstate
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">case</span> CG_GETSNAPSHOT:
+    {
+        <span style="color:#75715e">// call the real syscall first so the struct will be prepared for the following calls
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">auto</span> result <span style="color:#f92672">=</span> syscall(cmd, arg[<span style="color:#ae81ff">0</span>], arg[<span style="color:#ae81ff">1</span>], arg[<span style="color:#ae81ff">2</span>], arg[<span style="color:#ae81ff">3</span>], arg[<span style="color:#ae81ff">4</span>], arg[<span style="color:#ae81ff">5</span>], arg[<span style="color:#ae81ff">6</span>], arg[<span style="color:#ae81ff">7</span>], arg[<span style="color:#ae81ff">8</span>], arg[<span style="color:#ae81ff">9</span>], arg[<span style="color:#ae81ff">10</span>], arg[<span style="color:#ae81ff">11</span>], arg[<span style="color:#ae81ff">12</span>], arg[<span style="color:#ae81ff">13</span>]);
+
+        snapshot_t<span style="color:#f92672">*</span> snap <span style="color:#f92672">=</span> (snapshot_t<span style="color:#f92672">*</span>)arg[<span style="color:#ae81ff">1</span>];
+        <span style="color:#75715e">// get the current player state
+</span><span style="color:#75715e"></span>        ps <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>(snap<span style="color:#f92672">-&gt;</span>ps);
+
+        cg_t<span style="color:#f92672">*</span> tmp <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        <span style="color:#75715e">// we have an `activeSnapshots` object, so let&#39;s subtract its length and get the parent element
+</span><span style="color:#75715e"></span>        client_game <span style="color:#f92672">=</span> (cg_t<span style="color:#f92672">*</span>)((<span style="color:#66d9ef">int</span>)arg[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> (<span style="color:#66d9ef">int</span>)<span style="color:#f92672">&amp;</span>tmp<span style="color:#f92672">-&gt;</span>activeSnapshots);
+
+        <span style="color:#66d9ef">return</span> result;
+        <span style="color:#66d9ef">break</span>;
+    }
+
+    <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+        <span style="color:#66d9ef">break</span>;
+    }
+
+    <span style="color:#75715e">// execute the original syscall using the passed parameters
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> syscall(cmd, arg[<span style="color:#ae81ff">0</span>], arg[<span style="color:#ae81ff">1</span>], arg[<span style="color:#ae81ff">2</span>], arg[<span style="color:#ae81ff">3</span>], arg[<span style="color:#ae81ff">4</span>], arg[<span style="color:#ae81ff">5</span>], arg[<span style="color:#ae81ff">6</span>], arg[<span style="color:#ae81ff">7</span>], arg[<span style="color:#ae81ff">8</span>], arg[<span style="color:#ae81ff">9</span>], arg[<span style="color:#ae81ff">10</span>], arg[<span style="color:#ae81ff">11</span>], arg[<span style="color:#ae81ff">12</span>], arg[<span style="color:#ae81ff">13</span>]);
+}
+</code></pre></div><p>As can be seen, our replacement function for the syscall function pointer executes the original function at the very end, so execution can proceed after our hackery has been done. Some interesting commands like <code>CG_GETDEFAULTSTATE</code>, <code>CG_GETGAMESTATE</code> and <code>CG_GETSNAPSHOT</code> are now under our control. The definitions of these can be found in the original <a href="https://github.com/id-Software/Quake-III-Arena/blob/master/code/cgame/cg_syscalls.c#L316">Quake III Arena source code</a> or the Jedi Academy SDK. They all get executed as soon as a client joins a game and they receive interesting data structures as parameters. As seen in the listing above, the <code>CG_GETDEFAULTSTATE</code> call receives a parameter of type <code>centity_t</code>. In the idTech3 engine, this is a pointer to an entity in memory. Among other things, this can be a pointer to a model for a player, an item or a weapon. It&rsquo;s important to note that the coordinates of an entity are also stored in the <code>centity_t</code> structure. By having access to this data, all players and all player coordinates are now known and ready to be used by the injected DLL.</p>
+<p>While observing the required data and available syscalls, it became clear that not all game structures will be accessible by just hooking calls and saving their parameter values. Check out a <code>struct</code> like <a href="https://github.com/id-Software/Quake-III-Arena/blob/master/code/cgame/cg_local.h#L454">this one</a> that contains this data:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
     [...]
-    snapshot_t* snap;
+    snapshot_t<span style="color:#f92672">*</span> snap;
     [...]
 } cg_t;
-</code></pre><p>By <a href="https://github.com/ps1337/jka-multihack/blob/master/dll/dllmain.cpp#L272">hooking</a> <code>CG_GETSNAPSHOT</code> it&rsquo;s possible get the current game snapshot &ndash; a <code>snapshot_t</code> pointer value. We are <strong>not</strong> able to directly get a <code>cg_t</code> engine struct by hooking system calls but we know that the <code>snapshot_t</code> pointer is nested in a <code>cg_t</code> struct. By using some pointer arithmetic it&rsquo;s still possible to get the parent struct, a <code>cg_t</code> value:</p>
-<pre><code>snapshot_t *snap = (snapshot_t *)arg[1];
-// temp value
-cg_t *tmp = 0;
-// we have an `snapshot_t` pointer, so let's substract that values length and get the parent element
-client_game = (cg_t *)((int)arg[1] - (int)&amp;tmp-&gt;activeSnapshots);
-</code></pre><p>This works for some cases but we will come across a point where this memory hackery indeed causes some problems.</p>
-<h1 id="creating-the-wallhack">Creating The Wallhack</h1>
-<p>By using <code>dllMain</code> to hook all executed system calls, we modify calls with the <code>CG_R_ADDREFENTITYTOSCENE</code> command in a way that the <code>RF_DEPTHHACK</code> flag gets added:</p>
-<pre><code>// get the passed parameter (an entity)
-refEntity_t *ref = (refEntity_t *)arg[0];
+</code></pre></div><p>By hooking <code>CG_GETSNAPSHOT</code> it&rsquo;s possible get the current game snapshot &ndash; a <code>snapshot_t</code> pointer value. We are <strong>not</strong> able to directly get a <code>cg_t</code> engine struct by hooking system calls but we know that the <code>snapshot_t</code> pointer is nested in a <code>cg_t</code> struct. By using some pointer arithmetic and an offset it&rsquo;s still possible to get the parent struct, a <code>cg_t</code> value in this case:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">snapshot_t<span style="color:#f92672">*</span> snap <span style="color:#f92672">=</span> (snapshot_t<span style="color:#f92672">*</span>)arg[<span style="color:#ae81ff">1</span>];
+cg_t<span style="color:#f92672">*</span> tmp <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+<span style="color:#75715e">// we have an `activeSnapshots` object, so let&#39;s subtract its offset in `cg_t` and get the parent element
+</span><span style="color:#75715e"></span>client_game <span style="color:#f92672">=</span> (cg_t<span style="color:#f92672">*</span>)((<span style="color:#66d9ef">int</span>)arg[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> (<span style="color:#66d9ef">int</span>)<span style="color:#f92672">&amp;</span>tmp<span style="color:#f92672">-&gt;</span>activeSnapshots);
 
-// add the y flag to display the entity
-// over walls, effectively disabling depth for players
-// --&gt; wallhack
-ref-&gt;renderfx |= RF_DEPTHHACK | RDF_NOFOG;
-
-if (playerGlowRequired())
+</code></pre></div><p>Cool.</p>
+<p>Another handy thing is being able to execute code every frame. For example, it&rsquo;s required for the triggerbot to check if the local player is looking at an enemy in the current frame. Also, the aimbot needs to focus on the current target in each frame. The game engine implements a system call named <code>CG_DRAW_ACTIVE_FRAME</code> which can be hooked by us to perform these tasks.</p>
+<p>Time to implement some hax.</p>
+<hr>
+<h1 id="wallhack">Wallhack</h1>
+<p>In case of the idTech3 engine, this can be implemented without too much effort. The <code>CG_R_ADDREFENTITYTOSCENE</code> QVM system call adds an entity (e.g. a player) to the scene which is about to be rendered and shown on the screen. The parameter for this is call a pointer to an entity of type <code>refEntity_t</code>. By adding one specific rendering flag for a given entity, it can be shown regardless of any walls between our local player and the entity. The flag is called <code>RF_DEPTHHACK</code> which makes the engine ignore an entity&rsquo;s depth information. Entities will therefore be displayed on top of walls. Here&rsquo;s the code which has to be added to our <code>syscall_hook()</code> function:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">[...]
+<span style="color:#66d9ef">case</span> CG_R_ADDREFENTITYTOSCENE:
 {
-    // add a glowing shader for a better view
-    ref-&gt;customShader = client_gameState-&gt;media.disruptorShader;
-}
-</code></pre><p>As you can see, the player glow also gets added in this segment. <code>playerGlowRequired</code> checks whether an entity is a player by using internal engine structs, namely <code>centity_t</code> pointers which have been saved by hooking Q3 system calls.</p>
-<p>As a neat side effect, adding the <code>RF_DEPTHHACK</code> flag to all entities and not just players also shows entities like doors, weapon and pickups through walls:
-<img src="/img/jka-multihack/entities.jpg" alt="Entities"></p>
-<h2 id="recognizing-teams">Recognizing Teams</h2>
-<p>Normally, an entity&rsquo;s team information is stored in the</p>
-<pre><code>client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName
-</code></pre><p>value. After the pointer arithmetic hackery, the fields of <code>clientinfo</code> structs have somehow been corrupted and point to invalid data. For example, <code>teamName</code> contains parts of the model name for some entities. But let&rsquo;s just search in the memory region of the <code>clientinfo</code> struct!</p>
-<pre><code>// search for the team in the memory region of the `clientinfo` struct
-// using `.teamName` isn't exact because of memory hackery while determining `client_gameState`
-char red[] = &quot;red&quot;;
-char *base = client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName - 100;
-char *end = client_gameState-&gt;clientinfo[currentEntityClientNumber].teamName + 1000;
+    <span style="color:#75715e">// get the passed entity parameter
+</span><span style="color:#75715e"></span>    refEntity_t <span style="color:#f92672">*</span>ref <span style="color:#f92672">=</span> (refEntity_t <span style="color:#f92672">*</span>)arg[<span style="color:#ae81ff">0</span>];
 
-// check if he's red
-BOOL found = FALSE;
-while (base &lt; end)
-{
-    if (_memicmp(red, base, sizeof(red)) == 0)
-    {
-        teamMap.insert(std::pair&lt;int, int&gt;(currentEntityClientNumber, TEAM_RED));
-        return FALSE;
+    <span style="color:#75715e">// add the RF_DEPTHHACK flag to display the entity
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// over walls, effectively disabling depth for players
+</span><span style="color:#75715e"></span>    ref<span style="color:#f92672">-&gt;</span>renderfx <span style="color:#f92672">|=</span> RF_DEPTHHACK;
+
+    <span style="color:#66d9ef">if</span> (playerGlowRequired()) {
+        <span style="color:#75715e">// add a glowing shader for a better view
+</span><span style="color:#75715e"></span>        ref<span style="color:#f92672">-&gt;</span>customShader <span style="color:#f92672">=</span> client_gameState<span style="color:#f92672">-&gt;</span>media.disruptorShader;
     }
-    base += sizeof(red);
+
+    <span style="color:#66d9ef">break</span>;
 }
-// then he must be blue &lt;:
-</code></pre><p>This works because <code>CG_TeamName</code> puts a string containg either <code>RED</code> or <code>BLUE</code> in an entities <code>clientinfo</code>. By searching for these values in memory, we can get around the corrupted pointers and can obtain team information quickly. This has also been optimized to cache search results to prevent searching for these value every time.</p>
-<h1 id="pulling-the-trigger">Pulling The Trigger</h1>
-<p>Implementing a trigger bot is pretty straight forward once the we are able to modify each frame. By hooking the <code>CG_DRAW_ACTIVE_FRAME</code> command, we can check if we&rsquo;re aiming at an enemy by checking the value of <code>crosshairClientNum</code>:</p>
-<pre><code>// only trigger with a shootable weapon
-if (ps-&gt;weapon &gt; WP_SABER &amp;&amp; ps-&gt;weapon != WP_THERMAL &amp;&amp; ps-&gt;weapon != WP_TRIP_MINE &amp;&amp; ps-&gt;weapon != WP_DET_PACK)
+[...]
+</code></pre></div><p>As you can see, the player glow also gets added in this segment. Calling <code>playerGlowRequired()</code> checks if an entity is a player by making use of other engine structures, namely <code>centity_t</code> pointers which have also been saved by hooking Q3 system calls. This also checks if a given entity belongs to an enemy or to a team mate and acts accordingly &ndash; no glow will be added for team mates or dead players.</p>
+<p>Here&rsquo;s the wallhack in action:</p>
+<center>
+<img src="/img/jka-multihack/wallhack.gif">
+</center>
+<hr>
+<h1 id="aimbot">Aimbot</h1>
+<p>The idea is to continuously focus on an enemy entity in case the aim key, for example the left CTRL key, is being held down. As soon as an enemy is present in the crosshair, the aimbot will therefore lock the view on the respective entity on the screen.</p>
+<p>There are various ways to implement this but generally speaking you need two things:</p>
+<ul>
+<li>A way to calculate the correct angle that&rsquo;s required in order to aim at the enemy.</li>
+<li>A function that sets the view angle. This can happen by directly writing to memory or by sending mouse input events. Since I&rsquo;ve found no reliable way to use direct memory access to set the view angle, I&rsquo;m using mouse events. If you want to see an example of direct memory access, check out <a href="https://bananamafia.dev/post/bananabot/">this blog post of mine</a>.</li>
+</ul>
+<p>Now, theres some mad math behind all the required calculations. In short, you need a <em>world to screen</em> function, which transforms the 3D coordinates of the game world into 2D coordinates you can actually use to make the aimbot work in combination with mouse events. Most likely your screen only has two dimensions, the game has three &ndash; hence the transformation. Also, it allows to check if an entity is present in the current field of view. The people at <a href="https://guidedhacking.com">GuidedHacking</a> have a very good explanation of what&rsquo;s going on in detail, so I recommend checking out <a href="https://guidedhacking.com/threads/so-what-is-a-viewmatrix-anyway-and-how-does-a-w2s-work.10964/">this</a> article.</p>
+<p>For the idTech3 engine, a standard world to screen function can also be found at <a href="https://guidedhacking.com/threads/world2screen-direct3d-and-opengl-worldtoscreen-functions.8044/">GuidedHacking</a>. A convenient way to integrate it into a hack is to create a wrapper for this function. Using it is pretty straight forward: Call it with the enemy entity and the <code>refdef</code> engine structure, which contains information on the current field of view and the game dimensions:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// a vector storing X, Y and Z coordinates
+</span><span style="color:#75715e"></span>v3_t SCREEN <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span> };
+
+<span style="color:#75715e">// wrapper for v3_t::`w2s`
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">Q3worldToScreen</span>(centity_t<span style="color:#f92672">*</span> ent, refdef_t refdef) {
+    <span style="color:#75715e">// enemy chest
+</span><span style="color:#75715e"></span>    v3_t chest <span style="color:#f92672">=</span> ent<span style="color:#f92672">-&gt;</span>currentState.pos.trBase;
+    <span style="color:#75715e">// enemy head
+</span><span style="color:#75715e"></span>    chest.z <span style="color:#f92672">+=</span> <span style="color:#ae81ff">30</span>;
+
+    <span style="color:#75715e">// call world to screen for the chest vector
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> chest.w2s(refdef.fov_x, refdef.fov_x, refdef.width, refdef.height, refdef.viewaxis[<span style="color:#ae81ff">0</span>], refdef.viewaxis[<span style="color:#ae81ff">1</span>], refdef.viewaxis[<span style="color:#ae81ff">2</span>], refdef.vieworg, SCREEN);
+}
+</code></pre></div><p>I&rsquo;ve stolen some code for this from <a href="https://guidedhacking.com/threads/openarena-esp-hack-aimbot-source-code-download.7908/">here</a>.</p>
+<p>All that&rsquo;s left is to send the correct mouse events using the calculated 2D values that are now present in the <code>SCREEN</code> vector:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">moveMouse</span>(v3_t point) {
+    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>client_game) { <span style="color:#66d9ef">return</span>; }
+
+    <span style="color:#75715e">// only if game is not minimized
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>isJKAForeground()) { <span style="color:#66d9ef">return</span>; }
+
+    INPUT Input <span style="color:#f92672">=</span> { <span style="color:#ae81ff">0</span> };
+    Input.type <span style="color:#f92672">=</span> INPUT_MOUSE;
+    Input.mi.dwFlags <span style="color:#f92672">=</span> MOUSEEVENTF_MOVE;
+    Input.mi.dx <span style="color:#f92672">=</span> point.x <span style="color:#f92672">-</span> client_game<span style="color:#f92672">-&gt;</span>refdef.width <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+    Input.mi.dy <span style="color:#f92672">=</span> point.y <span style="color:#f92672">-</span> client_game<span style="color:#f92672">-&gt;</span>refdef.height <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>;
+
+    SendInput(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>Input, <span style="color:#66d9ef">sizeof</span>(INPUT));
+}
+</code></pre></div><p>Here&rsquo;s a quick demo of the aimbot and the triggerbot &ndash; no mouse movement or manual firing required:</p>
+<center>
+<img src="/img/jka-multihack/aimbot.gif">
+</center>
+<hr>
+<h1 id="triggerbot">Triggerbot</h1>
+<p>Implementing a triggerbot is pretty easy once we are able to execute code upon rendering each frame. Here&rsquo;s what we need:</p>
+<ul>
+<li>A way to detect if the player is currently aiming at an enemy: This can be accomplished by reading the <code>client_game-&gt;crosshairClientNum</code> value and passing the client number to our <code>isEnemy()</code> function.</li>
+<li>The ability to trigger an attack: Since we already have a pointer to the syscall function, we can use it and trigger an attack with <code>CG_SENDCONSOLECOMMAND</code>, as you can see below:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// only trigger with a shootable weapon
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (ps<span style="color:#f92672">-&gt;</span>weapon <span style="color:#f92672">&gt;</span> WP_SABER <span style="color:#f92672">&amp;&amp;</span> ps<span style="color:#f92672">-&gt;</span>weapon <span style="color:#f92672">!=</span> WP_THERMAL <span style="color:#f92672">&amp;&amp;</span> ps<span style="color:#f92672">-&gt;</span>weapon <span style="color:#f92672">!=</span> WP_TRIP_MINE <span style="color:#f92672">&amp;&amp;</span> ps<span style="color:#f92672">-&gt;</span>weapon <span style="color:#f92672">!=</span> WP_DET_PACK)
 {
-    // only shoot at enemies
-    if (isEnemy(client_game-&gt;crosshairClientNum))
+    <span style="color:#66d9ef">int</span> crosshairClientNum <span style="color:#f92672">=</span> client_game<span style="color:#f92672">-&gt;</span>crosshairClientNum;
+    <span style="color:#66d9ef">if</span> (crosshairClientNum <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> crosshairClientNum <span style="color:#f92672">&lt;=</span> MAX_CLIENTS)
     {
-        // send a left click
-        // not using left click for fire? srsly why
-        LeftClick();
-        client_game-&gt;crosshairClientNum = 0;
+        <span style="color:#75715e">// only shoot at enemies
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (isEnemy(crosshairClientNum))
+        {
+            <span style="color:#75715e">// attack
+</span><span style="color:#75715e"></span>            syscall_hook(CG_SENDCONSOLECOMMAND, <span style="color:#e6db74">&#34;+attack; -attack;&#34;</span>);
+        }
     }
 }
-</code></pre><h1 id="bonus-cvar-unlocker">Bonus: CVar Unlocker</h1>
-<p>The blocking of cheats is based on a server setting called <code>sv_cheats</code> which is read only on clients. However, by setting this value in the injected code with <code>syscall_hook(CG_CVAR_SET, &quot;sv_cheats&quot;, &quot;1&quot;);</code> circumvents this check :)</p>
-<h1 id="references">References</h1>
+</code></pre></div><p>And that&rsquo;s it :)</p>
+<hr>
+<h1 id="anti-grip">Anti Grip</h1>
+<p>Ok, here&rsquo;s the thing: In this game there&rsquo;s a certain force power that allows you to grip enemies. Some 1337 players use it to throw other people into pits:</p>
+<center>
+<img src="/img/jka-multihack/ag0.gif">
+</center>
+<p>I don&rsquo;t want to be treated like this and I&rsquo;ve found a reliable way to prevent it. The hack needs to detect if the local players is being gripped, aim at the last attacker and perform a force push, which breaks the grip. Since the aimbot is already implemented, only a few addtional things are needed:</p>
+<ul>
+<li>Get the entity of our last attacker: Luckily, the client number of our last attacker is stored in the <code>persistant[PERS_ATTACKER]</code> field of the <code>playerState</code> structure. Every entity has a field which maps it to a specific client number, so a simple loop will determine the correct entity</li>
+<li>Executing a force throw: This is similar to the triggerbot, the only difference is the executed command.</li>
+</ul>
+<p>Here&rsquo;s da code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// If we are currently being gripped
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (ps <span style="color:#f92672">&amp;&amp;</span> (ps<span style="color:#f92672">-&gt;</span>fd.forceGripBeingGripped <span style="color:#f92672">||</span> ps<span style="color:#f92672">-&gt;</span>fd.forceGripCripple)) {
+    <span style="color:#66d9ef">auto</span> ent <span style="color:#f92672">=</span> entFromClientNum(ps<span style="color:#f92672">-&gt;</span>persistant[PERS_ATTACKER])
+    <span style="color:#75715e">// focus the current target, similar to the aimbot functionality
+</span><span style="color:#75715e"></span>    focusEnt(pCurPushTarget);
+    syscall_hook(CG_SENDCONSOLECOMMAND, <span style="color:#e6db74">&#34;force_throw;&#34;</span>);
+}
+</code></pre></div><p>And here&rsquo;s the Anti Grip feature in action:</p>
+<center>
+<img src="/img/jka-multihack/ag1.gif">
+</center>
+<p>A good thing is that the force grip check can be performed quickly. Therefore executing it each frame is possible without causing any lag.</p>
+<hr>
+<h1 id="anti-mind-trick">Anti Mind Trick</h1>
+<p>The old <em>&ldquo;these aren&rsquo;t the droids you&rsquo;re looking for&rdquo;</em> <a href="https://eu.usatoday.com/story/life/entertainthis/2015/12/12/star-wars-famous-quotes-references-explained/77111728/">Jedi mind trick</a> is also present in this game. It causes a player to be invisible from the perspective of the victim.</p>
+<p>The easiest way to convince our game to show the hidden player entity nevertheless is the following: There&rsquo;s another force power, <em>force sight</em>, which enables players to see invisible players. We just tell the game that we have already activated this force power:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ps.fd.forcePowersActive <span style="color:#f92672">|=</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> FP_SEE);
+</code></pre></div><p>This works even though force powers are disabled on the server:</p>
+<center>
+<img src="/img/jka-multihack/antitrick.gif">
+</center>
+<hr>
+<h1 id="cvar-unlocker">CVar Unlocker</h1>
+<p>Some client side settings are blocked by default, since they are classified as cheats. For example, <code>r_fullbright 1</code> disables all shadows on the current map which can be an advantage in dark levels. Cheats can be blocked by making use of a server setting called <code>sv_cheats</code> which is read only by all clients. However, once again a manual system call can overwrite this value nevertheless:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">syscall_hook(CG_CVAR_SET, <span style="color:#e6db74">&#34;sv_cheats&#34;</span>, <span style="color:#e6db74">&#34;1&#34;</span>);
+</code></pre></div><hr>
+<p><marquee>That&rsquo;s it, thx for reading! &lt;3 </marquee></p>
+<p>Now go and check <a href="https://www.youtube.com/channel/UCCMi6F5Ac3kQDfffWXQGZDw">the GuidedHacking YouTube channel</a> in case you want to learn more game haxxoring things.</p>
+<h1 id="even-moar-references">Even Moar References</h1>
 <ul>
 <li><a href="https://github.com/martona/mhook">mhook - A Windows API hooking library</a></li>
 <li><a href="https://jkhub.org/files/file/1137-jedi-academy-sdk/">JKA SDK</a></li>
 <li><a href="https://github.com/id-Software/Quake-III-Arena">Q3 Source Code</a></li>
 <li><a href="http://aimbots.net/threads/13871-star-wars-Academy-Clienthook?s=8b499d2ecb5ca24cf45b3de98fad3376">JD Hook</a></li>
+<li><a href="https://www.youtube.com/watch?v=LT4n0KiSA90&amp;t=669s">Guided Hacking: OpenArena Aimbot &amp; ESP Source Code</a></li>
 </ul>
+<h1 id="further-reading">Further Reading</h1>
+<p>Check out <a href="https://bananamafia.dev/post/bananabot/">the next part</a> of my series on game hacking :)</p>
 </div>
 
     
@@ -443,7 +631,7 @@ if (ps-&gt;weapon &gt; WP_SABER &amp;&amp; ps-&gt;weapon != WP_THERMAL &amp;&amp
     
     <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
     
-    <a href="https://bananamafia.dev/tags/exploiting"><kbd class="item-tag">exploiting</kbd></a>
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
     
     <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
     

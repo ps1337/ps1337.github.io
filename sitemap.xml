@@ -124,11 +124,6 @@
   </url>
   
   <url>
-    <loc>https://bananamafia.dev/tags/exploiting/</loc>
-    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://bananamafia.dev/tags/fuzzing/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url>
@@ -330,6 +325,11 @@
   
   <url>
     <loc>https://bananamafia.dev/post/bananabot/</loc>
+    <lastmod>2019-06-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/gamehacking/</loc>
     <lastmod>2019-06-19T00:00:00+00:00</lastmod>
   </url>
   

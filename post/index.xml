@@ -223,13 +223,13 @@ RIP &amp;amp; Canonical Addresses The first thing one notices when trying to gai
     </item>
     
     <item>
-      <title>Coding A CS:GO Hack</title>
+      <title>Game Hacking #2: Coding A CS:GO Hack</title>
       <link>https://bananamafia.dev/post/bananabot/</link>
       <pubDate>Wed, 19 Jun 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/bananabot/</guid>
-      <description>This post covers creating a multihack for the game Counter Strike: Global Offensive. The created hack works with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools. Below you can find a demonstration of the finished cheat:
-The features therefore include:
+      <description>This post covers creating a hack for the game Counter Strike: Global Offensive. The hack I&amp;rsquo;ve developed works in combination with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools.
+These are the features I&amp;rsquo;ve integrated into the hack:
  Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy  Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
     </item>
     
@@ -275,14 +275,12 @@ Software There are multiple ways one can interface with the software stack of a 
     </item>
     
     <item>
-      <title>Creating A Multiplayer Game Hack</title>
+      <title>Game Hacking #1: Developing Hacks for idTech3 Based Games</title>
       <link>https://bananamafia.dev/post/multihack/</link>
       <pubDate>Tue, 28 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/multihack/</guid>
-      <description>What? This post covers creating a multihack for multiplayer games. The target is a Quake3 based game called Jedi Academy. I&amp;rsquo;ve found the techniques and process of doing this to be fairly undocumented and obscure, so this can serve as a starting point for researchers and game hackers.
-I&amp;rsquo;ve released my multihack source code. These are the implemented features:
- Wallhack (seeing enemies through walls) Player Glow (Enemies are glowing) Cheat Unlocker (Use otherwise blocked client side settings) Triggerbot (Automatically pull the trigger and shoot at enemies once they are in the crosshair)  This is what the wallhack and player glow looks like:</description>
+      <description>The idTech3 game engine is most known for being used in games like Quake III Arena, Wolfenstein: ET and Star Wars: Jedi Knight - Jedi Academy. Sometimes people just simply refer to this engine as the Quake3 engine. This post teaches you how to create hacks for games that are based on this game engine. The target of choice is the game Jedi Academy, which was released in 2003. Oldschool, I know - but most of the injection and hooking techniques can also be applied to modern games.</description>
     </item>
     
     <item>
@@ -396,7 +394,7 @@ Initially, a configuration file is required to get started. To get one, call</de
     </item>
     
     <item>
-      <title>Exploiting Unqoted Service Paths For Fun and No Profit</title>
+      <title>Exploiting Unquoted Service Paths For Fun and No Profit</title>
       <link>https://bananamafia.dev/post/realtek-driverutil/</link>
       <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
       
