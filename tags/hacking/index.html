@@ -40,13 +40,13 @@
  
 
 
-<script src="https://bananamafia.dev/js/highlight.min.js"></script>
+<script src="/js/highlight.min.js"></script>
 
 
-<script src="https://bananamafia.dev/js/python.min.js"></script> 
-<script src="https://bananamafia.dev/js/cpp.min.js"></script> 
-<script src="https://bananamafia.dev/js/json.min.js"></script> 
-<script src="https://bananamafia.dev/js/go.min.js"></script> 
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
 
 <script>
   hljs.initHighlightingOnLoad();
@@ -84,16 +84,16 @@
 
 
 
-<script src="https://bananamafia.dev/js/jquery.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 
 
-<script src="https://bananamafia.dev/js/bootstrap.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 
 
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
- <meta name="generator" content="Hugo 0.70.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.70.0" />
     
     <link href="https://bananamafia.dev/tags/hacking/index.xml" rel="alternate" type="application/rss+xml" title="BananaMafia" />
     <link href="https://bananamafia.dev/tags/hacking/index.xml" rel="feed" type="application/rss+xml" title="BananaMafia" />
@@ -148,9 +148,11 @@
                     
                     <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
                     
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
                     <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
                     
-                    <li class="navbar-icon"><a href=""><i class="fa fa-adjust"></i></a></li>
+                    <li class="navbar-icon"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=banana@bananamafia.dev&amp;item_name=Buy&#43;Me&#43;A&#43;Banana&amp;no_note=0&amp;cn=&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><i class="fa fa-money"></i></a></li>
                     
                 </ul>
                 
@@ -164,7 +166,11 @@
 
     <script>
         
-        $(".fa-adjust").parent().removeAttr("href");
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
 
         
         window.onload = setMode();
@@ -183,14 +189,24 @@
         function setDark() {
             document.documentElement.setAttribute('data-theme', 'dark');
             localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
         }
 
         function setLight() {
             document.documentElement.setAttribute('data-theme', 'light');
             localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
         }
 
-        $(".fa-adjust").on("click", function () {
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
             const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
             $("body").addClass("transition-bg");
             $("nav").addClass("transition-bg");
@@ -205,6 +221,24 @@
                 $("nav").removeClass("transition-bg");
             }, 500);
 
+        });
+
+        
+        $(document).ready(function () {
+            $(".fa-money").mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
         });
     </script>
 
