@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Game Hacking #3: Hooking Direct3D EndScene()</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: #ffe135;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.71.1" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">Game Hacking #3: Hooking Direct3D EndScene()</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana@bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=banana@bananamafia.dev&amp;item_name=Buy&#43;Me&#43;A&#43;Banana&amp;no_note=0&amp;cn=&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><i class="fa fa-money"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function setMode() {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        
+        $(document).ready(function () {
+            $(".fa-money").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+        });
+    </script>
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/d3dhook/">Game Hacking #3: Hooking Direct3D EndScene()</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>I&rsquo;ve experimented with even moar game hacking and hooking techniques and you didn&rsquo;t, so here comes another blog post.</p>
+<p>Today&rsquo;s topic is about hooking a specific function of the <a href="https://docs.microsoft.com/en-us/windows/win32/direct3d">Direct 3D</a> library with the goal to cause Counter Strike: Global Offensive to draw additional things on the screen. There can be various reasons to do this:</p>
+<ul>
+<li>It&rsquo;s possible to draw a crosshair on the screen when none is shown by the game. This allows players to <a href="https://www.urbandictionary.com/define.php?term=360%20No%20Scope">360 NoScope</a> all the enemies without zooming in first</li>
+<li>Show additional information on the screen, for example an enemy&rsquo;s health or the equipped weapon</li>
+<li>Also: Because why not</li>
+</ul>
+<h1 id="overview">Overview</h1>
+<p>The function we want to hook is called <code>EndScene()</code>. It&rsquo;s being called to queue an already existing <em>scene</em> for output. In the context of this blog post a <em>scene</em> is equivalent to a frame and you can therefore say that <code>EndScene()</code> is called once for each frame. Since this function is being executed <em>after</em> a specific scene has been put together, it&rsquo;s an ideal function to hook when adding additional content to the screen.</p>
+<p>The plan is to inject a DLL into the game process that hooks the target function. To add custom content to each scene, an <code>endSceneHook()</code> function that accepts the same list of parameters as the original function has to be implemented. But here&rsquo;s the thing: According to <a href="https://docs.microsoft.com/en-us/windows/win32/api/d3d9/nf-d3d9-idirect3ddevice9-endscene">the documentation</a> <code>EndScene()</code> is parameterless. However, there&rsquo;s an implicit parameter of type <code>LPDIRECT3DDEVICE9</code>, which is the <code>this</code> pointer. Hence, <code>endSceneHook()</code> is required to have the following function prototype:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> APIENTRY <span style="color:#a6e22e">endSceneHook</span>(LPDIRECT3DDEVICE9 p_pDevice);
+</code></pre></div><p>Here&rsquo;s a list of all requirements:</p>
+<ul>
+<li>A DLL loader that injects the custom library into the game process. I&rsquo;ve originally built my own loader for <a href="https://github.com/ps1337/jka-multihack/blob/master/loader/loader.cpp">another project</a> but it also works for CS:GO.</li>
+<li>The actual DLL with <code>endSceneHook()</code> and other helper functions. This time, no external hooking libraries are going to be used, so setting up the hook is also part of this.</li>
+</ul>
+<h1 id="determining-the-endscene-function-address">Determining the <code>EndScene()</code> Function Address</h1>
+<p>Once the DLL is up and running in the game process, the first thing to do is to determine the address of the function that&rsquo;s going to be hooked. Some <a href="https://guidedhacking.com/threads/get-direct3d9-and-direct3d11-devices-dummy-device-method.11867/">clever</a> <a href="https://books.google.de/books?id=h4-7DQAAQBAJ&amp;pg=PA178&amp;lpg=PA178&amp;source=bl&amp;ots=11FGnjGNCZ&amp;sig=ACfU3U19vVv4z7qwzzg8oEwYHPSjHd9gAw&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwiv0-qHpO_pAhUMyKYKHZnoBI8Q6AEwAXoECAsQAQ#v=onepage">people</a> have found a convenient way to do this. The general approach is to create a dummy Direct 3D device object before copying its memory contents into a separate buffer. This object of type <code>IDirect3DDevice9</code> contains a virtual function table (VTable). At index <code>42</code>, there&rsquo;s a pointer to the <code>EndScene()</code> function that will be hooked. The index value is fixed for the Direct 3D 9 library, which CS:GO uses. You can confirm the index yourself by checking the  <code>IDirect3DDevice9ExVtbl</code> structure on <a href="https://chromium.googlesource.com/chromiumos/third_party/mesa/+/refs/heads/factory-samus-6658.B/include/D3D9/d3d9.h">this page</a>.</p>
+<p>For debugging purposes it&rsquo;s a good idea to place a breakpoint at the <code>EndScene()</code> function. An easy way to do this is to start <a href="https://x64dbg.com/#start">x64dbg</a>, download the symbols for <code>d3d9.dll</code> and searching for the function name:</p>
+<center>
+<img src="/img/d3dhook/d3d_endscene_symbols.png">
+</center>
+<p>The cool thing about this <em>dummy device technique</em> is that it&rsquo;s not necessary to hardcode function addresses or to scan the memory for the first bytes of the desired function.</p>
+<p>Here&rsquo;s my slightly modified version of the code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">// see https://guidedhacking.com/threads/get-direct3d9-and-direct3d11-devices-dummy-device-method.11867/
+</span><span style="color:#75715e">// Create the dummy d3d device and copy the object contents in order to obtain the
+</span><span style="color:#75715e">// addresses of functions that are about to be hooked
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">bool</span> d3dHelper<span style="color:#f92672">::</span>getD3D9Device() {
+    IDirect3D9<span style="color:#f92672">*</span> d3dSys <span style="color:#f92672">=</span> Direct3DCreate9(D3D_SDK_VERSION);
+    IDirect3DDevice9<span style="color:#f92672">*</span> dummyDev <span style="color:#f92672">=</span> NULL;
+
+    <span style="color:#75715e">// Options to create dummy device
+</span><span style="color:#75715e"></span>    D3DPRESENT_PARAMETERS d3dpp <span style="color:#f92672">=</span> {};
+    d3dpp.Windowed <span style="color:#f92672">=</span> false;
+    d3dpp.SwapEffect <span style="color:#f92672">=</span> D3DSWAPEFFECT_DISCARD;
+    d3dpp.hDeviceWindow <span style="color:#f92672">=</span> hwnd;
+
+    HRESULT dummyDeviceCreated <span style="color:#f92672">=</span> d3dSys<span style="color:#f92672">-&gt;</span>CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dpp.hDeviceWindow, D3DCREATE_SOFTWARE_VERTEXPROCESSING, <span style="color:#f92672">&amp;</span>d3dpp, <span style="color:#f92672">&amp;</span>dummyDev);
+
+    <span style="color:#75715e">// Copy memory to our own data structure
+</span><span style="color:#75715e"></span>    memcpy(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>d3d9DeviceTable, <span style="color:#f92672">*</span><span style="color:#66d9ef">reinterpret_cast</span><span style="color:#f92672">&lt;</span><span style="color:#66d9ef">void</span><span style="color:#f92672">***&gt;</span>(dummyDev), <span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>d3d9DeviceTable));
+
+    <span style="color:#75715e">// Destroy the device afterwards, we don&#39;t need it anymore
+</span><span style="color:#75715e"></span>    dummyDev<span style="color:#f92672">-&gt;</span>Release();
+    d3dSys<span style="color:#f92672">-&gt;</span>Release();
+    <span style="color:#66d9ef">return</span> true;
+}
+</code></pre></div><p><em>Error checking and checks for special cases have been removed, check the full source code I&rsquo;ve referenced at the end of this post for a copy-pasta-compatible version.</em></p>
+<p>Getting the function address for <code>EndScene()</code> is now as simple as this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> ogEndSceneAddress <span style="color:#f92672">=</span> d3dHelper.d3d9DeviceTable[<span style="color:#ae81ff">42</span>];
+</code></pre></div><h1 id="how-to-hook">How to Hook</h1>
+<p>Now it&rsquo;s time to place a hook at the function address that was just determined using the technique described above. I&rsquo;m using a <em>trampoline hook</em> here. <a href="https://guidedhacking.com/threads/simple-x86-c-trampoline-hook.14188/">Here&rsquo;s how it works</a>:</p>
+<ol start="0">
+<li>Allocate some executable and writable memory. I call it <em>trampoline</em>.</li>
+<li>Copy the first N bytes of the original function to the start of the trampoline. N is determined by checking the disassembly of the hooked function: It&rsquo;s necessary to only copy the function prologue since the trampoline needs to replicate it.</li>
+<li>The trampoline needs to be able to jump back to a specific instruction of the original function. The easiest way to accomplish this is to add a relative jump instruction to the trampoline. The jump and the destination address is appended to the copied function prologue.</li>
+<li>The beginning of the original function gets modified to cause it to take a detour to the trampoline. For this, the memory protection is modified temporarily since otherwise write operations to the code section may fail. At the beginning of the hooked function a relative jump to the trampoline is inserted by replacing the original instructions.</li>
+</ol>
+<p>The trampoline may seem unnecessary at first, but without the trampoline this would create an endless loop. <code>EndScene()</code> would jump to <code>endSceneHook()</code> which calls the original function at the end, returning to <code>EndScene()</code> which jumps to <code>endSceneHook()</code> again which calls the original function at the end, returning to <code>EndScene()</code> which jumps to <code>endSceneHook()</code> again which calls the original function at the end, returning to <code>EndScene()</code> which jumps to <code>endSceneHook()</code> again, and so on and on.</p>
+<p>Check this out for a better overview:</p>
+<center>
+<img src="/img/d3dhook/d3dhook.png">
+</center>
+<p>Here&rsquo;s some code for all this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> REL_JMP <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\xE9</span><span style="color:#e6db74">&#34;</span>;
+<span style="color:#75715e">// 1 byte instruction + 4 bytes address
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> SIZE_OF_REL_JMP <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;
+
+<span style="color:#75715e">// adapted from https://guidedhacking.com/threads/simple-x86-c-trampoline-hook.14188/
+</span><span style="color:#75715e">// hookedFn: The function that&#39;s about to the hooked
+</span><span style="color:#75715e">// hookFn: The function that will be executed before `hookedFn` by causing `hookFn` to take a detour
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> WINAPI <span style="color:#a6e22e">hookFn</span>(<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> hookedFn, <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> hookFn, <span style="color:#66d9ef">int</span> copyBytesSize, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> backupBytes, std<span style="color:#f92672">::</span>string descr) {
+
+    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 0. Backup the original function prologue
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    ReadProcessMemory(GetCurrentProcess(), hookedFn, backupBytes, copyBytesSize, <span style="color:#ae81ff">0</span>);
+
+    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 1. Setup the trampoline
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// --&gt; Cause `hookedFn` to return to `hookFn` without causing an infinite loop
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Otherwise calling `hookedFn` directly again would then call `hookFn` again, and so on :)
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// allocate executable memory for the trampoline
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// the size is (amount of bytes copied from the original function) + (size of a relative jump + address)
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> trampoline <span style="color:#f92672">=</span> (<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>)VirtualAlloc(<span style="color:#ae81ff">0</span>, copyBytesSize <span style="color:#f92672">+</span> SIZE_OF_REL_JMP, MEM_COMMIT <span style="color:#f92672">|</span> MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    <span style="color:#75715e">// steal the first `copyBytesSize` bytes from the original function
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// these will be used to make the trampoline work
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// --&gt; jump back to `hookedFn` without executing `hookFn` again
+</span><span style="color:#75715e"></span>    memcpy(trampoline, hookedFn, copyBytesSize);
+
+    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 2. append the relative JMP instruction after the stolen instructions, calculate and write the offset between the hooked function and the trampoline
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    memcpy(trampoline <span style="color:#f92672">+</span> copyBytesSize, REL_JMP, <span style="color:#66d9ef">sizeof</span>(REL_JMP));
+
+    <span style="color:#75715e">// Distance between the trampoline and the original function `hookedFn`
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// the jump will land *after* the inserted JMP instruction, hence subtracting 5
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> hookedFnTrampolineOffset <span style="color:#f92672">=</span> hookedFn <span style="color:#f92672">-</span> trampoline <span style="color:#f92672">-</span> SIZE_OF_REL_JMP;
+    memcpy(trampoline <span style="color:#f92672">+</span> copyBytesSize <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>hookedFnTrampolineOffset, <span style="color:#66d9ef">sizeof</span>(hookedFnTrampolineOffset));
+
+    <span style="color:#75715e">// 3. Detour the original function `hookedFn`
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// --&gt; cause `hookedFn` to execute `hookFn` first
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// remap the first few bytes of the original function as RXW
+</span><span style="color:#75715e"></span>    DWORD oldProtect;
+    VirtualProtect(hookedFn, copyBytesSize, PAGE_EXECUTE_READWRITE, <span style="color:#f92672">&amp;</span>oldProtect);
+
+    <span style="color:#75715e">// best variable name ever
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// calculate the size of the relative jump between the start of `hookedFn` and the start of `hookFn`.
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> hookedFnHookFnOffset <span style="color:#f92672">=</span> hookFn <span style="color:#f92672">-</span> hookedFn <span style="color:#f92672">-</span> SIZE_OF_REL_JMP;
+
+    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Take a relative jump to `hookFn` at the beginning
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// of course, `hookFn` has to expect the same parameter types and values
+</span><span style="color:#75715e"></span>    memcpy(hookedFn, REL_JMP, <span style="color:#66d9ef">sizeof</span>(REL_JMP));
+    memcpy(hookedFn <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>hookedFnHookFnOffset, <span style="color:#66d9ef">sizeof</span>(hookedFnHookFnOffset));
+
+    <span style="color:#75715e">// restore the previous protection values
+</span><span style="color:#75715e"></span>    VirtualProtect(hookedFn, copyBytesSize, oldProtect, <span style="color:#f92672">&amp;</span>oldProtect);
+
+    <span style="color:#66d9ef">return</span> trampoline;
+}
+</code></pre></div><p><em>Once again: Error checks removed.</em></p>
+<p>As can be seen, the <code>hookFn()</code> function returns the address of the trampoline. This is required by <code>endSceneHook()</code> (<em>Hook Function</em>), since it needs to call the trampoline function as can be seen on the image above.</p>
+<p>For all you low-level fans, here&rsquo;s what happens to the assembly during the hooking process:</p>
+<p><strong>Original <code>EndScene()</code>:</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x5F8F46A0</span>  <span style="color:#ae81ff">6</span><span style="color:#66d9ef">A</span> <span style="color:#ae81ff">14</span>           <span style="color:#66d9ef">push</span> <span style="color:#ae81ff">14</span>                         <span style="color:#75715e">; Prologue
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">0x5F8F46A2</span>  <span style="color:#66d9ef">B8</span> <span style="color:#ae81ff">2</span><span style="color:#66d9ef">E01915F</span>     <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">eax</span>,<span style="color:#66d9ef">d3d9.5F91012E</span>           <span style="color:#75715e">; Prologue
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">0x5F8F46A7</span>  <span style="color:#66d9ef">E8</span> <span style="color:#ae81ff">3</span><span style="color:#66d9ef">E8B0100</span>     <span style="color:#ae81ff">call</span> &lt;<span style="color:#66d9ef">d3d9.__EH_prolog3_catch</span>&gt;  <span style="color:#75715e">; Actual code
+</span><span style="color:#75715e">;&lt;more code&gt;
+</span></code></pre></div><p><strong>Modified <code>EndScene()</code> after hooking:</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x5F8F46A0</span>  <span style="color:#66d9ef">E9</span> <span style="color:#ae81ff">5</span><span style="color:#66d9ef">ECB0004</span>     <span style="color:#66d9ef">jmp</span> <span style="color:#66d9ef">dll.66F21203</span>                <span style="color:#75715e">; Jump to trampoline
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">0x5F8F46A5</span>  <span style="color:#ae81ff">91</span>              <span style="color:#960050;background-color:#1e0010">???</span>                             <span style="color:#75715e">; Trash, never executed
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">0x5F8F46A6</span>  <span style="color:#ae81ff">5</span><span style="color:#66d9ef">F</span>              <span style="color:#960050;background-color:#1e0010">???</span>                             <span style="color:#75715e">; Trash, never executed
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">0x5F8F46A7</span>  <span style="color:#66d9ef">E8</span> <span style="color:#ae81ff">3</span><span style="color:#66d9ef">E8B0100</span>     <span style="color:#ae81ff">call</span> &lt;<span style="color:#66d9ef">d3d9.__EH_prolog3_catch</span>&gt;  <span style="color:#75715e">; Actual code
+</span><span style="color:#75715e">;&lt;more code&gt;
+</span></code></pre></div><p><strong>Trampoline:</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x66F21203</span>  <span style="color:#ae81ff">6</span><span style="color:#66d9ef">A</span> <span style="color:#ae81ff">14</span>           <span style="color:#66d9ef">push</span> <span style="color:#ae81ff">14</span>                 <span style="color:#75715e">; Copied prologue
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">0x66F21205</span>  <span style="color:#66d9ef">B8</span> <span style="color:#ae81ff">2</span><span style="color:#66d9ef">E01915F</span>     <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">eax</span>,<span style="color:#66d9ef">d3d9.5F91012E</span>   <span style="color:#75715e">; Copied prologue
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">0x66F2120A</span>  <span style="color:#66d9ef">E9</span> <span style="color:#ae81ff">9</span><span style="color:#66d9ef">B464221</span>     <span style="color:#66d9ef">jmp</span> <span style="color:#66d9ef">d3d9.5F8F46A7</span>       <span style="color:#75715e">; Jump back to `EndScene()`
+</span></code></pre></div><h1 id="adding-content-to-a-scene">Adding Content to a Scene</h1>
+<p>Now only one more thing is missing: The actual <code>endSceneHook()</code> function that adds our custom content to each scene. Here&rsquo;s a little proof-of-concept that adds a small rectangle to the screen:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">[...]
+<span style="color:#75715e">// pointer to a function that&#39;s like the original EndScene() function
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">typedef</span> HRESULT(APIENTRY<span style="color:#f92672">*</span> endSceneFunc)(LPDIRECT3DDEVICE9 pDevice);
+<span style="color:#75715e">// the returned trampoline
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">extern</span> endSceneFunc trampEndScene;
+[...]
+
+<span style="color:#66d9ef">void</span> APIENTRY d3dHelper<span style="color:#f92672">::</span>endSceneHook(LPDIRECT3DDEVICE9 p_pDevice) {
+    <span style="color:#75715e">// Save the parameter, since it&#39; used by us in order to draw stuff
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>d3dDevice) {
+        d3dDevice <span style="color:#f92672">=</span> p_pDevice;
+    }
+
+    <span style="color:#75715e">// Do own stuff
+</span><span style="color:#75715e"></span>    drawRectangle(<span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">100</span>, D3DCOLOR_ARGB(<span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">255</span>, <span style="color:#ae81ff">255</span>));
+
+    <span style="color:#75715e">// Call original function using the trampoline
+</span><span style="color:#75715e"></span>    trampEndScene(d3dDevice);
+}
+</code></pre></div><h1 id="compiling">Compiling</h1>
+<p>I&rsquo;ve used these VisualStudio settings:</p>
+<ul>
+<li>Turn <em>Character Set</em> to <em>not set</em></li>
+<li>Turn off precompiled headers</li>
+<li>For the DLL: Add the <a href="https://www.microsoft.com/en-us/download/details.aspx?id=6812">DirectX SDK</a> to the additional linker libraries</li>
+<li>Compile the DLL as a x86 library. If you want to do this without VisualStudio you may need to download MinGW Multilib first and use this command:</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ g++ -m32 -shared -o dll.dll .<span style="color:#ae81ff">\d</span>ll.cpp
+</code></pre></div><hr>
+<h1 id="demo">Demo</h1>
+<p>Normally, there&rsquo;s no crosshair for sniper rifles in CS:GO:</p>
+<center>
+<img src="/img/d3dhook/nohax_comp.gif">
+</center>
+<p>My proof of concept DLL adds a beautiful crosshair that allows aiming without using the scope:</p>
+<center>
+<img src="/img/d3dhook/hax_comp.gif">
+</center>
+<center>
+<img src="/img/d3dhook/itssth.png" width="30%" height="30%">
+</center>
+<hr>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="https://github.com/ps1337/endscene-hook">My Source Code</a></li>
+<li><a href="https://guidedhacking.com/threads/get-direct3d9-and-direct3d11-devices-dummy-device-method.11867/">GuidedHacking: Direct3D Dummy Device Method</a></li>
+<li><a href="https://guidedhacking.com/threads/simple-x86-c-trampoline-hook.14188/">GuidedHacking: Simple x86 Trampoline Hook</a></li>
+<li><a href="https://www.youtube.com/watch?v=7QDkceeykbI">GuidedHacking: ESP Tutorial</a></li>
+<li><a href="https://nostarch.com/gamehacking">no starch press: Game Hacking Book by Nick Cano</a></li>
+<li><a href="https://books.google.de/books?id=h4-7DQAAQBAJ&amp;pg=PA178&amp;lpg=PA178&amp;source=bl&amp;ots=11FGnjGNCZ&amp;sig=ACfU3U19vVv4z7qwzzg8oEwYHPSjHd9gAw&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwiv0-qHpO_pAhUMyKYKHZnoBI8Q6AEwAXoECAsQAQ#v=onepage">Snippet for the game hacking Book by Nick Cano</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/r2frida-1/">Dynamic Instrumentation: Frida And r2frida For Noobs</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/r2ctf-2019/">r2con 2019 CTF Writeups</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>
