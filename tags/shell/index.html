@@ -175,10 +175,20 @@
         
         window.onload = setMode();
 
-        function setMode() {
+        function isLightMode() {
+
             const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
 
             if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
                 setLight();
             }
             else {
@@ -194,6 +204,7 @@
                 $(this).removeClass("fa-toggle-off");
                 $(this).addClass("fa-toggle-on");
             });
+            setAltImgs();
         }
 
         function setLight() {
@@ -203,6 +214,27 @@
             $(".fa-toggle-on").each(function (i) {
                 $(this).removeClass("fa-toggle-on");
                 $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
             });
         }
 
@@ -223,8 +255,8 @@
 
         });
 
-        
         $(document).ready(function () {
+            
             $(".fa-money").parent().mouseenter(function () {
                 confetti.reset();
 
@@ -239,6 +271,7 @@
                     startVelocity: 60
                 });
             });
+            setAltImgs();
         });
     </script>
 
@@ -384,7 +417,7 @@
 
 
 <footer id="footer">
-    <img style="width:42vh" src="/img/tag.png">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
 
     <p class="copyright text-muted">
 

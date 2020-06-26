@@ -14,6 +14,7 @@ html, body {
     --header-color: #333333;
     --img-opacity: 1;
     --home-text-opacity: 1;
+    --category-opacity: 1;
     --tag-opacity: 1;
     --bar-opacity: 1;
     --accent: #ffe135;
@@ -34,7 +35,8 @@ html, body {
     --header-low-color:hsl(210, 15%, 45%);
     --img-opacity: 0.75;
     --home-text-opacity: 0.75;
-    --tag-opacity: 0.75;
+    --category-opacity: 0.75;
+    --tag-opacity: 1;
     --bar-opacity: 0.75;
     --accent: #ffe135;
     --accent-rgba: rgba(255, 225, 53, 0.75);
@@ -181,7 +183,7 @@ a:hover {
 .item-tag {
     background-color: var(--accent);
     color: #000;
-    opacity: var(--tag-opacity);
+    opacity: var(--category-opacity);
 }
 
 .item-tag:hover {
@@ -217,12 +219,15 @@ img {
     max-width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+img:not(#mafia-tag) {
     opacity: var(--img-opacity);
     transition: opacity .5s ease-in-out;
 }
 
 /* Hover effect for dark mode images */
-img:hover {
+img:hover:not(#mafia-tag) {
     opacity: 1;
 }
 
