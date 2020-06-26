@@ -14,7 +14,6 @@
     }
 
     :root {
-        --accent: #ffe135;
         --border-width:  5px ;
     }
 
@@ -37,6 +36,7 @@
 
 
 <link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
  
 
 
@@ -268,7 +268,7 @@
 
     <br>
     <div class="content-width text-justify"><p>I&rsquo;ve experimented with even moar game hacking and hooking techniques and you didn&rsquo;t, so here comes another blog post.</p>
-<p>Today&rsquo;s topic is about hooking a specific function of the <a href="https://docs.microsoft.com/en-us/windows/win32/direct3d">Direct 3D</a> library with the goal to cause Counter Strike: Global Offensive to draw additional things on the screen. There can be various reasons to do this:</p>
+<p>Today&rsquo;s topic is about hooking a specific function of the <a href="https://docs.microsoft.com/en-us/windows/win32/direct3d">Direct3D</a> library with the goal to cause Counter Strike: Global Offensive to draw additional things on the screen. There can be various reasons to do this:</p>
 <ul>
 <li>It&rsquo;s possible to draw a crosshair on the screen when none is shown by the game. This allows players to <a href="https://www.urbandictionary.com/define.php?term=360%20No%20Scope">360 NoScope</a> all the enemies without zooming in first</li>
 <li>Show additional information on the screen, for example an enemy&rsquo;s health or the equipped weapon</li>
@@ -284,7 +284,7 @@
 <li>The actual DLL with <code>endSceneHook()</code> and other helper functions. This time, no external hooking libraries are going to be used, so setting up the hook is also part of this.</li>
 </ul>
 <h1 id="determining-the-endscene-function-address">Determining the <code>EndScene()</code> Function Address</h1>
-<p>Once the DLL is up and running in the game process, the first thing to do is to determine the address of the function that&rsquo;s going to be hooked. Some <a href="https://guidedhacking.com/threads/get-direct3d9-and-direct3d11-devices-dummy-device-method.11867/">clever</a> <a href="https://books.google.de/books?id=h4-7DQAAQBAJ&amp;pg=PA178&amp;lpg=PA178&amp;source=bl&amp;ots=11FGnjGNCZ&amp;sig=ACfU3U19vVv4z7qwzzg8oEwYHPSjHd9gAw&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwiv0-qHpO_pAhUMyKYKHZnoBI8Q6AEwAXoECAsQAQ#v=onepage">people</a> have found a convenient way to do this. The general approach is to create a dummy Direct 3D device object before copying its memory contents into a separate buffer. This object of type <code>IDirect3DDevice9</code> contains a virtual function table (VTable). At index <code>42</code>, there&rsquo;s a pointer to the <code>EndScene()</code> function that will be hooked. The index value is fixed for the Direct 3D 9 library, which CS:GO uses. You can confirm the index yourself by checking the  <code>IDirect3DDevice9ExVtbl</code> structure on <a href="https://chromium.googlesource.com/chromiumos/third_party/mesa/+/refs/heads/factory-samus-6658.B/include/D3D9/d3d9.h">this page</a>.</p>
+<p>Once the DLL is up and running in the game process, the first thing to do is to determine the address of the function that&rsquo;s going to be hooked. Some <a href="https://guidedhacking.com/threads/get-direct3d9-and-direct3d11-devices-dummy-device-method.11867/">clever</a> <a href="https://books.google.de/books?id=h4-7DQAAQBAJ&amp;pg=PA178&amp;lpg=PA178&amp;source=bl&amp;ots=11FGnjGNCZ&amp;sig=ACfU3U19vVv4z7qwzzg8oEwYHPSjHd9gAw&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwiv0-qHpO_pAhUMyKYKHZnoBI8Q6AEwAXoECAsQAQ#v=onepage">people</a> have found a convenient way to do this. The general approach is to create a dummy Direct3D device object before copying its memory contents into a separate buffer. This object of type <code>IDirect3DDevice9</code> contains a virtual function table (VTable). At index <code>42</code>, there&rsquo;s a pointer to the <code>EndScene()</code> function that will be hooked. The index value is fixed for the Direct3D 9 library, which CS:GO uses. You can confirm the index yourself by checking the  <code>IDirect3DDevice9ExVtbl</code> structure on <a href="https://chromium.googlesource.com/chromiumos/third_party/mesa/+/refs/heads/factory-samus-6658.B/include/D3D9/d3d9.h">this page</a>.</p>
 <p>For debugging purposes it&rsquo;s a good idea to place a breakpoint at the <code>EndScene()</code> function. An easy way to do this is to start <a href="https://x64dbg.com/#start">x64dbg</a>, download the symbols for <code>d3d9.dll</code> and searching for the function name:</p>
 <center>
 <img src="/img/d3dhook/d3d_endscene_symbols.png">
