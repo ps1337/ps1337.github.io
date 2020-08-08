@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.71.1" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.73.0" />
     
 
     
@@ -317,12 +317,12 @@
 <p>This year the most popular architecture was x86, but there also were some ARM and MIPS bots. I&rsquo;m going to create an ARM based bot for next year and <a href="https://anisse.astier.eu/r2wars-2019.html">this year&rsquo;s winner</a> is based on ARM too, so don&rsquo;t hesitate to step back from using x86 only. However, for beginners x86 is the best option to begin with in my opinion.</p>
 <h2 id="debugging">Debugging</h2>
 <p>Use this cool one-liner to assemble and debug your bot during development:</p>
-<pre><code>radare2 malloc://1024 -c &quot;e asm.arch=x86; e asm.bits=32; aei; aeim; wx $(rasm2 -a x86 -b 32 -f yoloBot.x86-32.asm) @100; aer PC=100; aer SP=SP+100; Vpp&quot;
+<pre><code>radare2 -c &quot;e asm.arch=x86; e asm.bits=32; aei; aeim; wx $(rasm2 -a x86 -b 32 -f yoloBot.x86-32.asm) @100; aer PC=100; aer SP=SP+100; Vpp&quot; malloc://1024
 </code></pre><p>After the visual view has opened, just step through the execution and fix your bugs.</p>
 <p><img src="/img/r2wars-2019/r2wars-dbg.gif" alt="r2wars Debug"></p>
 <h2 id="profiling">Profiling</h2>
 <p>A part of my strategy was to write as much data as possible in the most efficient way possible. I&rsquo;ve tried various instructions for this when developing my bot. To profile how well it performs, I&rsquo;ve used a fixed amount of instructions to execute and examined the memory space afterwards. This is the one-liner I&rsquo;ve used:</p>
-<pre><code>radare2 malloc://1024 -c &quot;e asm.arch=x86; e asm.bits=32; aei; aeim; wx $(rasm2 -a x86 -b 32 -f yoloBot.x86-32.asm) @100; aer PC=100; aer SP=SP+100; 150ds; s 0x0; V\!&quot;
+<pre><code>radare2 -c &quot;e asm.arch=x86; e asm.bits=32; aei; aeim; wx $(rasm2 -a x86 -b 32 -f yoloBot.x86-32.asm) @100; aer PC=100; aer SP=SP+100; 150ds; s 0x0; V\!&quot; malloc://1024
 </code></pre><p>This executes 150 instructions of bot code and opens the visual mode of <code>radare2</code>. You can now just scroll through the memory view and check for large blocks that consist of only null bytes. Finding such blocks of memory that haven&rsquo;t been overwritten is an indicator for an inefficient bot, since you might also just miss your opponent in battle:</p>
 <p><img src="/img/r2wars-2019/r2wars-profile.gif" alt="r2wars Profiling"></p>
 <p>You can profile variants of your bot using this method and choose the most efficient one afterwards.</p>
@@ -364,7 +364,8 @@ jmp esp ; execute 4th stage (embedded into registers and now written to memory)
 <li>Be aware that people at r2con will and are able to reverse your bot while it&rsquo;s running on the screen, since the whole code is displayed on there. Looking at you, <a href="https://twitter.com/Aissn">Anisse</a> :D</li>
 </ol>
 <br>
-<marquee>Thanks for reading, BYE. <3</marquee></div>
+<marquee>Thanks for reading, BYE. <3</marquee>
+</div>
 
     
     
