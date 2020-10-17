@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.73.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.75.1" />
     
 
     
@@ -148,8 +148,6 @@
                     <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
                     
                     <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
-                    
-                    <li class="navbar-icon"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=banana@bananamafia.dev&amp;item_name=Buy&#43;Me&#43;A&#43;Banana&amp;no_note=0&amp;cn=&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><i class="fa fa-money"></i></a></li>
                     
                 </ul>
                 
@@ -254,7 +252,7 @@
 
         $(document).ready(function () {
             
-            $(".fa-money").parent().mouseenter(function () {
+            $(".fa-envira").parent().mouseenter(function () {
                 confetti.reset();
 
                 confetti({
@@ -271,6 +269,7 @@
             setAltImgs();
         });
     </script>
+
 
 <main id="main">
 
@@ -417,10 +416,10 @@ bananaboiii
 <p>The PHP source code for this challenge was given.</p>
 <p>Opening the challenge in a browser shows a simple file upload form. It also shows the uploaded files afterwards and allows downloading them. Additionally, the output of <code>file $file</code> is shown next to the download link. The web application uses SQLite to store this meta data.</p>
 <p>While analyzing the source code, this was found to be rather suspicious:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">if (isset($_FILES[&#39;file&#39;]) <span style="color:#960050;background-color:#1e0010">&amp;&amp;</span> $_FILES[&#39;file&#39;][&#39;size&#39;] &lt; <span style="color:#f92672">10</span><span style="color:#960050;background-color:#1e0010">*</span><span style="color:#a6e22e">1024</span> <span style="color:#960050;background-color:#1e0010">){</span>
-    <span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">s </span><span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;INSERT INTO upload(info) VALUES (&#39;&#34;</span> <span style="color:#960050;background-color:#1e0010">.(</span><span style="color:#a6e22e">new</span> <span style="color:#a6e22e">finfo</span><span style="color:#960050;background-color:#1e0010">)</span><span style="color:#a6e22e">-</span>&gt;file($_FILES[&#39;file&#39;][&#39;tmp_name&#39;]). &#34; &#39;);&#34;;
-    $db-&gt;exec($s);
-    [...]
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isset</span>($_FILES[<span style="color:#e6db74">&#39;file&#39;</span>]) <span style="color:#f92672">&amp;&amp;</span> $_FILES[<span style="color:#e6db74">&#39;file&#39;</span>][<span style="color:#e6db74">&#39;size&#39;</span>] <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">10</span><span style="color:#f92672">*</span><span style="color:#ae81ff">1024</span> ){
+    $s <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;INSERT INTO upload(info) VALUES (&#39;&#34;</span> <span style="color:#f92672">.</span>(<span style="color:#66d9ef">new</span> <span style="color:#a6e22e">finfo</span>)<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">file</span>($_FILES[<span style="color:#e6db74">&#39;file&#39;</span>][<span style="color:#e6db74">&#39;tmp_name&#39;</span>])<span style="color:#f92672">.</span> <span style="color:#e6db74">&#34; &#39;);&#34;</span>;
+    $db<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">exec</span>($s);
+    [<span style="color:#f92672">...</span>]
 }
 </code></pre></div><p>The web application passes the output of <code>(new finfo)-&gt;file($file)</code> to the database without prior sanitation. This means that SQLite injection can be achieved by causing the <code>file $file</code> call to output the injection payload.</p>
 <p>The initial approach was to check the filetype database of <a href="https://github.com/file/file/tree/master/magic/Magdir">GNU file</a> to find a file type that allows to control the output. The <code>Magdir</code> files in the link above use the placeholder <code>%s</code> exactly for this cause. While messing around with several files, it was found that <code>.tar.gz</code> files can be used for this:</p>

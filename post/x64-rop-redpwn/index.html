@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.73.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.75.1" />
     
 
     
@@ -148,8 +148,6 @@
                     <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
                     
                     <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
-                    
-                    <li class="navbar-icon"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=banana@bananamafia.dev&amp;item_name=Buy&#43;Me&#43;A&#43;Banana&amp;no_note=0&amp;cn=&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><i class="fa fa-money"></i></a></li>
                     
                 </ul>
                 
@@ -254,7 +252,7 @@
 
         $(document).ready(function () {
             
-            $(".fa-money").parent().mouseenter(function () {
+            $(".fa-envira").parent().mouseenter(function () {
                 confetti.reset();
 
                 confetti({
@@ -271,6 +269,7 @@
             setAltImgs();
         });
     </script>
+
 
 <main id="main">
 
@@ -302,10 +301,10 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>Based on the <em>Stop, ROP, n&rsquo;, Roll</em> challenge from this year&rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&rsquo;s using <em>glibc</em>. Of course, everything will be done with <code>radare2</code> and <code>pwntools</code>.</p>
+    <div class="content-width text-justify"><p>Based on the <em>Stop, ROP, n', Roll</em> challenge from this year&rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&rsquo;s using <em>glibc</em>. Of course, everything will be done with <code>radare2</code> and <code>pwntools</code>.</p>
 <p>The challenge binary can be found <a href="/misc/x64-rop-redpwn/srnr">here</a>.</p>
 <h1 id="ret2csu-basics">ret2csu Basics</h1>
-<p>The <em>ret2csu</em> technique, which has been presented at Black Hat Asia in 2018, is based on two specific ROP gadgets that are present in the <code>__libc_csu_init()</code> function. Lets&rsquo; quote the authors of the <a href="/misc/x64-rop-redpwn/asia-18-Marco-return-to-csu-a-new-method-to-bypass-the-64-bit-Linux-ASLR-wp.pdf">ret2csu paper</a> to explain why this function is even there:</p>
+<p>The <em>ret2csu</em> technique, which has been presented at Black Hat Asia in 2018, is based on two specific ROP gadgets that are present in the <code>__libc_csu_init()</code> function. Lets' quote the authors of the <a href="/misc/x64-rop-redpwn/asia-18-Marco-return-to-csu-a-new-method-to-bypass-the-64-bit-Linux-ASLR-wp.pdf">ret2csu paper</a> to explain why this function is even there:</p>
 <p><em>The problem appears when an application is Dynamically compiled, which represents
 99% of all applications. More precisely when the linker &ldquo;attaches code&rdquo; to the ELF
 executable that is not coming from the source code of the application. In other words the

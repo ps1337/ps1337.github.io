@@ -5,11 +5,7 @@
     <link>https://bananamafia.dev/tags/dockerfiles/</link>
     <description>Recent content in dockerfiles on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    
-	<atom:link href="https://bananamafia.dev/tags/dockerfiles/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language><atom:link href="https://bananamafia.dev/tags/dockerfiles/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dockerfiles</title>
       <link>https://bananamafia.dev/project/dockerfiles/</link>

@@ -6,11 +6,7 @@
     <description>Recent content in ret2libc on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 01 May 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://bananamafia.dev/tags/ret2libc/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 01 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/ret2libc/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Bypassing ASLR and DEP for 32-Bit Binaries With r2</title>
       <link>https://bananamafia.dev/post/binary-aslr-dep-32/</link>

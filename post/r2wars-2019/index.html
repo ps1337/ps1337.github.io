@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.73.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.75.1" />
     
 
     
@@ -148,8 +148,6 @@
                     <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
                     
                     <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
-                    
-                    <li class="navbar-icon"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=banana@bananamafia.dev&amp;item_name=Buy&#43;Me&#43;A&#43;Banana&amp;no_note=0&amp;cn=&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><i class="fa fa-money"></i></a></li>
                     
                 </ul>
                 
@@ -254,7 +252,7 @@
 
         $(document).ready(function () {
             
-            $(".fa-money").parent().mouseenter(function () {
+            $(".fa-envira").parent().mouseenter(function () {
                 confetti.reset();
 
                 confetti({
@@ -271,6 +269,7 @@
             setAltImgs();
         });
     </script>
+
 
 <main id="main">
 
@@ -298,7 +297,7 @@
     <br>
     <div class="content-width text-justify"><p>As every year at <a href="https://rada.re/con/2019/">r2con</a>, the r2wars competition was hosted by <a href="https://twitter.com/sanguinawer">sanguinawer</a> and the <code>r2</code> overlord <a href="https://twitter.com/trufae">pancake</a>. I&rsquo;ve made it to the second place in this year&rsquo;s battles, so I&rsquo;ve promised to create a writeup for my participation &ndash; and here it is. Welcome to the nerdiest game in town.</p>
 <h1 id="lol-whats-r2wars-again">Lol What&rsquo;s r2wars Again?</h1>
-<p>The r2wars competition is based on <code>radare2</code>'s <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">ESIL</a> (Evaluable Strings Intermediate Language) engine. It&rsquo;s normally used to emulate instructions of various architectures during reverse engineering. It&rsquo;s definitely a useful feature of <code>radare2</code> and you can find more information <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">here</a> if you want to get started using it.</p>
+<p>The r2wars competition is based on <code>radare2</code>&rsquo;s <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">ESIL</a> (Evaluable Strings Intermediate Language) engine. It&rsquo;s normally used to emulate instructions of various architectures during reverse engineering. It&rsquo;s definitely a useful feature of <code>radare2</code> and you can find more information <a href="https://radare.gitbooks.io/radare2book/disassembling/esil.html">here</a> if you want to get started using it.</p>
 <p>In order to find and fix bugs in the ESIL engine, r2wars was created to have fun and find bugs at the same time. Let&rsquo;s just quote the description of the r2wars competition for more information:</p>
 <p><em>Participants must submit small programs written in assembly (assembled by rasm2) to be executed with ESIL in a shared memory space inside r2.</em></p>
 <p><em>The objective of those programs is to find out the other program location and overwrite its code to make it crash, the last program to survive wins.</em></p>

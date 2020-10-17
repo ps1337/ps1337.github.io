@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.73.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.75.1" />
     
 
     
@@ -148,8 +148,6 @@
                     <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
                     
                     <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
-                    
-                    <li class="navbar-icon"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=banana@bananamafia.dev&amp;item_name=Buy&#43;Me&#43;A&#43;Banana&amp;no_note=0&amp;cn=&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><i class="fa fa-money"></i></a></li>
                     
                 </ul>
                 
@@ -254,7 +252,7 @@
 
         $(document).ready(function () {
             
-            $(".fa-money").parent().mouseenter(function () {
+            $(".fa-envira").parent().mouseenter(function () {
                 confetti.reset();
 
                 confetti({
@@ -271,6 +269,7 @@
             setAltImgs();
         });
     </script>
+
 
 <main id="main">
 
@@ -325,7 +324,7 @@
 <p>The game can be debugged using <a href="http://bgb.bircd.org">bgb</a>. During a debugging session it&rsquo;s possible to read the loaded image data that&rsquo;s being used to display the game environment. This data contains the flag, stored as map image data.</p>
 </li>
 <li>
-<p>I&rsquo;ve emulated the ROM using <code>vbam</code>. This emulator implements a convenient feature that allows users to speed up time while holding the space key. All I did was holding the space key while also holding <code>q</code> in order to constantly start the dialog with the character that knows about the flag. Lets&rsquo; check out what happens after a few seconds:</p>
+<p>I&rsquo;ve emulated the ROM using <code>vbam</code>. This emulator implements a convenient feature that allows users to speed up time while holding the space key. All I did was holding the space key while also holding <code>q</code> in order to constantly start the dialog with the character that knows about the flag. Lets' check out what happens after a few seconds:</p>
 </li>
 </ol>
 <p><img src="/img/r2ctf-2019/r2boy2.gif" alt="lol"></p>

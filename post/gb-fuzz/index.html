@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.73.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.75.1" />
     
 
     
@@ -148,8 +148,6 @@
                     <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
                     
                     <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
-                    
-                    <li class="navbar-icon"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=banana@bananamafia.dev&amp;item_name=Buy&#43;Me&#43;A&#43;Banana&amp;no_note=0&amp;cn=&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><i class="fa fa-money"></i></a></li>
                     
                 </ul>
                 
@@ -254,7 +252,7 @@
 
         $(document).ready(function () {
             
-            $(".fa-money").parent().mouseenter(function () {
+            $(".fa-envira").parent().mouseenter(function () {
                 confetti.reset();
 
                 confetti({
@@ -271,6 +269,7 @@
             setAltImgs();
         });
     </script>
+
 
 <main id="main">
 
@@ -466,7 +465,7 @@ SUMMARY: AddressSanitizer: global-buffer-overflow /path/to/vbam/visualboyadvance
     }
     [...]
 }
-</code></pre></div><p>The fuzzer found various inputs file that cause the value of <code>gbDataTAMA5.mapperCommandNumber</code> to become larger than the <code>gbDataTAMA5.mapperCommands</code> array, which is static and always holds 16 entries. This results in a write operation of 4 bytes that goes beyond the <code>gbDataTAMA5</code> structure. In fact, it was possible to write to other structures nearby. There&rsquo;s a limitation that restricts the overflow from going beyond the offset <code>0xFF</code> since VBA-M reads only a single byte into the index. This happens even though the data type of the index itself is an integer.</p>
+</code></pre></div><p>The fuzzer found various input files that cause the value of <code>gbDataTAMA5.mapperCommandNumber</code> to become larger than the <code>gbDataTAMA5.mapperCommands</code> array, which is static and always holds 16 entries. This results in a write operation of 4 bytes that goes beyond the <code>gbDataTAMA5</code> structure. In fact, it was possible to write to other structures nearby. There&rsquo;s a limitation that restricts the overflow from going beyond the offset <code>0xFF</code> since VBA-M reads only a single byte into the index. This happens even though the data type of the index itself is an integer.</p>
 <p>Since I had over 850 unique cases that trigger this bug, I&rsquo;ve checked how much each one overflows the array using a GDB batch script called <code>dump.gdb</code>:</p>
 <pre><code>break *mapperTAMA5RAM+153
 r
@@ -593,7 +592,8 @@ char filename[2048];
 <marquee>
 <b>OK BYE!</b>
 </marquee>
-</center></div>
+</center>
+</div>
 
     
     

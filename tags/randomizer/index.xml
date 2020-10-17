@@ -5,11 +5,7 @@
     <link>https://bananamafia.dev/tags/randomizer/</link>
     <description>Recent content in randomizer on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    
-	<atom:link href="https://bananamafia.dev/tags/randomizer/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language><atom:link href="https://bananamafia.dev/tags/randomizer/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>RandomJK</title>
       <link>https://bananamafia.dev/project/randomjk/</link>

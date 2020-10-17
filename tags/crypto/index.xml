@@ -6,11 +6,7 @@
     <description>Recent content in crypto on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Aug 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://bananamafia.dev/tags/crypto/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 11 Aug 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/crypto/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>CryptoCTF 2019 Writeup: Decode Me</title>
       <link>https://bananamafia.dev/post/cryptoctf-1-decodeme/</link>

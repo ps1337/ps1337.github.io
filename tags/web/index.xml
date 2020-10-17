@@ -6,11 +6,7 @@
     <description>Recent content in web on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 17 Dec 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://bananamafia.dev/tags/web/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 17 Dec 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/web/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Open Redirects In State Parameters</title>
       <link>https://bananamafia.dev/post/openredirect/</link>

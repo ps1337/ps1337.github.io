@@ -6,11 +6,7 @@
     <description>Recent content in travis on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://bananamafia.dev/tags/travis/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/travis/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Dotfile-tools</title>
       <link>https://bananamafia.dev/project/dotfile-tools/</link>
