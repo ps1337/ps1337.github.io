@@ -63,8 +63,33 @@
   </url>
   
   <url>
+    <loc>https://bananamafia.dev/tags/backup/</loc>
+    <lastmod>2021-01-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://bananamafia.dev/</loc>
-    <lastmod>2020-06-04T00:00:00+00:00</lastmod>
+    <lastmod>2021-01-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/syncthing-monitor/</loc>
+    <lastmod>2021-01-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2021-01-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/python/</loc>
+    <lastmod>2021-01-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2021-01-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -93,17 +118,7 @@
   </url>
   
   <url>
-    <loc>https://bananamafia.dev/post/</loc>
-    <lastmod>2020-06-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://bananamafia.dev/tags/reverse-engineering/</loc>
-    <lastmod>2020-06-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
   </url>
   
@@ -454,11 +469,6 @@
   
   <url>
     <loc>https://bananamafia.dev/post/mserver-crack/</loc>
-    <lastmod>2018-05-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/python/</loc>
     <lastmod>2018-05-13T00:00:00+00:00</lastmod>
   </url>
   

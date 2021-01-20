@@ -6,7 +6,7 @@
     <description>Recent content in python on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 May 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 20 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>CANalyzat0r</title>
       <link>https://bananamafia.dev/project/canalyzat0r/</link>
@@ -23,6 +23,16 @@
       
       <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Does This Syncthing Work?</title>
+      <link>https://bananamafia.dev/post/syncthing-monitor/</link>
+      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/syncthing-monitor/</guid>
+      <description>OK, so syncthing is cool for automatic synchronization and backups and all of that stuff. But there are also times when you open the web UI and notice that no data transfer has happened within the last two months. Nice!
+This is often caused by faulty run conditions that can be set in the app or network errors. The syncthing server may also have some trouble, too. I&amp;rsquo;ve decided to create a little bot with the goal to monitor sync progress and to send out alerts in case of failure.</description>
     </item>
     
     <item>

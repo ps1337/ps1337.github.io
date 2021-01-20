@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>backup on BananaMafia</title>
+    <link>https://bananamafia.dev/tags/backup/</link>
+    <description>Recent content in backup on BananaMafia</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/backup/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Does This Syncthing Work?</title>
+      <link>https://bananamafia.dev/post/syncthing-monitor/</link>
+      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/syncthing-monitor/</guid>
+      <description>OK, so syncthing is cool for automatic synchronization and backups and all of that stuff. But there are also times when you open the web UI and notice that no data transfer has happened within the last two months. Nice!
+This is often caused by faulty run conditions that can be set in the app or network errors. The syncthing server may also have some trouble, too. I&amp;rsquo;ve decided to create a little bot with the goal to monitor sync progress and to send out alerts in case of failure.</description>
+    </item>
+    
+    <item>
+      <title>Easy and Secure Backups Using Borg and Docker</title>
+      <link>https://bananamafia.dev/post/docker-borg/</link>
+      <pubDate>Wed, 14 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/docker-borg/</guid>
+      <description>BorgBackup is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.
+Getting started I&amp;rsquo;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
+This Makefile can be used to quickly get started using a containerized version of Borg:
+SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell echo $(shell cd &amp;quot;$(shell dirname &amp;quot;${BASH_SOURCE[0]}&amp;quot; )&amp;quot; &amp;amp;&amp;amp; pwd )) IMAGE_NAME ?</description>
+    </item>
+    
+  </channel>
+</rss>

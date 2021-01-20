@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Does This Syncthing Work?</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.79.0" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">Does This Syncthing Work?</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana_!AT!_bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/syncthing-monitor/">Does This Syncthing Work?</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/backup"><kbd class="item-tag">backup</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>OK, so <a href="https://github.com/syncthing/syncthing">syncthing</a> is cool for automatic synchronization and backups and all of that stuff. But there are also times when you open the web UI and notice that no data transfer has happened within the last two months. Nice!</p>
+<p>This is often caused by faulty <em>run conditions</em> that can be set in the app or network errors. The syncthing server may also have some trouble, too. I&rsquo;ve decided to create a little bot with the goal to monitor sync progress and to send out alerts in case of failure. I&rsquo;m using a Telegram bot to get notified. In a previous post, I&rsquo;ve described how to <a href="https://bananamafia.dev/post/telegram-notifications/">create such a Telegram bot</a>.</p>
+<p>The bot uses the <a href="https://docs.syncthing.net/rest/stats-device-get.html">syncthing REST API</a> to check the <code>lastSeen</code> timestamp of each device and compares it to the current date and time. It then sends out the <code>lastSeen</code> value and the time delta. Of course, it&rsquo;s also possible to create an alert in case the time delta is greater than a few days.</p>
+<h1 id="ok-whats-required">OK What&rsquo;s Required?</h1>
+<ul>
+<li>A <a href="https://docs.syncthing.net/dev/rest.html#api-key">syncthing API key</a></li>
+<li>The device identifier for each device that&rsquo;s going to be monitored. You can get these identifiers using the web GUI.</li>
+<li>If you&rsquo;re using Telegram: The bot API token and the chat ID.</li>
+</ul>
+<h1 id="give-code-please">Give Code Please</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/env python3</span>
+
+<span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> time
+<span style="color:#f92672">from</span> datetime <span style="color:#f92672">import</span> datetime, timedelta
+
+<span style="color:#75715e"># map device names to syncthing identifiers</span>
+DEVICES <span style="color:#f92672">=</span> {
+    <span style="color:#e6db74">&#34;bananaphone&#34;</span>:
+    <span style="color:#e6db74">&#34;YOLOBOI-[...]-[...]-[...]-[...]-[...]-[...]-[...]&#34;</span>
+}
+
+HEADERS <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;X-API-Key&#34;</span>: <span style="color:#e6db74">&#34;[Syncthing API key]&#34;</span>}
+TOKEN <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;[Telegram bot token]&#34;</span>
+CHATID <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;[Telegram Chat ID]&#34;</span>
+PARAMS <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;chat_id&#34;</span>: CHATID}
+
+<span style="color:#66d9ef">while</span> True:
+    r <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://[...]/rest/stats/device&#34;</span>,
+                     headers<span style="color:#f92672">=</span>HEADERS)
+    j <span style="color:#f92672">=</span> r<span style="color:#f92672">.</span>json()
+
+    <span style="color:#66d9ef">for</span> device <span style="color:#f92672">in</span> DEVICES<span style="color:#f92672">.</span>items():
+        ID <span style="color:#f92672">=</span> device[<span style="color:#ae81ff">1</span>]
+        lastSeen <span style="color:#f92672">=</span> j[ID][<span style="color:#e6db74">&#34;lastSeen&#34;</span>]
+        <span style="color:#75715e"># high quality parsing</span>
+        tsLastSeen <span style="color:#f92672">=</span> datetime<span style="color:#f92672">.</span>strptime(lastSeen<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;T&#34;</span>)[<span style="color:#ae81ff">0</span>], <span style="color:#e6db74">&#34;%Y-%m-</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>)
+        daysDelta <span style="color:#f92672">=</span> (datetime<span style="color:#f92672">.</span>now() <span style="color:#f92672">-</span> tsLastSeen)<span style="color:#f92672">.</span>days
+        sendStr <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">)&#34;</span> <span style="color:#f92672">%</span> (device[<span style="color:#ae81ff">0</span>], lastSeen, daysDelta)
+        _tmpParams <span style="color:#f92672">=</span> dict(PARAMS)
+        _tmpParams[<span style="color:#e6db74">&#34;text&#34;</span>] <span style="color:#f92672">=</span> sendStr
+        requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;https://api.telegram.org/bot</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/sendMessage&#34;</span> <span style="color:#f92672">%</span> (TOKEN), params<span style="color:#f92672">=</span>_tmpParams)
+
+    <span style="color:#75715e"># one day</span>
+    time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">86400</span>)
+</code></pre></div><h2 id="deploying-the-bot">Deploying the Bot</h2>
+<p>I&rsquo;m using this <code>Dockerfile</code> to run this thing:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">FROM debian:latest
+
+RUN apt update <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    apt -y install python3 python3-pip <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    pip3 install pipenv
+
+COPY . /opt/syncthing-monitor
+WORKDIR /opt/syncthing-monitor
+RUN pipenv --python <span style="color:#ae81ff">3</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    pipenv install requests
+
+HEALTHCHECK --interval<span style="color:#f92672">=</span>60m --timeout<span style="color:#f92672">=</span>5s CMD curl --fail -k <span style="color:#f92672">[</span>syncthing instance<span style="color:#f92672">]</span>  <span style="color:#f92672">||</span> kill <span style="color:#ae81ff">1</span>
+
+CMD pipenv shell python3 /opt/syncthing-monitor/monitor.py
+</code></pre></div><br>
+<marquee>ok bye</marquee></div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/python-hax/">2 Common Python Security Issues</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/docker-borg/">Easy and Secure Backups Using Borg and Docker</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/borg"><kbd class="item-tag">borg</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/backup"><kbd class="item-tag">backup</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>
