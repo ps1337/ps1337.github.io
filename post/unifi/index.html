@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Building a Cloudless UniFi Security System That Doesn&#39;t Suck</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.80.0" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">Building a Cloudless UniFi Security System That Doesn&#39;t Suck</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana-#@#-bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/unifi/">Building a Cloudless UniFi Security System That Doesn&#39;t Suck</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>If you&rsquo;re like me (rich), it&rsquo;s likely that you want to monitor and protect your ice and gold chainz with technical measures. Since <a href="https://krebsonsecurity.com/tag/ubiquiti-breach/">cloud based solutions are not an option</a> for me, I&rsquo;ve built a system that&rsquo;s self-hosted. It&rsquo;s based on my existing UniFi network setup, a UniFi camera and this software:</p>
+<ul>
+<li>UniFi Controller: This is used to manage all UniFi devices in a network.</li>
+<li>UniFi Network Video Recorder (NVR): This is a controller and video recording manager for UniFi cameras.</li>
+</ul>
+<p>All of this can be self-hosted without requiring any cloud connections. In fact, you can add some firewall rules to prevent any outbound connections and it will still work as expected.</p>
+<h2 id="what-to-build">What to Build</h2>
+<p>Now, what this system should be doing is:</p>
+<ul>
+<li>Tell the camera to record as soon as motion is detected.</li>
+<li>Check if there&rsquo;s a new recording and send out an alarm via Telegram and Signal, optionally with the recorded video as an attachment.</li>
+<li>Play a crazy MP3 on all Sonos devices connected to the network.</li>
+</ul>
+<p>Enabling and disabling all of this based on the WiFi connection status of my smartphone. This way, the alarm system gets armed and disarmed automatically. For this to work as efficient as possible, the UniFi API of both the controller and the NVR can be of use. There&rsquo;s only one slight problem: Some required API functions are undocumented. At least there&rsquo;s <a href="https://ubntwiki.com/products/software/unifi-controller/api">some unofficial documentation</a> available so not all is lost. Also, these repositories offer great Python libraries that can be used as well:</p>
+<ul>
+<li><a href="https://github.com/yuppity/unifi-video-api">unifi-video-api</a> for the NVR.</li>
+<li><a href="https://github.com/finish06/pyunifi">PyUnifi</a> for the Controller.</li>
+<li><a href="https://github.com/oznu/unifi-events">unifi-events</a> to properly make use of the websocket APIs.</li>
+</ul>
+<h1 id="websocket-event-api">Websocket Event API</h1>
+<p>Websockets allow receiving event driven data without requiring constant polling for new info, so that&rsquo;s pretty cool. Both the Controller and the NVR offer such an API. It&rsquo;s undocumented as well but I&rsquo;ll show my use cases in this section.</p>
+<p>OK, how to inspect and check out websockets? Just use the Chrome developer tools and switch to the <em>WS</em> tab under <em>Network</em> after logging in into the Controller web application:</p>
+<p><img src="/img/unifi/websocket.png" alt="Da Socket"></p>
+<p>The Controller sends out messages that contain information on clients entering and leaving the WiFi network. The NVR also sends out a websocket message as soon as a new recording gets created. These are the relevant API endpoints for the websockets:</p>
+<ul>
+<li>Controller: <code>wss://IP:PORT/wss/s/default/events</code></li>
+<li>NVR: <code>wss://IP:PORT/ws/update?compress=true</code></li>
+</ul>
+<p>Let&rsquo;s see how to get this event data using Python code.</p>
+<h2 id="using-the-websocket-api">Using the Websocket API</h2>
+<p>Luckily, the <code>unifi-events</code> repository I&rsquo;ve mentioned above already contains some code that&rsquo;s useful when interacting with websockets. I&rsquo;ve modified it slightly for this post:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Get a session cookie</span>
+jar <span style="color:#f92672">=</span> aiohttp<span style="color:#f92672">.</span>CookieJar(unsafe<span style="color:#f92672">=</span>True)
+json_request <span style="color:#f92672">=</span> {    <span style="color:#e6db74">&#39;username&#39;</span>: CONTROLLER_USER,
+                    <span style="color:#e6db74">&#39;password&#39;</span>: CONTROLLER_PASSWORD,
+                    <span style="color:#e6db74">&#39;strict&#39;</span>: True
+               }
+
+async <span style="color:#66d9ef">with</span> aiohttp<span style="color:#f92672">.</span>ClientSession(cookie_jar<span style="color:#f92672">=</span>jar) <span style="color:#66d9ef">as</span> session:
+    async <span style="color:#66d9ef">with</span> session<span style="color:#f92672">.</span>ws_connect(self<span style="color:#f92672">.</span>ws_url,
+                                    autoping<span style="color:#f92672">=</span>True,
+                                    heartbeat<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>,
+                                    ssl<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>ssl_verify,
+                                    timeout<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>timeout) <span style="color:#66d9ef">as</span> ws:
+        async <span style="color:#66d9ef">for</span> msg <span style="color:#f92672">in</span> ws:
+            <span style="color:#66d9ef">if</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>TEXT:
+                self<span style="color:#f92672">.</span>update_data(msg<span style="color:#f92672">.</span>json(loads<span style="color:#f92672">=</span>json<span style="color:#f92672">.</span>loads))
+            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>BINARY:
+                deflated <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(zlib<span style="color:#f92672">.</span>decompress(msg<span style="color:#f92672">.</span>data))
+                self<span style="color:#f92672">.</span>update_data(deflated)
+            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>CLOSE:
+                log<span style="color:#f92672">.</span>warn(<span style="color:#e6db74">&#39;WS closed: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> msg<span style="color:#f92672">.</span>extra)
+                <span style="color:#66d9ef">break</span>
+            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>ERROR:
+                log<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;WS closed with Error&#39;</span>)
+                <span style="color:#66d9ef">break</span>
+</code></pre></div><p>A few things are important here:</p>
+<ul>
+<li>Authentication is required, so a session cookie has to be received first. A read-only user is sufficient for the Controller. In case of the NVR, the user has to be able to alter camera settings.</li>
+<li>Using a session keepalive with the <code>autoping</code> and <code>heartbeat</code> parameters is required for the NVR websocket. If you don&rsquo;t use it, the server may close the connection after a while.</li>
+<li>There can be various types of received data. The messages containing useful data are of type <code>TEXT</code> and <code>BINARY</code>. The difference is that binary data has to be decompressed first, as seen above. I&rsquo;ve found that the NVR only sends out events for new recordings in binary mode, so it&rsquo;s important to use the <code>compress=true</code> URL parameter when creating the websocket.</li>
+</ul>
+<p>I&rsquo;m creating a new thread for each websocket that adds data to a queue. The main thread then removes data from those queues and processes it.</p>
+<h2 id="controller-api-limitations-">Controller API Limitations ❤</h2>
+<p>The Controller is not aware of leaving WiFi clients in case they don&rsquo;t send a disassociation frame. This happens if the client just walks away and loses the connection. There&rsquo;s no way to get notified for this by the API because there&rsquo;s simply no event being generated. This results in the alarm not being armed in this case.</p>
+<p>Ping to the rescue. I&rsquo;m pinging my phone regularly to determine the connection status. Since this runs in an own thread and may trigger camera settings to change, a mutex is now required to prevent race conditions with the main thread.</p>
+<p>Disarming the alarm system works like a charm though, since this always generates an new event.</p>
+<h1 id="camera-api">Camera API</h1>
+<p>OK cool, now the system is able to determine when to arm and it gets notified in case a new recording is available. It&rsquo;s now required that the camera settings get adjusted accordingly. As already mentioned, I&rsquo;ve used <code>unifi-video-api</code> for this purpose. This works via the normal HTTP API and has nothing to do with websockets.</p>
+<h2 id="changing-settings">Changing Settings</h2>
+<p>Changing camera settings isn&rsquo;t fully implemented by the library for all settings though. That&rsquo;s why I&rsquo;m using my own wrapper functions. The current settings are being retrieved, changed sent back to the NVR:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getCameraSettings</span>():
+    cfg <span style="color:#f92672">=</span> NVR<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;camera/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_CAMERA_ID))[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#ae81ff">0</span>]
+    <span style="color:#66d9ef">assert</span> cfg[<span style="color:#e6db74">&#34;deviceSettings&#34;</span>][<span style="color:#e6db74">&#34;name&#34;</span>] <span style="color:#f92672">==</span> NVR_CAMERA_NAME
+    <span style="color:#66d9ef">return</span> cfg
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">setCameraSettings</span>(led, sound):
+    recMode <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;disable&#34;</span> <span style="color:#66d9ef">if</span> SOMEONE_HOME <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;motion&#34;</span>
+    G3 <span style="color:#f92672">=</span> NVR<span style="color:#f92672">.</span>get_camera(NVR_CAMERA_NAME)
+    G3<span style="color:#f92672">.</span>set_recording_settings(recording_mode<span style="color:#f92672">=</span>recMode)
+
+    cfg <span style="color:#f92672">=</span> getCameraSettings()
+    cfg[<span style="color:#e6db74">&#34;systemSoundsEnabled&#34;</span>] <span style="color:#f92672">=</span> sound
+    cfg[<span style="color:#e6db74">&#34;enableSoundAlert&#34;</span>] <span style="color:#f92672">=</span> sound
+    cfg[<span style="color:#e6db74">&#34;enableStatusLed&#34;</span>] <span style="color:#f92672">=</span> led
+    cfg[<span style="color:#e6db74">&#34;enableSpeaker&#34;</span>] <span style="color:#f92672">=</span> sound
+    cfg[<span style="color:#e6db74">&#34;enableRecordingIndicator&#34;</span>] <span style="color:#f92672">=</span> sound
+    NVR<span style="color:#f92672">.</span>put(<span style="color:#e6db74">&#34;camera/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_CAMERA_ID), data<span style="color:#f92672">=</span>cfg)
+</code></pre></div><h2 id="downloading-recordings">Downloading Recordings</h2>
+<p>It&rsquo;s alert time, how to get the newest recording? I&rsquo;ve found that you can generate and use an API key for the NVR that allows downloading the recordings. Here&rsquo;s how to use it:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">isVideoInProgress</span>(id):
+    info <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/api/2.0/recording/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/?apiKey=</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span>
+                 (NVR_BASE_URL, id, NVR_API_KEY),
+                 stream<span style="color:#f92672">=</span>True)<span style="color:#f92672">.</span>json()
+
+    inProgress <span style="color:#f92672">=</span> info[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#34;inProgress&#34;</span>]
+    <span style="color:#66d9ef">return</span> inProgress
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getAndSendVideo</span>(id):
+    <span style="color:#66d9ef">while</span> isVideoInProgress(id):
+        time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>)
+
+    fpath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/tmp/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">.mp4&#34;</span> <span style="color:#f92672">%</span> (id)
+    <span style="color:#66d9ef">with</span> requests<span style="color:#f92672">.</span>get(
+        <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/api/2.0/recording/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/download?apiKey=</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_BASE_URL, id, NVR_API_KEY), stream<span style="color:#f92672">=</span>True) <span style="color:#66d9ef">as</span> video:
+
+        <span style="color:#66d9ef">with</span> open(fpath, <span style="color:#e6db74">&#34;wb&#34;</span>) <span style="color:#66d9ef">as</span> localfile:
+            shutil<span style="color:#f92672">.</span>copyfileobj(video<span style="color:#f92672">.</span>raw, localfile)
+    <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;MPEG v4 &#34;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> magic<span style="color:#f92672">.</span>from_file(fpath):
+        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">&#34;[Downloader] Error, Invalid recording&#34;</span>)
+
+    messaging<span style="color:#f92672">.</span>sendAttachment(CHAT_ID, fpath)
+</code></pre></div><p>In case of errors it&rsquo;s not guaranteed whether the server&rsquo;s answer is really a video file, so I&rsquo;m checking the magic bytes of the downloaded file to make sure everything is cool.</p>
+<h1 id="alerting-and-messaging">Alerting and Messaging</h1>
+<p>The NVR already supports email notifications but it&rsquo;s 2021 and I want to use messenger services instead. I&rsquo;ve decided to use two communication channels:</p>
+<ul>
+<li>Telegram because of the nice API.</li>
+<li>Signal because it&rsquo;s end-to-end encrypted. Recordings will be transmitted via Signal only since I don&rsquo;t want russian dudes to check out my video feed, okay?</li>
+</ul>
+<p>Using two messengers may seem strange, but on the other hand it&rsquo;s <a href="https://www.cnet.com/news/signal-operational-again-after-daylong-outage/">not uncommon</a> that a messenger is down for a whole day.</p>
+<h2 id="signal-account-creation">Signal Account Creation</h2>
+<p>Signal requires you to have access to a telephone number to create an account. This can be a mobile number or a landline number, but the important thing is that you keep the number. Otherwise shady people are able to re-register the number and take over your account.</p>
+<p>If you&rsquo;re living in Germany, you can get a free and dedicated number for a Signal account at <a href="https://www.satellite.me/">satellite.me</a>. In other countries, Google Voice may be an option to acquire a mobile number to complete the registration.</p>
+<h2 id="signal-cli-key-issues">Signal-CLI Key Issues</h2>
+<p>I know this sucks but there&rsquo;s a workaround: <a href="https://github.com/AsamK/signal-cli">Signal-CLI</a> <a href="https://github.com/AsamK/signal-cli/issues/202">fails to send messages</a> at some point if no <code>receive</code> operation is being executed. I guess that the client runs out of rolling keys and that&rsquo;s why it just fails quietly when sending another message. Nice. I guess having two messengers in parallel is a really good idea.</p>
+<p>The workaround is to execute <code>receive</code> using a Cron job or before sending a new message.</p>
+<h1 id="sonos-integration">Sonos Integration</h1>
+<p>I&rsquo;ve got some Sonos devices, so why not play an alarm sound at full volume in case an alarm gets triggered? The <a href="https://github.com/SoCo/SoCo">SoCo</a> library can be used for this exact purpose. Additionally, I&rsquo;ve found the <a href="https://github.com/drudv/sonosplay">sonosplay</a> repository that includes code to play an MP3 file on a Sonos device, so that&rsquo;s what I&rsquo;m using.</p>
+<p>This code scans the network for all available Sonos zones and starts the MP3 playback:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">playEverywhere</span>():
+    <span style="color:#66d9ef">try</span>:
+        <span style="color:#75715e"># make sure to send multicast using the correct interface</span>
+        <span style="color:#66d9ef">for</span> zone <span style="color:#f92672">in</span> soco<span style="color:#f92672">.</span>discover(interface_addr<span style="color:#f92672">=</span>IP):
+            zone<span style="color:#f92672">.</span>volume <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span>
+            playFile(zone)
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+        messaging<span style="color:#f92672">.</span>sendImportant(<span style="color:#e6db74">&#34;Sonos play error: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (str(e)))
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">playFile</span>(zone):
+    stream_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">:</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (IP, str(PORT), STREAM_PATH)
+    log<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Streaming on </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> stream_url)
+    <span style="color:#66d9ef">try</span>:
+        zone<span style="color:#f92672">.</span>clear_queue()
+        zone<span style="color:#f92672">.</span>play_uri(stream_url)
+    <span style="color:#66d9ef">except</span> soco<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>SoCoSlaveException <span style="color:#66d9ef">as</span> e:
+        <span style="color:#75715e"># Expected error, only Sonos group coordinators can start playback</span>
+        messaging<span style="color:#f92672">.</span>sendImportant(<span style="color:#e6db74">&#34;Sonos play file error: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (str(e)))
+</code></pre></div><p>The discovery process can be done for each playback since it&rsquo;s quite fast and doesn&rsquo;t introduce too much additional lag.</p>
+<h1 id="monitoring">Monitoring</h1>
+<p>OK so it would be great if the system monitored the system&rsquo;s health status. For example, a camera may disconnect or there may be high system load that interferes with the NVR operations. Luckily, the NVR websocket sends out this kind of information:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># a JSON object containing an NVR status update</span>
+data <span style="color:#f92672">=</span> getNVRUpdate()
+action <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;action&#34;</span>)
+<span style="color:#66d9ef">if</span> action <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;UPDATE&#34;</span>:
+
+    dataType <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;dataType&#34;</span>, None)
+    <span style="color:#66d9ef">if</span> dataType <span style="color:#f92672">is</span> None:
+        <span style="color:#66d9ef">return</span>
+
+    <span style="color:#66d9ef">if</span> dataType <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;health&#34;</span>:
+        <span style="color:#75715e"># disconnected cameras</span>
+        disconnectedCamera <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;camerasDisconnected&#34;</span>]
+        <span style="color:#66d9ef">if</span> disconnectedCamera <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
+            warningText <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Camera disconnected: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> str(
+                disconnectedCamera)
+            log<span style="color:#f92672">.</span>warn(warningText)
+            messaging<span style="color:#f92672">.</span>sendImportant(warningText)
+
+        <span style="color:#75715e"># general status</span>
+        status <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;status&#34;</span>]
+        phrase <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;statusPhrase&#34;</span>]
+        <span style="color:#66d9ef">if</span> status <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;GREEN&#34;</span>:
+            warningText <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Status: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (status, phrase)
+            log<span style="color:#f92672">.</span>warn(warningText)
+            messaging<span style="color:#f92672">.</span>sendImportant(warningText)
+</code></pre></div><p>All status updates with <code>status != &quot;GREEN&quot;</code> can be monitored to detect system or camera errors.</p>
+<center>
+    <img width="70%" src="/img/unifi/monitoring.png"/>
+</center>
+<h1 id="wheres-the-code">Where&rsquo;s the Code?</h1>
+<p>I might publish it at some point, maybe. I don&rsquo;t know.</p>
+<hr>
+<p>Now please don&rsquo;t raid my place, I have JavaScript-enabled turrets around.</p>
+</div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/syncthing-monitor/">Does This Syncthing Work?</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/backup"><kbd class="item-tag">backup</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/python-hax/">2 Common Python Security Issues</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

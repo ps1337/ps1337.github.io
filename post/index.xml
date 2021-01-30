@@ -6,7 +6,17 @@
     <description>Recent content in Posts on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building a Cloudless UniFi Security System That Doesn&#39;t Suck</title>
+      <link>https://bananamafia.dev/post/unifi/</link>
+      <pubDate>Mon, 25 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/unifi/</guid>
+      <description>If you&amp;rsquo;re like me (rich), it&amp;rsquo;s likely that you want to monitor and protect your ice and gold chainz with technical measures. Since cloud based solutions are not an option for me, I&amp;rsquo;ve built a system that&amp;rsquo;s self-hosted. It&amp;rsquo;s based on my existing UniFi network setup, a UniFi camera and this software:
+ UniFi Controller: This is used to manage all UniFi devices in a network. UniFi Network Video Recorder (NVR): This is a controller and video recording manager for UniFi cameras.</description>
+    </item>
+    
     <item>
       <title>Does This Syncthing Work?</title>
       <link>https://bananamafia.dev/post/syncthing-monitor/</link>
