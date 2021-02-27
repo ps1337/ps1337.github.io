@@ -301,7 +301,7 @@
 <li>No filtering or shell escaping is applied to user input.</li>
 </ol>
 <p>This means that not every usage of <code>child_process</code> is problematic. However, I&rsquo;ve found one flaw of this kind in <a href="https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop">LaTeX Workshop</a> which currently has over 1.1 million installs.</p>
-<p>The extension adds <a href="https://code.visualstudio.com/docs/editor/intellisense">Intellisense</a> features for LaTeX to VS Code. One part of this features involves suggestions for names of files that are present in the current project directory. Not every file name should be a part of the generated suggestions, since files could be ignored via <code>git</code>. This functions takes care of this filtering:</p>
+<p>The extension adds <a href="https://code.visualstudio.com/docs/editor/intellisense">Intellisense</a> features for LaTeX to VS Code. One part of this feature involves suggestions for names of files that are present in the current project directory. Not every file name should be a part of the generated suggestions, since files could be ignored via <code>git</code>. This function takes care of the filtering task:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">[...]
 <span style="color:#66d9ef">import</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">as</span> <span style="color:#a6e22e">cp</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;child_process&#39;</span>
 [...]
