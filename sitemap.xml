@@ -1,647 +1,375 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>https://bananamafia.dev/project/autosec/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/talks/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/bananabot/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/canalyzat0r/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/crypt0r/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/dockerfiles/</loc>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/project/dotfile-tools/</loc>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/project/dotfiles/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/haxxor-tools/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/containers/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/mitmfuzz0r/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/cutter-docker/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/pwntools-r2/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/jka-multihack/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/randomjk/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/tex/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/exploitation/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/vulnerability/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/hisensehax/</loc>
     <lastmod>2021-02-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/reverse-engineering/</loc>
     <lastmod>2021-02-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/unifi/</loc>
     <lastmod>2021-01-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/python/</loc>
     <lastmod>2021-01-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/backup/</loc>
     <lastmod>2021-01-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/syncthing-monitor/</loc>
     <lastmod>2021-01-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/binary/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/c&#43;&#43;/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/d3dhook/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/gamehacking/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/hooking/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/ctf/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/r2/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/radare2/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/rop/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/srop/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/forensics/</loc>
     <lastmod>2020-03-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/mem/</loc>
     <lastmod>2020-03-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/volatility/</loc>
     <lastmod>2020-03-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/fuzzing/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/gb-fuzz/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/reversing/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/cutter/</loc>
     <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/uaf-1/</loc>
     <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/heap/</loc>
     <lastmod>2020-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/36c3ctf/</loc>
     <lastmod>2019-12-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/openredirect/</loc>
     <lastmod>2019-12-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/research/</loc>
     <lastmod>2019-12-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/web/</loc>
     <lastmod>2019-12-17T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/arm/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/rop-arm-1/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/frida/</loc>
     <lastmod>2019-10-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/frida-fuzz/</loc>
     <lastmod>2019-10-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/dotfiles/</loc>
     <lastmod>2019-10-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/dotfiles/</loc>
     <lastmod>2019-10-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/linux/</loc>
     <lastmod>2019-10-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/r2wars-2019/</loc>
     <lastmod>2019-10-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/r2wars/</loc>
     <lastmod>2019-10-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/r2frida-1/</loc>
     <lastmod>2019-09-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/r2frida/</loc>
     <lastmod>2019-09-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/r2ctf-2019/</loc>
     <lastmod>2019-09-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/ret2csu/</loc>
     <lastmod>2019-08-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/x64-rop-redpwn/</loc>
     <lastmod>2019-08-29T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/dotnet/</loc>
     <lastmod>2019-08-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/dotnet-re-cccamp19/</loc>
     <lastmod>2019-08-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/deserialization/</loc>
     <lastmod>2019-08-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/php-deserialize-cccamp19/</loc>
     <lastmod>2019-08-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/binary-rop-stackpivot/</loc>
     <lastmod>2019-08-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/crypto/</loc>
     <lastmod>2019-08-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/cryptoctf-1-decodeme/</loc>
     <lastmod>2019-08-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/binary-canary-bruteforce/</loc>
     <lastmod>2019-08-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/cve/</loc>
     <lastmod>2019-07-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/exploit/</loc>
     <lastmod>2019-07-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/r2-pwndebian/</loc>
     <lastmod>2019-07-30T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/x64-bof/</loc>
     <lastmod>2019-07-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/x64/</loc>
     <lastmod>2019-07-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/bananabot/</loc>
     <lastmod>2019-06-19T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/binary-aslr-dep-32/</loc>
     <lastmod>2019-05-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/ret2libc/</loc>
     <lastmod>2019-05-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/docker/</loc>
     <lastmod>2019-01-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/docker-leak/</loc>
     <lastmod>2019-01-04T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/gdb/</loc>
     <lastmod>2018-10-26T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/rnd-092345-gdb/</loc>
     <lastmod>2018-10-26T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/randomnote/</loc>
     <lastmod>2018-10-26T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/automotive/</loc>
     <lastmod>2018-10-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/autohax/</loc>
     <lastmod>2018-10-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/car-hacking/</loc>
     <lastmod>2018-10-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/multihack/</loc>
     <lastmod>2018-08-28T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/cracking/</loc>
     <lastmod>2018-08-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/cvar-hax/</loc>
     <lastmod>2018-08-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/backups/</loc>
     <lastmod>2018-06-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/rnd-632424-2fa-backup/</loc>
     <lastmod>2018-06-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/docker-breakout/</loc>
     <lastmod>2018-05-18T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/hacking/</loc>
     <lastmod>2018-05-18T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/pentesting/</loc>
     <lastmod>2018-05-18T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/shell-upgrade/</loc>
     <lastmod>2018-05-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/shell/</loc>
     <lastmod>2018-05-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/python-hax/</loc>
     <lastmod>2018-05-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/mserver-crack/</loc>
     <lastmod>2018-05-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/programming/</loc>
     <lastmod>2018-04-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/pairprog/</loc>
     <lastmod>2018-04-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/tmux/</loc>
     <lastmod>2018-04-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/vim/</loc>
     <lastmod>2018-04-10T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/rnd-23542352/</loc>
     <lastmod>2018-03-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/crypt0r/</loc>
     <lastmod>2018-03-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/malware/</loc>
     <lastmod>2018-03-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/monit/</loc>
     <lastmod>2018-03-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/monitoring/</loc>
     <lastmod>2018-03-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/realtek-driverutil/</loc>
     <lastmod>2018-03-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/windows/</loc>
     <lastmod>2018-03-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/borg/</loc>
     <lastmod>2018-03-14T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/docker-borg/</loc>
     <lastmod>2018-03-14T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/ansible/</loc>
     <lastmod>2018-03-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/dotfile-deployment/</loc>
     <lastmod>2018-03-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/travis/</loc>
     <lastmod>2018-03-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/dotfile-shellcheck/</loc>
     <lastmod>2018-03-08T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/jenkins/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/notification/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/telegram-notifications/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/docker-jenkins/</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/ci/</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/gogs/</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/android/</loc>
     <lastmod>2017-10-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/post/write-diary/</loc>
     <lastmod>2017-10-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/categories/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/container/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/dockerfiles/</loc>
-  </url>
-  
-  <url>
-    <loc>https://bananamafia.dev/tags/i3/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/jka/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/project/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/pwntools/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://bananamafia.dev/tags/randomizer/</loc>
   </url>
-  
 </urlset>

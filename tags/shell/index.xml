@@ -8,15 +8,6 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 16 May 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/shell/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Dotfiles</title>
-      <link>https://bananamafia.dev/project/dotfiles/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/project/dotfiles/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Methods to Upgrade nc Reverse Shells</title>
       <link>https://bananamafia.dev/post/shell-upgrade/</link>
       <pubDate>Wed, 16 May 2018 00:00:00 +0000</pubDate>
