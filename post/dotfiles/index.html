@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.81.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.83.1" />
     
 
     
@@ -643,9 +643,9 @@ fi
 font = Hack 10
 clickable_url = true
 scrollback_lines = 10000
-</code></pre><p>Also, the color theme can be customized. I&rsquo;m using a solarized color scheme you can find <a href="https://github.com/ps1337/Dotfiles/blob/master/termite/config">here</a>.</p>
+</code></pre><p>Also, the color theme can be customized. I&rsquo;m using a solarized color scheme.</p>
 <h1 id="vim">Vim</h1>
-<p>I&rsquo;m using <a href="https://github.com/VundleVim/Vundle.vim">Vundle</a> as a plugin manager. You can check out my complete plugin list in <a href="https://github.com/ps1337/Dotfiles">this auto generated readme</a>. The important ones for me are:</p>
+<p>I&rsquo;m using <a href="https://github.com/VundleVim/Vundle.vim">Vundle</a> as a plugin manager. The important ones for me are:</p>
 <ul>
 <li><a href="https://github.com/ycm-core/YouCompleteMe">YouCompleteMe</a> adds auto completion for a bunch of stuff like file system paths and several programming lanugages.</li>
 <li><a href="https://github.com/scrooloose/nerdtree">NERDTree</a> allows browsing the file system and creating files and directories from within Vim.</li>
@@ -677,7 +677,7 @@ endif
 <p>Yes, it&rsquo;s true: No more dragging windows like it&rsquo;s 1887.</p>
 <p><a href="https://github.com/i3/i3">i3</a> is a tiling window manager that enables an efficient workflow. You can organize applications in a configurable manner and it&rsquo;s scriptable. I recommend <a href="https://www.youtube.com/watch?v=j1I63wGcvU4">this video series</a> for a detailed introduction to <code>i3</code>. It may look complicated at first, especially with custom menus or bars like <a href="https://github.com/polybar/polybar">polybar</a>, but the reality is that it&rsquo;s even more complicated :D</p>
 <h2 id="configuration">Configuration</h2>
-<p>You need to create a config file first. Mine can be found <a href="https://github.com/ps1337/Dotfiles/tree/master/i3">here</a>. The most important aspects are:</p>
+<p>You need to create a config file first. The most important aspects are:</p>
 <ul>
 <li>If you want to have an auto-starting application, use the <code>exec</code> directive.</li>
 <li>Create workspaces according to your needs. For example, you can put Vim and VS Code in the same workspace. This way, all applications are organized according to your personal workflow and the application use cases. Workspaces can be tagged with custom icons. If you&rsquo;re a <em>polybar</em> user, <a href="https://fontawesome.com/">FontAwesome</a> is a good font to use that supports many glyphs that can be copied from <a href="https://fontawesome.com/v4.7.0/icons/">this cheatsheet</a>. The configuration directives for the workspaces are:</li>
@@ -814,7 +814,7 @@ else
 fi
 </code></pre><p>To get this really over-engineered you can then send out a <em>Telegram</em> notification indicating success or failure to your mobile phone using <code>curl</code> and a secret <em>Telegram</em> token that&rsquo;s configured in the Travis CI job.</p>
 <h1 id="deployment">Deployment</h1>
-<p>Creating dotfiles is cool, but testing whether they can be deployed on various Linux distributions at the same time is something else. For this, I&rsquo;ve created my <a href="https://github.com/ps1337/Dotfile-tools">Dotfile-Tools</a> <em>Ansible</em> project. For more information regarding this, check out one of my <a href="https://bananamafia.dev/post/dotfile-deployment/">previous blog posts</a>.</p>
+<p>Creating dotfiles is cool, but testing whether they can be deployed on various Linux distributions at the same time is something else. For this, I&rsquo;ve created an <em>Ansible</em> project. For more information regarding this, check out one of my <a href="https://bananamafia.dev/post/dotfile-deployment/">previous blog posts</a>.</p>
 </div>
 
     

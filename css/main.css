@@ -2,7 +2,6 @@ html, body {
     height: 100%;
 }
 
-
 [data-theme="light"] {
     --body-background-color: white;
     --inline-code-text-color: black;
@@ -21,6 +20,7 @@ html, body {
     /* only for the yellow header since otherwise opacity
     would apply for the whole navbar instead of the yellow color only */
     --accent-rgba: rgba(255, 225, 53, 1);
+    --img-shadow: rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="dark"] {
@@ -40,7 +40,7 @@ html, body {
     --bar-opacity: 0.75;
     --accent: #ffe135;
     --accent-rgba: rgba(255, 225, 53, 0.75);
-
+    --img-shadow:  hsl(210, 10%, 30%);
 
     /* old dark mode colors */
     /*--text-color:#f5f5f5;
@@ -219,6 +219,25 @@ img {
     max-width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+
+div.content-width img {
+  -webkit-box-shadow: 1px 2px 5px 2px var(--img-shadow);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    1px 2px 5px 2px var(--img-shadow);  /* Firefox 3.5 - 3.6 */
+  box-shadow:         1px 2px 5px 2px var(--img-shadow);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
+
+div.highlight {
+    -webkit-box-shadow: 1px 2px 5px 2px var(--img-shadow);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    1px 2px 5px 2px var(--img-shadow);  /* Firefox 3.5 - 3.6 */
+  box-shadow:         1px 2px 5px 2px var(--img-shadow);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+}
+
+video {
+    -webkit-box-shadow: 1px 2px 5px 2px var(--img-shadow);  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  -moz-box-shadow:    1px 2px 5px 2px var(--img-shadow);  /* Firefox 3.5 - 3.6 */
+  box-shadow:         1px 2px 5px 2px var(--img-shadow);  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
 }
 
 img:not(#mafia-tag) {

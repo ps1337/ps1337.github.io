@@ -6,7 +6,7 @@
     <description>Recent content in r2 on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 11 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/r2/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/r2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>pwntools-r2</title>
       <link>https://bananamafia.dev/project/pwntools-r2/</link>
@@ -14,6 +14,17 @@
       
       <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</title>
+      <link>https://bananamafia.dev/post/satisfyer/</link>
+      <pubDate>Tue, 06 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/satisfyer/</guid>
+      <description>There&amp;rsquo;s no good way to start a blog post like this, so let&amp;rsquo;s dive right in:
+Recently, I&amp;rsquo;ve re-discovered the butthax talk which covered security aspects of Lovense devices. I&amp;rsquo;ve felt so inspired, that I&amp;rsquo;ve decided to buy some Satisfyer devices and check out how they work.
+These are app-controllable toys that are sold globally, first and foremost in Germany and all over the EU. They have some pretty interesting functionality:</description>
     </item>
     
     <item>

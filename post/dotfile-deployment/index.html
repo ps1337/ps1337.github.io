@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.81.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.83.1" />
     
 
     
@@ -316,7 +316,6 @@
 <li><code>deploy.yml</code> to call the created roles in a modular manner</li>
 <li><code>updateDotfiles.yml</code> only executes <code>dotfiles</code> role to update the provided files and symlinks on a host</li>
 </ul>
-<p><em>Note: My Roles and helper files can be checked <a href="https://github.com/ps1337/Dotfile-tools">here</a>.</em></p>
 <p>After creating this structure, it can look like this:</p>
 <pre><code>
 ├── roles
@@ -373,7 +372,7 @@
 <h2 id="additional-tricks">Additional Tricks</h2>
 <ol>
 <li>
-<p>Support for secret sub repositories can be implemented pretty easy using the <code>vars_prompt</code> and <code>when</code> directives as you can see <a href="https://github.com/ps1337/Dotfile-tools/blob/master/deploy.yml">here</a> and <a href="https://github.com/ps1337/Dotfile-tools/blob/master/roles/dotfiles/tasks/symlinks.yml">here</a>.</p>
+<p>Support for secret sub repositories can be implemented pretty easy using the <code>vars_prompt</code> and <code>when</code> directives.</p>
 </li>
 <li>
 <p>The generic package manager <code>package</code> can be used to install packages easily without having to specify <code>apt</code> or <code>pacman</code>.</p>
