@@ -28,10 +28,25 @@
   </url><url>
     <loc>https://bananamafia.dev/project/randomjk/</loc>
   </url><url>
-    <loc>https://bananamafia.dev/post/satisfyer/</loc>
-    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
+    <loc>https://bananamafia.dev/recipe/apt/</loc>
+    <lastmod>2021-07-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/</loc>
+    <lastmod>2021-07-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/recipe/</loc>
+    <lastmod>2021-07-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/recipe/</loc>
+    <lastmod>2021-07-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2021-07-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/tofu/</loc>
+    <lastmod>2021-07-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/satisfyer/</loc>
     <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/frida/</loc>
@@ -50,9 +65,6 @@
     <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/reverse-engineering/</loc>
-    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/</loc>
     <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/vulnerability/</loc>

@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.83.1" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
     
 
     
@@ -130,6 +130,8 @@
                     <li><a href="/post/">Posts</a></li>
                     
                     <li><a href="/project/">Projects</a></li>
+                    
+                    <li><a href="/recipe/">Recipes</a></li>
                     
                 </ul>
                 
@@ -321,11 +323,11 @@
 <h1 id="reversing-the-data-structure">Reversing The Data Structure</h1>
 <p>From the disassembled instructions it&rsquo;s possible to reconstruct the structure that represents a file in memory:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">struct</span> file {
-    uint8_t refcount; <span style="color:#75715e">// +0x0: mov byte [rax], 1
-</span><span style="color:#75715e"></span>    uint8_t unused_1; <span style="color:#75715e">// +0x1
-</span><span style="color:#75715e"></span>    uint8_t unused_2; <span style="color:#75715e">// +0x2
-</span><span style="color:#75715e"></span>    uint8_t unused_3; <span style="color:#75715e">// +0x3
-</span><span style="color:#75715e"></span>    uint32_t data_len; <span style="color:#75715e">// +0x4: mov dword [rax + 4], 0
+    <span style="color:#66d9ef">uint8_t</span> refcount; <span style="color:#75715e">// +0x0: mov byte [rax], 1
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint8_t</span> unused_1; <span style="color:#75715e">// +0x1
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint8_t</span> unused_2; <span style="color:#75715e">// +0x2
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint8_t</span> unused_3; <span style="color:#75715e">// +0x3
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint32_t</span> data_len; <span style="color:#75715e">// +0x4: mov dword [rax + 4], 0
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> data; <span style="color:#75715e">// +0x8: mov dword [rax + 8], 0
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> name[<span style="color:#ae81ff">32</span>]; <span style="color:#75715e">// +0x10 ... +0x2F (0x1F length): strcpy
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> close_func; <span style="color:#75715e">// +0x30: lea rax, [sym.c3ctf_file_close]

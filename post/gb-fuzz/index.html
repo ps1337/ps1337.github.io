@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.83.1" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
     
 
     
@@ -130,6 +130,8 @@
                     <li><a href="/post/">Posts</a></li>
                     
                     <li><a href="/project/">Projects</a></li>
+                    
+                    <li><a href="/recipe/">Recipes</a></li>
                     
                 </ul>
                 
@@ -349,7 +351,7 @@ BIN_PATH <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/
 
 SCHEDULES <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;coe&#34;</span>, <span style="color:#e6db74">&#34;fast&#34;</span>, <span style="color:#e6db74">&#34;explore&#34;</span>]
 
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Using </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> CPU Cores&#34;</span> <span style="color:#f92672">%</span> (NUM_CPUS))
+print(<span style="color:#e6db74">&#34;Using </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> CPU Cores&#34;</span> <span style="color:#f92672">%</span> (NUM_CPUS))
 
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">do_work</span>(cpu):
@@ -363,7 +365,7 @@ SCHEDULES <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34
     os<span style="color:#f92672">.</span>mkdir(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/tmp</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (OUTPUT_DIR, cpu))
 
     <span style="color:#75715e"># Restart if it dies, which happens on startup a bit</span>
-    <span style="color:#66d9ef">while</span> True:
+    <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
         <span style="color:#66d9ef">try</span>:
             args <span style="color:#f92672">=</span> [
                 <span style="color:#e6db74">&#34;taskset&#34;</span>, <span style="color:#e6db74">&#34;-c&#34;</span>,
@@ -378,10 +380,10 @@ SCHEDULES <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34
                                   stderr<span style="color:#f92672">=</span>subprocess<span style="color:#f92672">.</span>PIPE)
             sp<span style="color:#f92672">.</span>wait()
         <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
-            <span style="color:#66d9ef">print</span>(str(e))
+            print(str(e))
             <span style="color:#66d9ef">pass</span>
 
-        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;CPU </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> afl-fuzz instance died&#34;</span> <span style="color:#f92672">%</span> cpu)
+        print(<span style="color:#e6db74">&#34;CPU </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> afl-fuzz instance died&#34;</span> <span style="color:#f92672">%</span> cpu)
 
         <span style="color:#75715e"># Some backoff if we fail to run</span>
         time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1.0</span>)
@@ -393,12 +395,12 @@ SCHEDULES <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34
     os<span style="color:#f92672">.</span>mkdir(BACKUP_DIR)
 
 <span style="color:#66d9ef">if</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(OUTPUT_DIR):
-    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Backing up old output directory&#34;</span>)
+    print(<span style="color:#e6db74">&#34;Backing up old output directory&#34;</span>)
     shutil<span style="color:#f92672">.</span>move(
         OUTPUT_DIR, BACKUP_DIR <span style="color:#f92672">+</span> os<span style="color:#f92672">.</span>sep <span style="color:#f92672">+</span>
         <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">.</span>join(random<span style="color:#f92672">.</span>choice(string<span style="color:#f92672">.</span>ascii_uppercase) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>)))
 
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Creating output directory&#34;</span>)
+print(<span style="color:#e6db74">&#34;Creating output directory&#34;</span>)
 os<span style="color:#f92672">.</span>mkdir(OUTPUT_DIR)
 
 <span style="color:#75715e"># Disable AFL affinity as we do it better</span>
