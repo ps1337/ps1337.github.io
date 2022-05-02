@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -298,18 +298,18 @@
     <div class="content-width text-justify"><p>After setting up 329423 services and 823423 containers, you might want to manage your environment in case some service fails. This can be automated restarting, getting notified about failures or a similar thing. Say no more, I&rsquo;ve created a <a href="https://hub.docker.com/r/ps1337/monit-docker/">Dockerfile and image for Monit</a> for this.</p>
 <p><a href="https://mmonit.com/monit/">Monit</a> is extremely configurable and allows a maximum of flexibility when it comes to monitoring.</p>
 <p>Initially, a configuration file is required to get started. To get one, call</p>
-<pre><code>docker run \
+<pre tabindex="0"><code>docker run \
    -d \
    --name=monit \
    --restart=always \
    --expose 2812 \
    -p 127.0.0.1:2812:2812 \
    --entrypoint monit ps1337/monit-docker -I &amp;&amp; \
-docker exec -it monit bash -c &quot;cat /etc/monitrc&quot; &amp;&amp; \
+docker exec -it monit bash -c &#34;cat /etc/monitrc&#34; &amp;&amp; \
 docker rm -f monit
 </code></pre><p>and save the output to <code>monitrc</code>.</p>
 <p>To finally monitor services on a machine, you can use this command:</p>
-<pre><code>docker run \
+<pre tabindex="0"><code>docker run \
    -d \
    --name=monit \
    --restart=always \
@@ -326,8 +326,8 @@ docker rm -f monit
 </ul>
 <p>You can then refer to the <a href="https://mmonit.com/monit/documentation/monit.html">Monit manual</a> for information on adding hosts to monitor.</p>
 <p>One helpful option to use is <code>exec</code>, which executes shell scripts in case a service fails:</p>
-<pre><code>check host yolo with address yolo.party
-  if (failed port 80 protocol http with timeout 15 s) retry 5 then exec &quot;/opt/scripts/telegramNotification.sh 'FAIL'&quot;
+<pre tabindex="0"><code>check host yolo with address yolo.party
+  if (failed port 80 protocol http with timeout 15 s) retry 5 then exec &#34;/opt/scripts/telegramNotification.sh &#39;FAIL&#39;&#34;
 </code></pre></div>
 
     

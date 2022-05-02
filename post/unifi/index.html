@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -324,32 +324,32 @@
 <p>Let&rsquo;s see how to get this event data using Python code.</p>
 <h2 id="using-the-websocket-api">Using the Websocket API</h2>
 <p>Luckily, the <code>unifi-events</code> repository I&rsquo;ve mentioned above already contains some code that&rsquo;s useful when interacting with websockets. I&rsquo;ve modified it slightly for this post:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Get a session cookie</span>
-jar <span style="color:#f92672">=</span> aiohttp<span style="color:#f92672">.</span>CookieJar(unsafe<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
-json_request <span style="color:#f92672">=</span> {    <span style="color:#e6db74">&#39;username&#39;</span>: CONTROLLER_USER,
-                    <span style="color:#e6db74">&#39;password&#39;</span>: CONTROLLER_PASSWORD,
-                    <span style="color:#e6db74">&#39;strict&#39;</span>: <span style="color:#66d9ef">True</span>
-               }
-
-<span style="color:#66d9ef">async</span> <span style="color:#66d9ef">with</span> aiohttp<span style="color:#f92672">.</span>ClientSession(cookie_jar<span style="color:#f92672">=</span>jar) <span style="color:#66d9ef">as</span> session:
-    <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">with</span> session<span style="color:#f92672">.</span>ws_connect(self<span style="color:#f92672">.</span>ws_url,
-                                    autoping<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
-                                    heartbeat<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>,
-                                    ssl<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>ssl_verify,
-                                    timeout<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>timeout) <span style="color:#66d9ef">as</span> ws:
-        <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">for</span> msg <span style="color:#f92672">in</span> ws:
-            <span style="color:#66d9ef">if</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>TEXT:
-                self<span style="color:#f92672">.</span>update_data(msg<span style="color:#f92672">.</span>json(loads<span style="color:#f92672">=</span>json<span style="color:#f92672">.</span>loads))
-            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>BINARY:
-                deflated <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(zlib<span style="color:#f92672">.</span>decompress(msg<span style="color:#f92672">.</span>data))
-                self<span style="color:#f92672">.</span>update_data(deflated)
-            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>CLOSE:
-                log<span style="color:#f92672">.</span>warn(<span style="color:#e6db74">&#39;WS closed: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> msg<span style="color:#f92672">.</span>extra)
-                <span style="color:#66d9ef">break</span>
-            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>ERROR:
-                log<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;WS closed with Error&#39;</span>)
-                <span style="color:#66d9ef">break</span>
-</code></pre></div><p>A few things are important here:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Get a session cookie</span>
+</span></span><span style="display:flex;"><span>jar <span style="color:#f92672">=</span> aiohttp<span style="color:#f92672">.</span>CookieJar(unsafe<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>json_request <span style="color:#f92672">=</span> {    <span style="color:#e6db74">&#39;username&#39;</span>: CONTROLLER_USER,
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#39;password&#39;</span>: CONTROLLER_PASSWORD,
+</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#39;strict&#39;</span>: <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>               }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">with</span> aiohttp<span style="color:#f92672">.</span>ClientSession(cookie_jar<span style="color:#f92672">=</span>jar) <span style="color:#66d9ef">as</span> session:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">with</span> session<span style="color:#f92672">.</span>ws_connect(self<span style="color:#f92672">.</span>ws_url,
+</span></span><span style="display:flex;"><span>                                    autoping<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>                                    heartbeat<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>,
+</span></span><span style="display:flex;"><span>                                    ssl<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>ssl_verify,
+</span></span><span style="display:flex;"><span>                                    timeout<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>timeout) <span style="color:#66d9ef">as</span> ws:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">for</span> msg <span style="color:#f92672">in</span> ws:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>TEXT:
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>update_data(msg<span style="color:#f92672">.</span>json(loads<span style="color:#f92672">=</span>json<span style="color:#f92672">.</span>loads))
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>BINARY:
+</span></span><span style="display:flex;"><span>                deflated <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>loads(zlib<span style="color:#f92672">.</span>decompress(msg<span style="color:#f92672">.</span>data))
+</span></span><span style="display:flex;"><span>                self<span style="color:#f92672">.</span>update_data(deflated)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>CLOSE:
+</span></span><span style="display:flex;"><span>                log<span style="color:#f92672">.</span>warn(<span style="color:#e6db74">&#39;WS closed: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> msg<span style="color:#f92672">.</span>extra)
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">elif</span> msg<span style="color:#f92672">.</span>type <span style="color:#f92672">==</span> aiohttp<span style="color:#f92672">.</span>WSMsgType<span style="color:#f92672">.</span>ERROR:
+</span></span><span style="display:flex;"><span>                log<span style="color:#f92672">.</span>error(<span style="color:#e6db74">&#39;WS closed with Error&#39;</span>)
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
+</span></span></code></pre></div><p>A few things are important here:</p>
 <ul>
 <li>Authentication is required, so a session cookie has to be received first. A read-only user is sufficient for the Controller. In case of the NVR, the user has to be able to alter camera settings.</li>
 <li>Using a session keepalive with the <code>autoping</code> and <code>heartbeat</code> parameters is required for the NVR websocket. If you don&rsquo;t use it, the server may close the connection after a while.</li>
@@ -364,48 +364,48 @@ json_request <span style="color:#f92672">=</span> {    <span style="color:#e6db7
 <p>OK cool, now the system is able to determine when to arm and it gets notified in case a new recording is available. It&rsquo;s now required that the camera settings get adjusted accordingly. As already mentioned, I&rsquo;ve used <code>unifi-video-api</code> for this purpose. This works via the normal HTTP API and has nothing to do with websockets.</p>
 <h2 id="changing-settings">Changing Settings</h2>
 <p>Changing camera settings isn&rsquo;t fully implemented by the library for all settings though. That&rsquo;s why I&rsquo;m using my own wrapper functions. The current settings are being retrieved, changed sent back to the NVR:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getCameraSettings</span>():
-    cfg <span style="color:#f92672">=</span> NVR<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;camera/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_CAMERA_ID))[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#ae81ff">0</span>]
-    <span style="color:#66d9ef">assert</span> cfg[<span style="color:#e6db74">&#34;deviceSettings&#34;</span>][<span style="color:#e6db74">&#34;name&#34;</span>] <span style="color:#f92672">==</span> NVR_CAMERA_NAME
-    <span style="color:#66d9ef">return</span> cfg
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">setCameraSettings</span>(led, sound):
-    recMode <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;disable&#34;</span> <span style="color:#66d9ef">if</span> SOMEONE_HOME <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;motion&#34;</span>
-    G3 <span style="color:#f92672">=</span> NVR<span style="color:#f92672">.</span>get_camera(NVR_CAMERA_NAME)
-    G3<span style="color:#f92672">.</span>set_recording_settings(recording_mode<span style="color:#f92672">=</span>recMode)
-
-    cfg <span style="color:#f92672">=</span> getCameraSettings()
-    cfg[<span style="color:#e6db74">&#34;systemSoundsEnabled&#34;</span>] <span style="color:#f92672">=</span> sound
-    cfg[<span style="color:#e6db74">&#34;enableSoundAlert&#34;</span>] <span style="color:#f92672">=</span> sound
-    cfg[<span style="color:#e6db74">&#34;enableStatusLed&#34;</span>] <span style="color:#f92672">=</span> led
-    cfg[<span style="color:#e6db74">&#34;enableSpeaker&#34;</span>] <span style="color:#f92672">=</span> sound
-    cfg[<span style="color:#e6db74">&#34;enableRecordingIndicator&#34;</span>] <span style="color:#f92672">=</span> sound
-    NVR<span style="color:#f92672">.</span>put(<span style="color:#e6db74">&#34;camera/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_CAMERA_ID), data<span style="color:#f92672">=</span>cfg)
-</code></pre></div><h2 id="downloading-recordings">Downloading Recordings</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getCameraSettings</span>():
+</span></span><span style="display:flex;"><span>    cfg <span style="color:#f92672">=</span> NVR<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;camera/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_CAMERA_ID))[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> cfg[<span style="color:#e6db74">&#34;deviceSettings&#34;</span>][<span style="color:#e6db74">&#34;name&#34;</span>] <span style="color:#f92672">==</span> NVR_CAMERA_NAME
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> cfg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">setCameraSettings</span>(led, sound):
+</span></span><span style="display:flex;"><span>    recMode <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;disable&#34;</span> <span style="color:#66d9ef">if</span> SOMEONE_HOME <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;motion&#34;</span>
+</span></span><span style="display:flex;"><span>    G3 <span style="color:#f92672">=</span> NVR<span style="color:#f92672">.</span>get_camera(NVR_CAMERA_NAME)
+</span></span><span style="display:flex;"><span>    G3<span style="color:#f92672">.</span>set_recording_settings(recording_mode<span style="color:#f92672">=</span>recMode)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    cfg <span style="color:#f92672">=</span> getCameraSettings()
+</span></span><span style="display:flex;"><span>    cfg[<span style="color:#e6db74">&#34;systemSoundsEnabled&#34;</span>] <span style="color:#f92672">=</span> sound
+</span></span><span style="display:flex;"><span>    cfg[<span style="color:#e6db74">&#34;enableSoundAlert&#34;</span>] <span style="color:#f92672">=</span> sound
+</span></span><span style="display:flex;"><span>    cfg[<span style="color:#e6db74">&#34;enableStatusLed&#34;</span>] <span style="color:#f92672">=</span> led
+</span></span><span style="display:flex;"><span>    cfg[<span style="color:#e6db74">&#34;enableSpeaker&#34;</span>] <span style="color:#f92672">=</span> sound
+</span></span><span style="display:flex;"><span>    cfg[<span style="color:#e6db74">&#34;enableRecordingIndicator&#34;</span>] <span style="color:#f92672">=</span> sound
+</span></span><span style="display:flex;"><span>    NVR<span style="color:#f92672">.</span>put(<span style="color:#e6db74">&#34;camera/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_CAMERA_ID), data<span style="color:#f92672">=</span>cfg)
+</span></span></code></pre></div><h2 id="downloading-recordings">Downloading Recordings</h2>
 <p>It&rsquo;s alert time, how to get the newest recording? I&rsquo;ve found that you can generate and use an API key for the NVR that allows downloading the recordings. Here&rsquo;s how to use it:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">isVideoInProgress</span>(id):
-    info <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/api/2.0/recording/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/?apiKey=</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span>
-                 (NVR_BASE_URL, id, NVR_API_KEY),
-                 stream<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)<span style="color:#f92672">.</span>json()
-
-    inProgress <span style="color:#f92672">=</span> info[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#34;inProgress&#34;</span>]
-    <span style="color:#66d9ef">return</span> inProgress
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getAndSendVideo</span>(id):
-    <span style="color:#66d9ef">while</span> isVideoInProgress(id):
-        time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>)
-
-    fpath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/tmp/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">.mp4&#34;</span> <span style="color:#f92672">%</span> (id)
-    <span style="color:#66d9ef">with</span> requests<span style="color:#f92672">.</span>get(
-        <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/api/2.0/recording/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/download?apiKey=</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_BASE_URL, id, NVR_API_KEY), stream<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>) <span style="color:#66d9ef">as</span> video:
-
-        <span style="color:#66d9ef">with</span> open(fpath, <span style="color:#e6db74">&#34;wb&#34;</span>) <span style="color:#66d9ef">as</span> localfile:
-            shutil<span style="color:#f92672">.</span>copyfileobj(video<span style="color:#f92672">.</span>raw, localfile)
-    <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;MPEG v4 &#34;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> magic<span style="color:#f92672">.</span>from_file(fpath):
-        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">&#34;[Downloader] Error, Invalid recording&#34;</span>)
-
-    messaging<span style="color:#f92672">.</span>sendAttachment(CHAT_ID, fpath)
-</code></pre></div><p>In case of errors it&rsquo;s not guaranteed whether the server&rsquo;s answer is really a video file, so I&rsquo;m checking the magic bytes of the downloaded file to make sure everything is cool.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">isVideoInProgress</span>(id):
+</span></span><span style="display:flex;"><span>    info <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/api/2.0/recording/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/?apiKey=</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span>
+</span></span><span style="display:flex;"><span>                 (NVR_BASE_URL, id, NVR_API_KEY),
+</span></span><span style="display:flex;"><span>                 stream<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)<span style="color:#f92672">.</span>json()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    inProgress <span style="color:#f92672">=</span> info[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#34;inProgress&#34;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> inProgress
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getAndSendVideo</span>(id):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> isVideoInProgress(id):
+</span></span><span style="display:flex;"><span>        time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    fpath <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/tmp/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">.mp4&#34;</span> <span style="color:#f92672">%</span> (id)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> requests<span style="color:#f92672">.</span>get(
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/api/2.0/recording/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/download?apiKey=</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (NVR_BASE_URL, id, NVR_API_KEY), stream<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>) <span style="color:#66d9ef">as</span> video:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> open(fpath, <span style="color:#e6db74">&#34;wb&#34;</span>) <span style="color:#66d9ef">as</span> localfile:
+</span></span><span style="display:flex;"><span>            shutil<span style="color:#f92672">.</span>copyfileobj(video<span style="color:#f92672">.</span>raw, localfile)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;MPEG v4 &#34;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> magic<span style="color:#f92672">.</span>from_file(fpath):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">&#34;[Downloader] Error, Invalid recording&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    messaging<span style="color:#f92672">.</span>sendAttachment(CHAT_ID, fpath)
+</span></span></code></pre></div><p>In case of errors it&rsquo;s not guaranteed whether the server&rsquo;s answer is really a video file, so I&rsquo;m checking the magic bytes of the downloaded file to make sure everything is cool.</p>
 <h1 id="alerting-and-messaging">Alerting and Messaging</h1>
 <p>The NVR already supports email notifications but it&rsquo;s 2021 and I want to use messenger services instead. I&rsquo;ve decided to use two communication channels:</p>
 <ul>
@@ -422,53 +422,53 @@ json_request <span style="color:#f92672">=</span> {    <span style="color:#e6db7
 <h1 id="sonos-integration">Sonos Integration</h1>
 <p>I&rsquo;ve got some Sonos devices, so why not play an alarm sound at full volume in case an alarm gets triggered? The <a href="https://github.com/SoCo/SoCo">SoCo</a> library can be used for this exact purpose. Additionally, I&rsquo;ve found the <a href="https://github.com/drudv/sonosplay">sonosplay</a> repository that includes code to play an MP3 file on a Sonos device, so that&rsquo;s what I&rsquo;m using.</p>
 <p>This code scans the network for all available Sonos zones and starts the MP3 playback:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">playEverywhere</span>():
-    <span style="color:#66d9ef">try</span>:
-        <span style="color:#75715e"># make sure to send multicast using the correct interface</span>
-        <span style="color:#66d9ef">for</span> zone <span style="color:#f92672">in</span> soco<span style="color:#f92672">.</span>discover(interface_addr<span style="color:#f92672">=</span>IP):
-            zone<span style="color:#f92672">.</span>volume <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span>
-            playFile(zone)
-    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
-        messaging<span style="color:#f92672">.</span>sendImportant(<span style="color:#e6db74">&#34;Sonos play error: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (str(e)))
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">playFile</span>(zone):
-    stream_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">:</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (IP, str(PORT), STREAM_PATH)
-    log<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Streaming on </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> stream_url)
-    <span style="color:#66d9ef">try</span>:
-        zone<span style="color:#f92672">.</span>clear_queue()
-        zone<span style="color:#f92672">.</span>play_uri(stream_url)
-    <span style="color:#66d9ef">except</span> soco<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>SoCoSlaveException <span style="color:#66d9ef">as</span> e:
-        <span style="color:#75715e"># Expected error, only Sonos group coordinators can start playback</span>
-        messaging<span style="color:#f92672">.</span>sendImportant(<span style="color:#e6db74">&#34;Sonos play file error: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (str(e)))
-</code></pre></div><p>The discovery process can be done for each playback since it&rsquo;s quite fast and doesn&rsquo;t introduce too much additional lag.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">playEverywhere</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># make sure to send multicast using the correct interface</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> zone <span style="color:#f92672">in</span> soco<span style="color:#f92672">.</span>discover(interface_addr<span style="color:#f92672">=</span>IP):
+</span></span><span style="display:flex;"><span>            zone<span style="color:#f92672">.</span>volume <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span>
+</span></span><span style="display:flex;"><span>            playFile(zone)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        messaging<span style="color:#f92672">.</span>sendImportant(<span style="color:#e6db74">&#34;Sonos play error: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (str(e)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">playFile</span>(zone):
+</span></span><span style="display:flex;"><span>    stream_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;http://</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">:</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (IP, str(PORT), STREAM_PATH)
+</span></span><span style="display:flex;"><span>    log<span style="color:#f92672">.</span>info(<span style="color:#e6db74">&#39;Streaming on </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> stream_url)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        zone<span style="color:#f92672">.</span>clear_queue()
+</span></span><span style="display:flex;"><span>        zone<span style="color:#f92672">.</span>play_uri(stream_url)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> soco<span style="color:#f92672">.</span>exceptions<span style="color:#f92672">.</span>SoCoSlaveException <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Expected error, only Sonos group coordinators can start playback</span>
+</span></span><span style="display:flex;"><span>        messaging<span style="color:#f92672">.</span>sendImportant(<span style="color:#e6db74">&#34;Sonos play file error: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (str(e)))
+</span></span></code></pre></div><p>The discovery process can be done for each playback since it&rsquo;s quite fast and doesn&rsquo;t introduce too much additional lag.</p>
 <h1 id="monitoring">Monitoring</h1>
 <p>OK so it would be great if the system monitored the system&rsquo;s health status. For example, a camera may disconnect or there may be high system load that interferes with the NVR operations. Luckily, the NVR websocket sends out this kind of information:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># a JSON object containing an NVR status update</span>
-data <span style="color:#f92672">=</span> getNVRUpdate()
-action <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;action&#34;</span>)
-<span style="color:#66d9ef">if</span> action <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;UPDATE&#34;</span>:
-
-    dataType <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;dataType&#34;</span>, <span style="color:#66d9ef">None</span>)
-    <span style="color:#66d9ef">if</span> dataType <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
-        <span style="color:#66d9ef">return</span>
-
-    <span style="color:#66d9ef">if</span> dataType <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;health&#34;</span>:
-        <span style="color:#75715e"># disconnected cameras</span>
-        disconnectedCamera <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;camerasDisconnected&#34;</span>]
-        <span style="color:#66d9ef">if</span> disconnectedCamera <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
-            warningText <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Camera disconnected: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> str(
-                disconnectedCamera)
-            log<span style="color:#f92672">.</span>warn(warningText)
-            messaging<span style="color:#f92672">.</span>sendImportant(warningText)
-
-        <span style="color:#75715e"># general status</span>
-        status <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;status&#34;</span>]
-        phrase <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;statusPhrase&#34;</span>]
-        <span style="color:#66d9ef">if</span> status <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;GREEN&#34;</span>:
-            warningText <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Status: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (status, phrase)
-            log<span style="color:#f92672">.</span>warn(warningText)
-            messaging<span style="color:#f92672">.</span>sendImportant(warningText)
-</code></pre></div><p>All status updates with <code>status != &quot;GREEN&quot;</code> can be monitored to detect system or camera errors.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># a JSON object containing an NVR status update</span>
+</span></span><span style="display:flex;"><span>data <span style="color:#f92672">=</span> getNVRUpdate()
+</span></span><span style="display:flex;"><span>action <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;action&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> action <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;UPDATE&#34;</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dataType <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;dataType&#34;</span>, <span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> dataType <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> dataType <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;health&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># disconnected cameras</span>
+</span></span><span style="display:flex;"><span>        disconnectedCamera <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;camerasDisconnected&#34;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> disconnectedCamera <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            warningText <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Camera disconnected: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> str(
+</span></span><span style="display:flex;"><span>                disconnectedCamera)
+</span></span><span style="display:flex;"><span>            log<span style="color:#f92672">.</span>warn(warningText)
+</span></span><span style="display:flex;"><span>            messaging<span style="color:#f92672">.</span>sendImportant(warningText)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># general status</span>
+</span></span><span style="display:flex;"><span>        status <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;status&#34;</span>]
+</span></span><span style="display:flex;"><span>        phrase <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#34;data&#34;</span>][<span style="color:#e6db74">&#34;statusPhrase&#34;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> status <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;GREEN&#34;</span>:
+</span></span><span style="display:flex;"><span>            warningText <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Status: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (status, phrase)
+</span></span><span style="display:flex;"><span>            log<span style="color:#f92672">.</span>warn(warningText)
+</span></span><span style="display:flex;"><span>            messaging<span style="color:#f92672">.</span>sendImportant(warningText)
+</span></span></code></pre></div><p>All status updates with <code>status != &quot;GREEN&quot;</code> can be monitored to detect system or camera errors.</p>
 <center>
     <img width="70%" src="/img/unifi/monitoring.png"/>
 </center>
@@ -486,6 +486,25 @@ action <span style="color:#f92672">=</span> data<span style="color:#f92672">.</s
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/yt/">This Weird YouTube Trick</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     

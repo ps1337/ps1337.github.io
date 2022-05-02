@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -296,7 +296,7 @@
 
     <br>
     <div class="content-width text-justify"><p>Using 2 factor authentication generally is a good idea. However, losing 2 factor data can be the opposite. If you&rsquo;re using Google Authenticator to generate 2FA codes, you may have wondered how to backup the data the app uses to generate codes. The method described here requires root access of course but doesn&rsquo;t require a third party app. Please note that you can always use apps that backup app data but recovering this data on newer Android versions can fail. To avoid this, use this script:</p>
-<pre><code>#!/bin/bash
+<pre tabindex="0"><code>#!/bin/bash
 
 # $1: IP
 
@@ -304,9 +304,8 @@ adb root
 adb connect $1:5555
 adb pull /data/data/com.google.android.apps.authenticator2/databases/databases /tmp/.bkp
 
-sqlite3 /tmp/.bkp &quot;select * from accounts;&quot;
+sqlite3 /tmp/.bkp &#34;select * from accounts;&#34;
 rm /tmp/.bkp
-
 </code></pre><p>This pulls the SQLite database of Google Authenticator and prints all secret data. You can then use the printed data to backup your Authenticator state and to recover it later in case other restoring mechanisms fail.</p>
 </div>
 

@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -305,97 +305,97 @@
 <p>This of course allows very specific fuzzing at a great speed, but also requires quite some effort to pull of. An approach that <em>might</em> be easier to pull involves using Frida and in-process fuzzing. This, of course, comes with a much higher fuzzing performance impact compared to the native approach.</p>
 <h1 id="ok-how">OK HOW?</h1>
 <p>Let&rsquo;s Consider this very sophisticated fuzzing target:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lol</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>b)
-{
-    <span style="color:#66d9ef">char</span> buffer[<span style="color:#ae81ff">1337</span>];
-    strcpy(buffer, b);
-}
-
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv)
-{
-    lol(argv[<span style="color:#ae81ff">1</span>]);
-}
-</code></pre></div><p>Yes, the vulnerability is obvious and yes, you can find it using simple reverse engineering but I don&rsquo;t want to build a better PoC just for people to stop complaining, okay? :)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lol</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>b)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> buffer[<span style="color:#ae81ff">1337</span>];
+</span></span><span style="display:flex;"><span>    strcpy(buffer, b);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    lol(argv[<span style="color:#ae81ff">1</span>]);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Yes, the vulnerability is obvious and yes, you can find it using simple reverse engineering but I don&rsquo;t want to build a better PoC just for people to stop complaining, okay? :)</p>
 <p>The idea is to inject some code into the target process and use it to perform the fuzzing directly in the process as soon as the target function would be called regularly. This causes the target to execute all setup routines for us, up to the point where the harness would also hand over the work to the fuzzer. The target function will then be called in an infinite loop, with some optional cleanup in between, while mutating the input. This mutation can also happen directly in memory, if applicable.</p>
 <p>I&rsquo;ve created this highly complex fuzzing setup using Frida&rsquo;s Python bindings:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python3</span>
-
-<span style="color:#f92672">import</span> frida
-<span style="color:#f92672">import</span> time
-<span style="color:#f92672">import</span> sys
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">on_message</span>(message, data):
-    print(message)
-
-js <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">// Maximum payload size
-</span><span style="color:#e6db74">var size = 2000;
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">// Argument for the fuzzed function
-</span><span style="color:#e6db74">var arg = Memory.alloc(size);
-</span><span style="color:#e6db74">var fuzzData = [0x41];
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">var lolAddr = null;
-</span><span style="color:#e6db74">var lolHandle = null;
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">// Find the vulnerable function in the target process
-</span><span style="color:#e6db74">// and get a handle to it
-</span><span style="color:#e6db74">Module.enumerateSymbolsSync(&#34;yolo&#34;).forEach(function(symbol){
-</span><span style="color:#e6db74">        switch (symbol.name) {
-</span><span style="color:#e6db74">            case &#34;lol&#34;:
-</span><span style="color:#e6db74">                lolAddr = symbol.address;
-</span><span style="color:#e6db74">                // use the function prototype to create a handle
-</span><span style="color:#e6db74">                lolHandle = new NativeFunction(ptr(lolAddr), &#34;void&#34;, [&#34;pointer&#34;]);
-</span><span style="color:#e6db74">                console.log(&#34;[i] lol() is at &#34; + lolAddr);
-</span><span style="color:#e6db74">        }
-</span><span style="color:#e6db74">    });
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">if (lolAddr == null) {
-</span><span style="color:#e6db74">    die(&#34;Error finding symbol&#34;);
-</span><span style="color:#e6db74">}
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">// Fuzz the function in-process
-</span><span style="color:#e6db74">Interceptor.attach(ptr(lolAddr), {
-</span><span style="color:#e6db74">    // Begin fuzzing as soon as the application calls the function itself
-</span><span style="color:#e6db74">    onEnter: function(args) {
-</span><span style="color:#e6db74">        console.log(&#34;[i] Original argument: &#34; + args[0].readCString());
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">        console.log(&#34;[*] Fuzzing now&#34;);
-</span><span style="color:#e6db74">        while(fuzzData.length &lt; size) {
-</span><span style="color:#e6db74">            fuzzData.push(0x41);
-</span><span style="color:#e6db74">            Memory.writeByteArray(arg, fuzzData);
-</span><span style="color:#e6db74">            try {
-</span><span style="color:#e6db74">                lolHandle(arg);
-</span><span style="color:#e6db74">            }
-</span><span style="color:#e6db74">            catch(e) {
-</span><span style="color:#e6db74">                console.log(&#34;[!] Crash found for size &#34; + fuzzData.length);
-</span><span style="color:#e6db74">                break;
-</span><span style="color:#e6db74">            }
-</span><span style="color:#e6db74">        }
-</span><span style="color:#e6db74">    },
-</span><span style="color:#e6db74">});
-</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
-
-<span style="color:#75715e"># Spawn the target process</span>
-pid <span style="color:#f92672">=</span> frida<span style="color:#f92672">.</span>spawn([<span style="color:#e6db74">&#34;./yolo&#34;</span>, <span style="color:#e6db74">&#34;hello&#34;</span>])
-session <span style="color:#f92672">=</span> frida<span style="color:#f92672">.</span>attach(pid)
-
-<span style="color:#75715e"># Inject dem scriptz</span>
-script <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>create_script(js)
-script<span style="color:#f92672">.</span>on(<span style="color:#e6db74">&#39;message&#39;</span>, on_message)
-script<span style="color:#f92672">.</span>load()
-
-<span style="color:#75715e"># Continue execution of the target</span>
-frida<span style="color:#f92672">.</span>resume(pid)
-
-sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>read()
-</code></pre></div><p>Ok cool, what does this all do? Here&rsquo;s the output:</p>
-<pre><code>[i] lol() is at 0x5560a8bc5149
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> frida
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">on_message</span>(message, data):
+</span></span><span style="display:flex;"><span>    print(message)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>js <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">// Maximum payload size
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">var size = 2000;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">// Argument for the fuzzed function
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">var arg = Memory.alloc(size);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">var fuzzData = [0x41];
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">var lolAddr = null;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">var lolHandle = null;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">// Find the vulnerable function in the target process
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">// and get a handle to it
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Module.enumerateSymbolsSync(&#34;yolo&#34;).forEach(function(symbol){
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        switch (symbol.name) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            case &#34;lol&#34;:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                lolAddr = symbol.address;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                // use the function prototype to create a handle
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                lolHandle = new NativeFunction(ptr(lolAddr), &#34;void&#34;, [&#34;pointer&#34;]);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                console.log(&#34;[i] lol() is at &#34; + lolAddr);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    });
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if (lolAddr == null) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    die(&#34;Error finding symbol&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">// Fuzz the function in-process
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Interceptor.attach(ptr(lolAddr), {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // Begin fuzzing as soon as the application calls the function itself
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    onEnter: function(args) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        console.log(&#34;[i] Original argument: &#34; + args[0].readCString());
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        console.log(&#34;[*] Fuzzing now&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        while(fuzzData.length &lt; size) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            fuzzData.push(0x41);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            Memory.writeByteArray(arg, fuzzData);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            try {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                lolHandle(arg);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            catch(e) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                console.log(&#34;[!] Crash found for size &#34; + fuzzData.length);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                break;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">});
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Spawn the target process</span>
+</span></span><span style="display:flex;"><span>pid <span style="color:#f92672">=</span> frida<span style="color:#f92672">.</span>spawn([<span style="color:#e6db74">&#34;./yolo&#34;</span>, <span style="color:#e6db74">&#34;hello&#34;</span>])
+</span></span><span style="display:flex;"><span>session <span style="color:#f92672">=</span> frida<span style="color:#f92672">.</span>attach(pid)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Inject dem scriptz</span>
+</span></span><span style="display:flex;"><span>script <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>create_script(js)
+</span></span><span style="display:flex;"><span>script<span style="color:#f92672">.</span>on(<span style="color:#e6db74">&#39;message&#39;</span>, on_message)
+</span></span><span style="display:flex;"><span>script<span style="color:#f92672">.</span>load()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Continue execution of the target</span>
+</span></span><span style="display:flex;"><span>frida<span style="color:#f92672">.</span>resume(pid)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>read()
+</span></span></code></pre></div><p>Ok cool, what does this all do? Here&rsquo;s the output:</p>
+<pre tabindex="0"><code>[i] lol() is at 0x5560a8bc5149
 [i] Original argument: hello
 [*] Fuzzing now
 *** stack smashing detected ***: &lt;unknown&gt; terminated
@@ -407,125 +407,125 @@ sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>
 <p>The best feature is that it uses coverage information provided by <a href="https://www.frida.re/news/2017/08/25/frida-10-5-released/">Frida/Stalker</a> in order to find new execution paths while fuzzing and mutating the input accordingly. This mutation is based on a pre-defined set of corpus files.</p>
 <h2 id="frizzer-example">Frizzer Example</h2>
 <p>You can find some fuzzing targets in the Frizzer repository, but I&rsquo;ve built one myself in order to see how Frizzer performs and what it expects. I&rsquo;m using a target modified from my <a href="https://bananamafia.dev/post/binary-canary-bruteforce/">previous stack canary post</a>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/socket.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/types.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;netinet/in.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;arpa/inet.h&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span>
-<span style="color:#75715e">#define PORT 7777
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">thisIsBad</span>()
-{
-    <span style="color:#66d9ef">char</span> yolo[<span style="color:#ae81ff">12</span>];
-    strcpy(yolo, <span style="color:#e6db74">&#34;13333333333333333333333333333333333333333333333333337&#34;</span>);
-}
-
-<span style="color:#75715e">// Frizzer has to get to the `thisIsBad` call using
-</span><span style="color:#75715e">// the Stalker information
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">pwned</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>buf)
-{
-    printf(<span style="color:#e6db74">&#34;[*] Received: %s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, buf);
-    <span style="color:#66d9ef">if</span> (strlen(buf) <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">16</span>)
-    {
-        printf(<span style="color:#e6db74">&#34;1</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-        <span style="color:#66d9ef">if</span> (strncmp(buf <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;A&#34;</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-        {
-            printf(<span style="color:#e6db74">&#34;2</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-            <span style="color:#66d9ef">if</span> (strncmp(buf <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#34;X&#34;</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-            {
-                printf(<span style="color:#e6db74">&#34;3</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-                printf(<span style="color:#e6db74">&#34;[!] PWNED</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-                thisIsBad();
-            }
-        }
-    }
-}
-
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
-{
-    <span style="color:#66d9ef">int</span> sockfd, ret;
-    <span style="color:#66d9ef">struct</span> sockaddr_in serverAddr;
-
-    <span style="color:#66d9ef">int</span> newSocket;
-    <span style="color:#66d9ef">struct</span> sockaddr_in newAddr;
-
-    socklen_t addr_size;
-
-    <span style="color:#66d9ef">char</span> buffer[<span style="color:#ae81ff">1024</span>];
-    pid_t childpid;
-
-    sockfd <span style="color:#f92672">=</span> socket(AF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
-    memset(<span style="color:#f92672">&amp;</span>serverAddr, <span style="color:#e6db74">&#39;\0&#39;</span>, <span style="color:#66d9ef">sizeof</span>(serverAddr));
-    serverAddr.sin_family <span style="color:#f92672">=</span> AF_INET;
-    serverAddr.sin_port <span style="color:#f92672">=</span> htons(PORT);
-    serverAddr.sin_addr.s_addr <span style="color:#f92672">=</span> inet_addr(<span style="color:#e6db74">&#34;127.0.0.1&#34;</span>);
-
-    ret <span style="color:#f92672">=</span> bind(sockfd, (<span style="color:#66d9ef">struct</span> sockaddr <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>serverAddr, <span style="color:#66d9ef">sizeof</span>(serverAddr));
-    <span style="color:#66d9ef">if</span> (listen(sockfd, <span style="color:#ae81ff">10</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-    {
-        printf(<span style="color:#e6db74">&#34;[+] Listening....</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-    }
-    <span style="color:#66d9ef">else</span>
-    {
-        printf(<span style="color:#e6db74">&#34;[-] Error Binding to Port</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-    }
-
-    <span style="color:#66d9ef">while</span> (<span style="color:#ae81ff">1</span>)
-    {
-        newSocket <span style="color:#f92672">=</span> accept(sockfd, (<span style="color:#66d9ef">struct</span> sockaddr <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>newAddr, <span style="color:#f92672">&amp;</span>addr_size);
-        printf(<span style="color:#e6db74">&#34;[*] Got Connection from %s:%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
-
-        <span style="color:#75715e">// get user input
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">char</span> data[<span style="color:#ae81ff">32</span>];
-        bzero(data, <span style="color:#66d9ef">sizeof</span>(data));
-        recv(newSocket, data, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">0</span>);
-
-        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>strlen(data))
-        {
-            <span style="color:#66d9ef">continue</span>;
-        }
-
-        pwned(data);
-
-        <span style="color:#75715e">// if this works then no buffer overflow has occurred
-</span><span style="color:#75715e"></span>        send(newSocket, <span style="color:#e6db74">&#34;OK</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, strlen(<span style="color:#e6db74">&#34;OK</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>), <span style="color:#ae81ff">0</span>);
-        close(newSocket);
-    }
-
-    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-}
-</code></pre></div><p>This is a simple server application that accepts user input via TCP. This was compiled using <code>gcc -no-pie test.c -o test</code>. Disabling PIE theoretically isn&rsquo;t necessary because Frizzer <em>could</em> get the address of the function to fuzz directly on run time, as seen in the first example at the beginning of this post.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;unistd.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/socket.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/types.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;netinet/in.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;arpa/inet.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define PORT 7777
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">thisIsBad</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> yolo[<span style="color:#ae81ff">12</span>];
+</span></span><span style="display:flex;"><span>    strcpy(yolo, <span style="color:#e6db74">&#34;13333333333333333333333333333333333333333333333333337&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Frizzer has to get to the `thisIsBad` call using
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// the Stalker information
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">pwned</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>buf)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#e6db74">&#34;[*] Received: %s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, buf);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (strlen(buf) <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">16</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#e6db74">&#34;1</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (strncmp(buf <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;A&#34;</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            printf(<span style="color:#e6db74">&#34;2</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (strncmp(buf <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#34;X&#34;</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                printf(<span style="color:#e6db74">&#34;3</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>                printf(<span style="color:#e6db74">&#34;[!] PWNED</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>                thisIsBad();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> sockfd, ret;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sockaddr_in serverAddr;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> newSocket;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> sockaddr_in newAddr;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    socklen_t addr_size;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> buffer[<span style="color:#ae81ff">1024</span>];
+</span></span><span style="display:flex;"><span>    pid_t childpid;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    sockfd <span style="color:#f92672">=</span> socket(AF_INET, SOCK_STREAM, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    memset(<span style="color:#f92672">&amp;</span>serverAddr, <span style="color:#e6db74">&#39;\0&#39;</span>, <span style="color:#66d9ef">sizeof</span>(serverAddr));
+</span></span><span style="display:flex;"><span>    serverAddr.sin_family <span style="color:#f92672">=</span> AF_INET;
+</span></span><span style="display:flex;"><span>    serverAddr.sin_port <span style="color:#f92672">=</span> htons(PORT);
+</span></span><span style="display:flex;"><span>    serverAddr.sin_addr.s_addr <span style="color:#f92672">=</span> inet_addr(<span style="color:#e6db74">&#34;127.0.0.1&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ret <span style="color:#f92672">=</span> bind(sockfd, (<span style="color:#66d9ef">struct</span> sockaddr <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>serverAddr, <span style="color:#66d9ef">sizeof</span>(serverAddr));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (listen(sockfd, <span style="color:#ae81ff">10</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#e6db74">&#34;[+] Listening....</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#e6db74">&#34;[-] Error Binding to Port</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        newSocket <span style="color:#f92672">=</span> accept(sockfd, (<span style="color:#66d9ef">struct</span> sockaddr <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>newAddr, <span style="color:#f92672">&amp;</span>addr_size);
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#e6db74">&#34;[*] Got Connection from %s:%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// get user input
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">char</span> data[<span style="color:#ae81ff">32</span>];
+</span></span><span style="display:flex;"><span>        bzero(data, <span style="color:#66d9ef">sizeof</span>(data));
+</span></span><span style="display:flex;"><span>        recv(newSocket, data, <span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>strlen(data))
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        pwned(data);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// if this works then no buffer overflow has occurred
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        send(newSocket, <span style="color:#e6db74">&#34;OK</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, strlen(<span style="color:#e6db74">&#34;OK</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>), <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>        close(newSocket);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This is a simple server application that accepts user input via TCP. This was compiled using <code>gcc -no-pie test.c -o test</code>. Disabling PIE theoretically isn&rsquo;t necessary because Frizzer <em>could</em> get the address of the function to fuzz directly on run time, as seen in the first example at the beginning of this post.</p>
 <p>This is the script used to start the fuzzing process:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
-</span><span style="color:#75715e"></span>
-rm -rf tmpprojdir
-
-frizzer init tmpprojdir
-cat &gt; tmpprojdir/config <span style="color:#e6db74">&lt;&lt;EOF
-</span><span style="color:#e6db74">[fuzzer]
-</span><span style="color:#e6db74">log_level       = 3 # debug
-</span><span style="color:#e6db74">debug_mode      = false
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">[target]
-</span><span style="color:#e6db74">process_name    = &#34;test&#34;
-</span><span style="color:#e6db74">function        = 0x00401294
-</span><span style="color:#e6db74">remote_frida    = false
-</span><span style="color:#e6db74">fuzz_in_process = true
-</span><span style="color:#e6db74">modules = [
-</span><span style="color:#e6db74">        &#34;/&lt;path to target&gt;/yolotest/test&#34;,
-</span><span style="color:#e6db74">    ]
-</span><span style="color:#e6db74">EOF</span>
-
-frizzer add -p tmpprojdir indir
-frizzer fuzz -p tmpprojdir
-</code></pre></div><p>As can be seen, Frizzer requires the address of the target function that&rsquo;s going to be fuzzed. I&rsquo;ve determined this address using <code>radare2</code> like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ r2 -A -c <span style="color:#e6db74">&#34;afl~pwned&#34;</span> -q test
-0x00401294    <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">179</span>          sym.pwned
-</code></pre></div><p>Also, Frizzer seems to mutate the first parameter of the target function during fuzzing - in this case a <code>char*</code> value. If you find yourself trying to fuzz something different you might have to customize Frizzer to your needs :)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>rm -rf tmpprojdir
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>frizzer init tmpprojdir
+</span></span><span style="display:flex;"><span>cat &gt; tmpprojdir/config <span style="color:#e6db74">&lt;&lt;EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[fuzzer]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log_level       = 3 # debug
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">debug_mode      = false
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[target]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">process_name    = &#34;test&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">function        = 0x00401294
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">remote_frida    = false
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fuzz_in_process = true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">modules = [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;/&lt;path to target&gt;/yolotest/test&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>frizzer add -p tmpprojdir indir
+</span></span><span style="display:flex;"><span>frizzer fuzz -p tmpprojdir
+</span></span></code></pre></div><p>As can be seen, Frizzer requires the address of the target function that&rsquo;s going to be fuzzed. I&rsquo;ve determined this address using <code>radare2</code> like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ r2 -A -c <span style="color:#e6db74">&#34;afl~pwned&#34;</span> -q test
+</span></span><span style="display:flex;"><span>0x00401294    <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">179</span>          sym.pwned
+</span></span></code></pre></div><p>Also, Frizzer seems to mutate the first parameter of the target function during fuzzing - in this case a <code>char*</code> value. If you find yourself trying to fuzz something different you might have to customize Frizzer to your needs :)</p>
 <p>The directory <code>indir</code> will be filled with files that contain corpus data. This data is the basis for all the fuzzing that&rsquo;s going on.</p>
 <p>Let&rsquo;s see Frizzer in action:</p>
 <p><img src="/img/frida-fuzz/frizzer.gif" alt="Frizzer"></p>

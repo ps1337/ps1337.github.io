@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -296,43 +296,43 @@
 
     <br>
     <div class="content-width text-justify"><p>When writing Dockerfiles, people often use something like this to download and install software from GitHub:</p>
-<pre><code>ENV SOFTWARE_VERSION 1.33.7
+<pre tabindex="0"><code>ENV SOFTWARE_VERSION 1.33.7
 RUN curl -sSL \
     https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb
 </code></pre><p>This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:</p>
-<pre><code>curl -sSL \
+<pre tabindex="0"><code>curl -sSL \
    $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \
-   grep &quot;browser_download_url&quot; | \
-   grep &quot;amd64.deb&quot; | \
-   cut -d &quot;:&quot; -f 2,3 | \
-   tr --delete \&quot; | \
-   tr --delete &quot; &quot;) \
+   grep &#34;browser_download_url&#34; | \
+   grep &#34;amd64.deb&#34; | \
+   cut -d &#34;:&#34; -f 2,3 | \
+   tr --delete \&#34; | \
+   tr --delete &#34; &#34;) \
 -o /tmp/software-amd64.deb \
 </code></pre><p>As you can see, the endpoint at</p>
-<pre><code>https://api.github.com/repos/user/repo/releases/latest
+<pre tabindex="0"><code>https://api.github.com/repos/user/repo/releases/latest
 </code></pre><p>returns a JSON object which contains the download links for the newest release for each maintained architecture (along with some additional stuff maybe). For example, let&rsquo;s have a look at <a href="https://github.com/atom/atom/">Atom</a>:</p>
-<pre><code>&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-1.25.0-full.nupkg&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-amd64.deb&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-amd64.tar.gz&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-api.json&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-mac-symbols.zip&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-mac.zip&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-windows.zip&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom-x64-windows.zip&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/atom.x86_64.rpm&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/AtomSetup-x64.exe&quot;
-&quot;browser_download_url&quot;:
-    &quot;https://github.com/atom/atom/releases/download/v1.25.0/AtomSetup.exe&quot;
+<pre tabindex="0"><code>&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom-1.25.0-full.nupkg&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom-amd64.deb&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom-amd64.tar.gz&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom-api.json&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom-mac-symbols.zip&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom-mac.zip&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom-windows.zip&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom-x64-windows.zip&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/atom.x86_64.rpm&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/AtomSetup-x64.exe&#34;
+&#34;browser_download_url&#34;:
+    &#34;https://github.com/atom/atom/releases/download/v1.25.0/AtomSetup.exe&#34;
 </code></pre><p>This can be parsed with <code>grep</code> and <code>tr</code> like above or <a href="https://starkandwayne.com/blog/how-to-download-the-latest-release-from-github/">by using jq</a>.</p>
 </div>
 

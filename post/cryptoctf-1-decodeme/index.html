@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -297,32 +297,32 @@
     <br>
     <div class="content-width text-justify"><p>This is short writeup on the <em>Decode Me</em> challenge of the first CryptoCTF.</p>
 <p>The following string has to be decoded into a flag somehow:</p>
-<pre><code>D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey xam lb lbaH
+<pre tabindex="0"><code>D: mb xwhvxw mlnX 4X6AhPLAR4eupSRJ6FLt8AgE6JsLdBRxq57L8IeMyBRHp6IGsmgFIB5E :ztey xam lb lbaH
 </code></pre><p>The first thing that comes to mind is that some sort of substitution cipher was being used in the first place. A cipher of this kind is the <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caesar cipher</a> which is also known as ROT. <a href="https://gchq.github.io/CyberChef/#recipe=ROT13(true,true,7)&amp;input=RDogbWIgeHdodnh3IG1sblggNFg2QWhQTEFSNGV1cFNSSjZGTHQ4QWdFNkpzTGRCUnhxNTdMOEllTXlCUkhwNklHc21nRklCNUUgOnp0ZXkgeGFtIGxiIGxiYUg">Fiddling around</a> with this cipher and a key of <code>7</code> yields:</p>
-<pre><code>K: ti edoced tsuE 4E6HoWSHY4lbwZYQ6MSa8HnL6QzSkIYex57S8PlTfIYOw6PNztnMPI5L :galf eht si sihO
+<pre tabindex="0"><code>K: ti edoced tsuE 4E6HoWSHY4lbwZYQ6MSa8HnL6QzSkIYex57S8PlTfIYOw6PNztnMPI5L :galf eht si sihO
 </code></pre><p>And reversed:</p>
-<pre><code>Ohis is the flag: L5IPMntzNP6wOYIfTlP8S75xeYIkSzQ6LnH8aSM6QYZwbl4YHSWoH6E4 Eust decode it :K
+<pre tabindex="0"><code>Ohis is the flag: L5IPMntzNP6wOYIfTlP8S75xeYIkSzQ6LnH8aSM6QYZwbl4YHSWoH6E4 Eust decode it :K
 </code></pre><p>The odd thing is that some characters, the <code>O</code> in <code>Ohis</code>, the <code>E</code> in <code>Eust</code> and the smiley and the end of the line seem broken. Playing around with other keys and ciphers like Affine cipher or Vigenère didn&rsquo;t work. Also just decoding the alleged flag with Base64 and other encodings didn&rsquo;t produce anything useful.</p>
 <p>While trying to fix the corrupted characters, it has been observed that with a ROT key of <code>12</code>, the corrupted characters seem to be included correctly in the plaintext when merging it with the result with key <code>7</code>:</p>
-<pre><code>Tmnx nx ymj kqfl: Q5NURsyeSU6bTDNkYqU8X75cjDNpXeV6QsM8fXR6VDEbgq4DMXBtM6J4 Jzxy ijhtij ny :P
+<pre tabindex="0"><code>Tmnx nx ymj kqfl: Q5NURsyeSU6bTDNkYqU8X75cjDNpXeV6QsM8fXR6VDEbgq4DMXBtM6J4 Jzxy ijhtij ny :P
 </code></pre><p>Base64 decoding this prints:</p>
-<pre><code>CTF̞INL3db&lt;_\3i]zB&lt;}tzT1pm3x%
+<pre tabindex="0"><code>CTF̞INL3db&lt;_\3i]zB&lt;}tzT1pm3x%
 </code></pre><p>This at least starts with the <code>CTF</code> string&hellip;</p>
 <p>The assumption that has been made is that the alleged flag is encoded with Base64. It&rsquo;s known that all flags start with the <code>CCTF{</code> string in this particular CTF, so Base64 encoding this prints: <code>Q0NURns=</code> as reference. Therefore the encoded flag has to start with this string or a substring of it.</p>
 <p>The decryption result with key <code>12</code> starts with <code>Q5NUR</code> which is quite similar to the string that&rsquo;s being searched for. Let&rsquo;s line up both decryption results:</p>
-<pre><code>L5IPMntzNP6wOYIfTlP8S75xeYIkSzQ6LnH8aSM6QYZwbl4YHSWoH6E4 (key 7)
+<pre tabindex="0"><code>L5IPMntzNP6wOYIfTlP8S75xeYIkSzQ6LnH8aSM6QYZwbl4YHSWoH6E4 (key 7)
 Q5NURsyeSU6bTDNkYqU8X75cjDNpXeV6QsM8fXR6VDEbgq4DMXBtM6J4 (key 12)
 </code></pre><p>It was striking that the <em>numbers</em> weren&rsquo;t rotated when decrypting the string with <a href="https://gchq.github.io/CyberChef">CyberChef</a>. According to the reference above, the second character has to be a zero but it&rsquo;s a five. So I&rsquo;ve decided to just add <code>5</code> to every number that&rsquo;s present in the second decryption result (second line in the listing above):</p>
-<pre><code>Q0NURsyeSU1bTDNkYqU3X20cjDNpXeV1QsM3fXR1VDEbgq9DMXBtM1J9
+<pre tabindex="0"><code>Q0NURsyeSU1bTDNkYqU3X20cjDNpXeV1QsM3fXR1VDEbgq9DMXBtM1J9
 </code></pre><p>And Base64-decoded:</p>
-<pre><code>CCTF̞IM[L3db7_m3i]uB7}tuT11pm3R}
+<pre tabindex="0"><code>CCTF̞IM[L3db7_m3i]uB7}tuT11pm3R}
 </code></pre><p>Looks better but not good enough.</p>
 <p>An additional thing to notice is that they string decrypted with <code>7</code> has all lowercase characters correct. The <code>12</code> one has all uppercase characters correct - the <code>T</code>, <code>J</code> and <code>P</code>. So the idea was to merge these strings together: Use the lowercase characters from the <code>7</code> one, the uppercase ones from the <code>12</code> string and also rotate the numbers as shown before. This yields:</p>
-<pre><code>Q0NURntzSU1wTDNfYlU3X20xeDNkXzV1QnM3aXR1VDEwbl9DMXBoM1J9
+<pre tabindex="0"><code>Q0NURntzSU1wTDNfYlU3X20xeDNkXzV1QnM3aXR1VDEwbl9DMXBoM1J9
 </code></pre><p>And Base64-decoded:</p>
-<pre><code>CCTF{sIMpL3_bU7_m1x3d_5uBs7ituT10n_C1ph3R}
+<pre tabindex="0"><code>CCTF{sIMpL3_bU7_m1x3d_5uBs7ituT10n_C1ph3R}
 </code></pre><p>What to take away from this? I don&rsquo;t know. Maybe that</p>
-<pre><code>Base64Encode(CCTF{) = Q0NURns=
+<pre tabindex="0"><code>Base64Encode(CCTF{) = Q0NURns=
 Base64Decode(Q0NURnt=) = CCTF{
 </code></pre><p>So this means that there are various inputs for Base64 decoding that decode to the same string.</p>
 </div>

@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -306,20 +306,20 @@
     <div class="content-width text-justify"><p>One of my main takeaways from this year&rsquo;s r2con is that <a href="https://www.frida.re">Frida</a> is cool and that <a href="https://github.com/nowsecure/r2frida">r2frida</a>, the integration with <code>radare2</code>, is even cooler. Using this, it&rsquo;s possible to pair the benefits of dynamic instrumentation of Frida with the analysis features and workflow of <code>radare2</code>. This is a small tutorial to get started with both Frida and <code>r2frida</code> that&rsquo;s based on the <a href="/misc/r2frida-1/re.rada.con.ctf.r2xor.zip">r2xor</a> challenge of the recent r2con CTF. Please note that this is <em>not</em> a complete writeup for <code>r2xor</code>.</p>
 <h1 id="the-challenge">The Challenge</h1>
 <p>An Android <code>apk</code> file is given that contains the flag somewhere embedded into it. Based on the challenge name, it can be assumed that the flag is stored as a XOR encrypted value somewhere in the app, along with a static decryption key for it. The plan is to instrument the app using Frida in order to dump the flag. This is possible because the app uses the function:</p>
-<pre><code>sym.check_flag_char_const___char_const(int32_t arg_4h, int32_t arg_8h)
+<pre tabindex="0"><code>sym.check_flag_char_const___char_const(int32_t arg_4h, int32_t arg_8h)
 </code></pre><p>to check whether the user provided the correct flag. It takes two string pointer parameters: A pointer to the user input and a pointer to the correct flag, in whichever form. By hooking this function, the expected flag value can be read and the challenge is solved. Good plan for now.</p>
 <p>The app comes bundled with a native library called <code>libnative-lib.so</code> that contains the validation function above. Therefore hooking has to be performed in this native library. Also, the app checks whether the device its running on is rooted. If this is the case, the app won&rsquo;t run and will display a blank screen instead.</p>
 <h1 id="working-environment">Working Environment</h1>
 <p>I&rsquo;ve used the <a href="https://www.genymotion.com/">Genymotion</a> Android emulator. This runs x86 based pre-rooted Android devices on a local machine and exposes an <code>adb</code> port for easy shell access. I&rsquo;ve replaced the <code>adb</code> binary of Genymotion with my local version to prevent errors caused by incompatible <code>adb</code> versions.</p>
 <p>Frida comes with both a server and a client component. Therefore the next thing to prepare is a new <code>pipenv</code> with the Frida client installed. If you don&rsquo;t use the newest version, a <a href="https://github.com/frida/frida-java-bridge/issues/29">bug</a> can occur that prevents hooking functions that are executed early in the application life cycle, such as <code>onCreate()</code>. Calling <code>frida-ls-devices</code> should show a virtual Android USB device in case the Genymotion VM is running.</p>
 <p>The <a href="https://github.com/frida/frida/releases">latest Frida server release</a> can be downloaded with the correct architecture, x86 in this case, and uploaded to the running Android device:</p>
-<pre><code>adb push frida-server /data/local/tmp
+<pre tabindex="0"><code>adb push frida-server /data/local/tmp
 </code></pre><p>Don&rsquo;t forget to set the executable bit and to run the Frida server as root from an <code>adb</code> shell.</p>
 <p>The last thing to do is to install <code>r2frida</code> using the <code>radare2</code> packet manager:</p>
-<pre><code>r2pm -ci r2frida
+<pre tabindex="0"><code>r2pm -ci r2frida
 </code></pre><h1 id="bypassing-root-detection">Bypassing Root Detection</h1>
 <p>The first method that will be executed when launching the app is <code>onCreate()</code> of the class <code>MainActivity</code>. This is the decompiled code of it:</p>
-<pre><code>public void onCreate(Bundle paramBundle) {
+<pre tabindex="0"><code>public void onCreate(Bundle paramBundle) {
     super.onCreate(paramBundle);
     setContentView(2131296284);
     ((Button)findViewById(2131165219)).setOnClickListener(new a(this));
@@ -331,43 +331,43 @@
 }
 </code></pre><p>The app terminates in case <code>n()</code> returns <code>true</code>. The first thing <code>n()</code> does is creating an instance of the <code>RootDetection</code> class and proceeding with the root check. In order to run this app on the rooted device, it would therefore be convenient to force <code>n()</code> to always return <code>false</code> &ndash; Frida to the rescue.</p>
 <p>The plan is to launch the app using Frida while replacing <code>n()</code> with a function that just performs a <code>return false</code>. I&rsquo;ve used this script for this task:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python3</span>
-
-<span style="color:#f92672">import</span> frida
-<span style="color:#f92672">import</span> time
-<span style="color:#f92672">import</span> sys
-
-js <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
-</span><span style="color:#e6db74">Java.perform(function() {
-</span><span style="color:#e6db74">       var mainActivity = Java.use(&#34;re.rada.con.ctf.r2xor.MainActivity&#34;);
-</span><span style="color:#e6db74">       mainActivity.n.implementation = function() {
-</span><span style="color:#e6db74">           console.log(&#34;[*] Root check called&#34;);
-</span><span style="color:#e6db74">           return false;
-</span><span style="color:#e6db74">        }
-</span><span style="color:#e6db74">       console.log(&#34;[+] Hooking complete&#34;)
-</span><span style="color:#e6db74">})
-</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
-
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">on_message</span>(message, data):
-    print(message)
-
-
-device <span style="color:#f92672">=</span> frida<span style="color:#f92672">.</span>get_usb_device()
-pid <span style="color:#f92672">=</span> device<span style="color:#f92672">.</span>spawn([<span style="color:#e6db74">&#39;re.rada.con.ctf.r2xor&#39;</span>])
-print(<span style="color:#e6db74">&#34;[+] Got PID </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (pid))
-session <span style="color:#f92672">=</span> device<span style="color:#f92672">.</span>attach(pid)
-script <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>create_script(js)
-
-<span style="color:#75715e"># Callback function</span>
-script<span style="color:#f92672">.</span>on(<span style="color:#e6db74">&#39;message&#39;</span>, on_message)
-script<span style="color:#f92672">.</span>load()
-
-device<span style="color:#f92672">.</span>resume(pid)
-
-sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>read()
-print(<span style="color:#e6db74">&#34;[!] Exiting&#34;</span>)
-</code></pre></div><p>Frida itself spawns the app on the device, sets up the hooks, injects JavaScript code into the target process and resumes the process afterwards. This allows various modifications to an application, such as the ones defined in the <code>js</code> variable. Lets' break it down:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#!/usr/bin/python3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> frida
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>js <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Java.perform(function() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       var mainActivity = Java.use(&#34;re.rada.con.ctf.r2xor.MainActivity&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       mainActivity.n.implementation = function() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">           console.log(&#34;[*] Root check called&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">           return false;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       console.log(&#34;[+] Hooking complete&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">})
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">on_message</span>(message, data):
+</span></span><span style="display:flex;"><span>    print(message)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> frida<span style="color:#f92672">.</span>get_usb_device()
+</span></span><span style="display:flex;"><span>pid <span style="color:#f92672">=</span> device<span style="color:#f92672">.</span>spawn([<span style="color:#e6db74">&#39;re.rada.con.ctf.r2xor&#39;</span>])
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;[+] Got PID </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (pid))
+</span></span><span style="display:flex;"><span>session <span style="color:#f92672">=</span> device<span style="color:#f92672">.</span>attach(pid)
+</span></span><span style="display:flex;"><span>script <span style="color:#f92672">=</span> session<span style="color:#f92672">.</span>create_script(js)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Callback function</span>
+</span></span><span style="display:flex;"><span>script<span style="color:#f92672">.</span>on(<span style="color:#e6db74">&#39;message&#39;</span>, on_message)
+</span></span><span style="display:flex;"><span>script<span style="color:#f92672">.</span>load()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>device<span style="color:#f92672">.</span>resume(pid)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sys<span style="color:#f92672">.</span>stdin<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;[!] Exiting&#34;</span>)
+</span></span></code></pre></div><p>Frida itself spawns the app on the device, sets up the hooks, injects JavaScript code into the target process and resumes the process afterwards. This allows various modifications to an application, such as the ones defined in the <code>js</code> variable. Lets&rsquo; break it down:</p>
 <ol>
 <li>It&rsquo;s required to hook a function of the <code>MainActivity</code> class. In order to do this, we retrieve the class and assign it to a variable with <code>Java.use()</code> for later use.</li>
 <li>The <code>n()</code> function will be replaced with our own version that just returns <code>false</code> every time. The <code>implementation()</code> function performs just this. You could also call the original function with <code>this.n()</code> in case you would want to inject code before or after the original function.</li>
@@ -380,10 +380,10 @@ print(<span style="color:#e6db74">&#34;[!] Exiting&#34;</span>)
 <h1 id="tracing-function-calls-with-r2frida">Tracing Function Calls With r2frida</h1>
 <p>It&rsquo;s now necessary to get the values of the parameters for the <code>check_flag()</code> function. You could solve this entirely with Frida, but I&rsquo;ve decided to utilize <code>r2frida</code> and its tracing capabilities. Tracing in this context means that function calls can be <a href="https://www.frida.re/docs/frida-trace/">observed dynamically</a> while printing the passed parameters.</p>
 <p>Let&rsquo;s open the application in r2frida:</p>
-<pre><code>r2 frida://attach/usb//&lt;PID&gt;
+<pre tabindex="0"><code>r2 frida://attach/usb//&lt;PID&gt;
 </code></pre><p>Tracing can be set up with the <code>\dtf</code> command, as seen in <a href="https://github.com/enovella/r2frida-wiki/blob/master/README.md">this wiki page</a>. Remember, all <code>r2frida</code> commands have to be prefixed with a slash.</p>
 <p>Let&rsquo;s check the help text of this command:</p>
-<pre><code>[0x00000000]&gt; \dt?~dtf
+<pre tabindex="0"><code>[0x00000000]&gt; \dt?~dtf
  dtf    trace format
 [0x00000000]&gt; \dtf?
 Usage: dtf [format] || dtf [addr] [fmt]
@@ -399,19 +399,19 @@ Undocumented: Z, S
  dtf    trace format
 </code></pre><p>The <code>onEnter</code> (<code>^</code>) and string pointer (<code>z</code>) parameters seem to be fitting for this case. Now only the address of the function to be traced is required.</p>
 <p>The offset of the validation function is <code>0x00007330</code>, as determined via:</p>
-<pre><code>r2 -q -A -c &quot;afl~check&quot; libnative-lib.so
+<pre tabindex="0"><code>r2 -q -A -c &#34;afl~check&#34; libnative-lib.so
 0x00007330   28 271          sym.check_flag_char_const___char_const
 </code></pre><p>The start address of <code>libnative-lib.so</code> in the target process can be determined as follows in <code>r2frida</code>:</p>
-<pre><code>[0x00000000]&gt; \dm~libnative
+<pre tabindex="0"><code>[0x00000000]&gt; \dm~libnative
 0xcad88000 - 0xcadb6000 r-x /data/app/re.rada.con.ctf.r2xor-sROpLQAWfATDWNdVkEW8XA==/lib/x86/libnative-lib.so
 [...]
 </code></pre><p>Now the address of the function to be traced can be calculated using the library start address and the offset:</p>
-<pre><code>0xcad88000 + 0x00007330 = 0xcad8f330
+<pre tabindex="0"><code>0xcad88000 + 0x00007330 = 0xcad8f330
 </code></pre><p>Let&rsquo;s set up the tracing:</p>
-<pre><code>[0x00000000]&gt; \dtf 0xcad8f330 zz^
+<pre tabindex="0"><code>[0x00000000]&gt; \dtf 0xcad8f330 zz^
 </code></pre><p>This traces the function when entering it and prints the values of two string pointer parameters.</p>
 <p>Clicking the <em>Validate</em> button in the app now prints this in <code>r2frida</code>:</p>
-<pre><code>[TRACE] dtf     0xcad8f330      (0: &quot;�kB�&quot; 1: &quot;\u0001G\u0013\n\u001c\b\u001dS\u0007-TF*\u001eUE,PS*GV\u0010 EV\u000f&quot;)   0xcad8f2a0      libnative-lib.so 0x72a0 0xcb19d177
+<pre tabindex="0"><code>[TRACE] dtf     0xcad8f330      (0: &#34;�kB�&#34; 1: &#34;\u0001G\u0013\n\u001c\b\u001dS\u0007-TF*\u001eUE,PS*GV\u0010 EV\u000f&#34;)   0xcad8f2a0      libnative-lib.so 0x72a0 0xcb19d177
 </code></pre><p>The first parameter (<code>0</code>) contains trash (empty user input) and the second parameter (<code>1</code>) contains an interesting string that represents the expected flag value. This value has to be decoded (removing the <code>\u</code> notation) and XOR decrypted with the key <code>supersecure</code>. This key was determined using reverse engineering of the shared library. This is the flag, as determined with <em>CyberChef</em>:</p>
 <p><img src="/img/r2frida-1/r2xor-flag.jpg" alt="The Flag"></p>
 </div>

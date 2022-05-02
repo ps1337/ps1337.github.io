@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -309,7 +309,7 @@
 <li>Message your bot with a simple message like <code>/start</code> or <code>/test</code>.</li>
 </ul>
 <p>Now use</p>
-<pre><code>curl -i -X GET https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/getUpdates
+<pre tabindex="0"><code>curl -i -X GET https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/getUpdates
 </code></pre><p>to get the chat ID of the chat you created in the previous chat.</p>
 <h1 id="sending-messages">Sending messages</h1>
 <p>Now, you should have to following things:</p>
@@ -318,24 +318,24 @@
 <li>Chat ID of the chat between you and your newly created bot.</li>
 </ul>
 <p>To send a message, it&rsquo;s as simple as using the following command structure</p>
-<pre><code>curl -i -X GET &quot;https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/sendMessage?chat_id=&lt;CHAT_ID&gt;&amp;text=hello&quot;
+<pre tabindex="0"><code>curl -i -X GET &#34;https://api.telegram.org/bot&lt;BOT_TOKEN&gt;/sendMessage?chat_id=&lt;CHAT_ID&gt;&amp;text=hello&#34;
 </code></pre><h1 id="example-1-jenkins-build-notifications">Example 1: Jenkins build notifications</h1>
 <p>In order to get notified in case a Jenkins build succeeds or fails, you can edit the <code>Jenkinsfile</code> as follows</p>
-<pre><code>try {
+<pre tabindex="0"><code>try {
    // Build steps
 }
 catch(error) {
    // Send Telegram message: Fail
-   error &quot;Exception occurred, aborting&quot;
+   error &#34;Exception occurred, aborting&#34;
 }
 // Send Telegram message: Success
 </code></pre><h1 id="example-2-travis-notifications">Example 2: Travis notifications</h1>
 <p>If you use <a href="https://www.travis-ci.org">Travis CI</a> to build your projects after pushing to GitHub, notifications can be implemented by editing the <code>.travis.yml</code> file:</p>
-<pre><code>after_success:
-  - curl -iX GET &quot;https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$CHATID&amp;text=Build OK&quot; 2&gt;&amp;1 &gt;/dev/null
+<pre tabindex="0"><code>after_success:
+  - curl -iX GET &#34;https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$CHATID&amp;text=Build OK&#34; 2&gt;&amp;1 &gt;/dev/null
 
 after_failure:
-  - curl -iX GET &quot;https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$CHATID&amp;text=Build failed&quot; 2&gt;&amp;1 &gt;/dev/null
+  - curl -iX GET &#34;https://api.telegram.org/bot$TOKEN/sendMessage?chat_id=$CHATID&amp;text=Build failed&#34; 2&gt;&amp;1 &gt;/dev/null
 </code></pre><p>Two things are important here:</p>
 <ol>
 <li>Redirect the output to <code>/dev/null</code> in order to prevent the chat ID from being logged into the public build log.</li>
@@ -351,6 +351,25 @@ after_failure:
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/yt/">This Weird YouTube Trick</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -389,27 +408,6 @@ after_failure:
     <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
     
     <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/dotfile-shellcheck/">Using Shellcheck and Docker to Automatically Lint Dotfiles</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/dotfiles"><kbd class="item-tag">dotfiles</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/travis"><kbd class="item-tag">travis</kbd></a>
     
 
 </div>

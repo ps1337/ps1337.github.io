@@ -16,7 +16,7 @@
       <description>BorgBackup is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.
 Getting started I&amp;rsquo;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
 This Makefile can be used to quickly get started using a containerized version of Borg:
-SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell echo $(shell cd &amp;quot;$(shell dirname &amp;quot;${BASH_SOURCE[0]}&amp;quot; )&amp;quot; &amp;amp;&amp;amp; pwd )) IMAGE_NAME ?</description>
+SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell echo $(shell cd &amp;#34;$(shell dirname &amp;#34;${BASH_SOURCE[0]}&amp;#34; )&amp;#34; &amp;amp;&amp;amp; pwd )) IMAGE_NAME ?</description>
     </item>
     
   </channel>

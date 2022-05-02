@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -300,7 +300,7 @@
 <p>Don&rsquo;t use <code>input()</code> for Python2.x.</p>
 <h1 id="module-hijacking">Module Hijacking</h1>
 <p>When assigning SUID bits to Python scripts, privileges can be escalated easily. Consider the following Python source code:</p>
-<pre><code>#!/usr/bin/python2.7
+<pre tabindex="0"><code>#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
 import hashlib
@@ -315,17 +315,17 @@ print md5.digest()
 <li>In the working directory, create a filed called <code>hashlib.py</code> which will get loaded after running the above code.</li>
 <li>Add this constructor code to the created file:</li>
 </ul>
-<pre><code>class md5():
+<pre tabindex="0"><code>class md5():
    def _init_(self):
-      print &quot;loaded md5, hijacking&quot;
+      print &#34;loaded md5, hijacking&#34;
       import os
-      os.system(&quot;id&quot;)
-      print &quot;done&quot;
+      os.system(&#34;id&#34;)
+      print &#34;done&#34;
 </code></pre><p>By manipulating the call to <code>hashlib.md5()</code>, the <code>id</code> command has been executed as root.</p>
 <p>This works for Python2.x and Python3 because <code>sys.path</code> includes the current working directory as first value.</p>
 <h1 id="abusing-input">Abusing input()</h1>
 <p>This only works for Python2.x but it&rsquo;s great. It turns out that snippets like <code>value = input()</code> in fact evaluate the user supplied input. This means that a server can be attacked by injecting Python code into user supplied values as follows:</p>
-<pre><code>__import__(&quot;os&quot;).system(&quot;uname -a&quot;)
+<pre tabindex="0"><code>__import__(&#34;os&#34;).system(&#34;uname -a&#34;)
 </code></pre><p>This will run the supplied command in a local context or on a remote server.</p>
 <h1 id="resources">Resources</h1>
 <ul>
@@ -342,6 +342,25 @@ print md5.digest()
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/yt/">This Weird YouTube Trick</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -370,25 +389,6 @@ print md5.digest()
     <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
     
     <a href="https://bananamafia.dev/tags/backup"><kbd class="item-tag">backup</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/hacking"><kbd class="item-tag">hacking</kbd></a>
     
 
 </div>

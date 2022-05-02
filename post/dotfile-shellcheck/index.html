@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -304,7 +304,7 @@
 <p>First of all, it&rsquo;s necessary to link your Github account to an account on <a href="https://www.travis-ci.org">Travis CI</a>. To do this, just sign in at the Travis page using your GitHub account. After that, you need to activate Travis for your specific Dotfile repository. You can do this after logging in at Travis. This will add a hook to your repository on GitHub which will trigger the Travis build/linting process after pushing new content.</p>
 <h1 id="adding-a-travis-job-file">Adding a Travis job file</h1>
 <p>To let Travis know which commands should be executed, a <code>.travis.yml</code> file is needed. This can be as simple as:</p>
-<pre><code>sudo: required
+<pre tabindex="0"><code>sudo: required
 dist: trusty
 
 services:
@@ -333,7 +333,7 @@ after_failure:
 <li>Get all files which will be linted</li>
 <li>Execute <code>shellcheck</code> for each file</li>
 </ol>
-<pre><code>#!/bin/bash
+<pre tabindex="0"><code>#!/bin/bash
 # Stolen from: https://github.com/jessfraz/dotfiles/blob/master/test.sh
 # (modified)
 
@@ -344,33 +344,33 @@ ERRORS=()
 
 # find all executables and run `shellcheck`
 for f in $(find . -type f \
-        -not -iwholename '*.git*' | sort -u); do
+        -not -iwholename &#39;*.git*&#39; | sort -u); do
 
 
-	if file &quot;$f&quot; | grep --quiet shell; then
+	if file &#34;$f&#34; | grep --quiet shell; then
 		{
-			shellcheck &quot;$f&quot; &amp;&amp; echo &quot;[OK]: sucessfully linted $f&quot;
+			shellcheck &#34;$f&#34; &amp;&amp; echo &#34;[OK]: sucessfully linted $f&#34;
 		} || {
 		# add to errors
-		ERRORS+=(&quot;$f&quot;)
+		ERRORS+=(&#34;$f&#34;)
 	}
 	fi
 done
 
 if [ ${#ERRORS[@]} -eq 0 ]; then
-	echo &quot;No errors, hooray&quot;
+	echo &#34;No errors, hooray&#34;
 else
-	echo &quot;These files failed shellcheck: ${ERRORS[*]}&quot;
+	echo &#34;These files failed shellcheck: ${ERRORS[*]}&#34;
 	exit 1
 fi
 </code></pre><h1 id="executing-tests">Executing tests</h1>
 <p>If everything has been set up correctly, the output can show the following information:</p>
-<pre><code>docker run --rm -i -t \
+<pre tabindex="0"><code>docker run --rm -i -t \
 		--name df-shellcheck \
 		-v /home/travis/build/ps1337/Dotfiles:/usr/src:ro \
 		--workdir /usr/src \
 		r.j3ss.co/shellcheck ./.test.sh
-Unable to find image 'r.j3ss.co/shellcheck:latest' locally
+Unable to find image &#39;r.j3ss.co/shellcheck:latest&#39; locally
 latest: Pulling from shellcheck
 bec7afd8e02c: Pulling fs layer
 245090c4c10c: Pulling fs layer
@@ -427,6 +427,25 @@ No errors, hooray
 
     
 
+    <h4><a href="/post/yt/">This Weird YouTube Trick</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
     <h4><a href="/post/dotfiles/">How I Over-Engineered My Dotfiles</a></h4>
     <h5></h5>
     
@@ -450,25 +469,6 @@ No errors, hooray
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
     <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/hacking"><kbd class="item-tag">hacking</kbd></a>
     
 
 </div>

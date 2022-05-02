@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -318,46 +318,46 @@
 <p>This year the most popular architecture was x86, but there also were some ARM and MIPS bots. I&rsquo;m going to create an ARM based bot for next year and <a href="https://anisse.astier.eu/r2wars-2019.html">this year&rsquo;s winner</a> is based on ARM too, so don&rsquo;t hesitate to step back from using x86 only. However, for beginners x86 is the best option to begin with in my opinion.</p>
 <h2 id="debugging">Debugging</h2>
 <p>Use this cool one-liner to assemble and debug your bot during development:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">radare2 -c <span style="color:#e6db74">&#34;e asm.arch=x86; e asm.bits=32; aei; aeim; wx </span><span style="color:#66d9ef">$(</span>rasm2 -a x86 -b <span style="color:#ae81ff">32</span> -f yoloBot.x86-32.asm<span style="color:#66d9ef">)</span><span style="color:#e6db74"> @100; aer PC=100; aer SP=SP+100; Vpp&#34;</span> malloc://1024
-</code></pre></div><p>After the visual view has opened, just step through the execution and fix your bugs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>radare2 -c <span style="color:#e6db74">&#34;e asm.arch=x86; e asm.bits=32; aei; aeim; wx </span><span style="color:#66d9ef">$(</span>rasm2 -a x86 -b <span style="color:#ae81ff">32</span> -f yoloBot.x86-32.asm<span style="color:#66d9ef">)</span><span style="color:#e6db74"> @100; aer PC=100; aer SP=SP+100; Vpp&#34;</span> malloc://1024
+</span></span></code></pre></div><p>After the visual view has opened, just step through the execution and fix your bugs.</p>
 <p><img src="/img/r2wars-2019/r2wars-dbg.gif" alt="r2wars Debug"></p>
 <h2 id="profiling">Profiling</h2>
 <p>A part of my strategy was to write as much data as possible in the most efficient way possible. I&rsquo;ve tried various instructions for this when developing my bot. To profile how well it performs, I&rsquo;ve used a fixed amount of instructions to execute and examined the memory space afterwards. This is the one-liner I&rsquo;ve used:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">radare2 -c <span style="color:#e6db74">&#34;e asm.arch=x86; e asm.bits=32; aei; aeim; wx </span><span style="color:#66d9ef">$(</span>rasm2 -a x86 -b <span style="color:#ae81ff">32</span> -f yoloBot.x86-32.asm<span style="color:#66d9ef">)</span><span style="color:#e6db74"> @100; aer PC=100; aer SP=SP+100; 150ds; s 0x0; V\!&#34;</span> malloc://1024
-</code></pre></div><p>This executes 150 instructions of bot code and opens the visual mode of <code>radare2</code>. You can now just scroll through the memory view and check for large blocks that consist of only null bytes. Finding such blocks of memory that haven&rsquo;t been overwritten is an indicator for an inefficient bot, since you might also just miss your opponent in battle:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>radare2 -c <span style="color:#e6db74">&#34;e asm.arch=x86; e asm.bits=32; aei; aeim; wx </span><span style="color:#66d9ef">$(</span>rasm2 -a x86 -b <span style="color:#ae81ff">32</span> -f yoloBot.x86-32.asm<span style="color:#66d9ef">)</span><span style="color:#e6db74"> @100; aer PC=100; aer SP=SP+100; 150ds; s 0x0; V\!&#34;</span> malloc://1024
+</span></span></code></pre></div><p>This executes 150 instructions of bot code and opens the visual mode of <code>radare2</code>. You can now just scroll through the memory view and check for large blocks that consist of only null bytes. Finding such blocks of memory that haven&rsquo;t been overwritten is an indicator for an inefficient bot, since you might also just miss your opponent in battle:</p>
 <p><img src="/img/r2wars-2019/r2wars-profile.gif" alt="r2wars Profiling"></p>
 <p>You can profile variants of your bot using this method and choose the most efficient one afterwards.</p>
 <h1 id="my-bot">My Bot</h1>
 <p>It&rsquo;s called <code>CAPTNBANANABOII</code>. I won&rsquo;t paste the full code here, you&rsquo;ll have to reverse it yourself :D However, I&rsquo;m going to describe the general structure:</p>
 <h2 id="stage-1">Stage 1</h2>
 <p>In the first phase, the bot will populate the registers:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#a6e22e">call</span> <span style="color:#66d9ef">init</span>
-
-init:
-  <span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">...</span>]
-  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">ebx</span>, <span style="color:#ae81ff">0xc3c3c3c3</span> <span style="color:#75715e">; ret instructions
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">ecx</span>, <span style="color:#66d9ef">ebx</span> <span style="color:#75715e">; dito
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">edx</span>, <span style="color:#ae81ff">0x400</span> <span style="color:#75715e">; end of arena
-</span><span style="color:#75715e"></span>
-  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">edi</span>, <span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#66d9ef">stage</span> <span style="color:#ae81ff">4</span> <span style="color:#66d9ef">code</span><span style="color:#960050;background-color:#1e0010">&gt;</span>
-  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">esi</span>, <span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#66d9ef">stage</span> <span style="color:#ae81ff">4</span> <span style="color:#66d9ef">code</span><span style="color:#960050;background-color:#1e0010">&gt;</span>
-  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">ebp</span>, <span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#66d9ef">stage</span> <span style="color:#ae81ff">4</span> <span style="color:#66d9ef">code</span><span style="color:#960050;background-color:#1e0010">&gt;</span>
-
-  <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">stage_1</span>
-</code></pre></div><p>The <code>0xc3</code> values are being used to (hopefully) cause the opponent to crash by causing it to perform a <code>ret</code> instruction. I&rsquo;m using two registers full of these bytes that will be used in a later stage. To keep track of the end of the arena, which is at <code>0x400</code>, the <code>EDX</code> register is used.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">call</span> <span style="color:#66d9ef">init</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>init:
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">...</span>]
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">ebx</span>, <span style="color:#ae81ff">0xc3c3c3c3</span> <span style="color:#75715e">; ret instructions
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">ecx</span>, <span style="color:#66d9ef">ebx</span> <span style="color:#75715e">; dito
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">edx</span>, <span style="color:#ae81ff">0x400</span> <span style="color:#75715e">; end of arena
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">edi</span>, <span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#66d9ef">stage</span> <span style="color:#ae81ff">4</span> <span style="color:#66d9ef">code</span><span style="color:#960050;background-color:#1e0010">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">esi</span>, <span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#66d9ef">stage</span> <span style="color:#ae81ff">4</span> <span style="color:#66d9ef">code</span><span style="color:#960050;background-color:#1e0010">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">ebp</span>, <span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#66d9ef">stage</span> <span style="color:#ae81ff">4</span> <span style="color:#66d9ef">code</span><span style="color:#960050;background-color:#1e0010">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">stage_1</span>
+</span></span></code></pre></div><p>The <code>0xc3</code> values are being used to (hopefully) cause the opponent to crash by causing it to perform a <code>ret</code> instruction. I&rsquo;m using two registers full of these bytes that will be used in a later stage. To keep track of the end of the arena, which is at <code>0x400</code>, the <code>EDX</code> register is used.</p>
 <p>My bot is a replicator. This means that it contains code for another execution stage in its registers, namely <code>EDI</code>, <code>ESI</code> and <code>EBP</code>. The bot will repeatedly push these registers and perform a jump into the resulting code and execute it all over again. You can find a detailed description of this technique in <a href="https://ackcent.com/blog/r2wars/">this</a> post. It&rsquo;s important to fit the whole last stage into the registers that are still available for use.</p>
 <h2 id="stage-2">Stage 2</h2>
 <p>In the second stage, the bot wipes the end and the start of the memory region since many bots try to be sneaky and hide in these places. I should&rsquo;ve also wiped the middle of the memory region since this year&rsquo;s winner decided to hide there as well. Hmm, maybe next year :)</p>
 <h2 id="stage-3">Stage 3</h2>
 <p>The third stage migrates into the first quarter of the memory region and initiates the replication process:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">esp</span>, <span style="color:#66d9ef">eax</span> <span style="color:#75715e">; relocate to `eax`
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">pushad</span>
-<span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">...</span>]
-<span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">esp</span> <span style="color:#75715e">; execute 4th stage (embedded into registers and now written to memory)
-</span></code></pre></div><h2 id="stage-4">Stage 4</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">esp</span>, <span style="color:#66d9ef">eax</span> <span style="color:#75715e">; relocate to `eax`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">pushad</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">...</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">esp</span> <span style="color:#75715e">; execute 4th stage (embedded into registers and now written to memory)
+</span></span></span></code></pre></div><h2 id="stage-4">Stage 4</h2>
 <p>The fourth and last stage performs an infinite loop. It adds a carefully crafted static offset to <code>ESP</code> (lol), pushes the embedded code and jumps to it again. I&rsquo;ve tried to fit as many <code>pushad</code> instructions into this stage as possible. One neat trick allowed me to save additional space for one more <code>pushad</code> &ndash; you can compare two registers and move a value in case one has a greater value than the other in a single instruction:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#a6e22e">cmovg</span> <span style="color:#66d9ef">esp</span>, <span style="color:#66d9ef">eax</span> <span style="color:#75715e">; enter arena from start - we are outside
-</span></code></pre></div><p>This instruction avoids writing outside of the arena, which would count as an invalid instruction.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">cmovg</span> <span style="color:#66d9ef">esp</span>, <span style="color:#66d9ef">eax</span> <span style="color:#75715e">; enter arena from start - we are outside
+</span></span></span></code></pre></div><p>This instruction avoids writing outside of the arena, which would count as an invalid instruction.</p>
 <p>And that&rsquo;s it :)</p>
 <h1 id="additional-notes">Additional Notes</h1>
 <ol>

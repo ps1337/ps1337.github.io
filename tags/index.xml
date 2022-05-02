@@ -6,7 +6,34 @@
     <description>Recent content in Tags on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 23 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 30 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>programming</title>
+      <link>https://bananamafia.dev/tags/programming/</link>
+      <pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://bananamafia.dev/tags/python/</link>
+      <pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shell</title>
+      <link>https://bananamafia.dev/tags/shell/</link>
+      <pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/shell/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>recipe</title>
       <link>https://bananamafia.dev/tags/recipe/</link>
@@ -94,15 +121,6 @@
       <pubDate>Sat, 27 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/exploitation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>python</title>
-      <link>https://bananamafia.dev/tags/python/</link>
-      <pubDate>Mon, 25 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/python/</guid>
       <description></description>
     </item>
     
@@ -409,24 +427,6 @@
       <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/pentesting/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>shell</title>
-      <link>https://bananamafia.dev/tags/shell/</link>
-      <pubDate>Wed, 16 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/shell/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>programming</title>
-      <link>https://bananamafia.dev/tags/programming/</link>
-      <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/programming/</guid>
       <description></description>
     </item>
     

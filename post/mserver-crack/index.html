@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -313,7 +313,7 @@
 </ol>
 <h1 id="local-checks">Local Checks</h1>
 <p>After digging into the source code, this code snippet has been identified to be responsible for local license checks:</p>
-<pre><code>public boolean isLicenseValid(String email, String license) {
+<pre tabindex="0"><code>public boolean isLicenseValid(String email, String license) {
    if ((email == null) || (license == null)) {
       return false;
    }
@@ -322,7 +322,7 @@
 </code></pre><p>That&rsquo;s right: All licensed issued are basically <code>MD5(email)</code>. Bypassing this check is done by generating a MD5 hash of a random email address. This also means that you can hijack another persons license only by knowing his/her email address.</p>
 <h1 id="remote-checks">Remote Checks</h1>
 <p>Bypassing local checks is easily possible - not let&rsquo;s have a look at the API call which triggers server side checks:</p>
-<pre><code>private void validateLicense() {
+<pre tabindex="0"><code>private void validateLicense() {
    String email = getLicenseEmail();
    Date date = getLicenseDate();
 
@@ -332,12 +332,12 @@
    }
    try
    {
-      String content = HttpUtil.httpGet(&quot;http://&lt;domain&gt;/&lt;endpoint&gt;?email=&quot; + StringUtil.urlEncode(email) + &quot;&amp;date=&quot; + date
-            .getTime() + &quot;&amp;version=&quot; + versionService.getLocalVersion(), 120, 120);
+      String content = HttpUtil.httpGet(&#34;http://&lt;domain&gt;/&lt;endpoint&gt;?email=&#34; + StringUtil.urlEncode(email) + &#34;&amp;date=&#34; + date
+            .getTime() + &#34;&amp;version=&#34; + versionService.getLocalVersion(), 120, 120);
 
-      licenseValidated = ((content != null) &amp;&amp; (!content.contains(&quot;false&quot;)));
+      licenseValidated = ((content != null) &amp;&amp; (!content.contains(&#34;false&#34;)));
       if (!licenseValidated) {
-         LOG.warn(&quot;License key is not valid.&quot;);
+         LOG.warn(&#34;License key is not valid.&#34;);
       }
       String[] lines = StringUtils.split(content);
       if (lines.length &gt; 1) {
@@ -345,7 +345,7 @@
       }
    }
    catch (Throwable x) {
-      LOG.warn(&quot;Failed to validate license.&quot;, x);
+      LOG.warn(&#34;Failed to validate license.&#34;, x);
    }
 }
 </code></pre><p>To bypass the second validation stage, one could perform an easy attack: Redirecting <code>domain</code> locally to an attacker provided server which always returns the string <code>true</code>. However, another approach seemed to require even less work.</p>

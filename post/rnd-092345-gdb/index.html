@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -300,7 +300,7 @@
 
     <br>
     <div class="content-width text-justify"><p>When trying to exploit an application it&rsquo;s useful to send the input via <code>gdb</code> to immediately check how the input is being processed. But once the <code>gdb</code> is open it&rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using <code>read</code>. An easy way is to start the debugging session with <code>gdb ./binary</code> and using</p>
-<pre><code>run &lt; &lt;(printf &quot;\xAA\xAA\xAA&quot;)
+<pre tabindex="0"><code>run &lt; &lt;(printf &#34;\xAA\xAA\xAA&#34;)
 </code></pre><p>from the <code>gdb</code> session to send arbitrary bytes.</p>
 </div>
 

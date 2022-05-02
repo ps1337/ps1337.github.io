@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>This Weird YouTube Trick</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">This Weird YouTube Trick</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                    <li><a href="/recipe/">Recipes</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana-#@#-bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/yt/">This Weird YouTube Trick</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>A while ago, I&rsquo;ve found an <a href="https://hackaday.com/2022/02/04/python-web-proxy-convinces-sonos-to-stream-youtube/">article on Hackaday</a>, describing how to stream arbitrary YouTube videos to Sonos systems. Before you ask: No, that&rsquo;s not possible normally, at least not without a premium subscription.</p>
+<p>In the original article called <em><a href="https://www.deadf00d.com/post/how-i-hacked-sonos-and-youtube-the-same-day.html">How I hacked SONOS and YouTube the same day</a></em> (lol?????), the author described an approach to grab audio streams from YouTube and to convert them into ADTS streams on-the-fly to convince a Sonos device to play some YouTube music. For this, an MP3 radio station is created that Sonos uses as a source, all without the requirement to first download a video to disk and then streaming it to Sonos afterwards. Some parts seem rather complicated, such as manually parsing MP4 containers to extract AAC audio content. Also, there&rsquo;s another issue: The author still didn&rsquo;t release the full source code and also did not (yet?) release the announced mobile app to perform these tasks.</p>
+<p><code>(╯°□°)╯︵ ┻━┻</code></p>
+<p>So today, I&rsquo;ll present this hefty one-liner that does all of that stuff:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">(</span>tmux has-session -t yt 2&gt;/dev/null <span style="color:#f92672">||</span> tmux new-session -d -s yt<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span> tmux neww -d <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    <span style="color:#e6db74">&#34;ffmpeg -i \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#39;</span><span style="color:#66d9ef">$(</span>python3 -m youtube_dl --user-agent BestUserAgent  -f bestaudio,mp4 -g <span style="color:#e6db74">&#39;https://www.youtube.com/watch?v=zwu8hgUyr2E&#39;</span> | head -1<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#39; \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        -user_agent BestUserAgent -q:a 0 -map a -f mp3 pipe:1 | \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cvlc -vvv - --sout &#39;#standard{access=http,mux=mp3,dst=0.0.0.0:3636}&#39; --file-caching 10000 --network-caching 10000&#34;</span>
+</span></span></code></pre></div><p>OK! This does the following things:</p>
+<ol>
+<li>Execute all of the following stuff in a new <code>tmux</code> session, for convenience and to be able to run it on a server.</li>
+<li>Use <code>youtube-dl</code> to grab a streaming link from YouTube for the specific video. Normally, you&rsquo;d use <code>streamlink</code> for this, but some YouTube videos are protected and do not allow simple access to the respective streaming links. Luckily, <code>youtube-dl</code> uses its own <a href="https://github.com/ytdl-org/youtube-dl/blob/master/youtube_dl/jsinterp.py">JS interpreter</a> to even extract streams for protected content. The <code>-f</code> parameter for <code>youtube-dl</code> controls the desired content format. Most of the time, it would be fine to just grab an <em>audio only</em> stream, however some music live streams only offer video streams, for whatever reason. For this purpose, <code>bestaudio,mp4</code> is specified as a format to just try getting both a music and a video stream. If an audio only stream is available, that one is used instead of the one containing additional video content. Here&rsquo;s a list of available formats that can be specified with the <code>-f</code> parameter:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>youtube-dl --list-formats <span style="color:#e6db74">&#39;https://www.youtube.com/watch?v=zwu8hgUyr2E&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>youtube<span style="color:#f92672">]</span> zwu8hgUyr2E: Downloading webpage
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>info<span style="color:#f92672">]</span> Available formats <span style="color:#66d9ef">for</span> zwu8hgUyr2E:
+</span></span><span style="display:flex;"><span>format code  extension  resolution note
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">251</span>          webm       audio only tiny  125k , webm_dash container, opus @125k <span style="color:#f92672">(</span>48000Hz<span style="color:#f92672">)</span>, 3.20MiB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">140</span>          m4a        audio only tiny  127k , m4a_dash container, mp4a.40.2@127k <span style="color:#f92672">(</span>44100Hz<span style="color:#f92672">)</span>, 3.25MiB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">278</span>          webm       192x144    144p   28k , webm_dash container, vp9@  28k, 15fps, video only, 751.12KiB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">394</span>          mp4        192x144    144p   34k , mp4_dash container, av01.0.00M.08.0.110.06.01.06.0@  34k, 15fps, video only, 912.75KiB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">160</span>          mp4        192x144    144p  109k , mp4_dash container, avc1.4d400c@ 109k, 15fps, video only, 2.79MiB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">395</span>          mp4        320x240    240p   42k , mp4_dash container, av01.0.00M.08.0.110.06.01.06.0@  42k, 15fps, video only, 1.10MiB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">242</span>          webm       320x240    240p   65k , webm_dash container, vp9@  65k, 15fps, video only, 1.69MiB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">133</span>          mp4        320x240    240p  245k , mp4_dash container, avc1.4d400d@ 245k, 15fps, video only, 6.27MiB
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">18</span>           mp4        320x240    240p  325k , avc1.42001E, 15fps, mp4a.40.2 <span style="color:#f92672">(</span>44100Hz<span style="color:#f92672">)</span>, 8.33MiB <span style="color:#f92672">(</span>best<span style="color:#f92672">)</span>
+</span></span></code></pre></div><ol>
+<li>Use <code>ffmpeg</code> to get the stream contents, piping them to the next application on-the-fly and without downloading the full stream first.</li>
+<li>Use <code>cvlc</code>, the CLI version of <code>vlc</code>, to create an audio stream Sonos is able to interpret. This accomplished with an HTTP stream, similar to an MP3 web radio, as described in the <a href="https://docs.videolan.me/vlc-user/3.0/en/advanced/streaming/stream_over_http.html">VLC documentation</a>. It also uses some caching to prevent buffering during playback.</li>
+</ol>
+<p>The only thing that&rsquo;s left is to point Sonos to the audio stream, for example with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> soco <span style="color:#f92672">import</span> SoCo
+</span></span><span style="display:flex;"><span>zone <span style="color:#f92672">=</span> SoCo(<span style="color:#e6db74">&#34;10.1.3.37&#34;</span>)
+</span></span><span style="display:flex;"><span>zone<span style="color:#f92672">.</span>play_uri(<span style="color:#e6db74">&#34;x-rincon-mp3radio://10.1.2.3:3636&#34;</span>)
+</span></span></code></pre></div><p>The <code>x-rincon-mp3radio</code> handler allows specifying the MP3 stream opened by <code>cvlc</code> and we&rsquo;re done!</p>
+<p>This should work with every YouTube video and can be integrated into a chat bot or some other handy thing.</p>
+<p><code>ヾ(⌐■_■)ノ♪   |̲̅̅●̲̅̅|̲̅̅=̲̅̅|̲̅̅●̲̅̅|</code></p>
+</div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/unifi/">Building a Cloudless UniFi Security System That Doesn&#39;t Suck</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/syncthing-monitor/">Does This Syncthing Work?</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/backup"><kbd class="item-tag">backup</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/shell-upgrade/">Methods to Upgrade nc Reverse Shells</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

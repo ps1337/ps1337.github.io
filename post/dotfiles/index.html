@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -301,7 +301,7 @@ results and tricks in this blog post.</p>
 <h1 id="general-structure">General Structure</h1>
 <p>The first thing to do is to create a general structure for your dotfiles and
 all associated files and scripts. I came up with this structure:</p>
-<pre><code>dotfiles
+<pre tabindex="0"><code>dotfiles
 ├── aliases
 ├── bashrc
 ├── bindings: Additional key bindings
@@ -333,22 +333,21 @@ various purposes:</p>
 <ul>
 <li>Update all submpodules using a single command:</li>
 </ul>
-<pre><code>update-submodules: ## Update all submodules
+<pre tabindex="0"><code>update-submodules: ## Update all submodules
 	git submodule update --init --recursive &amp;&amp; \
 	git submodule foreach git pull --recurse-submodules origin master
-
 </code></pre><ul>
 <li>Generate a list with names and links to all Sublime, Vim and VS Code plugins
 that are currently in use - for example:</li>
 </ul>
-<pre><code>gen-vscode-info: ## Generate a list of VS Code plugins
-	code --list-extensions | xargs -d &quot;\n&quot; -rI % python -c &quot;print('- [%](https://marketplace.visualstudio.com/items?itemName=' + '%' + ')')&quot;
+<pre tabindex="0"><code>gen-vscode-info: ## Generate a list of VS Code plugins
+	code --list-extensions | xargs -d &#34;\n&#34; -rI % python -c &#34;print(&#39;- [%](https://marketplace.visualstudio.com/items?itemName=&#39; + &#39;%&#39; + &#39;)&#39;)&#34;
 </code></pre><ul>
 <li>Linting all dotfiles using <code>shellcheck</code> after pushing the dotfiles repository. I&rsquo;ve stolen most of this idea and the scripts from <a href="https://twitter.com/jessfraz/">Jessica Frazelle</a>. More on this later.</li>
 </ul>
 <p>The <code>Makefile</code> is self-documented. This means that upon executing <code>make</code>,
 a help message will be displayed like this:</p>
-<pre><code>$ make
+<pre tabindex="0"><code>$ make
 help                           This help
 push                           Push all changes
 update-submodules              Update all submodules
@@ -359,14 +358,14 @@ test                           Runs all the tests on the files in the repository
 shellcheck                     Runs the shellcheck tests on the scripts.
 </code></pre><p>This works by generating a default action for the <code>Makefile</code> that parses all
 commands and prints the comment specified with <code>##</code> after it in a list:</p>
-<pre><code>help: ## This help
-	@awk 'BEGIN {FS = &quot;:.*?## &quot;} /^[a-zA-Z_-]+:.*?## / {printf &quot;\033[36m%-30s\033[0m %s\n&quot;, $$1, $$2}' $(MAKEFILE_LIST)
+<pre tabindex="0"><code>help: ## This help
+	@awk &#39;BEGIN {FS = &#34;:.*?## &#34;} /^[a-zA-Z_-]+:.*?## / {printf &#34;\033[36m%-30s\033[0m %s\n&#34;, $$1, $$2}&#39; $(MAKEFILE_LIST)
 </code></pre><h1 id="shell">Shell</h1>
 <p>After setting up the structure, the most obvious thing to do is to customize
 the shell.</p>
 <h2 id="zsh">ZSH</h2>
 <p>You&rsquo;ve probably heard about <code>zsh</code> and the <a href="https://github.com/robbyrussell/oh-my-zsh">OhMyZSH</a> framework, which also acts as a plugin manager. However, only few people seem to use <a href="https://github.com/getantibody/antibody">antibody</a> as a plugin manager instead. Compared to <em>OhMyZSH</em> it comes with less features but with a higher performance instead, since it uses concurrency when starting up a shell. The best thing is that it&rsquo;s still possible to use individual <em>OhMyZSH</em> features in <em>antibody</em>. This is my plugin list:</p>
-<pre><code>robbyrussell/oh-my-zsh path:plugins/colored-man-pages
+<pre tabindex="0"><code>robbyrussell/oh-my-zsh path:plugins/colored-man-pages
 robbyrussell/oh-my-zsh path:plugins/extract
 robbyrussell/oh-my-zsh path:plugins/z
 robbyrussell/oh-my-zsh path:lib/history.zsh
@@ -386,130 +385,130 @@ zdharma/fast-syntax-highlighting
 <h2 id="aliases">Aliases</h2>
 <p>I&rsquo;m just going to drop some cool aliases in here:</p>
 <h3 id="perform-a-web-search-from-terminal">Perform A Web Search From Terminal</h3>
-<pre><code>function _web_search() {
+<pre tabindex="0"><code>function _web_search() {
     emulate -L zsh
 
     # define search engine URLS
     typeset -A urls
-    urls[google]=&quot;https://www.google.com/search?q=&quot;
-    urls[duckduckgo]=&quot;https://www.duckduckgo.com/?q=&quot;
-    urls[startpage]=&quot;https://www.startpage.com/do/search?q=&quot;
-    urls[github]=&quot;https://github.com/search?q=&quot;
+    urls[google]=&#34;https://www.google.com/search?q=&#34;
+    urls[duckduckgo]=&#34;https://www.duckduckgo.com/?q=&#34;
+    urls[startpage]=&#34;https://www.startpage.com/do/search?q=&#34;
+    urls[github]=&#34;https://github.com/search?q=&#34;
 
     # check whether the search engine is supported
-    if [[ -z &quot;${urls[$1]}&quot; ]]; then
-        echo &quot;Search engine $1 not supported.&quot;
+    if [[ -z &#34;${urls[$1]}&#34; ]]; then
+        echo &#34;Search engine $1 not supported.&#34;
         return 1
     fi
 
     # search or go to main page depending on number of arguments passed
     if [[ $# -gt 1 ]]; then
         # build search url:
-        # join arguments passed with '+', then append to search engine URL
+        # join arguments passed with &#39;+&#39;, then append to search engine URL
         # shellcheck disable=SC2154
-        url=&quot;${urls[$1]}${(j:+:)@[2,-1]}&quot;
+        url=&#34;${urls[$1]}${(j:+:)@[2,-1]}&#34;
     else
         # build main page url:
-        # split by '/', then rejoin protocol (1) and domain (2) parts with '//'
+        # split by &#39;/&#39;, then rejoin protocol (1) and domain (2) parts with &#39;//&#39;
         # shellcheck disable=SC2154
-        url=&quot;${(j://:)${(s:/:)urls[$1]}[1,2]}&quot;
+        url=&#34;${(j://:)${(s:/:)urls[$1]}[1,2]}&#34;
     fi
 
-    open_command &quot;$url&quot;
+    open_command &#34;$url&#34;
     return 0
 }
 
 function web_search() {
-    _web_search &quot;$@&quot; &amp;&amp; ~/.i3/scripts/launchBrowser.sh
+    _web_search &#34;$@&#34; &amp;&amp; ~/.i3/scripts/launchBrowser.sh
 }
-alias google='web_search google'
-alias ddg='web_search duckduckgo'
-alias sp='web_search startpage'
-alias github='web_search github'
+alias google=&#39;web_search google&#39;
+alias ddg=&#39;web_search duckduckgo&#39;
+alias sp=&#39;web_search startpage&#39;
+alias github=&#39;web_search github&#39;
 
 # bangs
-alias wiki='web_search duckduckgo \!w'
-alias news='web_search duckduckgo \!n'
-alias youtube='web_search duckduckgo \!yt'
-alias map='web_search duckduckgo \!m'
-alias image='web_search duckduckgo \!i'
-alias ducky='web_search duckduckgo \!'
+alias wiki=&#39;web_search duckduckgo \!w&#39;
+alias news=&#39;web_search duckduckgo \!n&#39;
+alias youtube=&#39;web_search duckduckgo \!yt&#39;
+alias map=&#39;web_search duckduckgo \!m&#39;
+alias image=&#39;web_search duckduckgo \!i&#39;
+alias ducky=&#39;web_search duckduckgo \!&#39;
 </code></pre><h3 id="greping-in-all-pdfs"><code>grep</code>ing In All PDFs</h3>
-<pre><code>function pdfgrep() {
+<pre tabindex="0"><code>function pdfgrep() {
     # shellcheck disable=SC2156
-    find . -name '*.pdf' -exec sh -c '/usr/bin/pdftotext &quot;{}&quot; - | grep --with-filename --label=&quot;{}&quot; --color '&quot;$1&quot; \;
+    find . -name &#39;*.pdf&#39; -exec sh -c &#39;/usr/bin/pdftotext &#34;{}&#34; - | grep --with-filename --label=&#34;{}&#34; --color &#39;&#34;$1&#34; \;
 }
 </code></pre><h3 id="cd-and-ls-in-one-command"><code>cd</code> And <code>ls</code> In One Command</h3>
 <p>I always execute <code>ls</code> after a <code>cd</code>, so let&rsquo;s just make it one command:</p>
-<pre><code>alias cd=&quot;cl&quot;
+<pre tabindex="0"><code>alias cd=&#34;cl&#34;
 function cl {
-    if [ &quot;$#&quot; -eq 0 ]; then
-        &quot;cd&quot; || return
+    if [ &#34;$#&#34; -eq 0 ]; then
+        &#34;cd&#34; || return
     else
-        &quot;cd&quot; &quot;$1&quot; || return
+        &#34;cd&#34; &#34;$1&#34; || return
     fi
     ls -lah --color=auto
 }
 </code></pre><h3 id="grep-for-processes"><code>grep</code> For Processes</h3>
-<pre><code>alias pg=&quot;pg&quot;
+<pre tabindex="0"><code>alias pg=&#34;pg&#34;
 function pg {
-    pgrep -fa &quot;$1&quot; | grep -E --color &quot;$1&quot;
+    pgrep -fa &#34;$1&#34; | grep -E --color &#34;$1&#34;
 }
 </code></pre><h3 id="create-encrypted-archives-using-7zip">Create Encrypted Archives Using 7zip</h3>
-<pre><code>mkzip() {
-    7z -mhe=on -p a &quot;$@&quot;
+<pre tabindex="0"><code>mkzip() {
+    7z -mhe=on -p a &#34;$@&#34;
 }
 </code></pre><p>Invoking <code>mkzip encrypted.7z &lt;directory&gt;</code> will then create an encrypted archive from a directory.</p>
 <h3 id="search-for-files-and-page-the-results">Search For Files And Page The Results</h3>
-<pre><code>function s() { find . -iname &quot;*$**&quot; | less; }
+<pre tabindex="0"><code>function s() { find . -iname &#34;*$**&#34; | less; }
 </code></pre><h3 id="receive-notifications-after-command-finished">Receive Notifications After Command Finished</h3>
-<pre><code>alias alert='notify-send --urgency=low -i &quot;$([ $? = 0 ] &amp;&amp; echo terminal || echo error)&quot; &quot;$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&amp;|]\s*alert$//'\'')&quot;'
+<pre tabindex="0"><code>alias alert=&#39;notify-send --urgency=low -i &#34;$([ $? = 0 ] &amp;&amp; echo terminal || echo error)&#34; &#34;$(history|tail -n1|sed -e &#39;\&#39;&#39;s/^\s*[0-9]\+\s*//;s/[;&amp;|]\s*alert$//&#39;\&#39;&#39;)&#34;&#39;
 </code></pre><p>You can use this with <code>sleep 5 &amp;&amp; alert &quot;YOLO&quot;</code></p>
 <h3 id="rm-to-trash"><code>rm</code> To Trash</h3>
 <p>Never remove files again by accident :D</p>
-<pre><code>alias rm='safedelete'
+<pre tabindex="0"><code>alias rm=&#39;safedelete&#39;
 function safedelete {
     if command -v gio &gt; /dev/null; then
-        for f in &quot;$@&quot;
+        for f in &#34;$@&#34;
         do
-            gio trash -f &quot;$f&quot;
+            gio trash -f &#34;$f&#34;
         done
 
     elif command -v gvfs-trash &gt; /dev/null; then
-        for f in &quot;$@&quot;
+        for f in &#34;$@&#34;
         do
-            gvfs-trash &quot;$f&quot;
+            gvfs-trash &#34;$f&#34;
         done
 
-    elif [ -d &quot;$HOME/.local/share/Trash/files&quot; ]; then
-        for f in &quot;$@&quot;
+    elif [ -d &#34;$HOME/.local/share/Trash/files&#34; ]; then
+        for f in &#34;$@&#34;
         do
-            mv &quot;$f&quot; &quot;$HOME/.local/share/Trash/files&quot;
+            mv &#34;$f&#34; &#34;$HOME/.local/share/Trash/files&#34;
         done
 
     else
-        for f in &quot;$@&quot;
+        for f in &#34;$@&#34;
         do
             # shellcheck disable=SC1012
-            \rm &quot;$f&quot;
+            \rm &#34;$f&#34;
         done
     fi
 }
 </code></pre><h3 id="use-clipboard-from-terminal">Use Clipboard From Terminal</h3>
-<pre><code># pipe into ccopy --&gt; clipboard
-alias ccopy='xclip -selection clipboard'
+<pre tabindex="0"><code># pipe into ccopy --&gt; clipboard
+alias ccopy=&#39;xclip -selection clipboard&#39;
 # paste with cpaste
-alias cpaste='xclip -selection clipboard -o'
+alias cpaste=&#39;xclip -selection clipboard -o&#39;
 </code></pre><h3 id="getting-internal-and-public-ips">Getting Internal And Public IPs</h3>
-<pre><code>alias pubip=&quot;dig +short myip.opendns.com @resolver1.opendns.com&quot;
-alias localip=&quot;ifconfig | grep -Eo 'inet (addr:)?([0-9]*\\.){3}[0-9]*' | grep -Eo '([0-9]*\\.){3}[0-9]*' | grep -v '127.0.0.1'&quot;
+<pre tabindex="0"><code>alias pubip=&#34;dig +short myip.opendns.com @resolver1.opendns.com&#34;
+alias localip=&#34;ifconfig | grep -Eo &#39;inet (addr:)?([0-9]*\\.){3}[0-9]*&#39; | grep -Eo &#39;([0-9]*\\.){3}[0-9]*&#39; | grep -v &#39;127.0.0.1&#39;&#34;
 </code></pre><h2 id="key-bindings">Key Bindings</h2>
 <p>Go backward and forward word with Shift + Arrow keys</p>
-<pre><code># key codes determined using cat
-bindkey &quot;^[[1;2C&quot; forward-word
-bindkey &quot;^[[1;2D&quot; backward-word
+<pre tabindex="0"><code># key codes determined using cat
+bindkey &#34;^[[1;2C&#34; forward-word
+bindkey &#34;^[[1;2D&#34; backward-word
 </code></pre><p>Delete current word with CTRL+W:</p>
-<pre><code>bindkey &quot;^W&quot; backward-kill-word
+<pre tabindex="0"><code>bindkey &#34;^W&#34; backward-kill-word
 </code></pre><h2 id="fzf">FZF</h2>
 <p>If you&rsquo;ve used this once, you don&rsquo;t want to use a shell without it ever again.
 Or, to quote the developer of it:</p>
@@ -524,11 +523,11 @@ from <code>bash</code>:</p>
 <p>By default this only works from the current folder downwards. In order do make
 this start from <code>$HOME</code> or even <code>/</code> you can paste this into your <code>bindings</code>
 file:</p>
-<pre><code># fzf: override ctrl+t --&gt; ctrl+a using home folder
+<pre tabindex="0"><code># fzf: override ctrl+t --&gt; ctrl+a using home folder
 fzf-homefolder() {
   # shellcheck disable=SC1001,SC2164
   \cd ~
-  LBUFFER=&quot;${LBUFFER}~/$(__fsel)&quot;
+  LBUFFER=&#34;${LBUFFER}~/$(__fsel)&#34;
   local ret=$?
   zle redisplay
   typeset -f zle-line-init &gt;/dev/null &amp;&amp; zle zle-line-init
@@ -537,29 +536,29 @@ fzf-homefolder() {
   return $ret
 }
 zle     -N   fzf-homefolder
-bindkey '^A' fzf-homefolder
+bindkey &#39;^A&#39; fzf-homefolder
 </code></pre><h3 id="fuzzy-search-in-chrome-history">Fuzzy Search In Chrome History</h3>
 <p>And you can do even moar. You can search your entire Chrome web browsing
 history using <code>fzf</code> and its fuzzy-finding features:</p>
-<pre><code># Browse chrome history
+<pre tabindex="0"><code># Browse chrome history
 # https://junegunn.kr/2015/04/browsing-chrome-history-with-fzf/
 chistory() {
     local cols sep
     cols=$(( COLUMNS / 3 ))
-    sep='{::}'
+    sep=&#39;{::}&#39;
 
     cp -f ~/.config/chromium/Default/History /tmp/h
 
     sqlite3 -separator $sep /tmp/h \
-        &quot;select substr(title, 1, $cols), url
-    from urls order by last_visit_time desc&quot; |
-        awk -F $sep '{printf &quot;%-'$cols's  \x1b[36m%s\x1b[m\n&quot;, $1, $2}' |
-        fzf --ansi --multi | sed 's#.*\(https*://\)#\1#'
+        &#34;select substr(title, 1, $cols), url
+    from urls order by last_visit_time desc&#34; |
+        awk -F $sep &#39;{printf &#34;%-&#39;$cols&#39;s  \x1b[36m%s\x1b[m\n&#34;, $1, $2}&#39; |
+        fzf --ansi --multi | sed &#39;s#.*\(https*://\)#\1#&#39;
 }
 </code></pre><h3 id="tuning-fzf">Tuning FZF</h3>
 <p>You can speed up <code>fzf</code> even more by making it use <code>ag</code>, a faster version of
 <code>grep</code> if you have it installed. Just add this to the <code>exports</code> file:</p>
-<pre><code>export FZF_DEFAULT_COMMAND='ag --nocolor -g &quot;&quot;'
+<pre tabindex="0"><code>export FZF_DEFAULT_COMMAND=&#39;ag --nocolor -g &#34;&#34;&#39;
 </code></pre><p>It has many more features that are worth reading on the <a href="https://github.com/junegunn/fzf">official GitHub page</a>.
 Among others, you can also <a href="https://github.com/junegunn/fzf.vim">integrate it into Vim</a>.</p>
 <h2 id="tmux">tmux</h2>
@@ -567,28 +566,28 @@ Among others, you can also <a href="https://github.com/junegunn/fzf.vim">integra
 <ol>
 <li>Create new tmux window and prompt for a name</li>
 </ol>
-<pre><code>bind-key c command-prompt -p &quot;window name:&quot; &quot;new-window; rename-window '%%'&quot;
+<pre tabindex="0"><code>bind-key c command-prompt -p &#34;window name:&#34; &#34;new-window; rename-window &#39;%%&#39;&#34;
 </code></pre><ol start="2">
 <li>Turn on mouse support</li>
 </ol>
-<pre><code>setw -g mouse on
+<pre tabindex="0"><code>setw -g mouse on
 </code></pre><ol start="3">
 <li>Use the mouse drag to re-order windows</li>
 </ol>
-<pre><code>bind-key -n MouseDrag1Status swap-window -t=
+<pre tabindex="0"><code>bind-key -n MouseDrag1Status swap-window -t=
 </code></pre><ol start="4">
 <li>Middle click to paste from the clipboard</li>
 </ol>
-<pre><code>unbind-key MouseDown2Pane
-bind-key -n MouseDown2Pane run &quot;tmux set-buffer \&quot;$(xclip -o -sel clipboard)\&quot;; tmux paste-buffer&quot;
+<pre tabindex="0"><code>unbind-key MouseDown2Pane
+bind-key -n MouseDown2Pane run &#34;tmux set-buffer \&#34;$(xclip -o -sel clipboard)\&#34;; tmux paste-buffer&#34;
 </code></pre><ol start="5">
 <li>Scroll History</li>
 </ol>
-<pre><code>set -g history-limit 30000
+<pre tabindex="0"><code>set -g history-limit 30000
 </code></pre><ol start="6">
 <li>Use <code>|</code> and <code>-</code> for window splitting</li>
 </ol>
-<pre><code>unbind '&quot;'
+<pre tabindex="0"><code>unbind &#39;&#34;&#39;
 unbind %
 bind | split-window -h
 bind - split-window -v
@@ -596,31 +595,31 @@ bind - split-window -v
 <p>Most of these and even more can be found <a href="https://github.com/tmux-plugins">here</a>.</p>
 <h4 id="powerline">Powerline</h4>
 <p>Organize <code>tmux</code> windows with <a href="https://github.com/powerline/powerline">Powerline</a>. This is not a <code>tmux</code> plugin per se but I only use it in combination with <code>tmux</code>. Here is the <code>tmux.conf</code> snippet to include it:</p>
-<pre><code>source ~/.powerline.conf
-run-shell &quot;powerline-daemon -q&quot;
+<pre tabindex="0"><code>source ~/.powerline.conf
+run-shell &#34;powerline-daemon -q&#34;
 </code></pre><p>I display the current network load in <code>tmux</code> via <em>Powerline</em>:</p>
-<pre><code>{
-  &quot;segments&quot;: {
-    &quot;right&quot;: [{
-        &quot;function&quot;: &quot;powerline.segments.common.net.network_load&quot;
+<pre tabindex="0"><code>{
+  &#34;segments&#34;: {
+    &#34;right&#34;: [{
+        &#34;function&#34;: &#34;powerline.segments.common.net.network_load&#34;
     },]
   },
 }
 </code></pre><h4 id="even-moar-tmux-plugins">Even Moar tmux Plugins</h4>
 <p>The <code>tmux</code> plugin manager <code>tpm</code> can be used to manage all other plugins. Here&rsquo;s a list of the plugins I&rsquo;m using:</p>
-<pre><code>set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-copycat'
-set -g @plugin 'tmux-plugins/tmux-open'
-set -g @plugin 'tmux-plugins/tmux-sessionist'
+<pre tabindex="0"><code>set -g @plugin &#39;tmux-plugins/tpm&#39;
+set -g @plugin &#39;tmux-plugins/tmux-copycat&#39;
+set -g @plugin &#39;tmux-plugins/tmux-open&#39;
+set -g @plugin &#39;tmux-plugins/tmux-sessionist&#39;
 
-set -g @plugin 'laktak/extrakto'
+set -g @plugin &#39;laktak/extrakto&#39;
 # Enable fzf support
-set -g @extrakto_fzf_tool &quot;$HOME/.dotfiles/fzf/bin/fzf&quot;
+set -g @extrakto_fzf_tool &#34;$HOME/.dotfiles/fzf/bin/fzf&#34;
 
 # Copy with mouse
-set -g @plugin 'tmux-plugins/tmux-yank'
-set -g @yank_selection 'clipboard'
-set -g @yank_selection_mouse 'clipboard'
+set -g @plugin &#39;tmux-plugins/tmux-yank&#39;
+set -g @yank_selection &#39;clipboard&#39;
+set -g @yank_selection_mouse &#39;clipboard&#39;
 </code></pre><p>Let&rsquo;s highlight two of them:</p>
 <ul>
 <li><a href="https://github.com/tmux-plugins/tmux-copycat">copycat</a>: This reduces using the mouse in a shell by allowing searches using <code>&lt;tmux-prefix&gt; + /</code>. It also has pre-defined regex searches for files, URLs and several other things. The results can be copied and used after <code>copycat</code> found a result in the window buffer.</li>
@@ -628,20 +627,20 @@ set -g @yank_selection_mouse 'clipboard'
 </ul>
 <h3 id="automatically-launching-tmux">Automatically Launching tmux</h3>
 <p>As you will see in a following chapter, I&rsquo;m using custom scripts to launch a terminal from <code>i3</code>. In order to launch <code>tmux</code> automatically, I&rsquo;ve added this to my <code>zshrc</code>:</p>
-<pre><code># auto start tmux
-if [ &quot;$TMUX&quot; = &quot;&quot; ]; then
+<pre tabindex="0"><code># auto start tmux
+if [ &#34;$TMUX&#34; = &#34;&#34; ]; then
     # check for old session
-    if [ &quot;$(tmux ls | grep -v attached | wc -l)&quot; -gt &quot;0&quot; ]; then
+    if [ &#34;$(tmux ls | grep -v attached | wc -l)&#34; -gt &#34;0&#34; ]; then
         # attach to old session
-        tmux a -t &quot;$(tmux ls | grep -v attached | cut -d &quot;:&quot; -f1 | head -n 1)&quot;
+        tmux a -t &#34;$(tmux ls | grep -v attached | cut -d &#34;:&#34; -f1 | head -n 1)&#34;
     else
-        # start new session - dont use exec so it's possible to run without tmux
+        # start new session - dont use exec so it&#39;s possible to run without tmux
         tmux
     fi
 fi
 </code></pre><h2 id="terminal-emulator">Terminal Emulator</h2>
 <p><a href="https://github.com/thestinger/termite">Termite</a> is an efficient and configurable terminal emulator for Linux. Among other things, I&rsquo;ve configured the terminal font to be <a href="https://sourcefoundry.org/hack/">Hack Font</a> for better visuals when working with code:</p>
-<pre><code>[options]
+<pre tabindex="0"><code>[options]
 font = Hack 10
 clickable_url = true
 scrollback_lines = 10000
@@ -660,17 +659,17 @@ scrollback_lines = 10000
 <ol>
 <li>Save files using <code>sudo</code> after opening it with user privileges:</li>
 </ol>
-<pre><code>&quot; Allow saving of files as sudo when I forgot to start vim using sudo.
+<pre tabindex="0"><code>&#34; Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee &gt; /dev/null %
 </code></pre><ol start="2">
 <li>Persistent file history:</li>
 </ol>
-<pre><code>&quot; Keep undo history across sessions by storing it in a file
-if has('persistent_undo')
-    let TheUndoDir = expand(vimDir . '/undo')
-    &quot; Create dirs
-    call system('mkdir ' . vimDir)
-    call system('mkdir ' . TheUndoDir)
+<pre tabindex="0"><code>&#34; Keep undo history across sessions by storing it in a file
+if has(&#39;persistent_undo&#39;)
+    let TheUndoDir = expand(vimDir . &#39;/undo&#39;)
+    &#34; Create dirs
+    call system(&#39;mkdir &#39; . vimDir)
+    call system(&#39;mkdir &#39; . TheUndoDir)
     let &amp;undodir = TheUndoDir
     set undofile
 endif
@@ -684,11 +683,11 @@ endif
 <li>If you want to have an auto-starting application, use the <code>exec</code> directive.</li>
 <li>Create workspaces according to your needs. For example, you can put Vim and VS Code in the same workspace. This way, all applications are organized according to your personal workflow and the application use cases. Workspaces can be tagged with custom icons. If you&rsquo;re a <em>polybar</em> user, <a href="https://fontawesome.com/">FontAwesome</a> is a good font to use that supports many glyphs that can be copied from <a href="https://fontawesome.com/v4.7.0/icons/">this cheatsheet</a>. The configuration directives for the workspaces are:</li>
 </ul>
-<pre><code># Set the workspace icon/glyph
-set $ws_music &quot;7:&lt;icon&gt;&quot;
+<pre tabindex="0"><code># Set the workspace icon/glyph
+set $ws_music &#34;7:&lt;icon&gt;&#34;
 
 # Assign all windows with window class `Spotify` to the `music` workspace
-set $music &quot;Spotify&quot;
+set $music &#34;Spotify&#34;
 assign [class=$music] $ws_music
 [...]
 assign [class=$terminal] $ws_terminal
@@ -698,47 +697,47 @@ assign [class=$sublime] $ws_code
 <ul>
 <li>Launching shell scripts using a specific key combination can be done with:</li>
 </ul>
-<pre><code>bindsym $mod+y exec --no-startup-id ~/.i3/scripts/launchTerminal.sh
+<pre tabindex="0"><code>bindsym $mod+y exec --no-startup-id ~/.i3/scripts/launchTerminal.sh
 </code></pre><p>I&rsquo;m using this approach to launch terminals, file managers and browser using a single key combination, for example:</p>
-<pre><code>#!/bin/bash
+<pre tabindex="0"><code>#!/bin/bash
 
 # shellcheck source=/dev/null
 source ~/.exports
 
-count=$(pgrep -fc &quot;$TERMINAL&quot;)
+count=$(pgrep -fc &#34;$TERMINAL&#34;)
 
 # If theres a terminal already
-if [ &quot;$count&quot; -gt 0 ]; then
+if [ &#34;$count&#34; -gt 0 ]; then
     # if terminal already focused: always open a new instance
-    if [[ $(xprop -id &quot;$(xdotool getactivewindow)&quot; | grep WM_CLASS | grep -v grep | cut -d ' ' -f 3 | tr -d '&quot;,' ) == &quot;$TERMINAL&quot; ]]; then
+    if [[ $(xprop -id &#34;$(xdotool getactivewindow)&#34; | grep WM_CLASS | grep -v grep | cut -d &#39; &#39; -f 3 | tr -d &#39;&#34;,&#39; ) == &#34;$TERMINAL&#34; ]]; then
 		# shellcheck disable=SC2091
-        $(env &quot;$TERMINAL&quot;)
+        $(env &#34;$TERMINAL&#34;)
 
     # else just focus
     else
-        i3-msg &quot;[class=$TERMINALWINDOWCLASS] focus&quot;
+        i3-msg &#34;[class=$TERMINALWINDOWCLASS] focus&#34;
     fi
 
 # None exists, start a new one
 else
 	# shellcheck disable=SC2091
-    $(env &quot;$TERMINAL&quot;)
+    $(env &#34;$TERMINAL&#34;)
 fi
 </code></pre><p>The neat thing is that this re-uses existing terminal windows instead of always creating a fresh one. This way you won&rsquo;t end up with 234562345 abandonned terminal windows at the end of the day. If really a new terminal is required, the same key combination can be used again in order to spawn a new terminal.</p>
 <h2 id="rofi"><code>rofi</code></h2>
 <p>The most efficient way for me to switch and launch applications is <a href="https://github.com/davatorium/rofi">rofi</a>. It can be invoked from <code>i3</code> with a single key combination and accepts input right after. This way, you can switch and launch applications using the fuzzy finding feature of <code>rofi</code> as fast as possible.</p>
 <p>I&rsquo;m using this to launch it:</p>
-<pre><code>bindsym $mod+q exec --no-startup-id &quot;rofi -combi-modi window,drun -show combi -modi combi&quot;
+<pre tabindex="0"><code>bindsym $mod+q exec --no-startup-id &#34;rofi -combi-modi window,drun -show combi -modi combi&#34;
 </code></pre><h2 id="alt-tab">Alt-Tab</h2>
 <p>Yes, <code>i3</code> doesn&rsquo;t handle Alt-Tab directly. Boo. Just use <a href="https://github.com/sagb/alttab">this</a> instead.</p>
-<pre><code>exec_always --no-startup-id alttab -d 1 -sc 1
+<pre tabindex="0"><code>exec_always --no-startup-id alttab -d 1 -sc 1
 </code></pre><h2 id="media-keys">Media Keys</h2>
 <p>Out of the box, <code>i3</code> also doesn&rsquo;t handle media keys. Boo.</p>
 <p>Time to do copy-pasta again:</p>
-<pre><code># Volume
-bindsym XF86AudioMute        exec --no-startup-id &quot;amixer -q set Master toggle&quot;
-bindsym XF86AudioRaiseVolume exec --no-startup-id &quot;amixer -q set Master 5%+ unmute&quot;
-bindsym XF86AudioLowerVolume exec --no-startup-id &quot;amixer -q set Master 5%- unmute&quot;
+<pre tabindex="0"><code># Volume
+bindsym XF86AudioMute        exec --no-startup-id &#34;amixer -q set Master toggle&#34;
+bindsym XF86AudioRaiseVolume exec --no-startup-id &#34;amixer -q set Master 5%+ unmute&#34;
+bindsym XF86AudioLowerVolume exec --no-startup-id &#34;amixer -q set Master 5%- unmute&#34;
 
 # Media player controls
 bindsym XF86AudioNext exec --no-startup-id playerctl next
@@ -760,9 +759,9 @@ bindsym XF86MonBrightnessDown exec --no-startup-id ~/.i3/scripts/setbrightness.s
 <li>Clone the dotfiles repository</li>
 <li>Invoke <code>make test</code> from it:</li>
 </ol>
-<pre><code>test: shellcheck ## Runs all the tests on the files in the repository.
+<pre tabindex="0"><code>test: shellcheck ## Runs all the tests on the files in the repository.
 
-# if this session isn't interactive, then we don't want to allocate a
+# if this session isn&#39;t interactive, then we don&#39;t want to allocate a
 # TTY, which would fail, but if it is interactive, we do want to attach
 # so that the user can send e.g. ^C through.
 INTERACTIVE := $(shell [ -t 0 ] &amp;&amp; echo 1 || echo 0)
@@ -778,7 +777,7 @@ shellcheck: ## Runs the shellcheck tests on the scripts.
 		--workdir /usr/src \
 		r.j3ss.co/shellcheck ./.test.sh
 </code></pre><p>This spins up a <code>shellcheck</code> docker container, which internally calls the <code>.test.sh</code> script that in turn performs the linting:</p>
-<pre><code>#!/bin/bash
+<pre tabindex="0"><code>#!/bin/bash
 # Stolen from: https://github.com/jessfraz/dotfiles/blob/master/test.sh
 
 set -e
@@ -789,29 +788,29 @@ ERRORS=()
 # find all executables and run `shellcheck` on them
 # define excludes here:
 for f in $(find . -type f \
-        -not -iwholename '*.git*' \
-        -not -iwholename './tpm*' \
-        -not -iwholename &quot;./oh-my-zsh-custom*&quot; \
-        -not -iwholename &quot;./nanorc-folder*&quot; \
-        -not -iwholename &quot;./powerline*&quot; \
-        -not -iwholename &quot;./xinitrc*&quot; \
-        -not -iwholename &quot;./fzf*&quot; | sort -u); do
+        -not -iwholename &#39;*.git*&#39; \
+        -not -iwholename &#39;./tpm*&#39; \
+        -not -iwholename &#34;./oh-my-zsh-custom*&#34; \
+        -not -iwholename &#34;./nanorc-folder*&#34; \
+        -not -iwholename &#34;./powerline*&#34; \
+        -not -iwholename &#34;./xinitrc*&#34; \
+        -not -iwholename &#34;./fzf*&#34; | sort -u); do
 
 
-	if file &quot;$f&quot; | grep --quiet shell; then
+	if file &#34;$f&#34; | grep --quiet shell; then
 		{
-			shellcheck &quot;$f&quot; &amp;&amp; echo &quot;[OK]: sucessfully linted $f&quot;
+			shellcheck &#34;$f&#34; &amp;&amp; echo &#34;[OK]: sucessfully linted $f&#34;
 		} || {
 			# add to errors
-		ERRORS+=(&quot;$f&quot;)
+		ERRORS+=(&#34;$f&#34;)
 	}
 	fi
 done
 
 if [ ${#ERRORS[@]} -eq 0 ]; then
-	echo &quot;No errors, hooray&quot;
+	echo &#34;No errors, hooray&#34;
 else
-	echo &quot;These files failed shellcheck: ${ERRORS[*]}&quot;
+	echo &#34;These files failed shellcheck: ${ERRORS[*]}&#34;
 	exit 1
 fi
 </code></pre><p>To get this really over-engineered you can then send out a <em>Telegram</em> notification indicating success or failure to your mobile phone using <code>curl</code> and a secret <em>Telegram</em> token that&rsquo;s configured in the Travis CI job.</p>

@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -301,11 +301,11 @@
 <h1 id="getting-started">Getting started</h1>
 <p>I&rsquo;ve created a <a href="https://github.com/ps1337/borg-docker/blob/master/Dockerfile">Dockerfile</a> based on Alpine Linux which is also available on <a href="https://hub.docker.com/r/ps1337/borg-docker/">DockerHub</a>. It gets built weekly to always stay up to date.</p>
 <p>This <code>Makefile</code> can be used to quickly get started using a containerized version of Borg:</p>
-<pre><code>SHELL := /bin/bash
+<pre tabindex="0"><code>SHELL := /bin/bash
 VERSION ?= latest
 
 # The directory of this file
-DIR := $(shell echo $(shell cd &quot;$(shell  dirname &quot;${BASH_SOURCE[0]}&quot; )&quot; &amp;&amp; pwd ))
+DIR := $(shell echo $(shell cd &#34;$(shell  dirname &#34;${BASH_SOURCE[0]}&#34; )&#34; &amp;&amp; pwd ))
 
 IMAGE_NAME ?= ps1337/borg-docker
 CONTAINER_NAME ?= borg
@@ -315,7 +315,7 @@ CONTAINER_NAME ?= borg
 .PHONY: help
 
 help: ## This help
-	@awk 'BEGIN {FS = &quot;:.*?## &quot;} /^[a-zA-Z_-]+:.*?## / {printf &quot;\033[36m%-30s\033[0m %s\n&quot;, $$1, $$2}' $(MAKEFILE_LIST)
+	@awk &#39;BEGIN {FS = &#34;:.*?## &#34;} /^[a-zA-Z_-]+:.*?## / {printf &#34;\033[36m%-30s\033[0m %s\n&#34;, $$1, $$2}&#39; $(MAKEFILE_LIST)
 
 .DEFAULT_GOAL := help
 
@@ -343,7 +343,6 @@ remove: ## Remove a (running) container
 
 remove-image-force: ## Remove the latest image (forced)
 	docker rmi -f $(IMAGE_NAME):$(VERSION)
-
 </code></pre><p>This <code>docker run</code> call mounts two things:</p>
 <ol>
 <li><code>./dir</code> to persistently store the backup data on the container host</li>
@@ -351,26 +350,26 @@ remove-image-force: ## Remove the latest image (forced)
 </ol>
 <h1 id="creating-repositories-and-backups">Creating repositories and backups</h1>
 <p>To create a borg backup repository using a specified SSH private key, use</p>
-<pre><code>BORG_RSH='ssh -i &lt;/path/to/private/key&gt;' borg init -e repokey &lt;ssh://borg@yourDomain:exposedPort/var/backups/borg/repoName&gt;
+<pre tabindex="0"><code>BORG_RSH=&#39;ssh -i &lt;/path/to/private/key&gt;&#39; borg init -e repokey &lt;ssh://borg@yourDomain:exposedPort/var/backups/borg/repoName&gt;
 </code></pre><p>For each backup repository, you can create a borg backup script like this:</p>
-<pre><code>#!/bin/sh
+<pre tabindex="0"><code>#!/bin/sh
 
-export BORG_RSH='&lt;ssh -i /path/to/private/key&gt;'
+export BORG_RSH=&#39;&lt;ssh -i /path/to/private/key&gt;&#39;
 
 # Setting this, so the repo does not need to be given on the commandline:
 export BORG_REPO=&lt;ssh://borg@yourDomain:exposedPort/var/backups/borg/repoName&gt;
 
-# Setting this, so you won't be asked for your repository passphrase:
+# Setting this, so you won&#39;t be asked for your repository passphrase:
 export BORG_PASSPHRASE=$(&lt;Password manager call to get the secret key&gt;)
 
 HOSTNAME=`hostname`
 DATE=`date +%Y-%m-%d-%s `
 
 # some helpers and error handling:
-info() { printf &quot;\n%s %s\n\n&quot; &quot;$( date )&quot; &quot;$*&quot; &gt;&amp;2; }
-trap 'echo $( date ) Backup interrupted &gt;&amp;2; exit 2' INT TERM
+info() { printf &#34;\n%s %s\n\n&#34; &#34;$( date )&#34; &#34;$*&#34; &gt;&amp;2; }
+trap &#39;echo $( date ) Backup interrupted &gt;&amp;2; exit 2&#39; INT TERM
 
-info &quot;Starting backup&quot;
+info &#34;Starting backup&#34;
 
 # Backup the most important directories into an archive named after
 # the machine this script is currently running on:
@@ -384,7 +383,7 @@ borg create                         \
     --show-rc                       \
     --compression zlib              \
     --exclude-caches                \
-    --exclude '/home/*/.cache/*'    \
+    --exclude &#39;/home/*/.cache/*&#39;    \
     ::$HOSTNAME-$DATE               \
     /home
 
@@ -392,12 +391,12 @@ backup_exit=$?
 
 if [ ${backup_exit} -eq 0 ];
     then
-        info &quot;Pruning repository&quot;
+        info &#34;Pruning repository&#34;
 
         # Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
-        # archives of THIS machine. The '{hostname}-' prefix is very important to
-        # limit prune's operation to this machine's archives and not apply to
-        # other machines' archives also:
+        # archives of THIS machine. The &#39;{hostname}-&#39; prefix is very important to
+        # limit prune&#39;s operation to this machine&#39;s archives and not apply to
+        # other machines&#39; archives also:
 
         borg prune                          \
             --list                          \
@@ -414,25 +413,23 @@ if [ ${backup_exit} -eq 0 ];
 
         if [ ${global_exit} -eq 1 ];
         then
-            info &quot;Backup and/or Prune finished with a warning&quot;
+            info &#34;Backup and/or Prune finished with a warning&#34;
         fi
 
         if [ ${global_exit} -gt 1 ];
         then
-            info &quot;Backup and/or Prune finished with an error&quot;
+            info &#34;Backup and/or Prune finished with an error&#34;
         fi
 
         exit ${global_exit}
 fi
 
 exit ${backup_exit}
-
 </code></pre><p>This script can be called daily or using a cronjob.</p>
 <p>After creating a few backups, the results can look like this:</p>
-<pre><code>                       Original size      Compressed size    Deduplicated size
+<pre tabindex="0"><code>                       Original size      Compressed size    Deduplicated size
 This archive:               75.24 GB             61.03 GB             53.69 GB
 All archives:              100.14 GB             84.17 GB             53.69 GB
-
 </code></pre><p>Note the deduplicated size vs. original size, showing the amount of space that&rsquo;s possible to save using borg.</p>
 </div>
 

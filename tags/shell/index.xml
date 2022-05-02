@@ -6,7 +6,17 @@
     <description>Recent content in shell on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 May 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/shell/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 30 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/shell/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>This Weird YouTube Trick</title>
+      <link>https://bananamafia.dev/post/yt/</link>
+      <pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/yt/</guid>
+      <description>A while ago, I&amp;rsquo;ve found an article on Hackaday, describing how to stream arbitrary YouTube videos to Sonos systems. Before you ask: No, that&amp;rsquo;s not possible normally, at least not without a premium subscription.
+In the original article called How I hacked SONOS and YouTube the same day (lol?????), the author described an approach to grab audio streams from YouTube and to convert them into ADTS streams on-the-fly to convince a Sonos device to play some YouTube music.</description>
+    </item>
+    
     <item>
       <title>Methods to Upgrade nc Reverse Shells</title>
       <link>https://bananamafia.dev/post/shell-upgrade/</link>

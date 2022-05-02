@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -301,17 +301,17 @@
 <p>Everything started when I had a look at a more complex part of a public web application of this vendor. The web application that gives out a link to the user that can be used to open up the same user state again at a later point. I&rsquo;ve then opened this link from a private tab and examined the web requests in the Burp proxy.</p>
 <h1 id="the-vulnerability">The Vulnerability</h1>
 <p>One link looked particularly interesting, since it contains a <code>redirect_uri</code> parameter:</p>
-<pre><code>https://vulnerable.com/login.html?cl_id=[Some ID]&amp;redirect_uri=https:%2F%2Fwebapp.vulnerable.com%2Fyolo.html&amp;scope=auth&amp;state=ey[Base64]
+<pre tabindex="0"><code>https://vulnerable.com/login.html?cl_id=[Some ID]&amp;redirect_uri=https:%2F%2Fwebapp.vulnerable.com%2Fyolo.html&amp;scope=auth&amp;state=ey[Base64]
 </code></pre><p>Parameters like that are often prone to <a href="https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html">open redirect vulnerabilities</a> that allow attackers to redirect users to another site after they click on a prepared and allegedly trustworthy link. Some web applications don&rsquo;t check whether this particular parameter has been manipulated and blindly redirect users to the attacker-controlled website after performing a certain action, like performing a login.</p>
 <p>What happened is that in fact the <code>redirect_uri</code> parameter is being sanitized by the web application itself and was therefore not vulnerable to an open redirect attack. I&rsquo;ve then decided to check out the <code>state</code> parameter that contains base64 encoded data. Here&rsquo;s the value of the decoded parameter:</p>
-<pre><code>{&quot;request&quot;:&quot;new&quot;,&quot;location&quot;:&quot;[somewhere at vulnerable.com]&quot;,&quot;scroll&quot;:&quot;0&quot;,&quot;configure&quot;:true,&quot;additionalParams&quot;:{},&quot;locale&quot;:&quot;&quot;}
+<pre tabindex="0"><code>{&#34;request&#34;:&#34;new&#34;,&#34;location&#34;:&#34;[somewhere at vulnerable.com]&#34;,&#34;scroll&#34;:&#34;0&#34;,&#34;configure&#34;:true,&#34;additionalParams&#34;:{},&#34;locale&#34;:&#34;&#34;}
 </code></pre><p>Well, what happens after manipulating the <code>location</code> parameter in the decoded JSON object and putting it back into the login URL?</p>
 <p>The web application redirects the user to the attacker-controlled website.</p>
 <p>Cool. This affects the central login mechanism of the public customer portal.</p>
 <h1 id="the-root-cause">The Root Cause</h1>
 <p>The redirect happens via JavaScript that&rsquo;s hosted at:</p>
-<pre><code>https://vulnerable.com/login/process.html:
-</code></pre><pre><code>let URL = state.oldId ? `${state.location}?id=${state.oldId}` : `${state.location}`;
+<pre tabindex="0"><code>https://vulnerable.com/login/process.html:
+</code></pre><pre tabindex="0"><code>let URL = state.oldId ? `${state.location}?id=${state.oldId}` : `${state.location}`;
 [...]
 document.location.replace(URL)
 </code></pre><p>As can be seen, the redirect happens in the last line of the above listing after the correct URL has been read from the <code>state</code> parameter. No sanitation is present for this particular parameter, which should be fixed :)</p>

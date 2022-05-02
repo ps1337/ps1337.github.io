@@ -6,7 +6,17 @@
     <description>Recent content in Posts on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 06 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 30 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>This Weird YouTube Trick</title>
+      <link>https://bananamafia.dev/post/yt/</link>
+      <pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/yt/</guid>
+      <description>A while ago, I&amp;rsquo;ve found an article on Hackaday, describing how to stream arbitrary YouTube videos to Sonos systems. Before you ask: No, that&amp;rsquo;s not possible normally, at least not without a premium subscription.
+In the original article called How I hacked SONOS and YouTube the same day (lol?????), the author described an approach to grab audio streams from YouTube and to convert them into ADTS streams on-the-fly to convince a Sonos device to play some YouTube music.</description>
+    </item>
+    
     <item>
       <title>Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</title>
       <link>https://bananamafia.dev/post/satisfyer/</link>
@@ -200,7 +210,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <pubDate>Thu, 29 Aug 2019 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/post/x64-rop-redpwn/</guid>
-      <description>Based on the Stop, ROP, n&#39;, Roll challenge from this year&amp;rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&amp;rsquo;s using glibc.</description>
+      <description>Based on the Stop, ROP, n&amp;rsquo;, Roll challenge from this year&amp;rsquo;s Redpwn CTF, this post will explain how to make system calls on x64 using ROP in order to spawn a shell. Also, it shows how to abuse writable memory regions of a process to overcome difficulties with some ROP gadgets. And the best thing is, two of the gadgets used in this writeup are universal and most likely also present in your x64 target if it&amp;rsquo;s using glibc.</description>
     </item>
     
     <item>
@@ -212,7 +222,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <description>Finally a nice .NET CTF challenge - time to pull out dnSpy :)
 The provided ZIP includes a CampRE.dll file which, according to the challenge description, is a .NET Core application. Time to boot a Windows VM and install the .NET Core runtime environment.
 After decompiling the dll, this source code can be inspected:
-private static void Main(string[] args) { byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location); for (int i = 0; i &amp;lt; 1333337; i++) { MD5 md = MD5.</description>
+private static void Main(string[] args) {  byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location);  for (int i = 0; i &amp;lt; 1333337; i++)  {  MD5 md = MD5.</description>
     </item>
     
     <item>
@@ -320,7 +330,7 @@ Leak of audio device status of the host When media is being played on the host, 
       
       <guid>https://bananamafia.dev/post/rnd-092345-gdb/</guid>
       <description>When trying to exploit an application it&amp;rsquo;s useful to send the input via gdb to immediately check how the input is being processed. But once the gdb is open it&amp;rsquo;s sometimes not clear how to pass binary input to applications reading from stdin, e.g. using read. An easy way is to start the debugging session with gdb ./binary and using
-run &amp;lt; &amp;lt;(printf &amp;quot;\xAA\xAA\xAA&amp;quot;) from the gdb session to send arbitrary bytes.</description>
+run &amp;lt; &amp;lt;(printf &amp;#34;\xAA\xAA\xAA&amp;#34;) from the gdb session to send arbitrary bytes.</description>
     </item>
     
     <item>
@@ -427,7 +437,7 @@ The Software This post covers reverse engineering and cracking the license valid
       <guid>https://bananamafia.dev/post/rnd-23542352/</guid>
       <description>When writing Dockerfiles, people often use something like this to download and install software from GitHub:
 ENV SOFTWARE_VERSION 1.33.7 RUN curl -sSL \ https://github.com/user/repo/releases/download/${SOFTWARE_VERSION}/amd64.deb This can be optimized so that always the newest version gets used, which also simplifies maintaining the Dockerfile because updating happens automatically:
-curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;quot;browser_download_url&amp;quot; | \ grep &amp;quot;amd64.deb&amp;quot; | \ cut -d &amp;quot;:&amp;quot; -f 2,3 | \ tr --delete \&amp;quot; | \ tr --delete &amp;quot; &amp;quot;) \ -o /tmp/software-amd64.</description>
+curl -sSL \ $(curl -sSL https://api.github.com/repos/user/repo/releases/latest | \ grep &amp;#34;browser_download_url&amp;#34; | \ grep &amp;#34;amd64.deb&amp;#34; | \ cut -d &amp;#34;:&amp;#34; -f 2,3 | \ tr --delete \&amp;#34; | \ tr --delete &amp;#34; &amp;#34;) \ -o /tmp/software-amd64.</description>
     </item>
     
     <item>
@@ -471,7 +481,7 @@ The vulnerability Upon installing the driver utility, two vulnerable services ge
       <description>BorgBackup is a secure backup solution which is also easy to use. It provides compression, encryption, deduplication and authentication.
 Getting started I&amp;rsquo;ve created a Dockerfile based on Alpine Linux which is also available on DockerHub. It gets built weekly to always stay up to date.
 This Makefile can be used to quickly get started using a containerized version of Borg:
-SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell echo $(shell cd &amp;quot;$(shell dirname &amp;quot;${BASH_SOURCE[0]}&amp;quot; )&amp;quot; &amp;amp;&amp;amp; pwd )) IMAGE_NAME ?</description>
+SHELL := /bin/bash VERSION ?= latest # The directory of this file DIR := $(shell echo $(shell cd &amp;#34;$(shell dirname &amp;#34;${BASH_SOURCE[0]}&amp;#34; )&amp;#34; &amp;amp;&amp;amp; pwd )) IMAGE_NAME ?</description>
     </item>
     
     <item>

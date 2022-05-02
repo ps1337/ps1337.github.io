@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -314,23 +314,23 @@
 <p>These attacks can be performed after gaining access to a Docker container:</p>
 <h2 id="reading-window-information">Reading Window Information</h2>
 <p>With <code>xwininfo -root -tree</code> it&rsquo;s possible to check which windows are opened on the host system, including the window titles:</p>
-<pre><code>[...]
-0xredacted &quot;[i3 con] container around 0xredacted&quot;: (&quot;i3-frame&quot; &quot;i3-frame&quot;) [...]
+<pre tabindex="0"><code>[...]
+0xredacted &#34;[i3 con] container around 0xredacted&#34;: (&#34;i3-frame&#34; &#34;i3-frame&#34;) [...]
         1 child:
-        0xredacted &quot;Write: super secret thing&quot;: (&quot;Msgcompose&quot; &quot;Thunderbird&quot;) [...]
+        0xredacted &#34;Write: super secret thing&#34;: (&#34;Msgcompose&#34; &#34;Thunderbird&#34;) [...]
 [...]
 </code></pre><h2 id="taking-screenshots">Taking screenshots</h2>
 <p>The command</p>
-<pre><code>xwd -root -screen &gt; screenshot.xwd &amp;&amp; convert screenshot.xwd screenshot.png
+<pre tabindex="0"><code>xwd -root -screen &gt; screenshot.xwd &amp;&amp; convert screenshot.xwd screenshot.png
 </code></pre><p>can be used to create a screenshot of the hosts display which makes it possible to watch every action a user performs on the system.</p>
 <h2 id="keylogging">Keylogging</h2>
 <p>By mounting the X11 socket into the container a user doesn&rsquo;t just mount the display. Additionally they keyboard also gets shared, so to say. With this, it&rsquo;s possible to log all keystrokes. There may be better tools for this, but during tests <a href="https://github.com/unixdj/xkey">xkey</a> seemed to perform very reliable. Using <code>xkey</code> it&rsquo;s possible to perform a specific action in case a previously defined key gets hit.</p>
 <h2 id="getting-a-shell">Getting a shell</h2>
 <p>Although it&rsquo;s not very stealthy, this method allows getting a shell on the host system. This works by sending keystrokes to the X server in order to open a terminal and execute commands:</p>
-<pre><code>xdotool key &lt;Shortcut to open a terminal&gt;
-xdotool type 'xterm'
+<pre tabindex="0"><code>xdotool key &lt;Shortcut to open a terminal&gt;
+xdotool type &#39;xterm&#39;
 xdotool key Return
-xdotool type --delay 50 '&lt;Desired reverse or bind shell command&gt;'
+xdotool type --delay 50 &#39;&lt;Desired reverse or bind shell command&gt;&#39;
 xdotool key Return
 </code></pre><p><img src="/img/docker-breakout/thisisfine.gif" alt="This is fine"></p>
 <h1 id="the-mitigation">The mitigation</h1>

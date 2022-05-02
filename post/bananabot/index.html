@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.85.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
     
 
     
@@ -359,12 +359,12 @@ and with the hack activated:</p>
 <p>Dead enemies and team mates can be filtered by making use of other member values of <code>CBaseEntity</code>. The values that are present in the determined memory regions have to be converted to <code>float</code>s before processing this data any further.</p>
 <h2 id="getting-the-nearest-enemy">Getting the Nearest Enemy</h2>
 <p>With the local player&rsquo;s and all enemy coordinates ready, it&rsquo;s quite easy to determine the nearest enemy using mad math skills:</p>
-<pre><code>return std::sqrt(std::pow(entity_x - own_x, 2) + std::pow(entity_y - own_y, 2) + std::pow(entity_z - own_z, 2));
+<pre tabindex="0"><code>return std::sqrt(std::pow(entity_x - own_x, 2) + std::pow(entity_y - own_y, 2) + std::pow(entity_z - own_z, 2));
 </code></pre><h2 id="setting-the-camera-angle">Setting the Camera Angle</h2>
 <p>After using the in-game console command <code>cl_showpos 1</code>, the current camera angle can be displayed on the screen. By moving the mouse and searching for changed values in Cheat Engine, multiple addresses can be found that hold the current camera angle. However, only one can be used to actually set this angle programmatically.</p>
 <h2 id="calculating-the-camera-angle">Calculating the Camera Angle</h2>
 <p>The only thing that&rsquo;s still required is calculating the camera angle in order to automatically aim at the enemy. The following function takes the local player&rsquo;s and the enemy coordinates and magically calculates this angle:</p>
-<pre><code>// Slightly modified standard `CalculateAngle` function.
+<pre tabindex="0"><code>// Slightly modified standard `CalculateAngle` function.
 std::vector&lt;float&gt; MadMath::calcAngle(std::vector&lt;float&gt; src, std::vector&lt;float&gt; dst)
 {
     std::vector&lt;float&gt; angles;
