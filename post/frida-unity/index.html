@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cheating in Unity Games Because Why Not?</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.96.0" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">Cheating in Unity Games Because Why Not?</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                    <li><a href="/recipe/">Recipes</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana-#@#-bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/frida-unity/">Cheating in Unity Games Because Why Not?</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>Yo!</p>
+<p>Do you know the game <em>Among Us</em> ? It&rsquo;s a multiplayer game where you have to identify impostors in a group of players. The impostor&rsquo;s goal is to kill every other player without being identified throughout the game. The remaining players can use votes to kick out a specific player, while hopefully identifying the impostor correctly.</p>
+<p>The game is based on the Unity engine and, along with other platforms, it is available for Android devices. I&rsquo;ve looked into the game and I thought it would be a great idea to identify the impostors right away and without having to guess. Let&rsquo;s see how that can be done with Frida.</p>
+<h1 id="decompilation">Decompilation</h1>
+<p>After grabbing an <code>.apk</code> file of the game and extracting it, I&rsquo;ve found that the actual game logic is not implemented in the Java code. Instead, and since it&rsquo;s Unity-based game, the interesting stuff is present in a <em>native library</em> called <code>libil2cpp.so</code>. Let&rsquo;s check out the <a href="https://docs.unity3d.com/Manual/IL2CPP.html">documentation</a>:</p>
+<blockquote>
+<p>The IL2CPP (Intermediate Language To C++) scripting backend
+is an alternative to the Mono backend. IL2CPP provides better support for applications across a wider range of platforms. The IL2CPP backend converts MSIL (Microsoft Intermediate Language) code (for example, C# code in scripts) into C++ code, then uses the C++ code to create a native binary file (for example, .exe, .apk, or .xap) for your chosen platform.</p>
+</blockquote>
+<p>Well that sounds interesting, especially the intermediate language aspect, since that often means that it&rsquo;s possible to decompile the code back the its original form. There already exists a tool called <a href="https://github.com/Perfare/Il2CppDumper">il2cpp-dumper</a> for this exact purpose:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ il2cpp-dumper ./libil2cpp.so ./global-metadata.dat ./out
+</span></span></code></pre></div><p>It uses the shared object along with some meta data to create a C# file that contains the original data structures and function prototypes. More on that code later.</p>
+<h1 id="injecting-code-into-unity-games">Injecting Code Into Unity Games</h1>
+<p>One of the first things to happen when the Among Us game is executed, is that the Unity engine and <code>libil2cpp.so</code> are loaded. To avoid crashes, it is important to wait until this shared object is loaded before actually interacting with the game. Therefore, I&rsquo;ve used this code to create a callback function that is executed as soon as the game engine is fully loaded:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">hax</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// do cool stuff at some point
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">awaitForCondition</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">callback</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#66d9ef">int</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">setInterval</span>(<span style="color:#66d9ef">function</span> () {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">addr</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Module</span>.<span style="color:#a6e22e">findBaseAddress</span>(<span style="color:#e6db74">&#39;libil2cpp.so&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">addr</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;Address found:&#34;</span>, <span style="color:#a6e22e">addr</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">clearInterval</span>(<span style="color:#66d9ef">int</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">callback</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">awaitForCondition</span>(()=&gt;{<span style="color:#a6e22e">hax</span>();});
+</span></span></code></pre></div><p>As a next step, the base address of the <code>libil2cpp.so</code> library is obtained, since we need that to actually create hooks with Frida:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">libil2cpp</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Process</span>.<span style="color:#a6e22e">getModuleByName</span>(<span style="color:#e6db74">&#34;libil2cpp.so&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">libil2cpp_base</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">libil2cpp</span>.<span style="color:#a6e22e">base</span>;
+</span></span></code></pre></div><p>This base address can then be used in combination with the code generated by <code>il2cpp-dumper</code>, since this code already contains annotations with attribute and function offsets that can be added to the base address to locate interesting stuff in game memory.</p>
+<h1 id="data-types">Data Types</h1>
+<p>Let&rsquo;s have a look at some decompiled code. First, it is important to know every player of the game is assigned a random role that determines the abilities for the next game round. This happens as soon as a new game round is about to start. One of the possible roles is the <code>Impostor</code> role that is represented as an <code>enum</code> value:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">enum</span> RoleTypes <span style="color:#75715e">// TypeDefIndex: 12375</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Fields</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">ushort</span> value__; <span style="color:#75715e">// 0x0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">const</span> RoleTypes Crewmate = <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">const</span> RoleTypes Impostor = <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// &lt;-- We are interested in this case</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">const</span> RoleTypes Scientist = <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">const</span> RoleTypes Engineer = <span style="color:#ae81ff">3</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">const</span> RoleTypes GuardianAngel = <span style="color:#ae81ff">4</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">const</span> RoleTypes Shapeshifter = <span style="color:#ae81ff">5</span>; <span style="color:#75715e">//&lt;-- and this one</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>You may have noticed the <code>Shapeshifter</code> role: It is a special version of the <code>Impostor</code> role with an additional ability: It allows a user to copy the visual appearance of another player. This means that we have to look for players with role <code>1</code> <em>and</em> <code>5</code>.</p>
+<p>The following class is responsible for assigning roles to individual players:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RoleManager</span> : DestroyableSingleton&lt;RoleManager&gt; <span style="color:#75715e">// TypeDefIndex: 12374</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">    [...]</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Methods</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">	[...]</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// RVA: 0xF3AF64 Offset: 0xF3AF64 VA: 0xF3AF64</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> SetRole(PlayerControl targetPlayer, RoleTypes roleType) { }
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">    [...]</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This means that it&rsquo;s possible to hook the <code>SetRole()</code> method at <code>libil2cpp_base + 0xF3AF64</code> to grab the relevant information:</p>
+<ul>
+<li>A <code>PlayerControl</code> instance is directly linked to a player in the game. It contains attributes that can be used to uniquely identify a player.</li>
+<li>The <code>RoleTypes</code> enum value determines the role to be assigned to a player.</li>
+</ul>
+<p>This is the definition of the <code>PlayerControl</code> class:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cs" data-lang="cs"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PlayerControl</span> : InnerNetObject <span style="color:#75715e">// TypeDefIndex: 12310</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Fields</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> LastStartCounter; <span style="color:#75715e">// 0x30</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">byte</span> PlayerId; <span style="color:#75715e">// 0x34 &lt;-- We need that</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">string</span> FriendCode; <span style="color:#75715e">// 0x38</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">string</span> Puid; <span style="color:#75715e">// 0x40</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">float</span> MaxReportDistance; <span style="color:#75715e">// 0x48</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">	[...]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// RVA: 0xF568F0 Offset: 0xF568F0 VA: 0xF568F0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> SetName(<span style="color:#66d9ef">string</span> name, <span style="color:#66d9ef">bool</span> dontCensor = False) { }
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">    [...]</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Note the <code>PlayerId</code> value: This value unique to each player, hence the name (really!). At this point, the only thing that&rsquo;s missing to identify an impostor in the game is a mapping from player IDs to player names. For that, we can hook another function, namely <code>SetName()</code> at <code>0xF568F0</code> (see above). If you check the decompiled code above, you can see that this method accepts two parameters. In reality, it receives three parameters though:</p>
+<p><img src="/img/frida-unity/ghidra.png" alt="Ghidra Output"></p>
+<p>Well okay, why is that? It turns out that for non-static functions an additional value is being passed that represents the current object (<code>this</code>). This ultimately allows mapping player names to player IDs.</p>
+<p>Time to put all of this information together in a Frida script.</p>
+<h1 id="getting-roles">Getting Roles</h1>
+<p>This is the hook for <code>SetRole()</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">Interceptor</span>.<span style="color:#a6e22e">attach</span>(<span style="color:#a6e22e">libil2cpp_base</span>.<span style="color:#a6e22e">add</span>(<span style="color:#ae81ff">0xF3AF64</span>), {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">onEnter</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">args</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">playerControl</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">1</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">roleType</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">2</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">roleType</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">roleType</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">5</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// we have the impostor, let&#39;s get the player ID
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">impostorPlayerId</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">playerControl</span>.<span style="color:#a6e22e">add</span>(<span style="color:#ae81ff">0x34</span>).<span style="color:#a6e22e">readS8</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;---&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;impostor is: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">impostorPlayerId</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;---&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>Note that we start grabbing values at index <code>1</code> instead of <code>0</code> since we don&rsquo;t need <code>this</code> in this case. If you check the implementation of the <code>PlayerControl</code> class, you&rsquo;ll notice that the player ID is stored at offset <code>0x34</code> as a byte value that can be read with the <code>readS8()</code> function of Frida. This reads a signed 8 bit value.</p>
+<h1 id="mapping-player-ids-to-names">Mapping Player IDs to Names</h1>
+<p>Now we know which player ID is the impostor. Let&rsquo;s map this ID to an actual name by hooking <code>SetName()</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">Interceptor</span>.<span style="color:#a6e22e">attach</span>(<span style="color:#a6e22e">libil2cpp_base</span>.<span style="color:#a6e22e">add</span>(<span style="color:#ae81ff">0xF568F0</span>), {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">onEnter</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">args</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// of type PlayerControl
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_this</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">0</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">strObj</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">1</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">playerName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">strObj</span>.<span style="color:#a6e22e">add</span>(<span style="color:#ae81ff">0x14</span>).<span style="color:#a6e22e">readUtf16String</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">playerId</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_this</span>.<span style="color:#a6e22e">add</span>(<span style="color:#ae81ff">0x34</span>).<span style="color:#a6e22e">readS8</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">playerName</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;: &#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">playerId</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>The player ID can be determined in the same way as before. The following hex dump shows what <code>string</code> objects looks like in memory:</p>
+<pre tabindex="0"><code>             0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F  0123456789ABCDEF
+7a87a40930  90 84 16 26 7d 00 00 00 00 00 00 00 00 00 00 00  ...&amp;}...........
+7a87a40940  09 00 00 00 4f 00 75 00 74 00 65 00 72 00 61 00  ....O.u.t.e.r.a.
+7a87a40950  77 00 65 00 64 00 00 00 41 00 41 00 41 00 41 00  w.e.d...A.A.A.A.
+7a87a40960  90 84 16 26 7d 00 00 00 00 00 00 00 00 00 00 00  ...&amp;}...........
+7a87a40970  07 00 00 00 73 00 75 00 72 00 66 00 65 00 69 00  ....s.u.r.f.e.i.
+7a87a40980  74 00 00 00 51 00 35 00 4e 00 6a 00 64 00 68 00  t...Q.5.N.j.d.h.
+</code></pre><p>Notice the following things:</p>
+<ul>
+<li>The name is stored as an UTF-16 wide string.</li>
+<li>We need to add an offset of <code>0x14</code> to the beginning of the <code>string</code> object to grab the player name.</li>
+</ul>
+<h1 id="demo">Demo</h1>
+<p>Upon running the game and injecting the script, the following output is printed:</p>
+<pre tabindex="0"><code>[+] Got PID 28485
+[+] libil2cpp.so base address: 0x7bc1d91000
+[+] doing hax now
+
+Oilunitary: 0
+Streakyfur: 1
+Snoozyday: 2
+Busyrain: 3
+BananaMan: 4
+Shocksure: 5
+Bridecosy: 6
+Supoverarm: 7
+
+---
+[+] impostor is: 6
+---
+</code></pre><p>Now we can vote to kick out <code>Bridecosy</code>, GTFO <code>◉‿◉</code></p>
+<h1 id="additional-client-side-memory-manipulation">Additional Client Side Memory Manipulation</h1>
+<p>At this point I thought: <em>What about manipulating client side memory instead of just reading some values?</em> Here are some things I&rsquo;ve tested.</p>
+<h2 id="entering-vents-as-regular-player">Entering Vents as Regular Player</h2>
+<p>Normally, only two player roles are permitted to enter vents on the game map: Engineers and Impostors. Vents can be used to hide, for example. However, we can make our local client think that we&rsquo;re actually an Imposter:</p>
+<ul>
+<li>We Become an Impostor by changing the role value in passed in <code>SetRole()</code> for our local player object.</li>
+<li>Now, the server thinks we&rsquo;re a regular player. But our local client thinks we&rsquo;re an Imposter.</li>
+<li>We can now enter vents and hide and move in there.</li>
+</ul>
+<p>This produces an interesting side effect: Since we&rsquo;re an impostor in our local game, we can directly identify other imposters from the game UI. Unfortunately the server doesn&rsquo;t accept kill operations form this spoofed role.</p>
+<h2 id="becoming-a-shapeshifter">Becoming a Shapeshifter</h2>
+<p>Like before, I&rsquo;ve tried to become a Shapeshifter by altering the role parameter in <code>SetRole()</code>. This works, but upon changing the player appearance, this happens:</p>
+<p><img src="/img/frida-unity/kick.jpg" alt="lol"></p>
+<p><code>:/</code></p>
+<h2 id="becoming-invincible-sort-of">Becoming Invincible, Sort of</h2>
+<p>If you&rsquo;re not familiar with the Guardian Angel role in Among Us, i suggest reading <a href="https://among-us.fandom.com/wiki/Guardian_Angel">this</a> article first. I&rsquo;ll wait here.</p>
+<p>Since this role type is able to protect players, I&rsquo;ve looked into what happens under the hood: There are some boolean values in players objects that control whether a player is protected or not. For some reason, if we set these to <code>true</code> for the local player and spoof the role to be a Guardian Angel, our player becomes sort of invincible.</p>
+<p>In the local game, we don&rsquo;t die in case an Imposter attacks the player. But on the server-side we die and other people will see a dead body on the floor. This makes playing really weird because we can still play as if nothing happened. At some point, I think some people noticed strange stuff is going on:</p>
+<p><img src="/img/frida-unity/fishy.jpg" alt="lol"></p>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="https://gist.github.com/eybisi/1fb454803fcf9a6f6b0db739a36e6382">GitHub Gist by eybisi</a></li>
+<li><a href="https://frida.re/docs/javascript-api/">Frida API</a></li>
+<li><a href="https://github.com/vfsfitvnm/frida-il2cpp-bridge">frida-il2cpp-bridge: A Frida library to interact with Unity-based games</a></li>
+<li>Thanks to <a href="https://twitter.com/oleavr">@oleavr</a> for telling me how to assign <code>NativePointers</code> with Frida :D</li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/satisfyer/">Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/web"><kbd class="item-tag">web</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/d3dhook/">Game Hacking #3: Hooking Direct3D EndScene()</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/frida-fuzz/">In-Process Fuzzing With Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/fuzzing"><kbd class="item-tag">fuzzing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>
