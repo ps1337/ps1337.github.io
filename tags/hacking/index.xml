@@ -27,7 +27,7 @@ Mount the X11 socket they said.
 Allow other users to access your X session they said.
 This post covers Docker container breakouts by abusing bad security practices related to the X11 socket.
 The problem To display windows spawned through a Docker container, people often launch containers following these steps:
- Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.X11-unix:/tmp/.X11-unix:ro shares the X11 socket - optionally as read only.</description>
+Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.X11-unix:/tmp/.X11-unix:ro shares the X11 socket - optionally as read only.</description>
     </item>
     
   </channel>

@@ -6,7 +6,17 @@
     <description>Recent content in programming on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 30 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 27 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/programming/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Reinschauer: Remotely Controlling Windows Machines</title>
+      <link>https://bananamafia.dev/post/reinschauer/</link>
+      <pubDate>Tue, 27 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/reinschauer/</guid>
+      <description>Recently, I did some research on Hidden VNCs (HVNC). This is a neat feature for attackers to have, since it allows to remotely control a compromised system on a new and separate virtual desktop that is not visible to the victim. This way, it is possible to remotely launch and use GUI programs without generating any visual indicators for victims.
+Implementing HVNC is complicated. First of all, you need to be able to grab the screen contents of the hidden desktop.</description>
+    </item>
+    
     <item>
       <title>This Weird YouTube Trick</title>
       <link>https://bananamafia.dev/post/yt/</link>
@@ -18,7 +28,7 @@ In the original article called How I hacked SONOS and YouTube the same day (lol?
     </item>
     
     <item>
-      <title>Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</title>
+      <title>Easy Remote Pair Programming Using Docker and Tmux</title>
       <link>https://bananamafia.dev/post/pairprog/</link>
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       

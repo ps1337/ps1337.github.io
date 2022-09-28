@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 26 Oct 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/gdb/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Random Note #092345: Passing binary input via GDB</title>
+      <title>Passing binary input via GDB</title>
       <link>https://bananamafia.dev/post/rnd-092345-gdb/</link>
       <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
       

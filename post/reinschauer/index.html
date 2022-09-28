@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reinschauer: Remotely Controlling Windows Machines</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.101.0" />
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">Reinschauer: Remotely Controlling Windows Machines</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                    <li><a href="/recipe/">Recipes</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana-#@#-bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/reinschauer/">Reinschauer: Remotely Controlling Windows Machines</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/golang"><kbd class="item-tag">golang</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/dotnet"><kbd class="item-tag">dotnet</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/windows"><kbd class="item-tag">windows</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>Recently, I did some research on <a href="https://www.malwaretech.com/2015/09/hidden-vnc-for-beginners.html">Hidden VNCs</a> (<em>HVNC</em>). This is a neat feature for attackers to have, since it allows to remotely control a compromised system on a new and separate virtual desktop that is not visible to the victim. This way, it is possible to remotely launch and use GUI programs without generating any visual indicators for victims.</p>
+<p>Implementing HVNC is complicated. First of all, you need to be able to grab the screen contents of the hidden desktop. On Windows, there are no APIs available to do this easily. You can only take screenshots of the default desktop, which is the one a potential victim is operating on. You rather have to use something like <code>EnumDesktopWindows()</code> to get a list of windows present on the hidden desktop and use another API call to get the window contents. In case that works: Great. But sometimes it just doesn&rsquo;t because some developer didn&rsquo;t care about implementing the functionality required to grab screen contents (<code>WM_PRINT</code>, for example). On top of that, you have to do all of that in the correct order, since windows are often layered on top of each other. Sending input to a specific window is quite another thing: On the regular desktop you can just use <code>SendInput()</code> and coordinates to simulate a click. On a hidden desktop, this API cannot be used as well. It is required to check what kind of GUI element a user clicks on, e.g. a close button, and send the correct message to the correct window. So, you ultimately have to implement your own window manager. Coooooooool :/</p>
+<p>Sometimes we might not need all of that complicated and complex stuff. Watching users and sending input on the same desktop may be just enough to pull off a successful attack. For example, we wait until the user has logged into a 2FA-protected web GUI and grab the cookie once we see the session was established. We can even take over the session once we think the user is not watching and interact with the web application. There are many scenarios where this may be of use. Stealing a specific secret stored in a password manager for example.</p>
+<p>Microsoft Teams is able to constantly grab screen contents of the user&rsquo;s desktop, so I wanted to replicate that in combination with the ability to interact with the machine. Also, web sockets seem to be a good way of communicating with C2 servers nowadays, so I want that as well. I&rsquo;ve created a proof of concept application that accomplishes this, and it&rsquo;s called <a href="https://github.com/ps1337/reinschauer">reinschauer</a>:</p>
+<center>
+<img width="100%" src="/img/reinschauer/reinschauer.gif">
+</center>
+<p>It uses a Linux-based server and the client application is obviously created for the Windows platform. An attacker is executing the server component, which is waiting for a client to connect. I&rsquo;ve implemented two clients: A Go-based client that can be used as a plain <code>exe</code>. Also, there&rsquo;s a client based on the .NET framework that has the following benefits:</p>
+<ul>
+<li>Smaller executable compared to the Golang version.</li>
+<li>Can be executed in-memory with Cobaltstrike <a href="https://github.com/CCob/BOF.NET">BOF.NET</a>.</li>
+</ul>
+<p>Creating an executable compatible with BOF.NET is quite easy. We only need to implement a class that inherits from <code>BeaconObject</code> of the <code>BOFNET</code> NuGet package. Also, it has to call the <code>Main()</code> method of our project:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c#" data-lang="c#"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> BOFNET;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">[...]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">namespace</span> reinschauer_dotnet
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BofStuff</span> : BeaconObject
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> BofStuff(BeaconApi api) : <span style="color:#66d9ef">base</span>(api) { }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// has to be called `Go`</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">void</span> Go(<span style="color:#66d9ef">string</span>[] args)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">try</span>
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                Reinschauer.Main(args);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">catch</span> (Exception ex)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                BeaconConsole.WriteLine(String.Format(<span style="color:#e6db74">&#34;\nException: {0}.&#34;</span>, ex));
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>But now, let&rsquo;s dive into some details that are important when implementing an implant like <code>reinschauer</code>.</p>
+<h1 id="grabbing-screen-contents-efficiently">Grabbing Screen Contents, efficiently</h1>
+<p>Getting and sending screen contents happens quite a few times per second. Therefore, it would be beneficial to implement this piece of code as efficient as possible. In general, I&rsquo;ve used these steps to minimize load and message size:</p>
+<ul>
+<li>Allocate memory required for the bitmap data once and try to re-use it for every frame.</li>
+<li>Use JPG compression. Most APIs allow specifying a compression level between 0 and 100. This step drastically reduces data volume with almost no impact on the resulting image.</li>
+<li>Scale the image before sending it.</li>
+</ul>
+<p>The WinAPI functions <code>BitBlt()</code> and <code>GetDIBits()</code> allow reading screen contents into a bitmap. We can use these APIs in Golang by using a wrapper like <a href="https://github.com/lxn/win">win</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">win</span>.<span style="color:#a6e22e">BitBlt</span>(<span style="color:#a6e22e">MEMORY_DEVICE</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, int32(<span style="color:#a6e22e">WIDTH</span>), int32(<span style="color:#a6e22e">HEIGHT</span>), <span style="color:#a6e22e">HDC</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">win</span>.<span style="color:#a6e22e">SRCCOPY</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;BitBlt failed&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">win</span>.<span style="color:#a6e22e">GetDIBits</span>(<span style="color:#a6e22e">HDC</span>, <span style="color:#a6e22e">BITMAP</span>, <span style="color:#ae81ff">0</span>, uint32(<span style="color:#a6e22e">HEIGHT</span>), (<span style="color:#f92672">*</span><span style="color:#66d9ef">uint8</span>)(<span style="color:#a6e22e">memptr</span>), (<span style="color:#f92672">*</span><span style="color:#a6e22e">win</span>.<span style="color:#a6e22e">BITMAPINFO</span>)(<span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">HEADER</span>)), <span style="color:#a6e22e">win</span>.<span style="color:#a6e22e">DIB_RGB_COLORS</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;GetDIBits failed&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Using the .NET framework, it&rsquo;s even more straight forward:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c#" data-lang="c#"><span style="display:flex;"><span>bm = <span style="color:#66d9ef">new</span> Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format32bppArgb);
+</span></span><span style="display:flex;"><span>g = Graphics.FromImage(bm);
+</span></span><span style="display:flex;"><span>g.CopyFromScreen(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, bm.Size, CopyPixelOperation.SourceCopy);
+</span></span><span style="display:flex;"><span>resized = <span style="color:#66d9ef">new</span> Bitmap(bm, <span style="color:#66d9ef">new</span> Size(bm.Width / scaler, bm.Height / scaler));
+</span></span><span style="display:flex;"><span>memStream = <span style="color:#66d9ef">new</span> MemoryStream();
+</span></span><span style="display:flex;"><span>resized.Save(memStream, codecfInfo, myEncoderParameters);
+</span></span></code></pre></div><h1 id="emulating-input">Emulating Input</h1>
+<p>Since the implant is operating on the default desktop, APIs like <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendinput">SendInput()</a> can be used to emulate keyboard and mouse input. The required functionality is similar to an aimbot, since its task is to send keyboard inputs and clicks on a specific pixel on the screen.</p>
+<p>The only tricky thing is handling different screen sizes and resolutions correctly: Clicks originating from the attacker&rsquo;s machine have to be translated to click events on the target machine. But an attacker may use an ultra-wide screen and the target machine may be a laptop with a much smaller screen. Therefore, we can&rsquo;t just transmit X and Y coordinates and generate click events for these values.</p>
+<p>Luckily, the WinAPI can already handle this kind of thing: The <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-mouseinput">MouseInput</a> struct contains a bit field called <code>dwFlags</code>. It is possible to specify <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-mouseinput#remarks">MOUSEEVENTF_ABSOLUTE</a> to normalize the dimensions of the screen:</p>
+<blockquote>
+<p>If MOUSEEVENTF_ABSOLUTE value is specified, dx and dy contain normalized absolute coordinates between 0 and 65,535. The event procedure maps these coordinates onto the display surface. Coordinate (0,0) maps onto the upper-left corner of the display surface; coordinate (65535,65535) maps onto the lower-right corner. In a multimonitor system, the coordinates map to the primary monitor.</p>
+</blockquote>
+<p>This means that click coordinates can be converted to use absolute positioning by using a simple code snippet:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">CONV_BASE</span> = float32(<span style="color:#ae81ff">65535</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// The size of the attacker&#39;s GUI
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">curr_size</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">IMG</span>.<span style="color:#a6e22e">Size</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">factor_x</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">CONV_BASE</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">curr_size</span>.<span style="color:#a6e22e">Width</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">factor_y</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">CONV_BASE</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">curr_size</span>.<span style="color:#a6e22e">Height</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">tap_x</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">event</span>.<span style="color:#a6e22e">Position</span>.<span style="color:#a6e22e">X</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">factor_x</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">tap_y</span> <span style="color:#f92672">:=</span> int(<span style="color:#a6e22e">event</span>.<span style="color:#a6e22e">Position</span>.<span style="color:#a6e22e">Y</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">factor_y</span>)
+</span></span></code></pre></div><p>Now we can resize the GUI however we want and the click events get translated correctly.</p>
+<h1 id="merging-net-executables-and-dlls">Merging .NET Executables and DLLs</h1>
+<p>This is only relevant for the .NET variant. When using external libraries like NuGet packages, they need to be bundled with the resulting .NET executable. Otherwise, the implant can not be executed on the target system because the required assemblies are missing. There&rsquo;s a simple solution for this and it can be automated: The tool <code>ILMerge</code> allows bundling DLL files into existing <code>exe</code> files with a single command. Just download the <code>ILMerge</code> NuGet package, put this into your <code>csproj</code> file and build the project:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;Target</span> <span style="color:#a6e22e">Name=</span><span style="color:#e6db74">&#34;AfterBuild&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;ItemGroup&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;MergeAssemblies</span> <span style="color:#a6e22e">Include=</span><span style="color:#e6db74">&#34;$(OutputPath)\reinschauer-dotnet.exe&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;MergeAssemblies</span> <span style="color:#a6e22e">Include=</span><span style="color:#e6db74">&#34;$(OutputPath)\System.Reactive.dll&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;MergeAssemblies</span> <span style="color:#a6e22e">Include=</span><span style="color:#e6db74">&#34;$(OutputPath)\System.ValueTuple.dll&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;MergeAssemblies</span> <span style="color:#a6e22e">Include=</span><span style="color:#e6db74">&#34;$(OutputPath)\System.Runtime.CompilerServices.Unsafe.dll&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;MergeAssemblies</span> <span style="color:#a6e22e">Include=</span><span style="color:#e6db74">&#34;$(OutputPath)\System.Threading.Channels.dll&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;MergeAssemblies</span> <span style="color:#a6e22e">Include=</span><span style="color:#e6db74">&#34;$(OutputPath)\System.Threading.Tasks.Extensions.dll&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;MergeAssemblies</span> <span style="color:#a6e22e">Include=</span><span style="color:#e6db74">&#34;$(OutputPath)\Websocket.Client.dll&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/ItemGroup&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;PropertyGroup&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;OutputAssembly&gt;</span>$(OutputPath)\reinschauer-dotnet-standalone.exe<span style="color:#f92672">&lt;/OutputAssembly&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&lt;Merger&gt;</span>&#34;$(SolutionDir)\packages\ILMerge.3.0.41\tools\net452\ILMerge.exe&#34;<span style="color:#f92672">&lt;/Merger&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;/PropertyGroup&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;Message</span> <span style="color:#a6e22e">Text=</span><span style="color:#e6db74">&#34;MERGING: @(MergeAssemblies-&gt;&#39;%(Filename)&#39;) into $(OutputAssembly)&#34;</span> <span style="color:#a6e22e">Importance=</span><span style="color:#e6db74">&#34;High&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;Exec</span> <span style="color:#a6e22e">Command=</span><span style="color:#e6db74">&#34;$(Merger) /out:&amp;quot;$(OutputAssembly)&amp;quot; @(MergeAssemblies-&gt;&#39;&amp;quot;%(FullPath)&amp;quot;&#39;, &#39; &#39;)&#34;</span> <span style="color:#f92672">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/Target&gt;</span>
+</span></span></code></pre></div><p>The resulting file <code>reinschauer-dotnet-standalone.exe</code> then contains all DLLs specified with <code>MergeAssemblies</code> elements.</p>
+<h1 id="tunneling-traffic">Tunneling Traffic</h1>
+<p>Most of the time, establishing direct TCP connections between an attacker and a target machine may not be possible. Therefore, an Internet-facing server is needed to relay traffic to and from both peers. The most convenient way is to tunnel traffic via a Beacon connection that is already existing. This is especially handy for the in-memory variant of <code>reinschauer</code>.</p>
+<p>Beacon implements the <code>rportfwd_local</code> that allows remote port forwarding to forward the port <code>reinschauer</code> is listening on to the target machine. The <code>reinschauer</code> client then only has to connect to localhost to establish a connection. However, <code>rportfwd_local</code> seems to listen on <code>0.0.0.0</code>, which triggers a Windows Firewall prompt and that&rsquo;s not cool. I&rsquo;m not aware of any way to make this listen on localhost only :/</p>
+<p>A more suitable alternative is to use OpenSSH and the <a href="https://man.openbsd.org/sshd_config#GatewayPorts">GatewayPorts</a> feature. Using that, we can forward the <code>reinschauer</code> port from the attacker&rsquo;s machine to an Internet-facing port on another server. More information regarding traffic tunneling can be found in the <a href="https://github.com/ps1337/reinschauer">reinschauer repository on GitHub</a>.</p>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="https://github.com/ps1337/reinschauer">reinschauer on GitHub</a></li>
+<li><a href="https://github.com/Meltedd/HVNC">Tinynuke HVNC</a></li>
+<li><a href="https://deepsec.net/docs/Slides/2017/Who_Hid_My_Desktop_Or_Safran_Pavel_Asinovsky.pdf">Who Hid My Desktop</a></li>
+</ul>
+</div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/yt/">This Weird YouTube Trick</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/python"><kbd class="item-tag">python</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/dotnet-re-cccamp19/">Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/dotnet"><kbd class="item-tag">dotnet</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/pairprog/">Easy Remote Pair Programming Using Docker and Tmux</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vim"><kbd class="item-tag">vim</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/tmux"><kbd class="item-tag">tmux</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/shell"><kbd class="item-tag">shell</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

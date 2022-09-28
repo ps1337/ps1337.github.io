@@ -6,7 +6,7 @@
     <description>Recent content on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 27 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Automotive Security Research</title>
       <link>https://bananamafia.dev/project/autosec/</link>
@@ -40,7 +40,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/project/canalyzat0r/</guid>
-      <description>Please find CANalyzat0r here on GitHub :)</description>
+      <description>Please find CANalyzat0r here on GitHub :) </description>
     </item>
     
     <item>
@@ -125,6 +125,16 @@
     </item>
     
     <item>
+      <title>Reinschauer: Remotely Controlling Windows Machines</title>
+      <link>https://bananamafia.dev/post/reinschauer/</link>
+      <pubDate>Tue, 27 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/reinschauer/</guid>
+      <description>Recently, I did some research on Hidden VNCs (HVNC). This is a neat feature for attackers to have, since it allows to remotely control a compromised system on a new and separate virtual desktop that is not visible to the victim. This way, it is possible to remotely launch and use GUI programs without generating any visual indicators for victims.
+Implementing HVNC is complicated. First of all, you need to be able to grab the screen contents of the hidden desktop.</description>
+    </item>
+    
+    <item>
       <title>Cheating in Unity Games Because Why Not?</title>
       <link>https://bananamafia.dev/post/frida-unity/</link>
       <pubDate>Mon, 09 May 2022 00:00:00 +0000</pubDate>
@@ -193,7 +203,7 @@ You can find some PoCs at the end of this blog post.</description>
       
       <guid>https://bananamafia.dev/post/unifi/</guid>
       <description>If you&amp;rsquo;re like me (rich), it&amp;rsquo;s likely that you want to monitor and protect your ice and gold chainz with technical measures. Since cloud based solutions are not an option for me, I&amp;rsquo;ve built a system that&amp;rsquo;s self-hosted. It&amp;rsquo;s based on my existing UniFi network setup, a UniFi camera and this software:
- UniFi Controller: This is used to manage all UniFi devices in a network. UniFi Network Video Recorder (NVR): This is a controller and video recording manager for UniFi cameras.</description>
+UniFi Controller: This is used to manage all UniFi devices in a network. UniFi Network Video Recorder (NVR): This is a controller and video recording manager for UniFi cameras.</description>
     </item>
     
     <item>
@@ -214,7 +224,7 @@ This is often caused by faulty run conditions that can be set in the app or netw
       <guid>https://bananamafia.dev/post/d3dhook/</guid>
       <description>I&amp;rsquo;ve experimented with even moar game hacking and hooking techniques and you didn&amp;rsquo;t, so here comes another blog post.
 Today&amp;rsquo;s topic is about hooking a specific function of the Direct3D library with the goal to cause Counter Strike: Global Offensive to draw additional things on the screen. There can be various reasons to do this:
- It&amp;rsquo;s possible to draw a crosshair on the screen when none is shown by the game.</description>
+It&amp;rsquo;s possible to draw a crosshair on the screen when none is shown by the game.</description>
     </item>
     
     <item>
@@ -266,7 +276,7 @@ Please note: This is a prototype implementation. At this point of time, only 16 
       <description>1337 skills Task description:
 It’s too hard to gain all 1337 h4x0r skills required by nowadays CTFs ._.! I am glad a friendly hacker told me about an App he got during a (growth) hacking course. Sadly, he didn’t wrote down any activations codes.
 Ready for your hacking exam?
- As can be read above, an Android app was given at the beginning of the challenge, with the hint to get a valid activation code for it.</description>
+As can be read above, an Android app was given at the beginning of the challenge, with the hint to get a valid activation code for it.</description>
     </item>
     
     <item>
@@ -359,7 +369,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <description>Finally a nice .NET CTF challenge - time to pull out dnSpy :)
 The provided ZIP includes a CampRE.dll file which, according to the challenge description, is a .NET Core application. Time to boot a Windows VM and install the .NET Core runtime environment.
 After decompiling the dll, this source code can be inspected:
-private static void Main(string[] args) {  byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location);  for (int i = 0; i &amp;lt; 1333337; i++)  {  MD5 md = MD5.</description>
+private static void Main(string[] args) { byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location); for (int i = 0; i &amp;lt; 1333337; i++) { MD5 md = MD5.</description>
     </item>
     
     <item>
@@ -436,7 +446,7 @@ RIP &amp;amp; Canonical Addresses The first thing one notices when trying to gai
       <guid>https://bananamafia.dev/post/bananabot/</guid>
       <description>This post covers creating a hack for the game Counter Strike: Global Offensive. The hack I&amp;rsquo;ve developed works in combination with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools.
 These are the features I&amp;rsquo;ve integrated into the hack:
- Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy  Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
+Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
     </item>
     
     <item>
@@ -461,7 +471,7 @@ Leak of audio device status of the host When media is being played on the host, 
     </item>
     
     <item>
-      <title>Random Note #092345: Passing binary input via GDB</title>
+      <title>Passing binary input via GDB</title>
       <link>https://bananamafia.dev/post/rnd-092345-gdb/</link>
       <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
       
@@ -500,7 +510,7 @@ The Target This is being shown in the following context: Quake3 based multiplaye
     </item>
     
     <item>
-      <title>Random Note #632424: Backup Google Authenticator Data</title>
+      <title>Backup Google Authenticator Data</title>
       <link>https://bananamafia.dev/post/rnd-632424-2fa-backup/</link>
       <pubDate>Wed, 20 Jun 2018 00:00:00 +0000</pubDate>
       
@@ -519,7 +529,7 @@ Mount the X11 socket they said.
 Allow other users to access your X session they said.
 This post covers Docker container breakouts by abusing bad security practices related to the X11 socket.
 The problem To display windows spawned through a Docker container, people often launch containers following these steps:
- Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.X11-unix:/tmp/.X11-unix:ro shares the X11 socket - optionally as read only.</description>
+Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.X11-unix:/tmp/.X11-unix:ro shares the X11 socket - optionally as read only.</description>
     </item>
     
     <item>
@@ -531,7 +541,7 @@ The problem To display windows spawned through a Docker container, people often 
       <description>Ended up with a cheap nc shell and want to upgrade to a &amp;ldquo;real&amp;rdquo; shell with a proper TTY and navigation?
 Say no more &amp;lt;:
 1. Upgrading using shell magic This doesn&amp;rsquo;t always work - however if Python is present on the victims machine, it&amp;rsquo;s worth a try.
- Use bash on the attacker machine, zsh doesn&amp;rsquo;t seem to work. Get the nc shell. In the shell, execute:  python -c &amp;#39;import pty; pty.</description>
+Use bash on the attacker machine, zsh doesn&amp;rsquo;t seem to work. Get the nc shell. In the shell, execute: python -c &amp;#39;import pty; pty.</description>
     </item>
     
     <item>
@@ -558,7 +568,7 @@ The Software This post covers reverse engineering and cracking the license valid
     </item>
     
     <item>
-      <title>Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</title>
+      <title>Easy Remote Pair Programming Using Docker and Tmux</title>
       <link>https://bananamafia.dev/post/pairprog/</link>
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
@@ -567,7 +577,7 @@ The Software This post covers reverse engineering and cracking the license valid
     </item>
     
     <item>
-      <title>Random Note #23542351: Using the GitHub API to improve Dockerfiles</title>
+      <title>Using the GitHub API to improve Dockerfiles</title>
       <link>https://bananamafia.dev/post/rnd-23542352/</link>
       <pubDate>Tue, 20 Mar 2018 00:00:00 +0000</pubDate>
       
@@ -659,7 +669,7 @@ Registering a bot First of all, a Telegram bot has to be registered in order to 
       <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
       <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
- Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
+Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can This assumes that you already have control over a private docker registry. If that isn&amp;rsquo;t the case yet, you can just use the pre-built registry image using the following Makefile.</description>
     </item>
     
     <item>

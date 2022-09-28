@@ -55,7 +55,7 @@ Please note: This is a prototype implementation. At this point of time, only 16 
       <description>1337 skills Task description:
 It’s too hard to gain all 1337 h4x0r skills required by nowadays CTFs ._.! I am glad a friendly hacker told me about an App he got during a (growth) hacking course. Sadly, he didn’t wrote down any activations codes.
 Ready for your hacking exam?
- As can be read above, an Android app was given at the beginning of the challenge, with the hint to get a valid activation code for it.</description>
+As can be read above, an Android app was given at the beginning of the challenge, with the hint to get a valid activation code for it.</description>
     </item>
     
     <item>
@@ -96,7 +96,7 @@ Going through the strings and searching for a possible dialog yields interesting
       <description>Finally a nice .NET CTF challenge - time to pull out dnSpy :)
 The provided ZIP includes a CampRE.dll file which, according to the challenge description, is a .NET Core application. Time to boot a Windows VM and install the .NET Core runtime environment.
 After decompiling the dll, this source code can be inspected:
-private static void Main(string[] args) {  byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location);  for (int i = 0; i &amp;lt; 1333337; i++)  {  MD5 md = MD5.</description>
+private static void Main(string[] args) { byte[] sourceArray = File.ReadAllBytes(Assembly.GetAssembly(typeof(Program)).Location); for (int i = 0; i &amp;lt; 1333337; i++) { MD5 md = MD5.</description>
     </item>
     
     <item>

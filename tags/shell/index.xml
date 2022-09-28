@@ -26,11 +26,11 @@ In the original article called How I hacked SONOS and YouTube the same day (lol?
       <description>Ended up with a cheap nc shell and want to upgrade to a &amp;ldquo;real&amp;rdquo; shell with a proper TTY and navigation?
 Say no more &amp;lt;:
 1. Upgrading using shell magic This doesn&amp;rsquo;t always work - however if Python is present on the victims machine, it&amp;rsquo;s worth a try.
- Use bash on the attacker machine, zsh doesn&amp;rsquo;t seem to work. Get the nc shell. In the shell, execute:  python -c &amp;#39;import pty; pty.</description>
+Use bash on the attacker machine, zsh doesn&amp;rsquo;t seem to work. Get the nc shell. In the shell, execute: python -c &amp;#39;import pty; pty.</description>
     </item>
     
     <item>
-      <title>Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</title>
+      <title>Easy Remote Pair Programming Using Docker and Tmux</title>
       <link>https://bananamafia.dev/post/pairprog/</link>
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       

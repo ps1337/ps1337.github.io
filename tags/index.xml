@@ -6,7 +6,43 @@
     <description>Recent content in Tags on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 27 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>dotnet</title>
+      <link>https://bananamafia.dev/tags/dotnet/</link>
+      <pubDate>Tue, 27 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/dotnet/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>golang</title>
+      <link>https://bananamafia.dev/tags/golang/</link>
+      <pubDate>Tue, 27 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>programming</title>
+      <link>https://bananamafia.dev/tags/programming/</link>
+      <pubDate>Tue, 27 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/programming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>windows</title>
+      <link>https://bananamafia.dev/tags/windows/</link>
+      <pubDate>Tue, 27 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/tags/windows/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>binary</title>
       <link>https://bananamafia.dev/tags/binary/</link>
@@ -31,15 +67,6 @@
       <pubDate>Mon, 09 May 2022 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/gamehacking/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>programming</title>
-      <link>https://bananamafia.dev/tags/programming/</link>
-      <pubDate>Sat, 30 Apr 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/programming/</guid>
       <description></description>
     </item>
     
@@ -296,15 +323,6 @@
     </item>
     
     <item>
-      <title>dotnet</title>
-      <link>https://bananamafia.dev/tags/dotnet/</link>
-      <pubDate>Sun, 25 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/dotnet/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>deserialization</title>
       <link>https://bananamafia.dev/tags/deserialization/</link>
       <pubDate>Sat, 24 Aug 2019 00:00:00 +0000</pubDate>
@@ -364,15 +382,6 @@
       <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/gdb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>randomnote</title>
-      <link>https://bananamafia.dev/tags/randomnote/</link>
-      <pubDate>Fri, 26 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/randomnote/</guid>
       <description></description>
     </item>
     
@@ -463,15 +472,6 @@
       <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>https://bananamafia.dev/tags/monitoring/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>windows</title>
-      <link>https://bananamafia.dev/tags/windows/</link>
-      <pubDate>Thu, 15 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://bananamafia.dev/tags/windows/</guid>
       <description></description>
     </item>
     

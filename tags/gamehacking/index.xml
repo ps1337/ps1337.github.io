@@ -35,7 +35,7 @@ The game is based on the Unity engine and, along with other platforms, it is ava
       <guid>https://bananamafia.dev/post/d3dhook/</guid>
       <description>I&amp;rsquo;ve experimented with even moar game hacking and hooking techniques and you didn&amp;rsquo;t, so here comes another blog post.
 Today&amp;rsquo;s topic is about hooking a specific function of the Direct3D library with the goal to cause Counter Strike: Global Offensive to draw additional things on the screen. There can be various reasons to do this:
- It&amp;rsquo;s possible to draw a crosshair on the screen when none is shown by the game.</description>
+It&amp;rsquo;s possible to draw a crosshair on the screen when none is shown by the game.</description>
     </item>
     
     <item>
@@ -46,7 +46,7 @@ Today&amp;rsquo;s topic is about hooking a specific function of the Direct3D lib
       <guid>https://bananamafia.dev/post/bananabot/</guid>
       <description>This post covers creating a hack for the game Counter Strike: Global Offensive. The hack I&amp;rsquo;ve developed works in combination with the Linux version of the game - coding a windows-based hack can however be done with the same methodology and tools.
 These are the features I&amp;rsquo;ve integrated into the hack:
- Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy  Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
+Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier to perform bunny hop chains No Flash: Be immune to flash grenades that would block the players vision Aimbot: Automatically aim at the head of the nearest enemy Tooling &amp;amp; Setup Linux lacks of good tools to perform the kind of analysis tasks required to code a cheat like this.</description>
     </item>
     
     <item>

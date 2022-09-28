@@ -56,11 +56,11 @@ Mount the X11 socket they said.
 Allow other users to access your X session they said.
 This post covers Docker container breakouts by abusing bad security practices related to the X11 socket.
 The problem To display windows spawned through a Docker container, people often launch containers following these steps:
- Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.X11-unix:/tmp/.X11-unix:ro shares the X11 socket - optionally as read only.</description>
+Use -e DISPLAY=$DISPLAY to share the display variable value Specifying -v /tmp/.X11-unix:/tmp/.X11-unix:ro shares the X11 socket - optionally as read only.</description>
     </item>
     
     <item>
-      <title>Random Note #12354123: Easy Remote Pair Programming Using Docker and Tmux</title>
+      <title>Easy Remote Pair Programming Using Docker and Tmux</title>
       <link>https://bananamafia.dev/post/pairprog/</link>
       <pubDate>Tue, 10 Apr 2018 00:00:00 +0000</pubDate>
       
@@ -69,7 +69,7 @@ The problem To display windows spawned through a Docker container, people often 
     </item>
     
     <item>
-      <title>Random Note #23542351: Using the GitHub API to improve Dockerfiles</title>
+      <title>Using the GitHub API to improve Dockerfiles</title>
       <link>https://bananamafia.dev/post/rnd-23542352/</link>
       <pubDate>Tue, 20 Mar 2018 00:00:00 +0000</pubDate>
       
@@ -129,7 +129,7 @@ After spending a lot of time and effort on your Dotfiles, it may be useful to se
       <guid>https://bananamafia.dev/post/docker-jenkins/</guid>
       <description>Note: This isn&amp;rsquo;t up to date anymore, instead use img .
 First of all – why should you want to build all the docker images on your own build server?
- Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can  This assumes that you already have control over a private docker registry.</description>
+Complete control over the build process You know when the images are built and how up-to-date they are Use of private repositories and images Because you can This assumes that you already have control over a private docker registry. If that isn&amp;rsquo;t the case yet, you can just use the pre-built registry image using the following Makefile.</description>
     </item>
     
   </channel>

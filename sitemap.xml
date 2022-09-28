@@ -29,7 +29,28 @@
     <loc>https://bananamafia.dev/project/randomjk/</loc>
   </url><url>
     <loc>https://bananamafia.dev/</loc>
-    <lastmod>2022-05-09T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/dotnet/</loc>
+    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/golang/</loc>
+    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/programming/</loc>
+    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/reinschauer/</loc>
+    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/windows/</loc>
+    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/binary/</loc>
     <lastmod>2022-05-09T00:00:00+00:00</lastmod>
@@ -42,15 +63,6 @@
   </url><url>
     <loc>https://bananamafia.dev/tags/gamehacking/</loc>
     <lastmod>2022-05-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/post/</loc>
-    <lastmod>2022-05-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/</loc>
-    <lastmod>2022-05-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/programming/</loc>
-    <lastmod>2022-04-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/python/</loc>
     <lastmod>2022-04-30T00:00:00+00:00</lastmod>
@@ -202,9 +214,6 @@
     <loc>https://bananamafia.dev/post/x64-rop-redpwn/</loc>
     <lastmod>2019-08-29T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/tags/dotnet/</loc>
-    <lastmod>2019-08-25T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/post/dotnet-re-cccamp19/</loc>
     <lastmod>2019-08-25T00:00:00+00:00</lastmod>
   </url><url>
@@ -259,9 +268,6 @@
     <loc>https://bananamafia.dev/post/rnd-092345-gdb/</loc>
     <lastmod>2018-10-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/tags/randomnote/</loc>
-    <lastmod>2018-10-26T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/tags/automotive/</loc>
     <lastmod>2018-10-23T00:00:00+00:00</lastmod>
   </url><url>
@@ -280,10 +286,10 @@
     <loc>https://bananamafia.dev/post/cvar-hax/</loc>
     <lastmod>2018-08-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/tags/backups/</loc>
+    <loc>https://bananamafia.dev/post/rnd-632424-2fa-backup/</loc>
     <lastmod>2018-06-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/post/rnd-632424-2fa-backup/</loc>
+    <loc>https://bananamafia.dev/tags/backups/</loc>
     <lastmod>2018-06-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/docker-breakout/</loc>
@@ -329,9 +335,6 @@
     <lastmod>2018-03-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/realtek-driverutil/</loc>
-    <lastmod>2018-03-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/windows/</loc>
     <lastmod>2018-03-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/borg/</loc>
