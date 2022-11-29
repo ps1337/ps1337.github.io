@@ -5,7 +5,7 @@
      
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>borg</title>
+    <title>Reinschauer</title>
     <style>
 
     html body {
@@ -95,9 +95,6 @@
 
 <script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.104.2" />
     
-    <link href="/tags/borg/index.xml" rel="alternate" type="application/rss&#43;xml" title="BananaMafia" />
-    <link href="/tags/borg/index.xml" rel="feed" type="application/rss&#43;xml" title="BananaMafia" />
-    
 
     
 </head>
@@ -113,7 +110,7 @@
 
             <div class="navbar-header">
 
-                <a class="navbar-brand visible-xs" href="#">borg</a>
+                <a class="navbar-brand visible-xs" href="#">Reinschauer</a>
 
                 <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
                     <span class="icon-bar"></span>
@@ -276,9 +273,43 @@
     </script>
 
 
-<main>
+<main id="main">
 
-    <h2 class="centeredText" >borg</h2>
+    <div class="item">
+
+    
+    
+        
+        
+            
+        
+    
+    
+
+      
+
+    <h4><a href="https://github.com/ps1337/reinschauer/">Reinschauer</a></h4>
+    <h5>A PoC to remotely control Windows machines over Websockets</h5>
+    
+    <a href="https://bananamafia.dev/tags/windows"><kbd class="item-tag">windows</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/golang"><kbd class="item-tag">golang</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/dotnet"><kbd class="item-tag">dotnet</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"></div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
 
      <div class="item">
 
@@ -288,23 +319,62 @@
 
     
 
-    <h4><a href="/post/docker-borg/">Easy and Secure Backups Using Borg and Docker</a></h4>
+    <h4><a href="/post/reinschauer/">Reinschauer: Remotely Controlling Windows Machines</a></h4>
     <h5></h5>
     
-    <a href="https://bananamafia.dev/tags/docker"><kbd class="item-tag">docker</kbd></a>
+    <a href="https://bananamafia.dev/tags/golang"><kbd class="item-tag">golang</kbd></a>
     
-    <a href="https://bananamafia.dev/tags/borg"><kbd class="item-tag">borg</kbd></a>
+    <a href="https://bananamafia.dev/tags/dotnet"><kbd class="item-tag">dotnet</kbd></a>
     
-    <a href="https://bananamafia.dev/tags/backup"><kbd class="item-tag">backup</kbd></a>
+    <a href="https://bananamafia.dev/tags/programming"><kbd class="item-tag">programming</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/windows"><kbd class="item-tag">windows</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/dotnet-re-cccamp19/">Reversing .NET Applications: CCCamp19 CTF CampRE Challenge</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/dotnet"><kbd class="item-tag">dotnet</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/realtek-driverutil/">Exploiting Unquoted Service Paths For Fun and No Profit</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/cve"><kbd class="item-tag">cve</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/windows"><kbd class="item-tag">windows</kbd></a>
     
 
 </div>
  
 
+    
+
 </main>
-
-
-
 <footer id="footer">
     <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
 
@@ -340,3 +410,37 @@
 </script>
 
 </html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.101.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.104.2" />
     
 
     
@@ -336,8 +336,8 @@
 </span></span><span style="display:flex;"><span>init:
 </span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">...</span>]
 </span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">ebx</span>, <span style="color:#ae81ff">0xc3c3c3c3</span> <span style="color:#75715e">; ret instructions
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">ecx</span>, <span style="color:#66d9ef">ebx</span> <span style="color:#75715e">; dito
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">edx</span>, <span style="color:#ae81ff">0x400</span> <span style="color:#75715e">; end of arena
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">ecx</span>, <span style="color:#66d9ef">ebx</span> <span style="color:#75715e">; dito
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">edx</span>, <span style="color:#ae81ff">0x400</span> <span style="color:#75715e">; end of arena
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
 </span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">edi</span>, <span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#66d9ef">stage</span> <span style="color:#ae81ff">4</span> <span style="color:#66d9ef">code</span><span style="color:#960050;background-color:#1e0010">&gt;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">esi</span>, <span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#66d9ef">stage</span> <span style="color:#ae81ff">4</span> <span style="color:#66d9ef">code</span><span style="color:#960050;background-color:#1e0010">&gt;</span>
@@ -351,7 +351,7 @@
 <h2 id="stage-3">Stage 3</h2>
 <p>The third stage migrates into the first quarter of the memory region and initiates the replication process:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">esp</span>, <span style="color:#66d9ef">eax</span> <span style="color:#75715e">; relocate to `eax`
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">pushad</span>
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">pushad</span>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[</span><span style="color:#a6e22e">...</span>]
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">esp</span> <span style="color:#75715e">; execute 4th stage (embedded into registers and now written to memory)
 </span></span></span></code></pre></div><h2 id="stage-4">Stage 4</h2>

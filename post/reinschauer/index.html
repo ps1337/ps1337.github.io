@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.101.0" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.104.2" />
     
 
     
@@ -397,8 +397,8 @@
 </span></span></code></pre></div><p>The resulting file <code>reinschauer-dotnet-standalone.exe</code> then contains all DLLs specified with <code>MergeAssemblies</code> elements.</p>
 <h1 id="tunneling-traffic">Tunneling Traffic</h1>
 <p>Most of the time, establishing direct TCP connections between an attacker and a target machine may not be possible. Therefore, an Internet-facing server is needed to relay traffic to and from both peers. The most convenient way is to tunnel traffic via a Beacon connection that is already existing. This is especially handy for the in-memory variant of <code>reinschauer</code>.</p>
-<p>Beacon implements the <code>rportfwd_local</code> that allows remote port forwarding to forward the port <code>reinschauer</code> is listening on to the target machine. The <code>reinschauer</code> client then only has to connect to localhost to establish a connection. However, <code>rportfwd_local</code> seems to listen on <code>0.0.0.0</code>, which triggers a Windows Firewall prompt and that&rsquo;s not cool. I&rsquo;m not aware of any way to make this listen on localhost only :/</p>
-<p>A more suitable alternative is to use OpenSSH and the <a href="https://man.openbsd.org/sshd_config#GatewayPorts">GatewayPorts</a> feature. Using that, we can forward the <code>reinschauer</code> port from the attacker&rsquo;s machine to an Internet-facing port on another server. More information regarding traffic tunneling can be found in the <a href="https://github.com/ps1337/reinschauer">reinschauer repository on GitHub</a>.</p>
+<p>Beacon implements the <code>rportfwd_local</code> that allows remote port forwarding to forward the port <code>reinschauer</code> is listening on to the target machine. The <code>reinschauer</code> client then only has to connect to localhost to establish a connection. The command <code>rportfwd_local</code> seems to cause Beacon to listen on <code>0.0.0.0</code> and this can&rsquo;t be changed apparently. Listening on <code>127.0.0.1</code> would be enough, but okay, it still works.</p>
+<p>An alternative is to use OpenSSH and the <a href="https://man.openbsd.org/sshd_config#GatewayPorts">GatewayPorts</a> feature. Using that, we can forward the <code>reinschauer</code> port from the attacker&rsquo;s machine to an Internet-facing port on another server. More information regarding traffic tunneling can be found in the <a href="https://github.com/ps1337/reinschauer">reinschauer repository on GitHub</a>.</p>
 <h1 id="references">References</h1>
 <ul>
 <li><a href="https://github.com/ps1337/reinschauer">reinschauer on GitHub</a></li>
