@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Game Hacking #4: Hacking Walls and Particles</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.111.3">
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">Game Hacking #4: Hacking Walls and Particles</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                    <li><a href="/recipe/">Recipes</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana-#@#-bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/cs-aimbot-wallhax/">Game Hacking #4: Hacking Walls and Particles</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>Hello fellow Wallhackers, NoSmokers and Copy-Pasters. Today, I&rsquo;ll write about implementing several cool cheat features for your favorite game, CS:GO. There may be many articles like this, but this one is mine :)</p>
+<p>First, of all I recommend checking out my previous posts covering several aspects and internals of CS:GO before reading this. I&rsquo;ve got posts about <a href="https://bananamafia.dev/post/bananabot/">Aimbots and NoFlash</a>, as well as <a href="https://bananamafia.dev/post/d3dhook/">Direct3D hooks</a> that will serve as a basis for this post.</p>
+<p>Ok cool, so this is the plan for the internal cheat targeting the Windows version of the game:</p>
+<ul>
+<li>Create a Wallhack based on the <code>GlowManager</code> technique.</li>
+<li>Add hooks to the particle and material system, so smoke and flash effects can be removed.</li>
+</ul>
+<p>Since I assume you&rsquo;re not that patient, I&rsquo;ll show you the results right here:</p>
+<center>
+<img src="/img/cs-aimbot-wallhax/wallhax.gif">
+</center>
+<center>
+<img src="/img/cs-aimbot-wallhax/smokeflash.gif">
+</center>
+<h1 id="setting-everything-up">Setting Everything Up</h1>
+<p>How to develop and debug a cheat like this? Well, I didn&rsquo;t know either so I&rsquo;ve fiddled around and came up with a few handy things:</p>
+<ul>
+<li>Since CS:GO is running in an x86 process, the injected DLL has to be an x86 one too.</li>
+<li>You can&rsquo;t just go and use a DLL and a random loader with CS:GO, since it won&rsquo;t allow arbitrary DLLs to be loaded into the process. Therefore, it is recommended to launch the game with the <code>--insecure</code> flag to disable VAC when developing and debugging. If the DLL is ready, it can then be injected using <a href="https://github.com/guided-hacking/GuidedHacking-Injector">the GuidedHacking Injector</a> or any other injector that uses manual mapping without having to disable VAC. Bonus: If the DLL is stealthy enough, it won&rsquo;t get flagged &lt;: I&rsquo;ve used <a href="https://github.com/ps1337/csgo-wallhack-noflash-nosmoke/tree/main/lader">my simple DLL loader</a> during development.</li>
+<li>Grab the latest offsets from <a href="https://github.com/frk1/hazedumper/blob/master/csgo.hpp">hazedumper</a>. Or, even better, build a pattern scanning class to resolve the required offsets after injecting. <em>I told you to read my previous posts, right?</em>.</li>
+<li>Bind and issue the following CS:GO in-game command to make your life easier:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>sv_cheats <span style="color:#ae81ff">1</span>; bot_stop <span style="color:#ae81ff">1</span>; mp_roundtime_defuse <span style="color:#ae81ff">9999</span>; mp_restartgame <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>Otherwise the bots will play the game without you, kill you and will probably blow up dust2 and cause the memory layout to change while you&rsquo;re staring at hex bytes.</p>
+<p>There&rsquo;s also a super secret debugging trick you can utilize. It&rsquo;s called print debugging and you can spawn a console box after injecting to see the output:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#ifdef DEBUG
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    AllocConsole();
+</span></span><span style="display:flex;"><span>    freopen_s(<span style="color:#f92672">&amp;</span>console, <span style="color:#e6db74">&#34;conout$&#34;</span>, <span style="color:#e6db74">&#34;w&#34;</span>, stdout);
+</span></span><span style="display:flex;"><span>    [...]
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;yolo&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif
+</span></span></span></code></pre></div><p>Just don&rsquo;t forget to close and <code>free()</code>the console when unloading the DLL. Real pros build DLLs in Debug mode and attach VisualStudio to <code>csgo.exe</code> though!</p>
+<h1 id="interfacing">Interfacing</h1>
+<p>The cheat I&rsquo;ve built is an internal one, which means that it actually runs as a thread inside of the game&rsquo;s process. In contrast, <a href="https://bananamafia.dev/post/bananabot/">external cheats</a> don&rsquo;t get injected into a game and act by reading and writing raw memory from the respective process.</p>
+<p>Internal cheats have a bit of an advantage here: It&rsquo;s easily possible to <a href="https://www.youtube.com/watch?v=HHHlNdmzYqA">dynamically resolve and call engine functions</a>. And because VALVe is very kind, all important engine DLLs export a function called <code>CreateInterface()</code> that allows to do just this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">// https://guidedhacking.com/threads/csgo-createinterface-tutorial-how-to-get-interfaces.14701/
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> (<span style="color:#66d9ef">__cdecl</span><span style="color:#f92672">*</span> tCreateInterface)(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> name, <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> returnCode);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> Interface<span style="color:#f92672">::</span>GetInterface(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> dllname, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> interfacename)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    tCreateInterface CreateInterface <span style="color:#f92672">=</span> (tCreateInterface)GetProcAddress(GetModuleHandle(dllname), <span style="color:#e6db74">&#34;CreateInterface&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> returnCode <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> result <span style="color:#f92672">=</span> CreateInterface(interfacename, <span style="color:#f92672">&amp;</span>returnCode);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>result) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throw</span> std<span style="color:#f92672">::</span>runtime_error(<span style="color:#e6db74">&#34;[!] Could not create interface, very bad!&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> result;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Cool, what to do with that function? The Source engine SDK <a href="https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/public/cdll_int.h#L790">contains</a> interface version information that can be passed as <code>interfacename</code> value to the function above, for example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#define CLIENT_DLL_INTERFACE_VERSION &#34;VClient017&#34;
+</span></span></span></code></pre></div><p>The resulting interface (or vTable or VMT or whatever you want to call it), can now directly be used to call engine functions of the <code>IBaseClientDLL</code> class, as defined in the SDK. An example of such a function is <code>FrameStageNotify()</code>, which will be important when implementing NoFlash and NoSmoke. However, the index of this function in the resulting vTable has to be reverse engineered first. You can also determine it with clever googling but that&rsquo;s cheating and I hate all sorts cheating, especially in games. A quick note: today <code>VClient017</code> is actually <code>VClient018</code> so keep in mind that the SDK, which is from 2013(!) may not be up-to-date anymore.</p>
+<p>Let&rsquo;s say we know the index and we have a pointer to a vTable, as returned by <code>GetInterface()</code>. We can use this snippet the get the address of a function in the vTable at a specific index:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">template</span><span style="color:#f92672">&lt;</span><span style="color:#66d9ef">typename</span> Function<span style="color:#f92672">&gt;</span>Function GetVtableAtIndex(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> _VMT, <span style="color:#66d9ef">int</span> Index)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">***</span> _TVMT <span style="color:#f92672">=</span> (<span style="color:#66d9ef">void</span><span style="color:#f92672">***</span>)_VMT;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">**</span> VMT <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>_TVMT;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> _Address <span style="color:#f92672">=</span> VMT[Index];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>(Function)(_Address);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>A triple pointer is used here because the pointer returned by <code>GetInterface()</code> is a pointer to a vTable, which in turn is an array of function pointers. Cool!</p>
+<h1 id="wallhack">Wallhack</h1>
+<p>As soon as a player gets killed in CS:GO, the kill cam gets activated. A special thing about this view is that opponents will glow through walls. Ultimately, this is a built-in Wallhack feature and it just needs to be activated.</p>
+<p>In the VALVe SDK you may notice a class called <a href="https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/game/client/glow_outline_effect.h#L25-L26">CGlowObjectManager</a>, which holds references to <a href="https://github1s.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/game/client/glow_outline_effect.h#L123">GlowObjectDefinition_t</a> objects. Here&rsquo;s the struct from the SDK:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">GlowObjectDefinition_t</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    [...]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    EHANDLE m_hEntity;
+</span></span><span style="display:flex;"><span>    Vector m_vGlowColor;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">float</span> m_flGlowAlpha;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> m_bRenderWhenOccluded;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> m_bRenderWhenUnoccluded;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> m_nSplitScreenSlot;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Linked list of free slots
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> m_nNextFreeSlot;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Special values for GlowObjectDefinition_t::m_nNextFreeSlot
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> END_OF_FREE_LIST <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> ENTRY_IN_USE <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>As you can see, the first member holds a reference to the actual entity that is managed by a <code>GlowObject</code>. The most interesting member is <code>m_bRenderWhenOcclude</code>: It controls whether an entity&rsquo;s glow will be rendered even though it is not visible, which is exactly what a Wallhack should do.</p>
+<p>Therefore, the plan is to:</p>
+<ol>
+<li>Find an instance of <code>CGlowObjectManager</code> in memory.</li>
+<li>Iterate the linked list of <code>GlowObjectDefinition_t</code>s and check whether <code>m_hEntity</code> is an enemy.</li>
+<li>If so: Set the glow color (<code>m_vGlowColor</code>) and <code>m_bRenderWhenOcclude</code> accordingly.</li>
+</ol>
+<p>I did not do that though. The reason for this is that I already had code ready to grab a list of all player entities, which I could filter for enemies. Each player entity holds a member value called <code>glowIndex</code>, which can be used to access the list of <code>GlowObjectDefinition_t</code>s in <code>CGlowObjectManager</code> by a numeric index. I&rsquo;ve used this code snippet to access the linked list:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>GlowObjectDefinition_t<span style="color:#f92672">*</span> GlowManager<span style="color:#f92672">::</span>GetGlowElement(<span style="color:#66d9ef">int</span> glowIndex) {
+</span></span><span style="display:flex;"><span>	DWORD dwGlowElem <span style="color:#f92672">=</span> base <span style="color:#f92672">+</span> (glowIndex <span style="color:#f92672">*</span> elementOffset) <span style="color:#f92672">+</span> skipBytes;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> (GlowObjectDefinition_t<span style="color:#f92672">*</span>)dwGlowElem;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The value <code>base</code> is the base address of <code>client.dll</code>, which holds a reference to the <code>CGlowObjectManager</code> object. It seems at some point VALVe decided to troll cheaters and added 4 bytes of trash (?) at the start of each <code>GlowObjectDefinition_t</code>, which will be skipped by adding <code>skipBytes</code> (<code>0x04</code>). Here&rsquo;s the memory layout of that:</p>
+<center>
+<img src="/img/cs-aimbot-wallhax/glowmanagerentry_trash_and_addr_to_first_entity.PNG">
+</center>
+<p>As can be seen above, there&rsquo;s a 4-byte value of <code>0xFFFFFFFE</code> before the member value <code>m_hEntity</code>, which is important to skip when overwriting any memory.</p>
+<p>And just for reference, here&rsquo;s a memory view of the entity list an entity&rsquo;s team number (<code>0x03</code>):</p>
+<center>
+<img src="/img/cs-aimbot-wallhax/entlist_get_entries.png">
+</center>
+<center>
+<img src="/img/cs-aimbot-wallhax/entlist_entry_read_team.png">
+</center>
+<p>But when should be memory be overwritten? You could do it in a loop, which executes every 5ms or so but that would result in bad performance and flickering glow. The correct way to do it is to hook the function that&rsquo;s responsible for adding effects before the rendering of a frame is finished. That function is called <code>DoPostScreenSpaceEffects()</code>, which is a member function of <a href="https://developer.valvesoftware.com/wiki/ClientMode">ClientMode</a>.</p>
+<p>In order to hook that function, its address has to be known. Remember the part about creating interfaces? This is how it works:</p>
+<ol>
+<li>Get an interface of to <code>VClient018</code>.</li>
+<li>Get the address of the function <code>HudProcessInput</code>, which is at vTable index <code>10</code>.</li>
+<li>Read the value in memory at offset <code>0x5</code> and grab a pointer to <code>ClientMode</code>.</li>
+<li>Use vTable index <code>44</code> to get the function pointer of the desired function.</li>
+</ol>
+<p>Why is there a pointer to <code>ClientMode</code> at this specific index, you may ask. Here&rsquo;s the <a href="https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/game/client/cdll_client_int.cpp#L1252-L1255">code</a> of the <code>HudProcessInput</code> function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> CHLClient<span style="color:#f92672">::</span>HudProcessInput( <span style="color:#66d9ef">bool</span> bActive ) {
+</span></span><span style="display:flex;"><span>	g_pClientMode<span style="color:#f92672">-&gt;</span>ProcessInput( bActive );
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>And this is the disassembly:</p>
+<center>
+<img src="/img/cs-aimbot-wallhax/clientmodeptr.png">
+</center>
+<p>And now it&rsquo;s just a matter of applying a trampoline hook, as described in <a href="https://bananamafia.dev/post/d3dhook/">a previous post</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> prologuePostScreenEffect[<span style="color:#ae81ff">6</span>];
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> objClientMode <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>;
+</span></span><span style="display:flex;"><span>tPostScreenEffect oPostScreenEffects <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">InitWallhack</span>() {
+</span></span><span style="display:flex;"><span>    MemoryManager ml;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> objClient <span style="color:#f92672">=</span> (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>)Interface<span style="color:#f92672">::</span>GetInterface(<span style="color:#e6db74">&#34;client.dll&#34;</span>, <span style="color:#e6db74">&#34;VClient018&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// pointer to HudProcessInput method
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// https://www.unknowncheats.me/wiki/Finding_a_pointer_to_ClientMode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    DWORD pHudProcessInput <span style="color:#f92672">=</span> GetVtableAtIndex<span style="color:#f92672">&lt;</span>DWORD<span style="color:#f92672">&gt;</span>(objClient, <span style="color:#ae81ff">10</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// this points to a pointer to ClientMode
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    DWORD ppClientMode <span style="color:#f92672">=</span> ml.ReadMem<span style="color:#f92672">&lt;</span>DWORD<span style="color:#f92672">&gt;</span>((DWORD)pHudProcessInput <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x5</span>);
+</span></span><span style="display:flex;"><span>    objClientMode <span style="color:#f92672">=</span> ml.ReadMem<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">void</span><span style="color:#f92672">*&gt;</span>(ppClientMode);
+</span></span><span style="display:flex;"><span>    oPostScreenEffects <span style="color:#f92672">=</span> (tPostScreenEffect)Haken<span style="color:#f92672">::</span>hookFn(GetVtableAtIndex<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">char</span><span style="color:#f92672">*&gt;</span>(objClientMode, <span style="color:#ae81ff">44</span>), (<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>)hPostScreenEffects, <span style="color:#ae81ff">6</span>, prologuePostScreenEffect, <span style="color:#e6db74">&#34;PostScreenEffect&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// aka DoPostScreenSpaceEffects
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#66d9ef">__stdcall</span> <span style="color:#a6e22e">hPostScreenEffects</span>(<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> edx, <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> setup) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// wallhax code
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    EntityList<span style="color:#f92672">::</span>AddGlowToMultiple();
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// call original
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// we could have also use __thiscall but yolo
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    oPostScreenEffects(objClientMode, edx, setup);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="noflash-and-nosmoke">NoFlash and NoSmoke</h1>
+<p>In CS:GO, the effects for flash and smoke grenades are called <em>materials</em>. I&rsquo;ve implemented NoSmoke and NoFlash by applying a special flag to the respective materials in order to hide them. As described previously, the best place to apply this is a function that gets called as soon as a frame is about to be rendered. For materials, the best option is to use <code>FrameStageNotify()</code>, which resides in <code>client.dll</code>. As before, the interfacing technique can be applied to obtain a pointer to this function at vTable index <code>37</code>of the interface <code>VClient018</code>.</p>
+<p>Once <code>FrameStageNotify()</code> is hooked, the respective materials have to be searched, so that additional flags can be added. Two functions are required for this, which can both be found in <code>materialsystem.dll</code> with interface <code>VMaterialSystem080</code>:</p>
+<ul>
+<li><code>FindMaterial()</code> to find a material based on a string-based identifier.</li>
+<li><code>SetMaterialVarFlag()</code> to add the flag <code>MATERIAL_VAR_NO_DRAW</code> to a material.</li>
+</ul>
+<p>The <code>FindMaterial()</code> function can be identified quite easily with a disassembler because of debugging statements left in the code:</p>
+<center>
+<img src="/img/cs-aimbot-wallhax/findmaterial.png">
+</center>
+<p>Or dynamically with <code>ReClass</code> after finding the vTable pointer and checking the entry at index <code>84</code>:</p>
+<center>
+<img src="/img/cs-aimbot-wallhax/pointerpointerpointer.png">
+</center>
+<center>
+<img src="/img/cs-aimbot-wallhax/reclass.PNG">
+</center>
+<p>This gives us the following code to apply both NoFlash and NoSmoke:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*&gt;</span> materials <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;particle/vistasmokev1/vistasmokev1_fire&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;particle/vistasmokev1/vistasmokev1_smokegrenade&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;particle/vistasmokev1/vistasmokev1_emods&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;particle/vistasmokev1/vistasmokev1_emods_impactdust&#34;</span>,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;effects</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">flashbang&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;effects</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">flashbang_white&#34;</span>
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> prologueFrameStateNotify[<span style="color:#ae81ff">17</span>];
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> objClient <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>;
+</span></span><span style="display:flex;"><span>tFrameStageNotify oFrameStageNotify <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>;
+</span></span><span style="display:flex;"><span>tFindMaterial oFindMaterial <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span><span style="color:#f92672">*</span> objMaterialSystem;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">InitMaterialHax</span>() {
+</span></span><span style="display:flex;"><span>    objClient <span style="color:#f92672">=</span> (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>)Interface<span style="color:#f92672">::</span>GetInterface(<span style="color:#e6db74">&#34;client.dll&#34;</span>, <span style="color:#e6db74">&#34;VClient018&#34;</span>);
+</span></span><span style="display:flex;"><span>    objMaterialSystem <span style="color:#f92672">=</span> (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>)Interface<span style="color:#f92672">::</span>GetInterface(<span style="color:#e6db74">&#34;materialsystem.dll&#34;</span>, <span style="color:#e6db74">&#34;VMaterialSystem080&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    oFindMaterial <span style="color:#f92672">=</span> GetVtableAtIndex<span style="color:#f92672">&lt;</span>tFindMaterial<span style="color:#f92672">&gt;</span>(objMaterialSystem, <span style="color:#ae81ff">84</span>);
+</span></span><span style="display:flex;"><span>    oFrameStageNotify <span style="color:#f92672">=</span> (tFrameStageNotify)Haken<span style="color:#f92672">::</span>hookFn(GetVtableAtIndex<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">char</span><span style="color:#f92672">*&gt;</span>(objClient, <span style="color:#ae81ff">37</span>), (<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span>)hFrameStageNotify, <span style="color:#ae81ff">17</span>, prologueFrameStateNotify, <span style="color:#e6db74">&#34;FrameStageNotify&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">hFrameStageNotify</span>(ClientFrameStage_t curStage) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (curStage <span style="color:#f92672">==</span> ClientFrameStage_t<span style="color:#f92672">::</span>FRAME_NET_UPDATE_POSTDATAUPDATE_END) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> it <span style="color:#f92672">=</span> materials.begin(); it <span style="color:#f92672">!=</span> materials.end(); it<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">auto</span> dasMaterial <span style="color:#f92672">=</span> oFindMaterial(objMaterialSystem, <span style="color:#f92672">*</span>it, <span style="color:#e6db74">&#34;Other textures&#34;</span>, true, NULL);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>dasMaterial) { <span style="color:#66d9ef">continue</span>; }
+</span></span><span style="display:flex;"><span>            GetVtableAtIndex<span style="color:#f92672">&lt;</span>tSetMaterialVarFlag<span style="color:#f92672">&gt;</span>(dasMaterial, <span style="color:#ae81ff">29</span>)(dasMaterial, MaterialVarFlags_t<span style="color:#f92672">::</span>MATERIAL_VAR_NO_DRAW, true);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        oFrameStageNotify(curStage);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        oFrameStageNotify(curStage);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><br>
+That's it. Don't forget to unhook all functions before unloading a DLL or the game will crash <:
+<h1 id="references">References</h1>
+<ul>
+<li><a href="https://github.com/ps1337/csgo-wallhack-noflash-nosmoke">My Code</a></li>
+<li><a href="https://guidedhacking.com/threads/csgo-createinterface-tutorial-how-to-get-interfaces.14701/">GuidedHacking: Interfacing Tutorial</a></li>
+<li><a href="https://www.unknowncheats.me/wiki/Finding_a_pointer_to_ClientMode">UnknownCheats: ClientMode Pointers</a></li>
+</ul>
+<hr>
+<p>And now a word from my fans:</p>
+<center>
+<img src="/img/cs-aimbot-wallhax/idiot.jpg">
+</center>
+</div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/frida-unity/">Cheating in Unity Games Because Why Not?</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/satisfyer/">Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/web"><kbd class="item-tag">web</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/hisensehax/">Haxxoring a Hisense Smart TV</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>

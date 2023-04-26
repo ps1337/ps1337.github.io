@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.104.2" />
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.111.3">
     
 
     
@@ -347,13 +347,13 @@
 </span></span><span style="display:flex;"><span>    __u64   reserved1[<span style="color:#ae81ff">8</span>];
 </span></span><span style="display:flex;"><span>};
 </span></span></code></pre></div><p>When executing <code>sigreturn()</code>, the function <code>restore_sigcontext()</code> will be eventually be called in the kernel. The implementation can be found <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/signal.c#n80">here</a>. This is the function prototype:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> restore_sigcontext(<span style="color:#66d9ef">struct</span> pt_regs <span style="color:#f92672">*</span>regs,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">restore_sigcontext</span>(<span style="color:#66d9ef">struct</span> pt_regs <span style="color:#f92672">*</span>regs,
 </span></span><span style="display:flex;"><span>                              <span style="color:#66d9ef">struct</span> sigcontext __user <span style="color:#f92672">*</span>usc,
 </span></span><span style="display:flex;"><span>                              <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> uc_flags)
 </span></span></code></pre></div><p>The <code>usc</code> value is a pointer to the user-supplied <code>sigcontext</code> structure that will be copied to kernel-land at the beginning of the function:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> sigcontext sc;
 </span></span><span style="display:flex;"><span>[...]
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (copy_from_user(<span style="color:#f92672">&amp;</span>sc, usc, CONTEXT_COPY_SIZE))
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">copy_from_user</span>(<span style="color:#f92672">&amp;</span>sc, usc, CONTEXT_COPY_SIZE))
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>EFAULT;
 </span></span></code></pre></div><p>As you can see below, the kernel takes the values of <code>sc</code> and just copies them to the registers:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>[...]

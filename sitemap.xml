@@ -31,15 +31,33 @@
     <loc>https://bananamafia.dev/project/reinschauer/</loc>
   </url><url>
     <loc>https://bananamafia.dev/</loc>
-    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
+    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/binary/</loc>
+    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/c&#43;&#43;/</loc>
+    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/cs-aimbot-wallhax/</loc>
+    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/gamehacking/</loc>
+    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/reverse-engineering/</loc>
+    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/dotnet/</loc>
     <lastmod>2022-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/golang/</loc>
-    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/post/</loc>
     <lastmod>2022-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/programming/</loc>
@@ -48,22 +66,13 @@
     <loc>https://bananamafia.dev/post/reinschauer/</loc>
     <lastmod>2022-09-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/tags/</loc>
-    <lastmod>2022-09-27T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/tags/windows/</loc>
     <lastmod>2022-09-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/binary/</loc>
-    <lastmod>2022-05-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/frida-unity/</loc>
     <lastmod>2022-05-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/frida/</loc>
-    <lastmod>2022-05-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/gamehacking/</loc>
     <lastmod>2022-05-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/python/</loc>
@@ -99,9 +108,6 @@
     <loc>https://bananamafia.dev/tags/radare2/</loc>
     <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/tags/reverse-engineering/</loc>
-    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/tags/vulnerability/</loc>
     <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
@@ -125,9 +131,6 @@
   </url><url>
     <loc>https://bananamafia.dev/post/syncthing-monitor/</loc>
     <lastmod>2021-01-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/c&#43;&#43;/</loc>
-    <lastmod>2020-06-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/d3dhook/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
