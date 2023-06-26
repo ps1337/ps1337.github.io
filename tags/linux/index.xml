@@ -6,7 +6,16 @@
     <description>Recent content in linux on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Oct 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 15 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ShhPlunk: Muting the Splunk Forwarder</title>
+      <link>https://bananamafia.dev/post/shhplunk/</link>
+      <pubDate>Mon, 15 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/shhplunk/</guid>
+      <description>Many organizations rely on Splunk and its Splunk Forwarder to deliver event data as a sole source of telemetry. For quite some time, I&amp;rsquo;ve wondered if it&amp;rsquo;s possible to mute the Splunk Forwarder&amp;rsquo;s splunkd process, so that no event data reaches the respective endpoint. Technically, this should be possible, once the required privileges are granted on a system. Therefore, I&amp;rsquo;ve decided to take a look at this. While Splunk Forwarder is available for various platforms, I&amp;rsquo;ve targeted the Linux version.</description>
+    </item>
+    
     <item>
       <title>How I Over-Engineered My Dotfiles</title>
       <link>https://bananamafia.dev/post/dotfiles/</link>

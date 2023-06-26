@@ -17,7 +17,7 @@
     </item>
     
     <item>
-      <title>Game Hacking #4: Hacking Walls and Particles</title>
+      <title>Game Hacking #5: Hacking Walls and Particles</title>
       <link>https://bananamafia.dev/post/cs-aimbot-wallhax/</link>
       <pubDate>Sun, 23 Apr 2023 00:00:00 +0000</pubDate>
       
@@ -27,7 +27,7 @@ First, of all I recommend checking out my previous posts covering several aspect
     </item>
     
     <item>
-      <title>Cheating in Unity Games Because Why Not?</title>
+      <title>Game Hacking #4: Cheating in Unity Games</title>
       <link>https://bananamafia.dev/post/frida-unity/</link>
       <pubDate>Mon, 09 May 2022 00:00:00 +0000</pubDate>
       
@@ -69,7 +69,7 @@ Bunnyhop Bot: Do jumps as soon as the player hits the ground to make it easier t
     </item>
     
     <item>
-      <title>Runtime Function Patching</title>
+      <title>Game Hacking #0: Runtime Function Patching</title>
       <link>https://bananamafia.dev/post/cvar-hax/</link>
       <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
       
