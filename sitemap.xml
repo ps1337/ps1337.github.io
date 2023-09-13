@@ -31,7 +31,22 @@
     <loc>https://bananamafia.dev/project/reinschauer/</loc>
   </url><url>
     <loc>https://bananamafia.dev/</loc>
-    <lastmod>2023-05-15T00:00:00+00:00</lastmod>
+    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/binary/</loc>
+    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/binarygolf23/</loc>
+    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/ctf/</loc>
+    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/c&#43;&#43;/</loc>
     <lastmod>2023-05-15T00:00:00+00:00</lastmod>
@@ -39,20 +54,11 @@
     <loc>https://bananamafia.dev/tags/linux/</loc>
     <lastmod>2023-05-15T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/post/</loc>
-    <lastmod>2023-05-15T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/tags/reverse-engineering/</loc>
     <lastmod>2023-05-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/shhplunk/</loc>
     <lastmod>2023-05-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/</loc>
-    <lastmod>2023-05-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/binary/</loc>
-    <lastmod>2023-04-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/cs-aimbot-wallhax/</loc>
     <lastmod>2023-04-23T00:00:00+00:00</lastmod>
@@ -143,9 +149,6 @@
   </url><url>
     <loc>https://bananamafia.dev/tags/hooking/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/ctf/</loc>
-    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/rop/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>

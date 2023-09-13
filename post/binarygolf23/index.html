@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BinaryGolf 2023: Building A GameBoy-Bash Polyglot</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.116.1">
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">BinaryGolf 2023: Building A GameBoy-Bash Polyglot</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                    <li><a href="/recipe/">Recipes</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana-#@#-bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/binarygolf23/">BinaryGolf 2023: Building A GameBoy-Bash Polyglot</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><p>In the <a href="https://binary.golf/">BinaryGolf</a> competition, specific file related problems have to be solved with the least amount of bytes. This was the challenge for the 2023 edition:</p>
+<center>
+<img src="/img/binarygolf23/task.png">
+</center>
+<p>Me and <a href="https://github.com/blenk92">some other guy</a> decided to go for a GameBoy ROM with an embedded bash script, since old file formats like game ROMs are quite interesting. In the end, we came up with such a polyglot file that met all criteria of the challenge and was 397 bytes in size. This is a short demo of it:</p>
+<center>
+<img src="/img/binarygolf23/demo.gif">
+</center>
+<p>As you can see, the file is a valid bash script that launches a GameBoy emulator with its own file as input to display a <code>4</code> after replicating.</p>
+<p>The first obvious idea to create this file was to use a GameBoy ROM creator like GB Studio. However, even a ROM with minimal content was still huge in size. It seems that being lazy was not the way to go <code>:)</code>. In the end, we used a simple <a href="https://gbdev.io/gb-asm-tutorial/part1/hello_world.html">Hello World example</a> in pure ASM as a template. Of course we didn&rsquo;t understand all aspects of this template but we still managed to reduce the resulting file size a bit by removing parts using trial and error. An important thing to do is to strip all zero bytes at the end of the resulting ROM file, since they seem to be irrelevant.</p>
+</br>
+<center>
+<img width=60% src="/img/binarygolf23/hont.png">
+</center>
+</br>
+<p>Our initial plan was to use an example that just printed some text on the screen so that we could replace the text with a <code>4</code>. However, it seems that font files have to be included when printing a pre-defined string to the screen. Since most fonts are huge, we decided to try something else. In the old days of the GameBoy, disk space was a limiting factor, so clever developers used various tricks to save some of that. One of them was a technique called <a href="https://gbdev.io/gb-asm-tutorial/part1/tilemap.html">Tile Map</a>. This basically allows to define (and to design) a small number of visual tiles once and referencing them multiple times using tile maps, which are ultimately used to draw content on the screen. To display a <code>4</code>, you could define a white tile once and re-use it a number of times to draw all pixels required for the desired result.</p>
+<p>We found out that this does not only save space but also allows embedding a shell script inside of the ROM file because tile data is placed at the start of the ROM. Therefore, we can overwrite this tile data partially using a hex editor after compiling the ROM. The hardest part was defining the tiles and tile maps because low-level GameBoy tooling is nuts.</p>
+<p>You can find our source code here (which is based on <a href="https://gbdev.io/gb-asm-tutorial/part1/hello_world.html">this Hello World example</a>):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">INCLUDE</span> <span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#66d9ef">hardware.inc</span><span style="color:#960050;background-color:#1e0010">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SECTION</span> <span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#66d9ef">Header</span><span style="color:#960050;background-color:#1e0010">&#34;</span>, <span style="color:#66d9ef">ROM0</span>[<span style="color:#66d9ef">$100</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">jp</span> <span style="color:#66d9ef">EntryPoint</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ds</span> <span style="color:#66d9ef">$150</span> - <span style="color:#960050;background-color:#1e0010">@</span>, <span style="color:#ae81ff">0</span> <span style="color:#75715e">; Make room for the header
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>EntryPoint:
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">; Shut down audio circuitry
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> [<span style="color:#66d9ef">rNR52</span>], <span style="color:#66d9ef">a</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">; Do not turn the LCD off outside of VBlank
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>WaitVBlank:
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, [<span style="color:#66d9ef">rLY</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cp</span> <span style="color:#ae81ff">144</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">jp</span> <span style="color:#66d9ef">c</span>, <span style="color:#66d9ef">WaitVBlank</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">; Turn the LCD off
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> [<span style="color:#66d9ef">rLCDC</span>], <span style="color:#66d9ef">a</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">; Copy the tile data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">de</span>, <span style="color:#66d9ef">Tiles</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">hl</span>, <span style="color:#66d9ef">$9000</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">bc</span>, <span style="color:#66d9ef">TilesEnd</span> - <span style="color:#66d9ef">Tiles</span>
+</span></span><span style="display:flex;"><span>CopyTiles:
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, [<span style="color:#66d9ef">de</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> [<span style="color:#66d9ef">hli</span>], <span style="color:#66d9ef">a</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">inc</span> <span style="color:#66d9ef">de</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">dec</span> <span style="color:#66d9ef">bc</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, <span style="color:#66d9ef">b</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">or</span> <span style="color:#66d9ef">a</span>, <span style="color:#66d9ef">c</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">jp</span> <span style="color:#66d9ef">nz</span>, <span style="color:#66d9ef">CopyTiles</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">; Copy the tilemap
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">de</span>, <span style="color:#66d9ef">Tilemap</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">hl</span>, <span style="color:#66d9ef">$9800</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">bc</span>, <span style="color:#66d9ef">TilemapEnd</span> - <span style="color:#66d9ef">Tilemap</span>
+</span></span><span style="display:flex;"><span>CopyTilemap:
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, [<span style="color:#66d9ef">de</span>]
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> [<span style="color:#66d9ef">hli</span>], <span style="color:#66d9ef">a</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">inc</span> <span style="color:#66d9ef">de</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">dec</span> <span style="color:#66d9ef">bc</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, <span style="color:#66d9ef">b</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">or</span> <span style="color:#66d9ef">a</span>, <span style="color:#66d9ef">c</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">jp</span> <span style="color:#66d9ef">nz</span>, <span style="color:#66d9ef">CopyTilemap</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">; Turn the LCD on
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, <span style="color:#66d9ef">LCDCF_ON</span> <span style="color:#960050;background-color:#1e0010">|</span> <span style="color:#66d9ef">LCDCF_BGON</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> [<span style="color:#66d9ef">rLCDC</span>], <span style="color:#66d9ef">a</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">; During the first (blank) frame, initialize display registers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ld</span> <span style="color:#66d9ef">a</span>, <span style="color:#960050;background-color:#1e0010">%</span><span style="color:#ae81ff">11100100</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ld</span> [<span style="color:#66d9ef">rBGP</span>], <span style="color:#66d9ef">a</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Done:
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">jp</span> <span style="color:#66d9ef">Done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SECTION</span> <span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#66d9ef">Tile</span> <span style="color:#66d9ef">data</span><span style="color:#960050;background-color:#1e0010">&#34;</span>, <span style="color:#66d9ef">ROM0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Tiles:
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">db</span> <span style="color:#66d9ef">$00</span>,<span style="color:#66d9ef">$00</span>,<span style="color:#66d9ef">$20</span>,<span style="color:#66d9ef">$00</span>,<span style="color:#66d9ef">$20</span>,<span style="color:#66d9ef">$00</span>,<span style="color:#66d9ef">$20</span>,<span style="color:#66d9ef">$00</span>,<span style="color:#66d9ef">$28</span>,<span style="color:#66d9ef">$00</span>,<span style="color:#66d9ef">$3C</span>,<span style="color:#66d9ef">$00</span>,<span style="color:#66d9ef">$08</span>,<span style="color:#66d9ef">$00</span>,<span style="color:#66d9ef">$08</span>,<span style="color:#66d9ef">$00</span>
+</span></span><span style="display:flex;"><span>TilesEnd:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">SECTION</span> <span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#66d9ef">Tilemap</span><span style="color:#960050;background-color:#1e0010">&#34;</span>, <span style="color:#66d9ef">ROM0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Tilemap:
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">db</span> <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#66d9ef">$00</span>, <span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>TilemapEnd:
+</span></span></code></pre></div><p>This is the resulting ROM in Base64:</p>
+<pre tabindex="0"><code>G1szODsyOzEzNjsxMzY7MTM2bSMhL2Jpbi9zaBtbMzltCmNwG1szODsyOzE4NzsxODc7MTg3bSAbWzM5bRtbMzg7MjsxNTM7MTAyOzUxbSQwG1szOW0bWzM4OzI7MTg3OzE4NzsxODdtIBtbMzltG1szODsyOzEwMjswOzIzODswMW00G1szOTswMG07Z2VhcmJveRtbMzg7MjsxODc7MTg3OzE4N20gG1szOW0bWzM4OzI7MTUzOzEwMjs1MW0kMBtbMzltG1szODsyOzE4NzsxODc7MTg3bSAbWzM5bRtbMzg7MjsxMzY7MTM2OzEzNm0jAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgICAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAw78Aw78Aw78Aw78Aw78Aw78Aw78Aw78AwoAAwoAAwoAAwoAAwoAAwoAAwoAAwoDDg1ABAMOOw61mZsOMG1szOW0KABtbMzg7MjsxODc7MTg3OzE4N20LG1szOW0DcwDCgwAbWzM4OzI7MTg3OzE4NzsxODdtDBtbMzltAAoACBEbWzM4OzI7MTg3OzE4NzsxODdtHxtbMzltwojCiQAOw5zDjG7DpsOdw53DmcKZwrvCu2djbg7DrMOMw53DnMKZwp/Cu8K5Mz4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAw6fDvcK2PgDDqibDvz4Ew7pEw7/DvsKQw5pXAT4Aw6pAw78Rw6AAIQDCkAEbWzM4OzI7MTg3OzE4NzsxODdtIBtbMzltABobWzQ4OzI7MjU1OzI0MDsyNDBtIhMLeMKxw4JtAREAACEAwpgBw6AAGiIbWzQ5bRMbWzM4OzI7MTg3OzE4NzsxODdtCxtbMzlteMKxw4J/AT7CgcOqQMO/Cg==
+</code></pre></div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/cs-aimbot-wallhax/">Game Hacking #5: Hacking Walls and Particles</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/frida-unity/">Game Hacking #4: Cheating in Unity Games</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/d3dhook/">Game Hacking #3: Hooking Direct3D EndScene()</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/c&#43;&#43;"><kbd class="item-tag">c&#43;&#43;</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/hooking"><kbd class="item-tag">hooking</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>
