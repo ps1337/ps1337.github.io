@@ -30,22 +30,40 @@
   </url><url>
     <loc>https://bananamafia.dev/project/reinschauer/</loc>
   </url><url>
+    <loc>https://bananamafia.dev/post/37c3ctf/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://bananamafia.dev/</loc>
-    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/ctf/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/exploitation/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/post/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/r2/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/radare2/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/reversing/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/rop/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://bananamafia.dev/tags/</loc>
+    <lastmod>2023-12-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/binary/</loc>
     <lastmod>2023-09-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/binarygolf23/</loc>
-    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/ctf/</loc>
-    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/post/</loc>
-    <lastmod>2023-09-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/</loc>
     <lastmod>2023-09-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/c&#43;&#43;/</loc>
@@ -111,13 +129,7 @@
     <loc>https://bananamafia.dev/post/satisfyer/</loc>
     <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/tags/r2/</loc>
-    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/tags/r2frida/</loc>
-    <lastmod>2021-07-06T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/radare2/</loc>
     <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/vulnerability/</loc>
@@ -127,9 +139,6 @@
     <lastmod>2021-07-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/tex/</loc>
-    <lastmod>2021-02-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/exploitation/</loc>
     <lastmod>2021-02-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/hisensehax/</loc>
@@ -150,9 +159,6 @@
     <loc>https://bananamafia.dev/tags/hooking/</loc>
     <lastmod>2020-06-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://bananamafia.dev/tags/rop/</loc>
-    <lastmod>2020-04-11T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://bananamafia.dev/post/srop/</loc>
     <lastmod>2020-04-11T00:00:00+00:00</lastmod>
   </url><url>
@@ -169,9 +175,6 @@
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/post/gb-fuzz/</loc>
-    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://bananamafia.dev/tags/reversing/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://bananamafia.dev/tags/cutter/</loc>

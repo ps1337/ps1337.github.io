@@ -6,7 +6,7 @@
     <description>Recent content in radare2 on BananaMafia</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 06 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/radare2/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://bananamafia.dev/tags/radare2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>pwntools-r2</title>
       <link>https://bananamafia.dev/project/pwntools-r2/</link>
@@ -14,6 +14,16 @@
       
       <guid>https://bananamafia.dev/project/pwntools-r2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>37C3 CTF: ezrop</title>
+      <link>https://bananamafia.dev/post/37c3ctf/</link>
+      <pubDate>Sun, 31 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://bananamafia.dev/post/37c3ctf/</guid>
+      <description>This is a writeup for the 37C3 CTF challenge ezrop with the following description: Pretty standard ret2libc pwn challenge.. A binary with partial RELRO, no PIC and no canary was given, along with the libc that&amp;rsquo;s deployed on the target server. This writeup shows how to solve the challenge using r2 and pwntools-r2.
+Triggering the buffer overflow vulnerability is straight forward: Passing a long string causes a segmentation fault in the function vuln().</description>
     </item>
     
     <item>

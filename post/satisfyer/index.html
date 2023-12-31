@@ -93,7 +93,7 @@
 <script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
 
 
-<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.116.1">
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.119.0">
     
 
     
@@ -391,8 +391,8 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">native</span> String <span style="color:#a6e22e">getReleaseKey</span><span style="color:#f92672">();</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> String <span style="color:#a6e22e">createJwtToken</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>        Date date <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Date<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Date<span style="color:#f92672">().</span><span style="color:#a6e22e">getTime</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">long</span><span style="color:#f92672">)</span>86400000<span style="color:#f92672">);</span>
-</span></span><span style="display:flex;"><span>        Object object <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;prod&#34;</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hashCode</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> 3449687 <span style="color:#f92672">?</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getDevKey</span><span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getReleaseKey</span><span style="color:#f92672">();</span>
+</span></span><span style="display:flex;"><span>        Date date <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Date<span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Date<span style="color:#f92672">().</span><span style="color:#a6e22e">getTime</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">long</span><span style="color:#f92672">)</span><span style="color:#ae81ff">86400000</span><span style="color:#f92672">);</span>
+</span></span><span style="display:flex;"><span>        Object object <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;prod&#34;</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hashCode</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> <span style="color:#ae81ff">3449687</span> <span style="color:#f92672">?</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getDevKey</span><span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getReleaseKey</span><span style="color:#f92672">();</span>
 </span></span><span style="display:flex;"><span>        Charset charset <span style="color:#f92672">=</span> d<span style="color:#f92672">.</span><span style="color:#a6e22e">a</span><span style="color:#f92672">;</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>object <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
 </span></span><span style="display:flex;"><span>            object <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>String<span style="color:#f92672">)</span>object<span style="color:#f92672">).</span><span style="color:#a6e22e">getBytes</span><span style="color:#f92672">(</span>charset<span style="color:#f92672">);</span>
@@ -760,6 +760,31 @@ too.</em></p>
 
     
 
+    <h4><a href="/post/37c3ctf/">37C3 CTF: ezrop</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
     <h4><a href="/post/shhplunk/">ShhPlunk: Muting the Splunk Forwarder</a></h4>
     <h5></h5>
     
@@ -789,25 +814,6 @@ too.</em></p>
     <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
     
     <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
-    
-
-</div>
-  <div class="item">
-
-    
-    
-    
-
-    
-
-    <h4><a href="/post/frida-unity/">Game Hacking #4: Cheating in Unity Games</a></h4>
-    <h5></h5>
-    
-    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/gamehacking"><kbd class="item-tag">gamehacking</kbd></a>
-    
-    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
     
 
 </div>

